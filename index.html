@@ -14,7 +14,6 @@
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
   <style>
-    /* المتغيرات اللونية للوضع الليلي والنهاري */
     :root[data-theme="dark"] {
       --primary: #e50914;
       --bg: #07090e;
@@ -50,7 +49,6 @@
       text-align: center; position: sticky; top: 0; z-index: 1200;
     }
 
-    /* الهيدر المتجاوب */
     header {
       position: sticky; top: 0; height: 64px; padding: 0 clamp(10px, 3vw, 20px);
       display: flex; justify-content: space-between; align-items: center;
@@ -102,7 +100,6 @@
     }
     .btn-vip-gold { background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; font-weight: 800; border: none; }
 
-    /* مظهر الصورة الدائرية للمستخدم */
     .user-avatar-btn {
       width: 38px; height: 38px; border-radius: 50%; overflow: hidden;
       border: 2px solid var(--cyan); box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
@@ -111,7 +108,7 @@
     }
     .user-avatar-btn img { width: 100%; height: 100%; object-fit: cover; }
 
-    /* القائمة الجانبية المنبثقة (Drawer) متوافقة مع اللغتين */
+    /* القائمة الجانبية المنبثقة */
     .drawer-overlay {
       position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
       z-index: 2500; display: none;
@@ -134,7 +131,6 @@
     }
     .drawer-link:hover, .drawer-link.active { background: var(--surface-hover); color: var(--primary); }
 
-    /* مربعات التصنيفات بدون إيموجي */
     .genre-boxes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
     .genre-box {
       background: var(--surface); border: 1px solid var(--border); padding: 8px 10px;
@@ -143,7 +139,6 @@
     }
     .genre-box:hover { border-color: var(--cyan); color: var(--cyan); background: var(--surface-hover); }
 
-    /* البانر الترويجي المتغير دورياً */
     .hero {
       position: relative; height: clamp(260px, 42vh, 440px); display: flex; align-items: flex-end;
       padding: clamp(14px, 4vw, 24px); background-size: cover; background-position: center;
@@ -158,7 +153,6 @@
     .hero-desc { font-size: 0.82rem; color: #cbd5e1; margin-bottom: 12px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .hero-btn { background: var(--primary); color: #fff; border: none; padding: 8px 18px; border-radius: 6px; font-size: 0.82rem; font-weight: 800; cursor: pointer; }
 
-    /* بطاقات العرض */
     .catalog { padding: clamp(12px, 3vw, 20px); display: flex; flex-direction: column; gap: 20px; }
     .shelf-title { font-size: 1.05rem; font-weight: 800; margin-bottom: 10px; }
     .shelf-grid { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; }
@@ -175,17 +169,41 @@
     .explore-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(clamp(110px, 28vw, 145px), 1fr)); gap: 10px; }
     .btn-load-more { width: 100%; max-width: 260px; margin: 20px auto 10px; display: block; background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 10px; border-radius: 20px; font-weight: 800; font-size: 0.8rem; cursor: pointer; text-align: center; }
 
-    /* شاشة المشغل */
+    /* شاشة تفاصيل العمل السينمائية وزر التشغيل الدائري */
     #theaterView { display: none; padding: clamp(10px, 3vw, 18px); max-width: 1000px; margin: 0 auto; }
     .back-btn { background: var(--surface); color: var(--text); border: 1px solid var(--border); padding: 7px 14px; border-radius: 6px; cursor: pointer; font-size: 0.78rem; margin-bottom: 12px; font-weight: 800; display: inline-flex; align-items: center; gap: 6px; }
     
-    .player-container { width: 100%; background: #000; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 14px; position: relative; }
+    .media-details-hero {
+      position: relative; border-radius: 12px; overflow: hidden; border: 1px solid var(--border);
+      background-size: cover; background-position: center; margin-bottom: 16px;
+      padding: clamp(16px, 4vw, 30px); min-height: 280px; display: flex; align-items: flex-end;
+    }
+    .media-details-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(0deg, var(--surface) 20%, rgba(15, 20, 34, 0.7) 70%, rgba(15, 20, 34, 0.4) 100%);
+    }
+    .media-details-content { position: relative; z-index: 2; display: flex; flex-direction: column; gap: 10px; width: 100%; }
+    .media-badges { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .badge-tag { background: rgba(255,255,255,0.1); border: 1px solid var(--border); padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; }
+    .badge-score { background: var(--gold); color: #000; font-weight: 800; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; }
+    
+    /* زر التشغيل الدائري الأحمر مع المثلث الأبيض */
+    .play-circle-btn {
+      width: 58px; height: 58px; background: var(--primary); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; cursor: pointer;
+      box-shadow: 0 0 20px rgba(229, 9, 20, 0.6); transition: transform 0.2s, background-color 0.2s;
+      border: none; margin-top: 6px;
+    }
+    .play-circle-btn:hover { transform: scale(1.08); background: #ff1e27; }
+    .play-circle-btn i { color: #ffffff; font-size: 1.3rem; margin-inline-start: 3px; }
+
+    .player-container { width: 100%; background: #000; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 14px; position: relative; display: none; }
     #directPlayerBox { display: none; width: 100%; }
     #nativeVideo { width: 100%; max-height: 70vh; display: block; }
     .player-box { position: relative; width: 100%; padding-top: 56.25%; }
     .player-box iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
 
-    .servers-bar, .episodes-bar { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px; margin-top: 10px; }
+    .servers-bar, .episodes-bar { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px; margin-top: 10px; display: none; }
     .servers-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
     .srv-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text-muted); padding: 7px 14px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer; }
     .srv-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
@@ -197,7 +215,6 @@
     .ep-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 7px 4px; border-radius: 6px; text-align: center; font-size: 0.75rem; cursor: pointer; }
     .ep-btn.active { background: var(--primary); color: #fff; }
 
-    /* كروت اشتراكات VIP */
     .vip-pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin: 14px 0; }
     .vip-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
     .vip-card.featured { border-color: var(--gold); }
@@ -206,7 +223,6 @@
     .vip-features { font-size: 0.72rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 12px; text-align: start; }
     .vip-btn-plan { background: var(--primary); color: #fff; text-decoration: none; padding: 8px; border-radius: 6px; font-size: 0.78rem; font-weight: 800; display: block; }
 
-    /* النوافذ المنبثقة ولوحة الأدمن */
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; z-index: 3000; padding: 12px; }
     .modal-box { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; padding: 18px; position: relative; }
     .modal-close { position: absolute; top: 14px; color: var(--text-muted); cursor: pointer; font-size: 1.1rem; }
@@ -218,6 +234,8 @@
     .form-group label { display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; }
     .form-group input, .form-group textarea { width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 0.8rem; outline: none; }
     .btn-submit { width: 100%; background: var(--primary); color: #fff; border: none; padding: 10px; border-radius: 6px; font-weight: 800; font-size: 0.82rem; cursor: pointer; }
+    .auth-toggle-links { display: flex; justify-content: space-between; margin-top: 10px; font-size: 0.75rem; }
+    .auth-toggle-links a { color: var(--cyan); text-decoration: none; cursor: pointer; }
 
     .admin-modal { max-width: 760px; }
     .admin-nav { display: flex; gap: 6px; margin-bottom: 14px; border-bottom: 1px solid var(--border); padding-bottom: 6px; overflow-x: auto; }
@@ -234,7 +252,7 @@
 
   <div id="announcementBanner"></div>
 
-  <!-- القائمة الجانبية المنبثقة (Drawer) -->
+  <!-- القائمة الجانبية المنبثقة -->
   <div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
   <div class="drawer" id="drawer">
     <div class="drawer-header">
@@ -269,7 +287,7 @@
     <div class="drawer-link" id="adminDrawerLink" style="display:none;" onclick="toggleDrawer(); location.hash='#/admin';"><i class="fa-solid fa-shield-halved" style="color:var(--cyan);"></i> <span data-i18n="admin_title">لوحة الأدمن</span></div>
   </div>
 
-  <!-- الهيدر مع الصورة الدائرية بدلاً من البريد -->
+  <!-- الهيدر -->
   <header>
     <div class="header-left">
       <button class="menu-btn" onclick="toggleDrawer()"><i class="fa-solid fa-bars"></i></button>
@@ -290,10 +308,8 @@
     <div class="header-actions">
       <button class="btn-header btn-vip-gold" onclick="openVipModal()"><i class="fa-solid fa-crown"></i> VIP</button>
       
-      <!-- زر تسجيل الدخول الافتراضي (للزائر) -->
       <button class="btn-header" id="guestAuthBtn" onclick="openAuthModal()"><i class="fa-solid fa-user"></i> <span id="authBtnText">دخول</span></button>
       
-      <!-- صورة المستخدم الدائرية بدلاً من عنوان البريد -->
       <button class="user-avatar-btn" id="userAvatarBtn" onclick="openAuthModal()" title="الحساب الشخصي">
         <img id="userAvatarImg" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80" alt="Avatar">
       </button>
@@ -340,11 +356,31 @@
     </div>
   </div>
 
-  <!-- شاشة المشغل -->
+  <!-- شاشة تفاصيل العمل والمشغل -->
   <div id="theaterView">
     <button class="back-btn" onclick="history.back()"><i class="fa-solid fa-arrow-right"></i> <span data-i18n="btn_back">العودة</span></button>
     
-    <div class="player-container">
+    <!-- بطاقة تفاصيل العمل السينمائية مع زر التشغيل الدائري -->
+    <div class="media-details-hero" id="detailHeroBox">
+      <div class="media-details-overlay"></div>
+      <div class="media-details-content">
+        <div class="media-badges">
+          <span class="badge-score" id="detailScore">⭐ 8.5</span>
+          <span class="badge-tag" id="detailYear">2026</span>
+          <div id="detailGenres" style="display:flex; gap:4px; flex-wrap:wrap;"></div>
+        </div>
+        <h1 class="hero-title" id="detailTitle" style="margin:0;">اسم العمل</h1>
+        <p class="hero-desc" id="detailOverview" style="max-width:700px; -webkit-line-clamp:3;">قصة العمل وتفاصيله...</p>
+        
+        <!-- زر التشغيل الدائري الأحمر والمثلث الأبيض -->
+        <button class="play-circle-btn" onclick="startStreamingNow()" title="تشغيل الفيديو">
+          <i class="fa-solid fa-play"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- مشغل الفيديو (يظهر عند الضغط على زر التشغيل) -->
+    <div class="player-container" id="mainPlayerContainer">
       <div id="directPlayerBox"><video id="nativeVideo" controls playsinline></video></div>
       <div class="player-box" id="iframeBox">
         <iframe id="streamFrame" src="" allowfullscreen allow="autoplay; fullscreen; encrypted-media; picture-in-picture"></iframe>
@@ -361,10 +397,16 @@
       </div>
     </div>
 
-    <div class="episodes-bar" id="episodesContainer" style="display: none;">
+    <div class="episodes-bar" id="episodesContainer">
       <div style="font-size: 0.8rem; font-weight: 800;" data-i18n="episodes_title">المواسم والحلقات:</div>
       <div class="seasons-scroll" id="seasonsList"></div>
       <div class="episodes-grid" id="episodesList"></div>
+    </div>
+
+    <!-- قسم الأفلام والمسلسلات المقترحة المشابهة -->
+    <div class="shelf" style="margin-top: 24px;">
+      <div class="shelf-title">🎯 <span data-i18n="shelf_similar">أعمال مقترحة ومشابهة</span></div>
+      <div class="shelf-grid" id="deckSimilar"></div>
     </div>
   </div>
 
@@ -394,16 +436,45 @@
     </div>
   </div>
 
-  <!-- نافذة الدخول والحساب الشخصي -->
+  <!-- نافذة الدخول والمصادقة المحدثة -->
   <div class="modal-overlay" id="authModal">
     <div class="modal-box">
       <i class="fa-solid fa-xmark modal-close" onclick="closeModal('authModal')"></i>
-      <div id="authForms">
+      
+      <!-- نموذج تسجيل الدخول -->
+      <div id="loginFormBox">
         <div class="modal-title"><i class="fa-solid fa-user-shield" style="color: var(--cyan);"></i> <span data-i18n="auth_title">تسجيل الدخول</span></div>
-        <div class="form-group"><label data-i18n="auth_email">البريد الإلكتروني:</label><input type="text" id="authEmail"></div>
-        <div class="form-group"><label data-i18n="auth_pass">رمز المرور:</label><input type="password" id="authPass"></div>
-        <button class="btn-submit" onclick="handleAuthSubmit()" data-i18n="auth_btn">دخول الحساب</button>
+        <div class="form-group"><label data-i18n="auth_email">البريد الإلكتروني:</label><input type="text" id="loginEmail"></div>
+        <div class="form-group"><label data-i18n="auth_pass">رمز المرور:</label><input type="password" id="loginPass"></div>
+        <button class="btn-submit" onclick="handleLoginSubmit()" data-i18n="auth_btn">دخول الحساب</button>
+        <div class="auth-toggle-links">
+          <a onclick="switchAuthView('register')">إنشاء حساب جديد</a>
+          <a onclick="switchAuthView('forgot')">نسيت كلمة المرور؟</a>
+        </div>
       </div>
+
+      <!-- نموذج إنشاء حساب جديد -->
+      <div id="registerFormBox" style="display: none;">
+        <div class="modal-title"><i class="fa-solid fa-user-plus" style="color: var(--cyan);"></i> <span>إنشاء حساب جديد</span></div>
+        <div class="form-group"><label data-i18n="auth_email">البريد الإلكتروني:</label><input type="email" id="regEmail"></div>
+        <div class="form-group"><label data-i18n="auth_pass">رمز المرور الجديد:</label><input type="password" id="regPass"></div>
+        <button class="btn-submit" style="background:var(--cyan); color:#000;" onclick="handleRegisterSubmit()">إنشاء الحساب الآن</button>
+        <div class="auth-toggle-links" style="justify-content:center;">
+          <a onclick="switchAuthView('login')">لديك حساب بالفعل؟ تسجيل الدخول</a>
+        </div>
+      </div>
+
+      <!-- نموذج نسيت كلمة المرور -->
+      <div id="forgotFormBox" style="display: none;">
+        <div class="modal-title"><i class="fa-solid fa-key" style="color: var(--gold);"></i> <span>استعادة الحساب</span></div>
+        <div class="form-group"><label data-i18n="auth_email">البريد الإلكتروني المسجل:</label><input type="email" id="forgotEmail"></div>
+        <button class="btn-submit" onclick="handleForgotSubmit()">إرسال طلب الاستعادة</button>
+        <div class="auth-toggle-links" style="justify-content:center;">
+          <a onclick="switchAuthView('login')">العودة لتسجيل الدخول</a>
+        </div>
+      </div>
+
+      <!-- الملف الشخصي عند الدخول -->
       <div id="authProfile" style="display: none; text-align: center;">
         <div class="modal-title" style="justify-content: center;"><i class="fa-solid fa-circle-user" style="color: var(--cyan);"></i> <span data-i18n="auth_profile">الحساب الشخصي</span></div>
         <div style="width: 70px; height: 70px; border-radius: 50%; overflow: hidden; margin: 0 auto 10px; border: 2px solid var(--cyan);">
@@ -429,7 +500,6 @@
         <button class="admin-nav-btn" onclick="switchAdminTab('banner', this)">📢 التنبيهات</button>
       </div>
 
-      <!-- إدارة الأعمال وحذفها -->
       <div id="tabMediaManage">
         <div style="max-height: 280px; overflow-y: auto;">
           <table class="admin-table">
@@ -439,7 +509,6 @@
         </div>
       </div>
 
-      <!-- إضافة عمل مباشر -->
       <div id="tabAddMedia" style="display: none;">
         <div class="form-group"><label>اسم العمل:</label><input type="text" id="customTitle" placeholder="مثال: اسم المسلسل أو الفيلم"></div>
         <div class="form-group"><label>رابط البوستر:</label><input type="text" id="customPoster" placeholder="https://image.tmdb.org/..."></div>
@@ -447,7 +516,6 @@
         <button class="btn-submit" style="background: var(--cyan); color: #000;" onclick="saveCustomMedia()">نشر العمل فوراً</button>
       </div>
 
-      <!-- إدارة الحظر -->
       <div id="tabUsersManage" style="display: none;">
         <div class="form-group"><label>البريد الإلكتروني المراد حظره:</label><input type="text" id="banUserEmail" placeholder="user@example.com"></div>
         <button class="btn-submit" style="background: #ef4444;" onclick="banUserAction()">حظر المستخدم الآن</button>
@@ -459,7 +527,6 @@
         </div>
       </div>
 
-      <!-- الزوار -->
       <div id="tabVisitors" style="display: none;">
         <div style="max-height: 260px; overflow-y: auto;">
           <table class="admin-table">
@@ -469,7 +536,6 @@
         </div>
       </div>
 
-      <!-- شريط التنبيهات -->
       <div id="tabBanner" style="display: none;">
         <div class="form-group"><label>نص الشريط الإعلاني:</label><input type="text" id="adminBannerText" placeholder="اكتب نص الإعلان..."></div>
         <button class="btn-submit" onclick="saveBannerAnnouncement()">تحديث التنبيه</button>
@@ -502,7 +568,7 @@
         nav_home: "الرئيسية", nav_movies: "الأفلام", nav_tv: "المسلسلات",
         watch_now: "مشاهدة العمل", shelf_custom: "أعمال مضافة بواسطة الإدارة (مباشرة / VIP)",
         shelf_trending: "الأكثر رواجاً اليوم", shelf_turkish: "الدراما والمسلسلات التركية",
-        shelf_movies: "أحدث الأفلام العالمية", shelf_explore: "استكشاف العروض",
+        shelf_movies: "أحدث الأفلام العالمية", shelf_explore: "استكشاف العروض", shelf_similar: "أعمال مقترحة ومشابهة",
         load_more: "تحميل المزيد", btn_back: "العودة", select_server: "اختر سيرفر المشاهدة:",
         srv_prefix: "سيرفر", episodes_title: "المواسم والحلقات:", vip_title: "اشتراكات وباقات VIP",
         vip_desc: "استمتع ببث مباشر فائق السرعة بدون إعلانات مع روابط سحابية خاصة ومكتبة VIP الحصرية.",
@@ -516,7 +582,7 @@
         nav_home: "Home", nav_movies: "Movies", nav_tv: "TV Shows",
         watch_now: "Watch Now", shelf_custom: "Admin Direct Releases (VIP)",
         shelf_trending: "Trending Today", shelf_turkish: "Turkish Drama & Series",
-        shelf_movies: "Latest World Movies", shelf_explore: "Explore Media",
+        shelf_movies: "Latest World Movies", shelf_explore: "Explore Media", shelf_similar: "Similar & Recommended Titles",
         load_more: "Load More", btn_back: "Back", select_server: "Select Stream Server:",
         srv_prefix: "Server", episodes_title: "Seasons & Episodes:", vip_title: "VIP Memberships & Plans",
         vip_desc: "Enjoy ad-free fast streaming with dedicated cloud links and exclusive VIP library.",
@@ -552,7 +618,6 @@
       handleRouting();
     }
 
-    // القائمة الجانبية (Drawer)
     function toggleDrawer() {
       const drawer = document.getElementById('drawer');
       const overlay = document.getElementById('drawerOverlay');
@@ -560,7 +625,6 @@
       overlay.style.display = drawer.classList.contains('open') ? 'block' : 'none';
     }
 
-    // الوضع الليلي والنهاري
     function toggleTheme() {
       currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
       localStorage.setItem('site_theme', currentTheme);
@@ -571,7 +635,6 @@
       document.getElementById('themeToggleText').innerText = theme === 'dark' ? 'الوضع النهاري (Light)' : 'الوضع الليلي (Dark)';
     }
 
-    // تبديل اللغة مع جلب العناوين باللغة المختارة
     function toggleLanguage() {
       currentLang = currentLang === 'ar' ? 'en' : 'ar';
       localStorage.setItem('site_lang', currentLang);
@@ -591,7 +654,6 @@
       });
     }
 
-    // التوجيه الذكي (Routing)
     function handleRouting() {
       const hash = window.location.hash || '#/home';
       const parts = hash.split('/');
@@ -627,15 +689,22 @@
       }
     }
 
+    // إيقاف تشغيل الفيديو والصوت وتفريغ الإطار تماماً عند الرجوع للرئيسية
     function showHomeView() {
       document.getElementById('theaterView').style.display = 'none';
       document.getElementById('homeView').style.display = 'block';
+      
+      const frame = document.getElementById('streamFrame');
+      frame.src = "";
+      
       const video = document.getElementById('nativeVideo');
       video.pause(); video.src = "";
       if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
+
+      document.getElementById('mainPlayerContainer').style.display = 'none';
+      document.getElementById('serversContainer').style.display = 'none';
     }
 
-    // تدوير محتوى الواجهة دورياً
     async function initHeroRotation() {
       try {
         const res = await fetch(`${API_BASE}/trending/all/day?api_key=${API_KEY}&language=${currentLang}`);
@@ -709,7 +778,6 @@
       } catch (e) {}
     }
 
-    // البحث الذكي
     function initSearchAutocomplete() {
       const searchInput = document.getElementById('searchInput');
       const searchDropdown = document.getElementById('searchDropdown');
@@ -757,13 +825,12 @@
       });
     }
 
-    // تشغيل العروض
+    // جلب تفاصيل العمل وعرض بطاقة المعلومات والأفلام المشابهة
     async function fetchMediaAndOpenTheater(id, type, season = 1, episode = 1) {
       document.getElementById('homeView').style.display = 'none';
       document.getElementById('theaterView').style.display = 'block';
-      document.getElementById('iframeBox').style.display = 'block';
-      document.getElementById('directPlayerBox').style.display = 'none';
-      document.getElementById('serversContainer').style.display = 'block';
+      document.getElementById('mainPlayerContainer').style.display = 'none';
+      document.getElementById('serversContainer').style.display = 'none';
       window.scrollTo(0, 0);
 
       currentItem = { id, type, title: '', season, episode, isCustom: false, directUrl: '' };
@@ -773,6 +840,26 @@
         const data = await res.json();
         currentItem.title = data.title || data.name;
 
+        // تعبئة بطاقة التفاصيل
+        document.getElementById('detailTitle').innerText = currentItem.title;
+        document.getElementById('detailOverview').innerText = data.overview || "Enjoy high quality streaming.";
+        document.getElementById('detailScore').innerText = `⭐ ${data.vote_average ? data.vote_average.toFixed(1) : '8.0'}`;
+        document.getElementById('detailYear').innerText = (data.release_date || data.first_air_date || '2026').substring(0, 4);
+
+        if (data.backdrop_path) {
+          document.getElementById('detailHeroBox').style.backgroundImage = `url('${BACKDROP_BASE + data.backdrop_path}')`;
+        }
+
+        const genresBox = document.getElementById('detailGenres');
+        genresBox.innerHTML = '';
+        (data.genres || []).forEach(g => {
+          const badge = document.createElement('span');
+          badge.className = 'badge-tag';
+          badge.innerText = g.name;
+          genresBox.appendChild(badge);
+        });
+
+        // إدارة مواسم وحلقات المسلسلات
         if (type === 'tv') {
           document.getElementById('episodesContainer').style.display = 'block';
           renderTvSeasons(data.seasons || [], id);
@@ -780,7 +867,30 @@
           document.getElementById('episodesContainer').style.display = 'none';
         }
 
-        changeServer(1);
+        // جلب الأعمال المشابهة والمقترحة
+        loadSimilarMedia(id, type);
+
+      } catch(e) {}
+    }
+
+    // تشغيل البث عند الضغط على زر التشغيل الدائري
+    function startStreamingNow() {
+      document.getElementById('mainPlayerContainer').style.display = 'block';
+      document.getElementById('iframeBox').style.display = 'block';
+      document.getElementById('directPlayerBox').style.display = 'none';
+      document.getElementById('serversContainer').style.display = 'block';
+      changeServer(1);
+      document.getElementById('mainPlayerContainer').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // جلب الأعمال المشابهة من TMDb
+    async function loadSimilarMedia(id, type) {
+      try {
+        const res = await fetch(`${API_BASE}/${type}/${id}/similar?api_key=${API_KEY}&language=${currentLang}`);
+        const data = await res.json();
+        const deck = document.getElementById('deckSimilar');
+        deck.innerHTML = '';
+        renderCards(data.results || [], deck, type);
       } catch(e) {}
     }
 
@@ -819,12 +929,12 @@
           btn.classList.add('active');
           currentItem.episode = i;
           location.hash = `#/theater/tv/${tvId}/${seasonNum}/${i}`;
+          startStreamingNow();
         };
         epList.appendChild(btn);
       }
     }
 
-    // تبديل السيرفرات
     function changeServer(idx) {
       currentServer = idx;
       document.querySelectorAll('.srv-btn').forEach((b, i) => b.classList.toggle('active', i + 1 === idx));
@@ -853,11 +963,12 @@
       };
     }
 
-    // تشغيل الروابط المباشرة
     function playDirectMedia(title, streamUrl, poster) {
       currentItem = { id: 'custom', type: 'custom', title, isCustom: true, directUrl: streamUrl };
       document.getElementById('homeView').style.display = 'none';
       document.getElementById('theaterView').style.display = 'block';
+      document.getElementById('detailHeroBox').style.display = 'none';
+      document.getElementById('mainPlayerContainer').style.display = 'block';
       document.getElementById('iframeBox').style.display = 'none';
       document.getElementById('serversContainer').style.display = 'none';
       document.getElementById('episodesContainer').style.display = 'none';
@@ -885,7 +996,65 @@
       }
     }
 
-    // إدارة الحساب والتحقق من حالة المستخدم
+    // إدارة نظام المصادقة والحسابات (Login, Register, Forgot)
+    function switchAuthView(view) {
+      document.getElementById('loginFormBox').style.display = view === 'login' ? 'block' : 'none';
+      document.getElementById('registerFormBox').style.display = view === 'register' ? 'block' : 'none';
+      document.getElementById('forgotFormBox').style.display = view === 'forgot' ? 'block' : 'none';
+    }
+
+    async function handleLoginSubmit() {
+      const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+      const pass = document.getElementById('loginPass').value.trim();
+
+      const isBanned = await checkUserBanned(email);
+      if (isBanned) return alert('هذا الحساب محظور من استخدام المنصة!');
+
+      if (email === SUPER_ADMIN_EMAIL.toLowerCase() && pass === SUPER_ADMIN_PASS) {
+        currentUser = { email, isAdmin: true, isVip: true };
+        localStorage.setItem('cinema_user', JSON.stringify(currentUser));
+        closeModal('authModal');
+        verifyUserStatus();
+        return;
+      }
+
+      // التحقق من الحسابات المسجلة في Firebase
+      const key = email.replace(/[^a-zA-Z0-9]/g, '_');
+      try {
+        const res = await fetch(`${FIREBASE_DB}/users/${key}.json`);
+        const user = await res.json();
+        if (user && user.pass === pass) {
+          currentUser = { email, isAdmin: false, isVip: user.isVip || false };
+          localStorage.setItem('cinema_user', JSON.stringify(currentUser));
+          closeModal('authModal');
+          verifyUserStatus();
+        } else {
+          alert('بيانات الدخول غير صحيحة!');
+        }
+      } catch(e) { alert('تعذر تسجيل الدخول، يرجى المحاولة لاحقاً'); }
+    }
+
+    async function handleRegisterSubmit() {
+      const email = document.getElementById('regEmail').value.trim().toLowerCase();
+      const pass = document.getElementById('regPass').value.trim();
+      if (!email || pass.length < 6) return alert('يرجى إدخال بريد صحيح وكلمة مرور من 6 خانات على الأقل');
+
+      const key = email.replace(/[^a-zA-Z0-9]/g, '_');
+      await fetch(`${FIREBASE_DB}/users/${key}.json`, {
+        method: 'PUT',
+        body: JSON.stringify({ email, pass, created: new Date().toLocaleString('ar-EG'), isVip: false })
+      });
+      alert('تم إنشاء الحساب بنجاح! يمكنك الآن تسجيل الدخول.');
+      switchAuthView('login');
+    }
+
+    function handleForgotSubmit() {
+      const email = document.getElementById('forgotEmail').value.trim();
+      if (!email) return alert('يرجى كتابة البريد الإلكتروني المسجل');
+      alert('إذا كان هذا الحساب مسجلاً لدينا، سيتم إرسال تعليمات إعادة التعيين أو التواصل معك من المشرفين.');
+      switchAuthView('login');
+    }
+
     async function verifyUserStatus() {
       const guestBtn = document.getElementById('guestAuthBtn');
       const avatarBtn = document.getElementById('userAvatarBtn');
@@ -896,30 +1065,12 @@
         return;
       }
 
-      // إذا كان المستخدم مسجلاً، يتم إخفاء زر الدخول وإظهار الصورة الدائرية
       guestBtn.style.display = 'none';
       avatarBtn.style.display = 'flex';
 
       let isAdmin = (currentUser.email.toLowerCase() === SUPER_ADMIN_EMAIL.toLowerCase());
       currentUser.isAdmin = isAdmin;
       if (isAdmin) document.getElementById('adminDrawerLink').style.display = 'flex';
-    }
-
-    async function handleAuthSubmit() {
-      const email = document.getElementById('authEmail').value.trim().toLowerCase();
-      const pass = document.getElementById('authPass').value.trim();
-
-      const isBanned = await checkUserBanned(email);
-      if (isBanned) return alert('هذا الحساب محظور من استخدام المنصة!');
-
-      if (email === SUPER_ADMIN_EMAIL.toLowerCase() && pass === SUPER_ADMIN_PASS) {
-        currentUser = { email, isAdmin: true, isVip: true };
-        localStorage.setItem('cinema_user', JSON.stringify(currentUser));
-        closeModal('authModal');
-        verifyUserStatus();
-      } else {
-        alert('بيانات الدخول غير صحيحة!');
-      }
     }
 
     function logoutUser() {
@@ -932,11 +1083,13 @@
     function openVipModal() { document.getElementById('vipModal').style.display = 'flex'; }
     function openAuthModal() {
       if (currentUser) {
-        document.getElementById('authForms').style.display = 'none';
+        document.getElementById('loginFormBox').style.display = 'none';
+        document.getElementById('registerFormBox').style.display = 'none';
+        document.getElementById('forgotFormBox').style.display = 'none';
         document.getElementById('authProfile').style.display = 'block';
         document.getElementById('profileEmail').innerText = currentUser.email;
       } else {
-        document.getElementById('authForms').style.display = 'block';
+        switchAuthView('login');
         document.getElementById('authProfile').style.display = 'none';
       }
       document.getElementById('authModal').style.display = 'flex';
@@ -965,7 +1118,6 @@
       if (tab === 'visitors') loadAdminVisitors();
     }
 
-    // إدارة Firebase
     async function logVisitor() {
       try {
         const visitorData = {
@@ -1063,7 +1215,6 @@
       } catch (e) {}
     }
 
-    // إدارة الحظر
     async function checkUserBanned(email) {
       try {
         const key = email.replace(/[^a-zA-Z0-9]/g, '_');
