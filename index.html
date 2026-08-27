@@ -1,10 +1,28 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+  <!-- علامة إثبات ملكية محرك بحث جوجل الرسمية -->
+  <meta name="google-site-verification" content="BzEBTPOz0r6bMT40aBZm_NO_lS3DtXm_AHMwH_znFC4" />
+  
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ONEBR TV | ون بر تي في العالمية</title>
+  
+  <!-- إعدادات محركات البحث والـ SEO -->
+  <title>ONEBR TV | ون بر تي في - مشاهدة أحدث الأفلام والمسلسلات مجاناً</title>
+  <meta name="description" content="منصة ONEBR TV الرسمية لمشاهدة وتحميل أحدث الأفلام العالمية والمسلسلات التركية والكورية والأنمي بدقة Full HD مع ترجمة عربية مدمجة وسيرفرات فائقة السرعة بدون إعلانات.">
+  <meta name="keywords" content="ONEBR TV, ون بر تي في, مسلسلات تركية, وادي الذئاب, قيامة عثمان, افلام مترجمة, مسلسلات كورية, سينما VIP">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#e50914">
+
+  <!-- وسوم المشاركة (Facebook / Telegram / WhatsApp) -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="ONEBR TV | منصة السينما والمسلسلات العالمية">
+  <meta property="og:description" content="شاهد أحدث الأفلام والمسلسلات الحصرية مجاناً وبجودة فائقة.">
+  <meta property="og:image" content="https://image.tmdb.org/t/p/w500/mXk9kEw9u5dF72Tsk4O9Jt0rGgG.jpg">
+
+  <link rel="icon" type="image/png" href="https://img.icons8.com/color/96/play--v1.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
   <style>
     :root {
       --primary: #e50914;
@@ -18,25 +36,26 @@
       --cyan: #00f0ff;
       --green: #10b981;
       --yellow: #f59e0b;
+      --gold: #fbbf24;
       --radius: 12px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
     body { background-color: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
 
-    /* شريط التنبيهات العلوي */
+    /* شريط التنبيهات */
     #announcementBanner {
       display: none; background: linear-gradient(90deg, #b91c1c, #e50914);
       color: #fff; padding: 9px 16px; font-size: 0.85rem; font-weight: 700;
       text-align: center; position: sticky; top: 0; z-index: 1002; box-shadow: 0 4px 15px rgba(229,9,20,0.4);
     }
 
-    /* الهيدر العلوي */
+    /* الهيدر الرئيسي */
     header {
       position: sticky; top: 0; height: 65px; padding: 0 16px;
       display: flex; justify-content: space-between; align-items: center;
       background: rgba(6, 8, 13, 0.95); backdrop-filter: blur(16px);
-      z-index: 1000; border-bottom: 1px solid var(--border); gap: 10px;
+      z-index: 1000; border-bottom: 1px solid var(--border); gap: 8px;
     }
     .brand { display: flex; align-items: center; gap: 8px; cursor: pointer; flex-shrink: 0; }
     .brand-icon {
@@ -45,9 +64,9 @@
     }
     .brand-name { font-size: 1.25rem; font-weight: 900; background: linear-gradient(90deg, #fff, var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-    .header-actions { display: flex; align-items: center; gap: 8px; }
-    .search-box { position: relative; width: 170px; transition: 0.3s; }
-    @media(min-width: 768px) { .search-box { width: 280px; } }
+    .header-actions { display: flex; align-items: center; gap: 6px; }
+    .search-box { position: relative; width: 150px; transition: 0.3s; }
+    @media(min-width: 768px) { .search-box { width: 260px; } }
     .search-box input {
       width: 100%; padding: 7px 32px 7px 12px; border-radius: 20px;
       border: 1px solid var(--border); background: rgba(255, 255, 255, 0.06);
@@ -58,18 +77,24 @@
 
     .btn-header {
       background: rgba(255, 255, 255, 0.08); border: 1px solid var(--border); color: #fff;
-      padding: 7px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 700;
+      padding: 7px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 700;
       cursor: pointer; display: flex; align-items: center; gap: 6px; white-space: nowrap; transition: 0.2s;
     }
     .btn-header:hover { background: rgba(255, 255, 255, 0.15); border-color: var(--cyan); }
     
-    /* زر الأدمن - مخفي افتراضياً ولا يظهر إلا للمشرفين */
+    /* زر اشتراك VIP الذهبي */
+    .btn-vip-header {
+      background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; font-weight: 800; border: none;
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.4); animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.03); } 100% { transform: scale(1); } }
+
     #adminNavBtn {
-      display: none; background: linear-gradient(135deg, #f59e0b, #d97706);
-      color: #000; font-weight: 800; border: none;
+      display: none; background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff; font-weight: 800; border: none;
     }
 
-    /* شريط الفئات */
+    /* شريط الفئات والتصنيفات */
     .nav-tabs {
       display: flex; gap: 8px; padding: 12px 16px; overflow-x: auto;
       background: var(--card-bg); border-bottom: 1px solid var(--border); scrollbar-width: none;
@@ -82,7 +107,7 @@
     }
     .tab-btn.active, .tab-btn:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-    /* البانر الترويجي */
+    /* البانر الإعلاني */
     .hero {
       position: relative; height: 50vh; min-height: 320px; display: flex; align-items: flex-end;
       padding: 24px 16px; background: linear-gradient(0deg, var(--bg) 15%, rgba(6,8,13,0.5) 60%, rgba(6,8,13,0.1) 100%),
@@ -91,10 +116,12 @@
     .hero-content { max-width: 650px; }
     .hero-title { font-size: 1.7rem; font-weight: 900; margin-bottom: 6px; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
     .hero-desc { font-size: 0.85rem; color: #cbd5e1; margin-bottom: 14px; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; }
     .hero-btn {
       background: var(--primary); color: #fff; border: none; padding: 10px 22px;
       border-radius: 8px; font-size: 0.85rem; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
     }
+    .hero-btn-vip { background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; }
 
     /* الرفوف وقوائم العرض */
     .catalog { padding: 16px; display: flex; flex-direction: column; gap: 28px; }
@@ -194,6 +221,29 @@
       border-radius: 8px; font-weight: 800; font-size: 0.88rem; cursor: pointer; margin-top: 8px;
     }
 
+    /* تصميم نافذة اشتراكات VIP */
+    .vip-modal { max-width: 700px; text-align: center; }
+    .vip-badge-head { background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; padding: 4px 14px; border-radius: 20px; font-weight: 900; font-size: 0.85rem; display: inline-block; margin-bottom: 10px; }
+    .vip-plans-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin: 20px 0; }
+    .vip-card {
+      background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: var(--radius);
+      padding: 18px 12px; transition: 0.3s; position: relative; overflow: hidden;
+    }
+    .vip-card:hover { transform: translateY(-5px); border-color: var(--gold); box-shadow: 0 4px 20px rgba(245, 158, 11, 0.2); }
+    .vip-card.popular { border: 2px solid var(--gold); background: rgba(245, 158, 11, 0.05); }
+    .vip-plan-name { font-size: 1rem; font-weight: 800; color: #fff; margin-bottom: 6px; }
+    .vip-price { font-size: 1.5rem; font-weight: 900; color: var(--gold); margin-bottom: 12px; }
+    .vip-features { list-style: none; font-size: 0.75rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+    .vip-features li i { color: var(--green); margin-left: 4px; }
+    .btn-vip-buy {
+      width: 100%; background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; border: none;
+      padding: 8px; border-radius: 6px; font-weight: 800; font-size: 0.8rem; cursor: pointer;
+    }
+    .payment-methods-box {
+      background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; font-size: 0.8rem; color: var(--text-muted);
+      margin-top: 14px; border: 1px dashed var(--border);
+    }
+
     /* لوحة الأدمن */
     .admin-modal { max-width: 820px; }
     .admin-nav { display: flex; gap: 6px; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 8px; overflow-x: auto; }
@@ -208,12 +258,13 @@
     .badge { padding: 2px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 700; }
     .badge-online { background: rgba(16,185,129,0.2); color: var(--green); }
     .badge-banned { background: rgba(239,68,68,0.2); color: #ef4444; }
-    .btn-sm-action { padding: 3px 8px; border-radius: 4px; font-size: 0.7rem; border: none; cursor: pointer; font-weight: 700; }
+    .badge-vip { background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; font-weight: 800; }
+    .btn-sm-action { padding: 3px 8px; border-radius: 4px; font-size: 0.7rem; border: none; cursor: pointer; font-weight: 700; margin-left: 2px; }
   </style>
 </head>
 <body>
 
-  <!-- شريط التنبيهات -->
+  <!-- شريط التنبيهات الإعلانية -->
   <div id="announcementBanner"></div>
 
   <!-- الهيدر الرئيسي -->
@@ -229,11 +280,17 @@
     </div>
 
     <div class="header-actions">
+      <!-- زر اشتراك VIP -->
+      <button class="btn-header btn-vip-header" onclick="openVipModal()">
+        <i class="fa-solid fa-crown"></i> اشتراك VIP
+      </button>
+
+      <!-- زر الحساب والتسجيل -->
       <button class="btn-header" id="authBtn" onclick="openAuthModal()">
         <i class="fa-solid fa-user"></i> <span id="authBtnText">دخول</span>
       </button>
       
-      <!-- زر الأدمن: يظهر فقط عند تسجيل الدخول بحساب المشرف -->
+      <!-- زر لوحة الأدمن: يظهر فقط للمشرف الرئيسي altrfybaqer0@gmail.com -->
       <button class="btn-header" id="adminNavBtn" onclick="openAdminModal()">
         <i class="fa-solid fa-shield-halved"></i> لوحة الأدمن
       </button>
@@ -256,7 +313,10 @@
       <div class="hero-content">
         <h1 class="hero-title" id="heroTitle">جاري تحميل أحدث العروض...</h1>
         <p class="hero-desc" id="heroDesc">استمتع بأكبر منصة سينمائية بملايين الأفلام والمسلسلات مع ترجمة احترافية وسيرفرات فائقة السرعة.</p>
-        <button class="hero-btn" id="heroBtn"><i class="fa-solid fa-play"></i> مشاهدة العمل الآن</button>
+        <div class="hero-actions">
+          <button class="hero-btn" id="heroBtn"><i class="fa-solid fa-play"></i> مشاهدة العمل الآن</button>
+          <button class="hero-btn hero-btn-vip" onclick="openVipModal()"><i class="fa-solid fa-crown"></i> تفعيل عضوية VIP</button>
+        </div>
       </div>
     </section>
 
@@ -320,10 +380,10 @@
       <iframe id="streamFrame" src="" allowfullscreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture; accelerometer; gyroscope"></iframe>
     </div>
 
-    <!-- قائمة السيرفرات القوية -->
+    <!-- قائمة السيرفرات القوية والمترجمة -->
     <div class="servers-bar">
       <div style="font-size: 0.85rem; font-weight: 800; color: #fff;">
-        <i class="fa-solid fa-server" style="color: var(--cyan); margin-left: 6px;"></i> سيرفرات البث السحابية (اختر السيرفر الأنسب لك):
+        <i class="fa-solid fa-server" style="color: var(--cyan); margin-left: 6px;"></i> سيرفرات البث السحابية المباشرة (اختر السيرفر الأنسب):
       </div>
       <div class="servers-list">
         <button class="srv-btn active" onclick="changeServer(1)">سيرفر 1 (VidLink HD - ترجمة عربي مدمجة)</button>
@@ -341,7 +401,61 @@
     </div>
   </div>
 
-  <!-- تسجيل الدخول -->
+  <!-- نافذة باقات واشتراكات VIP -->
+  <div class="modal-overlay" id="vipModal">
+    <div class="modal-box vip-modal">
+      <i class="fa-solid fa-xmark modal-close" onclick="closeVipModal()"></i>
+      <span class="vip-badge-head"><i class="fa-solid fa-crown"></i> عضوية ONEBR VIP المميزة</span>
+      <h2 style="font-size: 1.4rem; font-weight: 900; color: #fff; margin-bottom: 6px;">شاهد بدون إعلانات وبأعلى جودة 4K</h2>
+      <p style="font-size: 0.82rem; color: var(--text-muted);">انضم الآن لأعضاء VIP واستمتع بتجربة سينمائية لا مثيل لها.</p>
+
+      <div class="vip-plans-grid">
+        <!-- باقة شهرية -->
+        <div class="vip-card">
+          <div class="vip-plan-name">الباقة الشهرية</div>
+          <div class="vip-price">3$ <span style="font-size: 0.75rem; color: var(--text-muted);">/ شهرياً</span></div>
+          <ul class="vip-features">
+            <li><i class="fa-solid fa-check"></i> مشاهدة بدون إعلانات</li>
+            <li><i class="fa-solid fa-check"></i> سيرفرات VIP فائقة السرعة</li>
+            <li><i class="fa-solid fa-check"></i> جودة 1080p Full HD</li>
+          </ul>
+          <button class="btn-vip-buy" onclick="contactForVip('الباقة الشهرية - 3$')">اشترك الآن</button>
+        </div>
+
+        <!-- باقة 3 أشهر (الأكثر طلباً) -->
+        <div class="vip-card popular">
+          <div style="position: absolute; top:0; right:0; background: var(--gold); color:#000; font-size:0.65rem; font-weight:900; padding:2px 8px; border-bottom-left-radius:8px;">الأكثر توفيراً</div>
+          <div class="vip-plan-name">باقة 3 أشهر</div>
+          <div class="vip-price">7$ <span style="font-size: 0.75rem; color: var(--text-muted);">/ 3 شهور</span></div>
+          <ul class="vip-features">
+            <li><i class="fa-solid fa-check"></i> كل ميزات الباقة الشهرية</li>
+            <li><i class="fa-solid fa-check"></i> ميزة طلب الأفلام والمسلسلات</li>
+            <li><i class="fa-solid fa-check"></i> دعم فني مخصص 24/7</li>
+          </ul>
+          <button class="btn-vip-buy" onclick="contactForVip('باقة 3 أشهر - 7$')">اشترك الآن</button>
+        </div>
+
+        <!-- باقة سنوية -->
+        <div class="vip-card">
+          <div class="vip-plan-name">الباقة السنوية</div>
+          <div class="vip-price">20$ <span style="font-size: 0.75rem; color: var(--text-muted);">/ سنوياً</span></div>
+          <ul class="vip-features">
+            <li><i class="fa-solid fa-check"></i> وصول دائم مدى الحياة لكل الميزات</li>
+            <li><i class="fa-solid fa-check"></i> توفير الحلقات الحصرية قبل الجميع</li>
+            <li><i class="fa-solid fa-check"></i> شارة VIP الذهبية في حسابك</li>
+          </ul>
+          <button class="btn-vip-buy" onclick="contactForVip('الباقة السنوية - 20$')">اشترك الآن</button>
+        </div>
+      </div>
+
+      <div class="payment-methods-box">
+        <div style="font-weight: 800; color: #fff; margin-bottom: 4px;">طرق الدفع المتاحة:</div>
+        <div>🇮🇶 زين كاش (Zain Cash) • آسيا حوالة • رصيد كروت • USDT (Crypto) • بطاقات دفع</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة تسجيل الدخول والحساب -->
   <div class="modal-overlay" id="authModal">
     <div class="modal-box">
       <i class="fa-solid fa-xmark modal-close" onclick="closeAuthModal()"></i>
@@ -369,7 +483,7 @@
     </div>
   </div>
 
-  <!-- لوحة تحكم الأدمن -->
+  <!-- لوحة تحكم الأدمن الشاملة (Super Admin Panel) -->
   <div class="modal-overlay" id="adminModal">
     <div class="modal-box admin-modal">
       <i class="fa-solid fa-xmark modal-close" onclick="closeAdminModal()"></i>
@@ -377,7 +491,7 @@
       
       <div class="admin-nav">
         <button class="admin-nav-btn active" onclick="switchAdminTab('visitors', this)">👥 الزوار المباشرين</button>
-        <button class="admin-nav-btn" onclick="switchAdminTab('users', this)">👤 المستخدمين والحظر</button>
+        <button class="admin-nav-btn" onclick="switchAdminTab('users', this)">👤 المستخدمين والـ VIP والحظر</button>
         <button class="admin-nav-btn" onclick="switchAdminTab('admins', this)">🛡️ إدارة المشرفين</button>
         <button class="admin-nav-btn" onclick="switchAdminTab('addMedia', this)">➕ إضافة مسلسل/فيلم</button>
         <button class="admin-nav-btn" onclick="switchAdminTab('manageMedia', this)">🗑️ إدارة وحذف الأعمال</button>
@@ -396,7 +510,7 @@
       <div id="tabUsers" style="display: none;">
         <div style="max-height: 280px; overflow-y: auto;">
           <table class="admin-table">
-            <thead><tr><th>البريد</th><th>تاريخ الانضمام</th><th>الحالة</th><th>الإجراء</th></tr></thead>
+            <thead><tr><th>البريد</th><th>الرتبة</th><th>الحالة</th><th>الإجراءات</th></tr></thead>
             <tbody id="usersTableBody"></tbody>
           </table>
         </div>
@@ -470,7 +584,7 @@
     const BACKDROP_BASE = "https://image.tmdb.org/t/p/original";
     const FIREBASE_DB = "https://cinemavip-a9a21-default-rtdb.firebaseio.com";
 
-    // المشرف الرئيسي
+    // المشرف الرئيسي الثابت
     const SUPER_ADMIN_EMAIL = "altrfybaqer0@gmail.com";
     const SUPER_ADMIN_PASS = "Aann22@@55";
 
@@ -517,6 +631,13 @@
         }
       } catch (e) {}
 
+      // التحقق من حالة VIP
+      try {
+        const vipRes = await fetch(`${FIREBASE_DB}/vip_users/${emailKey}.json`);
+        const isVip = await vipRes.json();
+        currentUser.isVip = !!isVip;
+      } catch (e) {}
+
       let isAdmin = (currentUser.email.toLowerCase() === SUPER_ADMIN_EMAIL);
       if (!isAdmin) {
         try {
@@ -534,7 +655,9 @@
       } else {
         document.getElementById('adminNavBtn').style.display = 'none';
       }
-      document.getElementById('authBtnText').innerText = currentUser.email.split('@')[0];
+      
+      const badgePrefix = currentUser.isVip ? '⭐ VIP | ' : '';
+      document.getElementById('authBtnText').innerText = badgePrefix + currentUser.email.split('@')[0];
     }
 
     async function logVisitorEntry() {
@@ -786,7 +909,6 @@
       launchStream();
     }
 
-    // سيرفرات البث القوية والمحدثة مع الترجمة
     function launchStream() {
       if (!currentItem.id || currentItem.type === 'custom') return;
       const { id, type, season: s, episode: e } = currentItem;
@@ -855,6 +977,15 @@
       }, 350);
     }
 
+    // --- نظام اشتراك VIP ---
+    function openVipModal() { document.getElementById('vipModal').style.display = 'flex'; }
+    function closeVipModal() { document.getElementById('vipModal').style.display = 'none'; }
+
+    function contactForVip(planName) {
+      const msg = `مرحباً، أود الاشتراك في ONEBR VIP (${planName}). يرجى تزويدي بحساب الدفع لتفعيل الحساب فوراً.`;
+      alert(`🎉 تم اختيار ${planName}!\n\nيمكنك التواصل معنا عبر التيليجرام أو الواتساب لتحويل المبلغ وتفعيل شارة VIP لحسابك.`);
+    }
+
     // --- العضوية وتسجيل الدخول ---
     function openAuthModal() {
       document.getElementById('authModal').style.display = 'flex';
@@ -862,7 +993,9 @@
         document.getElementById('authForms').style.display = 'none';
         document.getElementById('authProfile').style.display = 'block';
         document.getElementById('profileEmail').innerText = currentUser.email;
-        document.getElementById('profileRoleBadge').innerHTML = currentUser.isAdmin ? `<span class="badge" style="background: #f59e0b; color:#000;">🛡️ مشرف ONEBR TV</span>` : `<span class="badge" style="background: rgba(255,255,255,0.1);">عضو مميز</span>`;
+        let badgeHtml = currentUser.isAdmin ? `<span class="badge" style="background:#f59e0b; color:#000;">🛡️ مشرف ONEBR TV</span>` : `<span class="badge" style="background:rgba(255,255,255,0.1);">عضو</span>`;
+        if (currentUser.isVip) badgeHtml += ` <span class="badge badge-vip">⭐ VIP مفعل</span>`;
+        document.getElementById('profileRoleBadge').innerHTML = badgeHtml;
       } else {
         document.getElementById('authForms').style.display = 'block';
         document.getElementById('authProfile').style.display = 'none';
@@ -883,9 +1016,8 @@
       const pass = document.getElementById('authPass').value.trim();
       if (!email || !pass) return alert('يرجى كتابة البريد وكلمة المرور');
 
-      // تسجيل دخول المشرف الرئيسي
       if (email === SUPER_ADMIN_EMAIL && pass === SUPER_ADMIN_PASS) {
-        currentUser = { email: email, isAdmin: true };
+        currentUser = { email: email, isAdmin: true, isVip: true };
         localStorage.setItem('cinema_user', JSON.stringify(currentUser));
         alert('مرحباً بك يا باقر! تم الدخول بصلاحيات المشرف الكاملة.');
         closeAuthModal();
@@ -966,18 +1098,24 @@
         const users = await res.json() || {};
         const banRes = await fetch(`${FIREBASE_DB}/banned_users.json`);
         const bans = await banRes.json() || {};
+        const vipRes = await fetch(`${FIREBASE_DB}/vip_users.json`);
+        const vips = await vipRes.json() || {};
 
         const tbody = document.getElementById('usersTableBody');
         tbody.innerHTML = "";
         Object.keys(users).forEach(k => {
           const u = users[k];
           const isBanned = !!bans[k];
+          const isVip = !!vips[k];
           tbody.innerHTML += `
             <tr>
               <td>${u.email}</td>
-              <td>${u.date || 'عضو'}</td>
+              <td>${isVip ? '<span class="badge badge-vip">⭐ VIP</span>' : 'عادي'}</td>
               <td><span class="badge ${isBanned ? 'badge-banned' : 'badge-online'}">${isBanned ? 'محظور' : 'نشط'}</span></td>
               <td>
+                <button class="btn-sm-action" style="background: ${isVip ? '#64748b' : '#f59e0b'}; color:#000;" onclick="toggleUserVip('${k}', ${isVip})">
+                  ${isVip ? 'إلغاء VIP' : 'ترقية لـ VIP'}
+                </button>
                 <button class="btn-sm-action" style="background: ${isBanned ? '#10b981' : '#ef4444'}; color:#fff;" onclick="toggleUserBan('${k}', ${isBanned})">
                   ${isBanned ? 'فك الحظر' : 'حظر'}
                 </button>
@@ -986,6 +1124,17 @@
           `;
         });
       } catch (e) {}
+    }
+
+    async function toggleUserVip(userKey, isVip) {
+      if (isVip) {
+        await fetch(`${FIREBASE_DB}/vip_users/${userKey}.json`, { method: 'DELETE' });
+        alert('تم إلغاء عضوية VIP عن المستخدم!');
+      } else {
+        await fetch(`${FIREBASE_DB}/vip_users/${userKey}.json`, { method: 'PUT', body: JSON.stringify(true) });
+        alert('تم منح عضوية VIP بنجاح!');
+      }
+      fetchAdminUsers();
     }
 
     async function toggleUserBan(userKey, isCurrentlyBanned) {
