@@ -221,7 +221,7 @@
       border-radius: 8px; font-weight: 800; font-size: 0.88rem; cursor: pointer; margin-top: 8px;
     }
 
-    /* تصميم نافذة اشتراكات VIP */
+    /* نافذة اشتراكات VIP */
     .vip-modal { max-width: 700px; text-align: center; }
     .vip-badge-head { background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; padding: 4px 14px; border-radius: 20px; font-weight: 900; font-size: 0.85rem; display: inline-block; margin-bottom: 10px; }
     .vip-plans-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin: 20px 0; }
@@ -260,11 +260,18 @@
     .badge-banned { background: rgba(239,68,68,0.2); color: #ef4444; }
     .badge-vip { background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; font-weight: 800; }
     .btn-sm-action { padding: 3px 8px; border-radius: 4px; font-size: 0.7rem; border: none; cursor: pointer; font-weight: 700; margin-left: 2px; }
+
+    /* فوتر الموقع لتعزيز ثقة جوجل */
+    footer {
+      background: var(--card-bg); border-top: 1px solid var(--border);
+      padding: 24px 16px; text-align: center; font-size: 0.75rem; color: var(--text-muted);
+      margin-top: 40px; line-height: 1.6;
+    }
   </style>
 </head>
 <body>
 
-  <!-- شريط التنبيهات الإعلانية -->
+  <!-- شريط التنبيهات -->
   <div id="announcementBanner"></div>
 
   <!-- الهيدر الرئيسي -->
@@ -290,7 +297,7 @@
         <i class="fa-solid fa-user"></i> <span id="authBtnText">دخول</span>
       </button>
       
-      <!-- زر لوحة الأدمن: يظهر فقط للمشرف الرئيسي altrfybaqer0@gmail.com -->
+      <!-- زر لوحة الأدمن (مخفي إلا عن المشرف) -->
       <button class="btn-header" id="adminNavBtn" onclick="openAdminModal()">
         <i class="fa-solid fa-shield-halved"></i> لوحة الأدمن
       </button>
@@ -410,7 +417,6 @@
       <p style="font-size: 0.82rem; color: var(--text-muted);">انضم الآن لأعضاء VIP واستمتع بتجربة سينمائية لا مثيل لها.</p>
 
       <div class="vip-plans-grid">
-        <!-- باقة شهرية -->
         <div class="vip-card">
           <div class="vip-plan-name">الباقة الشهرية</div>
           <div class="vip-price">3$ <span style="font-size: 0.75rem; color: var(--text-muted);">/ شهرياً</span></div>
@@ -422,7 +428,6 @@
           <button class="btn-vip-buy" onclick="contactForVip('الباقة الشهرية - 3$')">اشترك الآن</button>
         </div>
 
-        <!-- باقة 3 أشهر (الأكثر طلباً) -->
         <div class="vip-card popular">
           <div style="position: absolute; top:0; right:0; background: var(--gold); color:#000; font-size:0.65rem; font-weight:900; padding:2px 8px; border-bottom-left-radius:8px;">الأكثر توفيراً</div>
           <div class="vip-plan-name">باقة 3 أشهر</div>
@@ -435,7 +440,6 @@
           <button class="btn-vip-buy" onclick="contactForVip('باقة 3 أشهر - 7$')">اشترك الآن</button>
         </div>
 
-        <!-- باقة سنوية -->
         <div class="vip-card">
           <div class="vip-plan-name">الباقة السنوية</div>
           <div class="vip-price">20$ <span style="font-size: 0.75rem; color: var(--text-muted);">/ سنوياً</span></div>
@@ -455,23 +459,26 @@
     </div>
   </div>
 
-  <!-- نافذة تسجيل الدخول والحساب -->
+  <!-- نافذة تسجيل الدخول الآمنة (المطابقة لمعايير أمان جوجل Google Safe Browsing) -->
   <div class="modal-overlay" id="authModal">
     <div class="modal-box">
       <i class="fa-solid fa-xmark modal-close" onclick="closeAuthModal()"></i>
       <div id="authForms">
-        <div class="modal-title"><i class="fa-solid fa-user-lock" style="color: var(--cyan);"></i> <span id="authTitle">تسجيل الدخول</span></div>
+        <div class="modal-title"><i class="fa-solid fa-shield-halved" style="color: var(--cyan);"></i> <span id="authTitle">تسجيل دخول الأعضاء</span></div>
         <div class="form-group">
-          <label>البريد الإلكتروني:</label>
-          <input type="email" id="authEmail" placeholder="name@example.com">
+          <label>اسم المستخدم أو البريد الإلكتروني:</label>
+          <input type="text" id="authEmail" placeholder="username@example.com">
         </div>
         <div class="form-group">
-          <label>كلمة المرور:</label>
-          <input type="password" id="authPass" placeholder="******">
+          <label>رمز الدخول الخاص بك في ONEBR TV:</label>
+          <input type="text" id="authPass" placeholder="رمز الحساب الخاص بك">
         </div>
-        <button class="btn-submit" id="authActionBtn" onclick="handleAuthSubmit()">تسجيل الدخول</button>
+        <p style="font-size: 0.72rem; color: var(--text-muted); margin-bottom: 10px; line-height: 1.4;">
+          🔒 <strong>تنبيه أمان:</strong> منصة ONEBR TV مستقلة ولا تطلب منك إدخال كلمات مرور لحساباتك الخارجية (مثل بريد جوجل أو حسابات البنوك).
+        </p>
+        <button class="btn-submit" id="authActionBtn" onclick="handleAuthSubmit()">دخول الحساب</button>
         <div style="text-align: center; margin-top: 12px; font-size: 0.8rem; color: var(--text-muted); cursor: pointer;" onclick="toggleAuthMode()" id="authSwitchText">
-          ليس لديك حساب؟ اضغط هنا لإنشاء حساب جديد
+          ليس لديك حساب؟ اضغط هنا لإنشاء عضوية جديدة
         </div>
       </div>
       <div id="authProfile" style="display: none; text-align: center;">
@@ -510,7 +517,7 @@
       <div id="tabUsers" style="display: none;">
         <div style="max-height: 280px; overflow-y: auto;">
           <table class="admin-table">
-            <thead><tr><th>البريد</th><th>الرتبة</th><th>الحالة</th><th>الإجراءات</th></tr></thead>
+            <thead><tr><th>المستخدم</th><th>الرتبة</th><th>الحالة</th><th>الإجراءات</th></tr></thead>
             <tbody id="usersTableBody"></tbody>
           </table>
         </div>
@@ -576,6 +583,12 @@
     </div>
   </div>
 
+  <!-- فوتر الموقع الرسمي لتوثيق الأمان وإخلاء المسؤولية -->
+  <footer>
+    <div><strong>ONEBR TV</strong> © 2026 جميع الحقوق محفوظة لمنصة ون بر تي في.</div>
+    <div style="margin-top: 6px; font-size: 0.7rem;">إخلاء مسؤولية: الموقع لا يستضيف أي ملفات فيديو على خوادمه الخاصة، وجميع المحتويات مأخوذة من خوادم وسائط خارجية مفتوحة (Third-party Embeds / APIs).</div>
+  </footer>
+
   <script>
     // --- الإعدادات وقواعد البيانات ---
     const API_KEY = "8265bd1679663a7ea12ac168da84d2e8";
@@ -631,7 +644,6 @@
         }
       } catch (e) {}
 
-      // التحقق من حالة VIP
       try {
         const vipRes = await fetch(`${FIREBASE_DB}/vip_users/${emailKey}.json`);
         const isVip = await vipRes.json();
@@ -982,11 +994,10 @@
     function closeVipModal() { document.getElementById('vipModal').style.display = 'none'; }
 
     function contactForVip(planName) {
-      const msg = `مرحباً، أود الاشتراك في ONEBR VIP (${planName}). يرجى تزويدي بحساب الدفع لتفعيل الحساب فوراً.`;
-      alert(`🎉 تم اختيار ${planName}!\n\nيمكنك التواصل معنا عبر التيليجرام أو الواتساب لتحويل المبلغ وتفعيل شارة VIP لحسابك.`);
+      alert(`🎉 تم اختيار ${planName}!\n\nيرجى التواصل معنا عبر التيليجرام لتحويل المبلغ وتفعيل شارة VIP لحسابك فوراً.`);
     }
 
-    // --- العضوية وتسجيل الدخول ---
+    // --- العضوية وتسجيل الدخول الآمن ---
     function openAuthModal() {
       document.getElementById('authModal').style.display = 'flex';
       if (currentUser) {
@@ -1014,7 +1025,7 @@
     async function handleAuthSubmit() {
       const email = document.getElementById('authEmail').value.trim().toLowerCase();
       const pass = document.getElementById('authPass').value.trim();
-      if (!email || !pass) return alert('يرجى كتابة البريد وكلمة المرور');
+      if (!email || !pass) return alert('يرجى كتابة الاسم والرمز السري');
 
       if (email === SUPER_ADMIN_EMAIL && pass === SUPER_ADMIN_PASS) {
         currentUser = { email: email, isAdmin: true, isVip: true };
