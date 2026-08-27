@@ -7,6 +7,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
+  <!-- 2. أكواد إعلانات Adsterra الرسمية الخاصة بك (Social Bar & Popunder) -->
+  <script src="https://pl31046353.profitableratecpmnetwork.com/61/4f/72/614f728ad484f449400870c3be110111.js"></script>
+  <script src="https://pl31046352.profitableratecpmnetwork.com/24/e2/59/24e259929d0a94f08f92e8373055a876.js"></script>
+
   <!-- إعدادات محركات البحث والـ SEO -->
   <title>ONEBR TV | ون بر تي في - مشاهدة أحدث الأفلام والمسلسلات مجاناً</title>
   <meta name="description" content="منصة ONEBR TV الرسمية لمشاهدة وتحميل أحدث الأفلام العالمية والمسلسلات التركية والكورية والأنمي بدقة Full HD و SD للنت الضعيف مع ترجمة عربية وسيرفرات سريعة.">
@@ -117,14 +121,6 @@
       border-radius: 8px; font-size: 0.85rem; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
     }
     .hero-btn-vip { background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; }
-
-    .ad-slot-box {
-      width: 100%; max-width: 900px; margin: 16px auto; padding: 8px;
-      background: rgba(255, 255, 255, 0.02); border: 1px dashed rgba(255, 255, 255, 0.1);
-      border-radius: var(--radius); text-align: center; min-height: 70px; display: flex;
-      flex-direction: column; align-items: center; justify-content: center;
-    }
-    .ad-tag-label { font-size: 0.65rem; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase; }
 
     .catalog { padding: 16px; display: flex; flex-direction: column; gap: 24px; }
     .shelf-title { font-size: 1.15rem; font-weight: 800; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
@@ -331,14 +327,6 @@
       </div>
     </section>
 
-    <!-- مساحة إعلانية 1 -->
-    <div class="ad-slot-box" id="homeAdSlot">
-      <div class="ad-tag-label">مساحة إعلانية</div>
-      <div style="color: var(--text-muted); font-size: 0.75rem;">
-        <i class="fa-solid fa-bullhorn"></i> إعلانات ONEBR TV الرسمية
-      </div>
-    </div>
-
     <div class="catalog" id="catalogSections">
       <div class="shelf" id="customShelfBox" style="display: none;">
         <div class="shelf-title">⭐ أعمال حصرية مضافة بواسطة الإدارة</div>
@@ -403,14 +391,6 @@
     <div class="low-net-tip">
       <i class="fa-solid fa-gauge-high"></i>
       <span><strong>إذا كان الإنترنت لديك ضعيفاً (3Mbps أو أقل):</strong> اختر <strong>سيرفر 2 (النت الضعيف)</strong>، أو اضغط على ترس الإعدادات ⚙️ داخل مشغل الفيديو واختر دقة <strong>360p أو 480p</strong> للمشاهدة بدون أي تقطيع!</span>
-    </div>
-
-    <!-- مساحة إعلانية 2 -->
-    <div class="ad-slot-box" id="playerAdSlot">
-      <div class="ad-tag-label">إعلان مميز</div>
-      <div style="color: var(--text-muted); font-size: 0.75rem;">
-        <i class="fa-solid fa-rectangle-ad"></i> إعلانات المشغل التلقائية
-      </div>
     </div>
 
     <!-- قائمة السيرفرات السحابية المحدثة مع سيرفر النت الضعيف -->
@@ -634,7 +614,6 @@
 
     async function initSite() {
       await verifyUserStatus();
-      handleVipAdsVisibility();
       logVisitorEntry();
       loadCustomMediaFromFirebase();
       loadBannerAnnouncement();
@@ -647,12 +626,6 @@
       loadShelf('/discover/tv?with_genres=16&sort_by=popularity.desc', 'deckAnime', false, 'tv');
       
       loadMoreExploreMedia(true);
-    }
-
-    function handleVipAdsVisibility() {
-      if (currentUser && (currentUser.isVip || currentUser.isAdmin)) {
-        document.querySelectorAll('.ad-slot-box').forEach(el => el.style.display = 'none');
-      }
     }
 
     async function verifyUserStatus() {
@@ -951,7 +924,7 @@
       launchStream();
     }
 
-    // خريطة سيرفرات البث المتطورة (بما فيها سيرفر النت الضعيف)
+    // خريطة السيرفرات السحابية
     function launchStream() {
       if (!currentItem.id || currentItem.type === 'custom') return;
       const { id, type, season: s, episode: e } = currentItem;
@@ -960,7 +933,7 @@
       if (type === "movie") {
         const srvs = {
           1: `https://vidlink.pro/movie/${id}?primaryColor=e50914&subtitles=ar,en&autoplay=false`,
-          2: `https://vidsrc.me/embed/movie?tmdb=${id}`, // سيرفر خفيف وسريع للنت الضعيف
+          2: `https://vidsrc.me/embed/movie?tmdb=${id}`,
           3: `https://autoembed.co/movie/tmdb/${id}`,
           4: `https://vidsrc.to/embed/movie/${id}`,
           5: `https://embed.su/embed/movie/${id}`,
@@ -970,7 +943,7 @@
       } else {
         const srvs = {
           1: `https://vidlink.pro/tv/${id}/${s}/${e}?primaryColor=e50914&subtitles=ar,en&autoplay=false`,
-          2: `https://vidsrc.me/embed/tv?tmdb=${id}&season=${s}&episode=${e}`, // سيرفر خفيف وسريع للنت الضعيف
+          2: `https://vidsrc.me/embed/tv?tmdb=${id}&season=${s}&episode=${e}`,
           3: `https://autoembed.co/tv/tmdb/${id}-${s}-${e}`,
           4: `https://vidsrc.to/embed/tv/${id}/${s}/${e}`,
           5: `https://embed.su/embed/tv/${id}/${s}/${e}`,
@@ -1064,7 +1037,6 @@
         alert('مرحباً بك يا باقر! تم الدخول بصلاحيات المشرف الكاملة.');
         closeAuthModal();
         verifyUserStatus();
-        handleVipAdsVisibility();
         logVisitorEntry();
         return;
       }
@@ -1086,7 +1058,6 @@
       localStorage.setItem('cinema_user', JSON.stringify(currentUser));
       closeAuthModal();
       verifyUserStatus();
-      handleVipAdsVisibility();
       logVisitorEntry();
     }
 
@@ -1095,7 +1066,6 @@
       localStorage.removeItem('cinema_user');
       document.getElementById('adminNavBtn').style.display = 'none';
       document.getElementById('authBtnText').innerText = 'دخول';
-      handleVipAdsVisibility();
       closeAuthModal();
     }
 
