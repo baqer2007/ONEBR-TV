@@ -1,19 +1,25 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+  <!-- 1. إثبات ملكية محرك بحث Google الرسمي -->
   <meta name="google-site-verification" content="BzEBTPOz0r6bMT40aBZm_NO_lS3DtXm_AHMwH_znFC4" />
+  
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
+  <!-- 2. أكواد إعلانات Adsterra الرسمية الخاصة بك -->
   <script src="https://pl31046353.profitableratecpmnetwork.com/61/4f/72/614f728ad484f449400870c3be110111.js"></script>
   <script src="https://pl31046352.profitableratecpmnetwork.com/24/e2/59/24e259929d0a94f08f92e8373055a876.js"></script>
 
-  <title>ONEBR TV | ون بر تي في - مشاهدة أحدث الأفلام والمسلسلات</title>
-  <meta name="description" content="منصة ONEBR TV الرسمية لمشاهدة الأفلام والمسلسلات التركية والعربية والآسيوية والعالمية.">
+  <title>ONEBR TV | ون بر تي في - مكتبة الأفلام والمسلسلات والمستودعات المفتوحة</title>
+  <meta name="description" content="منصة ONEBR TV الرسمية لمشاهدة الأفلام والمسلسلات ومستودعات الأرشيف المفتوح وقنوات البث المباشر.">
+  <meta name="keywords" content="ONEBR TV, ون بر تي في, مسلسلات تركية, ارشيف السينما, افلام مترجمة, قنوات بث مباشر">
+  <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#e50914">
 
   <link rel="icon" type="image/png" href="https://img.icons8.com/color/96/play--v1.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
   <style>
     :root {
@@ -70,6 +76,7 @@
       padding: 7px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 700;
       cursor: pointer; display: flex; align-items: center; gap: 6px; white-space: nowrap;
     }
+    .btn-header:hover { background: rgba(255, 255, 255, 0.15); border-color: var(--cyan); }
     
     .btn-vip-header {
       background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; font-weight: 800; border: none;
@@ -128,7 +135,7 @@
       padding: 10px; border-radius: 30px; font-weight: 800; font-size: 0.85rem; cursor: pointer;
     }
 
-    /* المشغل الاحترافي */
+    /* شاشة المشغل */
     #theaterView { display: none; padding: 12px; max-width: 1100px; margin: 0 auto; }
     .back-btn {
       background: var(--card-bg); color: #fff; border: 1px solid var(--border);
@@ -226,11 +233,11 @@
 
     <div class="search-box">
       <i class="fa-solid fa-magnifying-glass"></i>
-      <input type="text" id="searchInput" placeholder="ابحث عن الأفلام والمسلسلات..." oninput="searchMedia()">
+      <input type="text" id="searchInput" placeholder="ابحث في آلاف الأفلام والمسلسلات..." oninput="searchMedia()">
     </div>
 
     <div class="header-actions">
-      <button class="btn-header btn-vip-header" onclick="alert('تواصل عبر التليجرام لتفعيل اشتراك VIP!')">
+      <button class="btn-header btn-vip-header" onclick="alert('تواصل عبر تيليجرام لتفعيل باقات VIP!')">
         <i class="fa-solid fa-crown"></i> VIP
       </button>
 
@@ -247,9 +254,10 @@
   <div id="homeView">
     <div class="nav-tabs">
       <button class="tab-btn active" onclick="switchCategory('all', this)">✨ الكل</button>
+      <button class="tab-btn" onclick="switchCategory('archive', this)">🏛️ سينما الأرشيف المفتوح (Archive.org)</button>
+      <button class="tab-btn" onclick="switchCategory('live_tv', this)">📺 قنوات البث التلفزيوني (IPTV)</button>
       <button class="tab-btn" onclick="switchCategory('turkish', this)">🇹🇷 مسلسلات تركية</button>
       <button class="tab-btn" onclick="switchCategory('korean', this)">🇰🇷 دراما كورية وآسيوية</button>
-      <button class="tab-btn" onclick="switchCategory('arabic', this)">🇮🇶 🇪🇬 أفلام ومسلسلات عربية</button>
       <button class="tab-btn" onclick="switchCategory('anime', this)">⛩️ أنمي</button>
       <button class="tab-btn" onclick="switchCategory('movies', this)">🎬 سينما عالمية</button>
     </div>
@@ -257,16 +265,23 @@
     <section class="hero" id="heroBanner">
       <div class="hero-content">
         <h1 class="hero-title" id="heroTitle">جاري التحميل...</h1>
-        <p class="hero-desc" id="heroDesc">استمتع بأكبر منصة سينمائية بملايين الأفلام والمسلسلات مترجمة بدقة عالية.</p>
+        <p class="hero-desc" id="heroDesc">استمتع بأكبر منصة سينمائية تجمع المستودعات المفتوحة وسيرفرات البث السحابية المترجمة.</p>
         <button class="hero-btn" id="heroBtn"><i class="fa-solid fa-play"></i> مشاهدة العمل الآن</button>
       </div>
     </section>
 
     <div class="catalog" id="catalogSections">
       <div class="shelf" id="customShelfBox" style="display: none;">
-        <div class="shelf-title">⭐ أعمال مضافة بواسطة الإدارة</div>
+        <div class="shelf-title">⭐ أعمال مضافة ومحدثة بواسطة الإدارة</div>
         <div class="shelf-grid" id="deckCustom"></div>
       </div>
+
+      <!-- قسم أفلام الأرشيف المفتوح الشغالة مباشرة -->
+      <div class="shelf" id="archiveShelf">
+        <div class="shelf-title">🏛️ روائع سينما الأرشيف المفتوح (تشغيل مباشر مجاني)</div>
+        <div class="shelf-grid" id="deckArchive"></div>
+      </div>
+
       <div class="shelf">
         <div class="shelf-title">🇹🇷 أحدث المسلسلات التركية (مترجمة)</div>
         <div class="shelf-grid" id="deckTurkish"></div>
@@ -296,7 +311,7 @@
     </div>
   </div>
 
-  <!-- شاشة المشغل المباشر -->
+  <!-- شاشة المشغل -->
   <div id="theaterView">
     <button class="back-btn" onclick="goHome()"><i class="fa-solid fa-arrow-right"></i> العودة للرئيسية</button>
     
@@ -311,14 +326,14 @@
       </div>
     </div>
 
-    <!-- مشغل البث السحابي الذكي -->
+    <!-- المشغل السينمائي -->
     <div class="player-box">
       <iframe id="streamFrame" src="" allowfullscreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture"></iframe>
     </div>
 
     <div class="servers-bar" id="serversContainer">
       <div style="font-size: 0.85rem; font-weight: 800; color: #fff;">
-        <i class="fa-solid fa-server" style="color: var(--cyan); margin-left: 6px;"></i> سيرفرات البث (إذا لم يعمل سيرفر، اختر غيره):
+        <i class="fa-solid fa-server" style="color: var(--cyan); margin-left: 6px;"></i> سيرفرات البث (اختر السيرفر المناسب):
       </div>
       <div class="servers-list">
         <button class="srv-btn active" onclick="changeServer(1)">سيرفر 1 (VidLink HD - ترجمة عربي مدمجة)</button>
@@ -390,15 +405,25 @@
     const SUPER_ADMIN_EMAIL = "altrfybaqer0@gmail.com";
     const SUPER_ADMIN_PASS = "Aann22@@55";
 
-    let currentItem = { id: null, title: '', type: 'movie', season: 1, episode: 1, isCustom: false, customUrl: '' };
+    let currentItem = { id: null, title: '', type: 'movie', season: 1, episode: 1, isDirectEmbed: false, directUrl: '' };
     let currentServer = 1;
     let currentUser = JSON.parse(localStorage.getItem('cinema_user') || 'null');
     let explorePage = 1;
     let currentExploreEndpoint = '/discover/tv?with_original_language=tr&sort_by=popularity.desc';
 
+    // قائمة مختارة من أعمال الأرشيف المفتوح (Internet Archive) الشغالة 100%
+    const OPEN_ARCHIVE_MOVIES = [
+      { id: 'Night_of_the_Living_Dead_1968', title: 'Night of the Living Dead (كلاسيكيات الرعب)', poster: 'https://archive.org/services/img/Night_of_the_Living_Dead_1968', year: '1968', score: '8.0' },
+      { id: 'charade_1963', title: 'Charade (غموض وإثارة كلاسيكية)', poster: 'https://archive.org/services/img/charade_1963', year: '1963', score: '7.9' },
+      { id: 'the-general-1926', title: 'The General (كوميديا سينمائية)', poster: 'https://archive.org/services/img/the-general-1926', year: '1926', score: '8.2' },
+      { id: 'Plan_9_from_Outer_Space_1959', title: 'Plan 9 from Outer Space (خيال علمي)', poster: 'https://archive.org/services/img/Plan_9_from_Outer_Space_1959', year: '1959', score: '6.5' },
+      { id: 'his-girl-friday', title: 'His Girl Friday (كوميديا ودراما)', poster: 'https://archive.org/services/img/his-girl-friday', year: '1940', score: '7.8' }
+    ];
+
     async function initSite() {
       verifyUserStatus();
       loadCustomMediaFromFirebase();
+      loadOpenArchiveShelf();
       
       loadShelf('/discover/tv?with_original_language=tr&sort_by=popularity.desc', 'deckTurkish', true, 'tv');
       loadShelf('/discover/tv?with_original_language=ko&sort_by=popularity.desc', 'deckKorean', false, 'tv');
@@ -415,6 +440,41 @@
         document.getElementById('adminNavBtn').style.display = 'flex';
       }
       document.getElementById('authBtnText').innerText = currentUser.email.split('@')[0];
+    }
+
+    // عرض أعمال الأرشيف المفتوح
+    function loadOpenArchiveShelf() {
+      const deck = document.getElementById('deckArchive');
+      deck.innerHTML = "";
+      OPEN_ARCHIVE_MOVIES.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.onclick = () => openArchiveTheater(item);
+        card.innerHTML = `
+          <img src="${item.poster}" loading="lazy">
+          <div class="card-body">
+            <div class="card-title">${item.title}</div>
+            <div class="card-meta"><span>${item.year}</span><span class="rating">🏛️ ${item.score}</span></div>
+          </div>
+        `;
+        deck.appendChild(card);
+      });
+    }
+
+    // تشغيل فيلم الأرشيف المفتوح عبر واجهة Internet Archive Embed المباشرة
+    function openArchiveTheater(item) {
+      document.getElementById('homeView').style.display = 'none';
+      document.getElementById('theaterView').style.display = 'block';
+      document.getElementById('serversContainer').style.display = 'none';
+      document.getElementById('episodesContainer').style.display = 'none';
+      window.scrollTo(0, 0);
+
+      document.getElementById('detailTitle').innerText = item.title;
+      document.getElementById('detailPoster').src = item.poster;
+      document.getElementById('detailOverview').innerText = "عمل متاح بالكامل ضمن مستودع الملكية العامة والأرشيف العالمي المفتوح (Internet Archive) ويعمل بمشغل فوري دون انقطاع.";
+      document.getElementById('detailTags').innerHTML = `<span class="pill pill-genre">🏛️ أرشيف مفتوح</span><span class="pill">${item.year}</span>`;
+
+      document.getElementById('streamFrame').src = `https://archive.org/embed/${item.id}`;
     }
 
     async function loadShelf(path, elemId, isHero = false, fixedType = null) {
@@ -475,7 +535,7 @@
     }
 
     async function openTheater(id, type, basicInfo) {
-      currentItem = { id: id, type: type, title: basicInfo.title || basicInfo.name, season: 1, episode: 1, isCustom: false };
+      currentItem = { id: id, type: type, title: basicInfo.title || basicInfo.name, season: 1, episode: 1, isDirectEmbed: false };
       document.getElementById('homeView').style.display = 'none';
       document.getElementById('theaterView').style.display = 'block';
       document.getElementById('serversContainer').style.display = 'flex';
@@ -554,7 +614,7 @@
     function changeServer(idx) {
       currentServer = idx;
       document.querySelectorAll('.srv-btn').forEach((b, i) => b.classList.toggle('active', i + 1 === idx));
-      if (!currentItem.id || currentItem.isCustom) return;
+      if (!currentItem.id || currentItem.isDirectEmbed) return;
 
       const { id, type, season: s, episode: e } = currentItem;
       let streamUrl = "";
@@ -594,8 +654,12 @@
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
 
+      if (cat === 'archive') {
+        window.scrollTo({ top: document.getElementById('archiveShelf').offsetTop - 80, behavior: 'smooth' });
+        return;
+      }
+
       if (cat === 'turkish') currentExploreEndpoint = '/discover/tv?with_original_language=tr&sort_by=popularity.desc';
-      if (cat === 'arabic') currentExploreEndpoint = '/discover/movie?with_original_language=ar&sort_by=popularity.desc';
       if (cat === 'korean') currentExploreEndpoint = '/discover/tv?with_original_language=ko&sort_by=popularity.desc';
       if (cat === 'anime') currentExploreEndpoint = '/discover/tv?with_genres=16&sort_by=popularity.desc';
       if (cat === 'movies') currentExploreEndpoint = '/discover/movie?sort_by=popularity.desc';
@@ -636,7 +700,7 @@
             const card = document.createElement('div');
             card.className = 'card';
             card.onclick = () => {
-              currentItem = { id: item.id, type: 'custom', title: item.title, isCustom: true };
+              currentItem = { id: item.id, type: 'custom', title: item.title, isDirectEmbed: true };
               document.getElementById('homeView').style.display = 'none';
               document.getElementById('theaterView').style.display = 'block';
               document.getElementById('serversContainer').style.display = 'none';
