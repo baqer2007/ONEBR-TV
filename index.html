@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <!-- علامة إثبات ملكية محرك بحث جوجل الرسمية -->
+  <!-- 1. كود إثبات ملكية محرك بحث Google الرسمي -->
   <meta name="google-site-verification" content="BzEBTPOz0r6bMT40aBZm_NO_lS3DtXm_AHMwH_znFC4" />
   
   <meta charset="UTF-8">
@@ -9,15 +9,15 @@
   
   <!-- إعدادات محركات البحث والـ SEO -->
   <title>ONEBR TV | ون بر تي في - مشاهدة أحدث الأفلام والمسلسلات مجاناً</title>
-  <meta name="description" content="منصة ONEBR TV الرسمية لمشاهدة وتحميل أحدث الأفلام العالمية والمسلسلات التركية والكورية والأنمي بدقة Full HD مع ترجمة عربية مدمجة وسيرفرات فائقة السرعة بدون إعلانات.">
-  <meta name="keywords" content="ONEBR TV, ون بر تي في, مسلسلات تركية, وادي الذئاب, قيامة عثمان, افلام مترجمة, مسلسلات كورية, سينما VIP">
+  <meta name="description" content="منصة ONEBR TV الرسمية لمشاهدة وتحميل أحدث الأفلام العالمية والمسلسلات التركية والكورية والأنمي بدقة Full HD و SD للنت الضعيف مع ترجمة عربية وسيرفرات سريعة.">
+  <meta name="keywords" content="ONEBR TV, ون بر تي في, مسلسلات تركية, وادي الذئاب, قيامة عثمان, افلام مترجمة, مسلسلات كورية, سينما VIP, نت ضعيف">
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#e50914">
 
-  <!-- وسوم المشاركة (Facebook / Telegram / WhatsApp) -->
+  <!-- وسوم المشاركة لفيسبوك وتيليجرام وواتساب -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="ONEBR TV | منصة السينما والمسلسلات العالمية">
-  <meta property="og:description" content="شاهد أحدث الأفلام والمسلسلات الحصرية مجاناً وبجودة فائقة.">
+  <meta property="og:description" content="شاهد أحدث الأفلام والمسلسلات الحصرية مجاناً وبجودة فائقة تدعم النت الضعيف.">
   <meta property="og:image" content="https://image.tmdb.org/t/p/w500/mXk9kEw9u5dF72Tsk4O9Jt0rGgG.jpg">
 
   <link rel="icon" type="image/png" href="https://img.icons8.com/color/96/play--v1.png">
@@ -43,14 +43,12 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
     body { background-color: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
 
-    /* شريط التنبيهات */
     #announcementBanner {
       display: none; background: linear-gradient(90deg, #b91c1c, #e50914);
       color: #fff; padding: 9px 16px; font-size: 0.85rem; font-weight: 700;
       text-align: center; position: sticky; top: 0; z-index: 1002; box-shadow: 0 4px 15px rgba(229,9,20,0.4);
     }
 
-    /* الهيدر الرئيسي */
     header {
       position: sticky; top: 0; height: 65px; padding: 0 16px;
       display: flex; justify-content: space-between; align-items: center;
@@ -65,7 +63,7 @@
     .brand-name { font-size: 1.25rem; font-weight: 900; background: linear-gradient(90deg, #fff, var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
     .header-actions { display: flex; align-items: center; gap: 6px; }
-    .search-box { position: relative; width: 150px; transition: 0.3s; }
+    .search-box { position: relative; width: 140px; transition: 0.3s; }
     @media(min-width: 768px) { .search-box { width: 260px; } }
     .search-box input {
       width: 100%; padding: 7px 32px 7px 12px; border-radius: 20px;
@@ -82,7 +80,6 @@
     }
     .btn-header:hover { background: rgba(255, 255, 255, 0.15); border-color: var(--cyan); }
     
-    /* زر اشتراك VIP الذهبي */
     .btn-vip-header {
       background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; font-weight: 800; border: none;
       box-shadow: 0 0 12px rgba(245, 158, 11, 0.4); animation: pulse 2s infinite;
@@ -94,7 +91,6 @@
       color: #fff; font-weight: 800; border: none;
     }
 
-    /* شريط الفئات والتصنيفات */
     .nav-tabs {
       display: flex; gap: 8px; padding: 12px 16px; overflow-x: auto;
       background: var(--card-bg); border-bottom: 1px solid var(--border); scrollbar-width: none;
@@ -107,7 +103,6 @@
     }
     .tab-btn.active, .tab-btn:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-    /* البانر الإعلاني */
     .hero {
       position: relative; height: 50vh; min-height: 320px; display: flex; align-items: flex-end;
       padding: 24px 16px; background: linear-gradient(0deg, var(--bg) 15%, rgba(6,8,13,0.5) 60%, rgba(6,8,13,0.1) 100%),
@@ -123,8 +118,15 @@
     }
     .hero-btn-vip { background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; }
 
-    /* الرفوف وقوائم العرض */
-    .catalog { padding: 16px; display: flex; flex-direction: column; gap: 28px; }
+    .ad-slot-box {
+      width: 100%; max-width: 900px; margin: 16px auto; padding: 8px;
+      background: rgba(255, 255, 255, 0.02); border: 1px dashed rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius); text-align: center; min-height: 70px; display: flex;
+      flex-direction: column; align-items: center; justify-content: center;
+    }
+    .ad-tag-label { font-size: 0.65rem; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase; }
+
+    .catalog { padding: 16px; display: flex; flex-direction: column; gap: 24px; }
     .shelf-title { font-size: 1.15rem; font-weight: 800; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
     .shelf-grid { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
     .shelf-grid::-webkit-scrollbar { display: none; }
@@ -140,7 +142,6 @@
     .card-meta { display: flex; justify-content: space-between; font-size: 0.68rem; color: var(--text-muted); margin-top: 4px; }
     .rating { color: var(--yellow); font-weight: 800; }
 
-    /* شبكة تصفح الآلاف */
     .explore-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; }
     .btn-load-more {
       width: 100%; max-width: 320px; margin: 24px auto 10px; display: block;
@@ -149,7 +150,6 @@
     }
     .btn-load-more:hover { background: var(--primary); border-color: var(--primary); }
 
-    /* المشغل وتفاصيل العمل */
     #theaterView { display: none; padding: 12px; max-width: 1150px; margin: 0 auto; }
     .back-btn {
       background: var(--card-bg); color: #fff; border: 1px solid var(--border);
@@ -173,6 +173,12 @@
     .player-box { position: relative; width: 100%; padding-top: 56.25%; background: #000; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); }
     .player-box iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
 
+    .low-net-tip {
+      background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 8px 12px; border-radius: 8px; font-size: 0.75rem; color: #6ee7b7;
+      margin-top: 10px; display: flex; align-items: center; gap: 8px;
+    }
+
     .servers-bar, .episodes-bar {
       background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius);
       padding: 14px; margin-top: 14px; display: flex; flex-direction: column; gap: 8px;
@@ -183,6 +189,8 @@
       padding: 7px 14px; border-radius: 8px; font-size: 0.78rem; font-weight: 700; cursor: pointer; transition: 0.2s;
     }
     .srv-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .srv-btn.lite-srv { border-color: rgba(16, 185, 129, 0.4); color: #6ee7b7; }
+    .srv-btn.lite-srv.active { background: var(--green); color: #000; border-color: var(--green); }
 
     .seasons-scroll { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; }
     .season-btn {
@@ -261,7 +269,6 @@
     .badge-vip { background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; font-weight: 800; }
     .btn-sm-action { padding: 3px 8px; border-radius: 4px; font-size: 0.7rem; border: none; cursor: pointer; font-weight: 700; margin-left: 2px; }
 
-    /* فوتر الموقع لتعزيز ثقة جوجل */
     footer {
       background: var(--card-bg); border-top: 1px solid var(--border);
       padding: 24px 16px; text-align: center; font-size: 0.75rem; color: var(--text-muted);
@@ -287,17 +294,14 @@
     </div>
 
     <div class="header-actions">
-      <!-- زر اشتراك VIP -->
       <button class="btn-header btn-vip-header" onclick="openVipModal()">
         <i class="fa-solid fa-crown"></i> اشتراك VIP
       </button>
 
-      <!-- زر الحساب والتسجيل -->
       <button class="btn-header" id="authBtn" onclick="openAuthModal()">
         <i class="fa-solid fa-user"></i> <span id="authBtnText">دخول</span>
       </button>
       
-      <!-- زر لوحة الأدمن (مخفي إلا عن المشرف) -->
       <button class="btn-header" id="adminNavBtn" onclick="openAdminModal()">
         <i class="fa-solid fa-shield-halved"></i> لوحة الأدمن
       </button>
@@ -319,13 +323,21 @@
     <section class="hero" id="heroBanner">
       <div class="hero-content">
         <h1 class="hero-title" id="heroTitle">جاري تحميل أحدث العروض...</h1>
-        <p class="hero-desc" id="heroDesc">استمتع بأكبر منصة سينمائية بملايين الأفلام والمسلسلات مع ترجمة احترافية وسيرفرات فائقة السرعة.</p>
+        <p class="hero-desc" id="heroDesc">استمتع بأكبر منصة سينمائية بملايين الأفلام والمسلسلات مع ترجمة احترافية وسيرفرات فائقة السرعة تدعم أضعف سرعات الإنترنت.</p>
         <div class="hero-actions">
           <button class="hero-btn" id="heroBtn"><i class="fa-solid fa-play"></i> مشاهدة العمل الآن</button>
           <button class="hero-btn hero-btn-vip" onclick="openVipModal()"><i class="fa-solid fa-crown"></i> تفعيل عضوية VIP</button>
         </div>
       </div>
     </section>
+
+    <!-- مساحة إعلانية 1 -->
+    <div class="ad-slot-box" id="homeAdSlot">
+      <div class="ad-tag-label">مساحة إعلانية</div>
+      <div style="color: var(--text-muted); font-size: 0.75rem;">
+        <i class="fa-solid fa-bullhorn"></i> إعلانات ONEBR TV الرسمية
+      </div>
+    </div>
 
     <div class="catalog" id="catalogSections">
       <div class="shelf" id="customShelfBox" style="display: none;">
@@ -387,17 +399,32 @@
       <iframe id="streamFrame" src="" allowfullscreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture; accelerometer; gyroscope"></iframe>
     </div>
 
-    <!-- قائمة السيرفرات القوية والمترجمة -->
+    <!-- تنبيه سرعة الإنترنت للمستخدمين -->
+    <div class="low-net-tip">
+      <i class="fa-solid fa-gauge-high"></i>
+      <span><strong>إذا كان الإنترنت لديك ضعيفاً (3Mbps أو أقل):</strong> اختر <strong>سيرفر 2 (النت الضعيف)</strong>، أو اضغط على ترس الإعدادات ⚙️ داخل مشغل الفيديو واختر دقة <strong>360p أو 480p</strong> للمشاهدة بدون أي تقطيع!</span>
+    </div>
+
+    <!-- مساحة إعلانية 2 -->
+    <div class="ad-slot-box" id="playerAdSlot">
+      <div class="ad-tag-label">إعلان مميز</div>
+      <div style="color: var(--text-muted); font-size: 0.75rem;">
+        <i class="fa-solid fa-rectangle-ad"></i> إعلانات المشغل التلقائية
+      </div>
+    </div>
+
+    <!-- قائمة السيرفرات السحابية المحدثة مع سيرفر النت الضعيف -->
     <div class="servers-bar">
       <div style="font-size: 0.85rem; font-weight: 800; color: #fff;">
-        <i class="fa-solid fa-server" style="color: var(--cyan); margin-left: 6px;"></i> سيرفرات البث السحابية المباشرة (اختر السيرفر الأنسب):
+        <i class="fa-solid fa-server" style="color: var(--cyan); margin-left: 6px;"></i> سيرفرات البث السحابية المباشرة (اختر السيرفر الأنسب لسرعتك):
       </div>
       <div class="servers-list">
         <button class="srv-btn active" onclick="changeServer(1)">سيرفر 1 (VidLink HD - ترجمة عربي مدمجة)</button>
-        <button class="srv-btn" onclick="changeServer(2)">سيرفر 2 (AutoEmbed VIP - فائق السرعة)</button>
-        <button class="srv-btn" onclick="changeServer(3)">سيرفر 3 (VidSrc Multi - مكتبة ضخمة)</button>
-        <button class="srv-btn" onclick="changeServer(4)">سيرفر 4 (EmbedSU Pro - جودة 1080p)</button>
-        <button class="srv-btn" onclick="changeServer(5)">سيرفر 5 (SmashyStream - مضاد للإعلانات)</button>
+        <button class="srv-btn lite-srv" onclick="changeServer(2)">⚡ سيرفر 2 (النت الضعيف 3MBPS - دقة 360p/480p خفيف)</button>
+        <button class="srv-btn" onclick="changeServer(3)">سيرفر 3 (AutoEmbed VIP - فائق السرعة)</button>
+        <button class="srv-btn" onclick="changeServer(4)">سيرفر 4 (VidSrc Multi - مكتبة ضخمة)</button>
+        <button class="srv-btn" onclick="changeServer(5)">سيرفر 5 (EmbedSU Pro - جودة 1080p)</button>
+        <button class="srv-btn" onclick="changeServer(6)">سيرفر 6 (SmashyStream - مضاد للإعلانات)</button>
       </div>
     </div>
 
@@ -421,7 +448,7 @@
           <div class="vip-plan-name">الباقة الشهرية</div>
           <div class="vip-price">3$ <span style="font-size: 0.75rem; color: var(--text-muted);">/ شهرياً</span></div>
           <ul class="vip-features">
-            <li><i class="fa-solid fa-check"></i> مشاهدة بدون إعلانات</li>
+            <li><i class="fa-solid fa-check"></i> مشاهدة بدون إعلانات نهائياً</li>
             <li><i class="fa-solid fa-check"></i> سيرفرات VIP فائقة السرعة</li>
             <li><i class="fa-solid fa-check"></i> جودة 1080p Full HD</li>
           </ul>
@@ -459,7 +486,7 @@
     </div>
   </div>
 
-  <!-- نافذة تسجيل الدخول الآمنة (المطابقة لمعايير أمان جوجل Google Safe Browsing) -->
+  <!-- نافذة تسجيل الدخول الآمنة -->
   <div class="modal-overlay" id="authModal">
     <div class="modal-box">
       <i class="fa-solid fa-xmark modal-close" onclick="closeAuthModal()"></i>
@@ -474,7 +501,7 @@
           <input type="text" id="authPass" placeholder="رمز الحساب الخاص بك">
         </div>
         <p style="font-size: 0.72rem; color: var(--text-muted); margin-bottom: 10px; line-height: 1.4;">
-          🔒 <strong>تنبيه أمان:</strong> منصة ONEBR TV مستقلة ولا تطلب منك إدخال كلمات مرور لحساباتك الخارجية (مثل بريد جوجل أو حسابات البنوك).
+          🔒 <strong>تنبيه أمان:</strong> منصة ONEBR TV مستقلة ولا تطلب منك إدخال كلمات مرور لحساباتك الخارجية.
         </p>
         <button class="btn-submit" id="authActionBtn" onclick="handleAuthSubmit()">دخول الحساب</button>
         <div style="text-align: center; margin-top: 12px; font-size: 0.8rem; color: var(--text-muted); cursor: pointer;" onclick="toggleAuthMode()" id="authSwitchText">
@@ -490,7 +517,7 @@
     </div>
   </div>
 
-  <!-- لوحة تحكم الأدمن الشاملة (Super Admin Panel) -->
+  <!-- لوحة تحكم الأدمن الشاملة -->
   <div class="modal-overlay" id="adminModal">
     <div class="modal-box admin-modal">
       <i class="fa-solid fa-xmark modal-close" onclick="closeAdminModal()"></i>
@@ -583,21 +610,18 @@
     </div>
   </div>
 
-  <!-- فوتر الموقع الرسمي لتوثيق الأمان وإخلاء المسؤولية -->
   <footer>
     <div><strong>ONEBR TV</strong> © 2026 جميع الحقوق محفوظة لمنصة ون بر تي في.</div>
     <div style="margin-top: 6px; font-size: 0.7rem;">إخلاء مسؤولية: الموقع لا يستضيف أي ملفات فيديو على خوادمه الخاصة، وجميع المحتويات مأخوذة من خوادم وسائط خارجية مفتوحة (Third-party Embeds / APIs).</div>
   </footer>
 
   <script>
-    // --- الإعدادات وقواعد البيانات ---
     const API_KEY = "8265bd1679663a7ea12ac168da84d2e8";
     const API_BASE = "https://api.themoviedb.org/3";
     const POSTER_BASE = "https://image.tmdb.org/t/p/w500";
     const BACKDROP_BASE = "https://image.tmdb.org/t/p/original";
     const FIREBASE_DB = "https://cinemavip-a9a21-default-rtdb.firebaseio.com";
 
-    // المشرف الرئيسي الثابت
     const SUPER_ADMIN_EMAIL = "altrfybaqer0@gmail.com";
     const SUPER_ADMIN_PASS = "Aann22@@55";
 
@@ -608,9 +632,9 @@
     let explorePage = 1;
     let currentExploreEndpoint = '/discover/movie?sort_by=popularity.desc';
 
-    // --- تشغيل الموقع والتهيئة ---
     async function initSite() {
       await verifyUserStatus();
+      handleVipAdsVisibility();
       logVisitorEntry();
       loadCustomMediaFromFirebase();
       loadBannerAnnouncement();
@@ -623,6 +647,12 @@
       loadShelf('/discover/tv?with_genres=16&sort_by=popularity.desc', 'deckAnime', false, 'tv');
       
       loadMoreExploreMedia(true);
+    }
+
+    function handleVipAdsVisibility() {
+      if (currentUser && (currentUser.isVip || currentUser.isAdmin)) {
+        document.querySelectorAll('.ad-slot-box').forEach(el => el.style.display = 'none');
+      }
     }
 
     async function verifyUserStatus() {
@@ -921,6 +951,7 @@
       launchStream();
     }
 
+    // خريطة سيرفرات البث المتطورة (بما فيها سيرفر النت الضعيف)
     function launchStream() {
       if (!currentItem.id || currentItem.type === 'custom') return;
       const { id, type, season: s, episode: e } = currentItem;
@@ -929,19 +960,21 @@
       if (type === "movie") {
         const srvs = {
           1: `https://vidlink.pro/movie/${id}?primaryColor=e50914&subtitles=ar,en&autoplay=false`,
-          2: `https://autoembed.co/movie/tmdb/${id}`,
-          3: `https://vidsrc.to/embed/movie/${id}`,
-          4: `https://embed.su/embed/movie/${id}`,
-          5: `https://player.smashy.stream/movie/${id}`
+          2: `https://vidsrc.me/embed/movie?tmdb=${id}`, // سيرفر خفيف وسريع للنت الضعيف
+          3: `https://autoembed.co/movie/tmdb/${id}`,
+          4: `https://vidsrc.to/embed/movie/${id}`,
+          5: `https://embed.su/embed/movie/${id}`,
+          6: `https://player.smashy.stream/movie/${id}`
         };
         streamUrl = srvs[currentServer] || srvs[1];
       } else {
         const srvs = {
           1: `https://vidlink.pro/tv/${id}/${s}/${e}?primaryColor=e50914&subtitles=ar,en&autoplay=false`,
-          2: `https://autoembed.co/tv/tmdb/${id}-${s}-${e}`,
-          3: `https://vidsrc.to/embed/tv/${id}/${s}/${e}`,
-          4: `https://embed.su/embed/tv/${id}/${s}/${e}`,
-          5: `https://player.smashy.stream/tv/${id}?s=${s}&e=${e}`
+          2: `https://vidsrc.me/embed/tv?tmdb=${id}&season=${s}&episode=${e}`, // سيرفر خفيف وسريع للنت الضعيف
+          3: `https://autoembed.co/tv/tmdb/${id}-${s}-${e}`,
+          4: `https://vidsrc.to/embed/tv/${id}/${s}/${e}`,
+          5: `https://embed.su/embed/tv/${id}/${s}/${e}`,
+          6: `https://player.smashy.stream/tv/${id}?s=${s}&e=${e}`
         };
         streamUrl = srvs[currentServer] || srvs[1];
       }
@@ -989,7 +1022,6 @@
       }, 350);
     }
 
-    // --- نظام اشتراك VIP ---
     function openVipModal() { document.getElementById('vipModal').style.display = 'flex'; }
     function closeVipModal() { document.getElementById('vipModal').style.display = 'none'; }
 
@@ -997,7 +1029,6 @@
       alert(`🎉 تم اختيار ${planName}!\n\nيرجى التواصل معنا عبر التيليجرام لتحويل المبلغ وتفعيل شارة VIP لحسابك فوراً.`);
     }
 
-    // --- العضوية وتسجيل الدخول الآمن ---
     function openAuthModal() {
       document.getElementById('authModal').style.display = 'flex';
       if (currentUser) {
@@ -1033,6 +1064,7 @@
         alert('مرحباً بك يا باقر! تم الدخول بصلاحيات المشرف الكاملة.');
         closeAuthModal();
         verifyUserStatus();
+        handleVipAdsVisibility();
         logVisitorEntry();
         return;
       }
@@ -1054,6 +1086,7 @@
       localStorage.setItem('cinema_user', JSON.stringify(currentUser));
       closeAuthModal();
       verifyUserStatus();
+      handleVipAdsVisibility();
       logVisitorEntry();
     }
 
@@ -1062,10 +1095,10 @@
       localStorage.removeItem('cinema_user');
       document.getElementById('adminNavBtn').style.display = 'none';
       document.getElementById('authBtnText').innerText = 'دخول';
+      handleVipAdsVisibility();
       closeAuthModal();
     }
 
-    // --- نظام لوحة الأدمن ---
     function openAdminModal() {
       if (!currentUser || !currentUser.isAdmin) return alert('غير مصرح لك بالدخول!');
       document.getElementById('adminModal').style.display = 'flex';
