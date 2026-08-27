@@ -654,7 +654,7 @@
     const POSTER_BASE = "https://image.tmdb.org/t/p/w500";
     const BACKDROP_BASE = "https://image.tmdb.org/t/p/original";
     const FIREBASE_DB = "https://cinemavip-a9a21-default-rtdb.firebaseio.com";
-    const PROXY_BASE = "https://cold-dust-ef5a.altrfybaqer0.workers.dev/?url=";
+    const PROXY_BASE = "/api/extract?url=";
 
     const SUPER_ADMIN_EMAIL = "altrfybaqer0@gmail.com";
     const SUPER_ADMIN_PASS = "Aann22@@55";
@@ -1207,7 +1207,6 @@
       }
     }
 
-    // إدارة السيرفرات الكاملة من 1 إلى 12
     function changeServer(idx) {
       const isVipUser = currentUser && (currentUser.isVip || currentUser.isAdmin);
       if (idx >= 9 && !isVipUser) {
@@ -1517,6 +1516,11 @@
       if (tab === 'visitors') loadAdminVisitors();
       if (tab === 'mediaManage') loadAdminMediaTable();
       if (tab === 'banManage') loadBannedUsersTable();
+    }
+
+    async function loadAdminDashboard() {
+      loadAdminStats();
+      loadAdminUsersTable();
     }
 
     async function loadAdminStats() {
