@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
-  <!-- إعلان Popunder -->
+  <!-- 📢 إعلان Popunder -->
   <script src="https://pl31046353.profitableratecpmnetwork.com/61/4f/72/614f728ad484f449400870c3be110111.js"></script>
 
   <style>
@@ -111,7 +111,6 @@
     }
     .user-avatar-btn img { width: 100%; height: 100%; object-fit: cover; }
 
-    /* القائمة الجانبية المنبثقة */
     .drawer-overlay {
       position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
       z-index: 2500; display: none;
@@ -172,7 +171,6 @@
     .explore-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(clamp(110px, 28vw, 145px), 1fr)); gap: 10px; }
     .btn-load-more { width: 100%; max-width: 260px; margin: 20px auto 10px; display: block; background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 10px; border-radius: 20px; font-weight: 800; font-size: 0.8rem; cursor: pointer; text-align: center; }
 
-    /* شاشة تفاصيل العمل */
     #theaterView { display: none; padding: clamp(10px, 3vw, 18px); max-width: 1000px; margin: 0 auto; }
     .back-btn { background: var(--surface); color: var(--text); border: 1px solid var(--border); padding: 7px 14px; border-radius: 6px; cursor: pointer; font-size: 0.78rem; margin-bottom: 12px; font-weight: 800; display: inline-flex; align-items: center; gap: 6px; }
     
@@ -239,13 +237,24 @@
     .auth-toggle-links { display: flex; justify-content: space-between; margin-top: 10px; font-size: 0.75rem; }
     .auth-toggle-links a { color: var(--cyan); text-decoration: none; cursor: pointer; }
 
-    .admin-modal { max-width: 760px; }
-    .admin-nav { display: flex; gap: 6px; margin-bottom: 14px; border-bottom: 1px solid var(--border); padding-bottom: 6px; overflow-x: auto; }
-    .admin-nav-btn { background: none; border: none; color: var(--text-muted); font-weight: 700; font-size: 0.78rem; cursor: pointer; padding: 6px 10px; border-radius: 6px; }
+    /* لوحة الأدمن المتقدمة */
+    .admin-modal { max-width: 820px; }
+    .admin-nav { display: flex; gap: 6px; margin-bottom: 14px; border-bottom: 1px solid var(--border); padding-bottom: 6px; overflow-x: auto; scrollbar-width: none; }
+    .admin-nav-btn { background: none; border: none; color: var(--text-muted); font-weight: 700; font-size: 0.78rem; cursor: pointer; padding: 6px 10px; border-radius: 6px; white-space: nowrap; }
     .admin-nav-btn.active { background: var(--surface-hover); color: var(--cyan); }
+    
+    .admin-stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-bottom: 14px; }
+    .admin-stat-card { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px; text-align: center; }
+    .stat-number { font-size: 1.3rem; font-weight: 900; color: var(--cyan); margin-top: 4px; }
+    .stat-label { font-size: 0.7rem; color: var(--text-muted); font-weight: 700; }
+
     .admin-table { width: 100%; border-collapse: collapse; font-size: 0.72rem; text-align: start; }
-    .admin-table th, .admin-table td { padding: 8px 6px; border-bottom: 1px solid var(--border); }
+    .admin-table th, .admin-table td { padding: 8px 6px; border-bottom: 1px solid var(--border); vertical-align: middle; }
     .btn-table-del { background: #ef4444; color: #fff; border: none; padding: 4px 8px; border-radius: 4px; font-size: 0.68rem; cursor: pointer; }
+    .btn-table-vip { background: var(--gold); color: #000; border: none; padding: 4px 8px; border-radius: 4px; font-size: 0.68rem; cursor: pointer; font-weight: 800; }
+
+    .user-table-avatar { width: 28px; height: 28px; border-radius: 50%; vertical-align: middle; background: #1a2234; border: 1px solid var(--border); }
+    .fingerprint-badge { font-family: monospace; font-size: 0.65rem; background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 4px; color: var(--cyan); }
 
     footer { background: var(--surface); border-top: 1px solid var(--border); padding: 20px 14px; text-align: center; font-size: 0.72rem; color: var(--text-muted); margin-top: 30px; }
   </style>
@@ -313,7 +322,7 @@
       <button class="btn-header" id="guestAuthBtn" onclick="openAuthModal()"><i class="fa-solid fa-user"></i> <span id="authBtnText">دخول</span></button>
       
       <button class="user-avatar-btn" id="userAvatarBtn" onclick="openAuthModal()" title="الحساب الشخصي">
-        <img id="userAvatarImg" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80" alt="Avatar">
+        <img id="userAvatarImg" src="" alt="Avatar">
       </button>
     </div>
   </header>
@@ -386,6 +395,7 @@
       </div>
     </div>
 
+    <!-- أزرار السيرفرات الموحدة من 1 إلى 6 -->
     <div class="servers-bar" id="serversContainer">
       <div style="font-size: 0.8rem; font-weight: 800;" data-i18n="select_server">اختر سيرفر المشاهدة:</div>
       <div class="servers-list">
@@ -393,6 +403,8 @@
         <button class="srv-btn" onclick="changeServer(2)"><span data-i18n="srv_prefix">سيرفر</span> 2</button>
         <button class="srv-btn" onclick="changeServer(3)"><span data-i18n="srv_prefix">سيرفر</span> 3</button>
         <button class="srv-btn" onclick="changeServer(4)"><span data-i18n="srv_prefix">سيرفر</span> 4</button>
+        <button class="srv-btn" onclick="changeServer(5)"><span data-i18n="srv_prefix">سيرفر</span> 5</button>
+        <button class="srv-btn" onclick="changeServer(6)"><span data-i18n="srv_prefix">سيرفر</span> 6</button>
       </div>
     </div>
 
@@ -434,11 +446,12 @@
     </div>
   </div>
 
-  <!-- نافذة المصادقة -->
+  <!-- نافذة المصادقة المحدثة مع إعادة تعيين كلمة المرور -->
   <div class="modal-overlay" id="authModal">
     <div class="modal-box">
       <i class="fa-solid fa-xmark modal-close" onclick="closeModal('authModal')"></i>
       
+      <!-- تسجيل الدخول -->
       <div id="loginFormBox">
         <div class="modal-title"><i class="fa-solid fa-user-shield" style="color: var(--cyan);"></i> <span data-i18n="auth_title">تسجيل الدخول</span></div>
         <div class="form-group"><label data-i18n="auth_email">البريد الإلكتروني:</label><input type="text" id="loginEmail"></div>
@@ -450,6 +463,7 @@
         </div>
       </div>
 
+      <!-- إنشاء حساب جديد -->
       <div id="registerFormBox" style="display: none;">
         <div class="modal-title"><i class="fa-solid fa-user-plus" style="color: var(--cyan);"></i> <span>إنشاء حساب جديد</span></div>
         <div class="form-group"><label data-i18n="auth_email">البريد الإلكتروني:</label><input type="email" id="regEmail"></div>
@@ -460,41 +474,82 @@
         </div>
       </div>
 
+      <!-- نسيت كلمة المرور (خطوة 1: فحص البريد) -->
       <div id="forgotFormBox" style="display: none;">
         <div class="modal-title"><i class="fa-solid fa-key" style="color: var(--gold);"></i> <span>استعادة الحساب</span></div>
-        <div class="form-group"><label data-i18n="auth_email">البريد الإلكتروني المسجل:</label><input type="email" id="forgotEmail"></div>
-        <button class="btn-submit" onclick="handleForgotSubmit()">إرسال طلب الاستعادة</button>
+        <div class="form-group"><label data-i18n="auth_email">أدخل بريدك الإلكتروني المسجل:</label><input type="email" id="forgotEmail"></div>
+        <button class="btn-submit" onclick="verifyForgotEmail()">متابعة الاستعادة</button>
         <div class="auth-toggle-links" style="justify-content:center;">
           <a onclick="switchAuthView('login')">العودة لتسجيل الدخول</a>
         </div>
       </div>
 
+      <!-- إعادة تعيين كلمة المرور (خطوة 2: كلمة المرور الجديدة) -->
+      <div id="resetPassFormBox" style="display: none;">
+        <div class="modal-title"><i class="fa-solid fa-lock-open" style="color: var(--cyan);"></i> <span>تعيين كلمة مرور جديدة</span></div>
+        <p id="resetTargetEmail" style="font-size:0.75rem; color:var(--text-muted); margin-bottom:8px;"></p>
+        <div class="form-group"><label>كلمة المرور الجديدة:</label><input type="password" id="newResetPass" placeholder="6 خانات على الأقل"></div>
+        <button class="btn-submit" style="background:var(--cyan); color:#000;" onclick="applyNewPassword()">حفظ وتحديث كلمة المرور</button>
+      </div>
+
+      <!-- الملف الشخصي -->
       <div id="authProfile" style="display: none; text-align: center;">
         <div class="modal-title" style="justify-content: center;"><i class="fa-solid fa-circle-user" style="color: var(--cyan);"></i> <span data-i18n="auth_profile">الحساب الشخصي</span></div>
-        <div style="width: 70px; height: 70px; border-radius: 50%; overflow: hidden; margin: 0 auto 10px; border: 2px solid var(--cyan);">
-          <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=140&q=80" style="width: 100%; height: 100%; object-fit: cover;">
+        <div style="width: 76px; height: 76px; border-radius: 50%; overflow: hidden; margin: 0 auto 10px; border: 2px solid var(--cyan); box-shadow: 0 0 12px rgba(0,240,255,0.4);">
+          <img id="profileAvatarBig" src="" style="width: 100%; height: 100%; object-fit: cover;">
         </div>
-        <p id="profileEmail" style="font-size: 0.85rem; margin-bottom: 14px; font-weight: 700; color: var(--text-muted);"></p>
+        <p id="profileEmail" style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 700; color: var(--text);"></p>
+        <p id="profileRoleBadge" style="font-size: 0.7rem; color: var(--gold); font-weight: 800; margin-bottom: 14px;"></p>
         <button class="btn-submit" style="background: #ef4444;" onclick="logoutUser()" data-i18n="auth_logout">تسجيل الخروج</button>
       </div>
     </div>
   </div>
 
-  <!-- لوحة تحكم الأدمن -->
+  <!-- لوحة تحكم الأدمن المحدثة مع إحصائيات وإدارة متقدمة -->
   <div class="modal-overlay" id="adminModal">
     <div class="modal-box admin-modal">
       <i class="fa-solid fa-xmark modal-close" onclick="closeModal('adminModal'); location.hash='#/home';"></i>
       <div class="modal-title"><i class="fa-solid fa-shield-halved" style="color: var(--gold);"></i> <span data-i18n="admin_title">لوحة تحكم المشرفين (ONEBR TV)</span></div>
       
+      <!-- إحصائيات المنصة السريعة -->
+      <div class="admin-stats-grid">
+        <div class="admin-stat-card"><div class="stat-label">👥 إجمالي الزيارات</div><div class="stat-number" id="statVisitorsCount">0</div></div>
+        <div class="admin-stat-card"><div class="stat-label">👤 المسجلين</div><div class="stat-number" id="statUsersCount">0</div></div>
+        <div class="admin-stat-card"><div class="stat-label">🎬 الأعمال المباشرة</div><div class="stat-number" id="statMediaCount">0</div></div>
+        <div class="admin-stat-card"><div class="stat-label">🚫 المحظورين</div><div class="stat-number" id="statBannedCount" style="color:#ef4444;">0</div></div>
+      </div>
+
       <div class="admin-nav">
-        <button class="admin-nav-btn active" onclick="switchAdminTab('mediaManage', this)">🎬 إدارة الأعمال</button>
-        <button class="admin-nav-btn" onclick="switchAdminTab('addMedia', this)">➕ إضافة عمل مباشر</button>
-        <button class="admin-nav-btn" onclick="switchAdminTab('usersManage', this)">🚫 حظر المستخدمين</button>
-        <button class="admin-nav-btn" onclick="switchAdminTab('visitors', this)">👥 الزوار</button>
+        <button class="admin-nav-btn active" onclick="switchAdminTab('usersManage', this)">👥 المستخدمين المسجلين</button>
+        <button class="admin-nav-btn" onclick="switchAdminTab('visitors', this)">🌐 سجل الزوار</button>
+        <button class="admin-nav-btn" onclick="switchAdminTab('mediaManage', this)">🎬 الأعمال المباشرة</button>
+        <button class="admin-nav-btn" onclick="switchAdminTab('addMedia', this)">➕ إضافة عمل</button>
+        <button class="admin-nav-btn" onclick="switchAdminTab('banManage', this)">🚫 إدارة الحظر</button>
         <button class="admin-nav-btn" onclick="switchAdminTab('banner', this)">📢 التنبيهات</button>
       </div>
 
-      <div id="tabMediaManage">
+      <!-- تبويب إدارة المستخدمين المسجلين -->
+      <div id="tabUsersManage">
+        <div style="max-height: 280px; overflow-y: auto;">
+          <table class="admin-table">
+            <thead><tr><th>المستخدم</th><th>البريد</th><th>تاريخ التسجيل</th><th>الحالة</th><th>الإجراءات</th></tr></thead>
+            <tbody id="adminUsersTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- تبويب سجل الزوار مع البصمة المميزة -->
+      <div id="tabVisitors" style="display: none;">
+        <div style="max-height: 280px; overflow-y: auto;">
+          <table class="admin-table">
+            <thead><tr><th>البصمة الفريدة</th><th>الوقت</th><th>المتصفح والجهاز</th><th>الحساب</th></tr></thead>
+            <tbody id="visitorsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- إدارة الأعمال المباشرة -->
+      <div id="tabMediaManage" style="display: none;">
         <div style="max-height: 280px; overflow-y: auto;">
           <table class="admin-table">
             <thead><tr><th>اسم العمل</th><th>الرابط</th><th>الإجراء</th></tr></thead>
@@ -503,6 +558,7 @@
         </div>
       </div>
 
+      <!-- إضافة عمل -->
       <div id="tabAddMedia" style="display: none;">
         <div class="form-group"><label>اسم العمل:</label><input type="text" id="customTitle" placeholder="مثال: اسم المسلسل أو الفيلم"></div>
         <div class="form-group"><label>رابط البوستر:</label><input type="text" id="customPoster" placeholder="https://image.tmdb.org/..."></div>
@@ -510,7 +566,8 @@
         <button class="btn-submit" style="background: var(--cyan); color: #000;" onclick="saveCustomMedia()">نشر العمل فوراً</button>
       </div>
 
-      <div id="tabUsersManage" style="display: none;">
+      <!-- إدارة الحظر -->
+      <div id="tabBanManage" style="display: none;">
         <div class="form-group"><label>البريد الإلكتروني المراد حظره:</label><input type="text" id="banUserEmail" placeholder="user@example.com"></div>
         <button class="btn-submit" style="background: #ef4444;" onclick="banUserAction()">حظر المستخدم الآن</button>
         <div style="margin-top: 14px; max-height: 160px; overflow-y: auto;">
@@ -521,15 +578,7 @@
         </div>
       </div>
 
-      <div id="tabVisitors" style="display: none;">
-        <div style="max-height: 260px; overflow-y: auto;">
-          <table class="admin-table">
-            <thead><tr><th>الوقت</th><th>المتصفح</th><th>المستخدم</th></tr></thead>
-            <tbody id="visitorsTableBody"></tbody>
-          </table>
-        </div>
-      </div>
-
+      <!-- شريط التنبيهات -->
       <div id="tabBanner" style="display: none;">
         <div class="form-group"><label>نص الشريط الإعلاني:</label><input type="text" id="adminBannerText" placeholder="اكتب نص الإعلان..."></div>
         <button class="btn-submit" onclick="saveBannerAnnouncement()">تحديث التنبيه</button>
@@ -542,7 +591,7 @@
     <div><strong>ONEBR TV</strong> © 2026. All rights reserved.</div>
   </footer>
 
-  <!-- إعلان Social Bar -->
+  <!-- 📢 إعلان Social Bar -->
   <script src="https://pl31046352.profitableratecpmnetwork.com/24/e2/59/24e259929d0a94f08f92e8373055a876.js"></script>
 
   <script>
@@ -600,6 +649,22 @@
     let currentExploreEndpoint = '/trending/all/day';
     let hlsInstance = null;
     let searchDebounceTimer = null;
+    let verifyingForgotEmailAddress = '';
+
+    // توليد رابط الأفاتار الرقمي المميز تلقائياً
+    function getAvatarUrl(seed) {
+      return `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(seed || 'guest')}`;
+    }
+
+    // توليد أو جلب البصمة الفريدة للزائر
+    function getVisitorFingerprint() {
+      let fp = localStorage.getItem('visitor_uuid');
+      if (!fp) {
+        fp = 'ID-' + Math.random().toString(36).substring(2, 7).toUpperCase() + '-' + Date.now().toString(36).substring(4).toUpperCase();
+        localStorage.setItem('visitor_uuid', fp);
+      }
+      return fp;
+    }
 
     async function initSite() {
       applyTheme(currentTheme);
@@ -936,20 +1001,24 @@
             1: `https://vidlink.pro/movie/${id}`,
             2: `https://www.2embed.cc/embed/${id}`,
             3: `https://embed.smashystream.com/playere.php?tmdb=${id}`,
-            4: `https://multiembed.mov/?video_id=${id}&tmdb=1`
+            4: `https://multiembed.mov/?video_id=${id}&tmdb=1`,
+            5: `https://vidsrc.to/embed/movie/${id}`,
+            6: `https://autoembed.co/movie/tmdb/${id}`
           }
         : { 
             1: `https://vidlink.pro/tv/${id}/${s}/${e}`,
             2: `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}`,
             3: `https://embed.smashystream.com/playere.php?tmdb=${id}&season=${s}&episode=${e}`,
-            4: `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}`
+            4: `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}`,
+            5: `https://vidsrc.to/embed/tv/${id}/${s}/${e}`,
+            6: `https://autoembed.co/tv/tmdb/${id}/${s}/${e}`
           };
 
       const frame = document.getElementById('streamFrame');
       frame.src = srvs[currentServer] || srvs[1];
 
       frame.onerror = () => {
-        if (currentServer < 4) changeServer(currentServer + 1);
+        if (currentServer < 6) changeServer(currentServer + 1);
       };
     }
 
@@ -986,10 +1055,13 @@
       }
     }
 
+    // إدارة تبديل نوافذ المصادقة
     function switchAuthView(view) {
       document.getElementById('loginFormBox').style.display = view === 'login' ? 'block' : 'none';
       document.getElementById('registerFormBox').style.display = view === 'register' ? 'block' : 'none';
       document.getElementById('forgotFormBox').style.display = view === 'forgot' ? 'block' : 'none';
+      document.getElementById('resetPassFormBox').style.display = view === 'reset' ? 'block' : 'none';
+      document.getElementById('authProfile').style.display = view === 'profile' ? 'block' : 'none';
     }
 
     async function handleLoginSubmit() {
@@ -1036,16 +1108,47 @@
       switchAuthView('login');
     }
 
-    function handleForgotSubmit() {
-      const email = document.getElementById('forgotEmail').value.trim();
+    // فحص البريد لاستعادة كلمة المرور
+    async function verifyForgotEmail() {
+      const email = document.getElementById('forgotEmail').value.trim().toLowerCase();
       if (!email) return alert('يرجى كتابة البريد الإلكتروني المسجل');
-      alert('إذا كان هذا الحساب مسجلاً لدينا، سيتم إرسال تعليمات إعادة التعيين أو التواصل معك من المشرفين.');
-      switchAuthView('login');
+      
+      const key = email.replace(/[^a-zA-Z0-9]/g, '_');
+      try {
+        const res = await fetch(`${FIREBASE_DB}/users/${key}.json`);
+        const user = await res.json();
+        if (user) {
+          verifyingForgotEmailAddress = email;
+          document.getElementById('resetTargetEmail').innerText = `إعادة تعيين الحساب: ${email}`;
+          switchAuthView('reset');
+        } else {
+          alert('هذا البريد غير مسجل في النظام لدينا!');
+        }
+      } catch(e) {
+        alert('تعذر التحقق، يرجى المحاولة لاحقاً');
+      }
+    }
+
+    // حفظ كلمة المرور الجديدة
+    async function applyNewPassword() {
+      const newPass = document.getElementById('newResetPass').value.trim();
+      if (!newPass || newPass.length < 6) return alert('يرجى إدخال كلمة مرور جديدة من 6 خانات على الأقل');
+
+      const key = verifyingForgotEmailAddress.replace(/[^a-zA-Z0-9]/g, '_');
+      try {
+        await fetch(`${FIREBASE_DB}/users/${key}/pass.json`, { method: 'PUT', body: JSON.stringify(newPass) });
+        alert('تم تحديث كلمة المرور بنجاح! يمكنك تسجيل الدخول الآن.');
+        document.getElementById('newResetPass').value = '';
+        switchAuthView('login');
+      } catch(e) {
+        alert('حدث خطأ أثناء تحديث كلمة المرور');
+      }
     }
 
     async function verifyUserStatus() {
       const guestBtn = document.getElementById('guestAuthBtn');
       const avatarBtn = document.getElementById('userAvatarBtn');
+      const avatarImg = document.getElementById('userAvatarImg');
 
       if (!currentUser) {
         guestBtn.style.display = 'flex';
@@ -1055,6 +1158,11 @@
 
       guestBtn.style.display = 'none';
       avatarBtn.style.display = 'flex';
+      
+      // تعيين الأفاتار الرقمي المميز
+      const avatarSrc = getAvatarUrl(currentUser.email);
+      avatarImg.src = avatarSrc;
+      document.getElementById('profileAvatarBig').src = avatarSrc;
 
       let isAdmin = (currentUser.email.toLowerCase() === SUPER_ADMIN_EMAIL.toLowerCase());
       currentUser.isAdmin = isAdmin;
@@ -1071,17 +1179,15 @@
     function openVipModal() { document.getElementById('vipModal').style.display = 'flex'; }
     function openAuthModal() {
       if (currentUser) {
-        document.getElementById('loginFormBox').style.display = 'none';
-        document.getElementById('registerFormBox').style.display = 'none';
-        document.getElementById('forgotFormBox').style.display = 'none';
-        document.getElementById('authProfile').style.display = 'block';
+        switchAuthView('profile');
         document.getElementById('profileEmail').innerText = currentUser.email;
+        document.getElementById('profileRoleBadge').innerText = currentUser.isAdmin ? '⭐ مشرف النظام (Super Admin)' : (currentUser.isVip ? '👑 عضو مميز (VIP)' : 'عضو مسجل (Free Member)');
       } else {
         switchAuthView('login');
-        document.getElementById('authProfile').style.display = 'none';
       }
       document.getElementById('authModal').style.display = 'flex';
     }
+    
     function openAdminModal() {
       if (!currentUser || !currentUser.isAdmin) {
         alert('غير مصرح لك بالدخول!');
@@ -1089,28 +1195,101 @@
         return;
       }
       document.getElementById('adminModal').style.display = 'flex';
-      loadAdminMediaTable();
+      loadAdminDashboard();
     }
     function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
     function switchAdminTab(tab, btn) {
       document.querySelectorAll('.admin-nav-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      document.getElementById('tabMediaManage').style.display = tab === 'mediaManage' ? 'block' : 'none';
-      document.getElementById('tabAddMedia').style.display = tab === 'addMedia' ? 'block' : 'none';
       document.getElementById('tabUsersManage').style.display = tab === 'usersManage' ? 'block' : 'none';
       document.getElementById('tabVisitors').style.display = tab === 'visitors' ? 'block' : 'none';
+      document.getElementById('tabMediaManage').style.display = tab === 'mediaManage' ? 'block' : 'none';
+      document.getElementById('tabAddMedia').style.display = tab === 'addMedia' ? 'block' : 'none';
+      document.getElementById('tabBanManage').style.display = tab === 'banManage' ? 'block' : 'none';
       document.getElementById('tabBanner').style.display = tab === 'banner' ? 'block' : 'none';
-      if (tab === 'mediaManage') loadAdminMediaTable();
-      if (tab === 'usersManage') loadBannedUsersTable();
+      
+      if (tab === 'usersManage') loadAdminUsersTable();
       if (tab === 'visitors') loadAdminVisitors();
+      if (tab === 'mediaManage') loadAdminMediaTable();
+      if (tab === 'banManage') loadBannedUsersTable();
     }
 
+    async function loadAdminDashboard() {
+      loadAdminStats();
+      loadAdminUsersTable();
+    }
+
+    // جلب وحساب إحصائيات لوحة الأدمن
+    async function loadAdminStats() {
+      try {
+        const [visRes, usersRes, mediaRes, banRes] = await Promise.all([
+          fetch(`${FIREBASE_DB}/visitors.json`),
+          fetch(`${FIREBASE_DB}/users.json`),
+          fetch(`${FIREBASE_DB}/series.json`),
+          fetch(`${FIREBASE_DB}/banned_users.json`)
+        ]);
+
+        const visData = await visRes.json();
+        const usersData = await usersRes.json();
+        const mediaData = await mediaRes.json();
+        const banData = await banRes.json();
+
+        document.getElementById('statVisitorsCount').innerText = visData ? Object.keys(visData).length : '0';
+        document.getElementById('statUsersCount').innerText = usersData ? Object.keys(usersData).length : '0';
+        document.getElementById('statMediaCount').innerText = mediaData ? Object.keys(mediaData).length : '0';
+        document.getElementById('statBannedCount').innerText = banData ? Object.keys(banData).length : '0';
+      } catch(e) {}
+    }
+
+    // إدارة جدول المستخدمين في الأدمن
+    async function loadAdminUsersTable() {
+      try {
+        const res = await fetch(`${FIREBASE_DB}/users.json`);
+        const data = await res.json();
+        const tbody = document.getElementById('adminUsersTableBody');
+        tbody.innerHTML = "";
+        if (data) {
+          Object.keys(data).forEach(k => {
+            const u = data[k];
+            const av = getAvatarUrl(u.email);
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td><img class="user-table-avatar" src="${av}"></td>
+              <td><strong>${u.email}</strong></td>
+              <td>${u.created || '-'}</td>
+              <td><span style="color:${u.isVip ? 'var(--gold)' : 'var(--text-muted)'}; font-weight:800;">${u.isVip ? 'VIP' : 'Regular'}</span></td>
+              <td>
+                <button class="btn-table-vip" onclick="toggleVipStatus('${k}', ${!u.isVip})">${u.isVip ? 'إلغاء VIP' : 'ترقية VIP'}</button>
+                <button class="btn-table-del" onclick="deleteUserAccount('${k}')">حذف</button>
+              </td>
+            `;
+            tbody.appendChild(row);
+          });
+        }
+      } catch(e) {}
+    }
+
+    async function toggleVipStatus(key, newStatus) {
+      await fetch(`${FIREBASE_DB}/users/${key}/isVip.json`, { method: 'PUT', body: JSON.stringify(newStatus) });
+      loadAdminUsersTable();
+    }
+
+    async function deleteUserAccount(key) {
+      if (!confirm('هل أنت متأكد من حذف هذا الحساب نهائياً؟')) return;
+      await fetch(`${FIREBASE_DB}/users/${key}.json`, { method: 'DELETE' });
+      loadAdminUsersTable();
+      loadAdminStats();
+    }
+
+    // تسجيل وحفظ بيانات الزوار مع البصمة المميزة
     async function logVisitor() {
       try {
+        const fp = getVisitorFingerprint();
         const visitorData = {
+          fingerprint: fp,
           time: new Date().toLocaleString('ar-EG'),
-          agent: navigator.userAgent.substring(0, 35),
+          agent: navigator.userAgent.substring(0, 32),
           user: currentUser ? currentUser.email : "Guest"
         };
         await fetch(`${FIREBASE_DB}/visitors.json`, { method: 'POST', body: JSON.stringify(visitorData) });
@@ -1124,10 +1303,15 @@
         const tbody = document.getElementById('visitorsTableBody');
         tbody.innerHTML = "";
         if (data) {
-          Object.keys(data).slice(-15).reverse().forEach(k => {
+          Object.keys(data).slice(-20).reverse().forEach(k => {
             const v = data[k];
             const row = document.createElement('tr');
-            row.innerHTML = `<td>${v.time}</td><td>${v.agent}</td><td>${v.user}</td>`;
+            row.innerHTML = `
+              <td><span class="fingerprint-badge">${v.fingerprint || 'OLD-VISITOR'}</span></td>
+              <td>${v.time}</td>
+              <td>${v.agent}</td>
+              <td><strong>${v.user}</strong></td>
+            `;
             tbody.appendChild(row);
           });
         }
@@ -1148,6 +1332,7 @@
       alert('تم نشر العمل!');
       loadCustomMediaFromFirebase();
       loadAdminMediaTable();
+      loadAdminStats();
     }
 
     async function loadAdminMediaTable() {
@@ -1176,6 +1361,7 @@
       await fetch(`${FIREBASE_DB}/series/${key}.json`, { method: 'DELETE' });
       loadCustomMediaFromFirebase();
       loadAdminMediaTable();
+      loadAdminStats();
     }
 
     async function loadCustomMediaFromFirebase() {
@@ -1219,6 +1405,7 @@
       alert('تم حظر المستخدم بنجاح!');
       document.getElementById('banUserEmail').value = '';
       loadBannedUsersTable();
+      loadAdminStats();
     }
 
     async function loadBannedUsersTable() {
@@ -1240,6 +1427,7 @@
     async function unbanUser(key) {
       await fetch(`${FIREBASE_DB}/banned_users/${key}.json`, { method: 'DELETE' });
       loadBannedUsersTable();
+      loadAdminStats();
     }
 
     async function loadBannerAnnouncement() {
