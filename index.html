@@ -292,7 +292,7 @@
         <video id="nativeVideo" controls playsinline></video>
       </div>
 
-      <!-- مشغل التضمين للأفلام والمسلسلات بدون قيود sandbox -->
+      <!-- مشغل التضمين للأفلام والمسلسلات -->
       <div class="player-box" id="iframeBox">
         <iframe 
           id="streamFrame" 
@@ -314,7 +314,7 @@
         <button class="srv-btn active" onclick="changeServer(1)">سيرفر 1 (VidLink Pro)</button>
         <button class="srv-btn" onclick="changeServer(2)">سيرفر 2 (2Embed)</button>
         <button class="srv-btn" onclick="changeServer(3)">سيرفر 3 (SmashyStream)</button>
-        <button class="srv-btn" onclick="changeServer(4)">سيرفر 4 (AutoEmbed)</button>
+        <button class="srv-btn" onclick="changeServer(4)">سيرفر 4 (MultiEmbed)</button>
       </div>
     </div>
 
@@ -629,7 +629,7 @@
       }
     }
 
-    // تبديل السيرفرات المحدثة
+    // تبديل السيرفرات بعد استبدال السيرفر 4 بـ MultiEmbed
     function changeServer(idx) {
       currentServer = idx;
       document.querySelectorAll('.srv-btn').forEach((b, i) => b.classList.toggle('active', i + 1 === idx));
@@ -642,13 +642,13 @@
             1: `https://vidlink.pro/movie/${id}`,
             2: `https://www.2embed.cc/embed/${id}`,
             3: `https://embed.smashystream.com/playere.php?tmdb=${id}`,
-            4: `https://player.autoembed.cc/embed/movie/${id}`
+            4: `https://multiembed.mov/?video_id=${id}&tmdb=1`
           }
         : { 
             1: `https://vidlink.pro/tv/${id}/${s}/${e}`,
             2: `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}`,
             3: `https://embed.smashystream.com/playere.php?tmdb=${id}&season=${s}&episode=${e}`,
-            4: `https://player.autoembed.cc/embed/tv/${id}/${s}/${e}`
+            4: `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}`
           };
 
       document.getElementById('iframeBox').style.display = 'block';
