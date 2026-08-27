@@ -13,9 +13,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
-  <!-- 📢 إعلان Popunder -->
-  <script src="https://pl31046353.profitableratecpmnetwork.com/61/4f/72/614f728ad484f449400870c3be110111.js"></script>
-
   <style>
     :root[data-theme="dark"] {
       --primary: #e50914;
@@ -73,14 +70,14 @@
     }
 
     .header-center { flex: 1; max-width: 440px; position: relative; }
-    .search-wrapper { position: relative; width: 100%; }
+    .search-wrapper { position: relative; width: 100%; display: flex; align-items: center; }
     .search-wrapper input {
       width: 100%; padding: 8px 36px 8px 12px; border-radius: 20px;
       border: 1px solid var(--border); background: var(--bg);
       color: var(--text); font-size: 0.8rem; outline: none;
     }
     html[dir="ltr"] .search-wrapper input { padding: 8px 12px 8px 36px; }
-    .search-icon { position: absolute; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.8rem; }
+    .search-icon { position: absolute; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.8rem; cursor: pointer; }
     html[dir="rtl"] .search-icon { right: 12px; }
     html[dir="ltr"] .search-icon { left: 12px; }
 
@@ -136,8 +133,8 @@
     .genre-boxes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
     .genre-box {
       background: var(--surface); border: 1px solid var(--border); padding: 8px 10px;
-      border-radius: 6px; text-align: center; font-size: 0.75rem; font-weight: 700;
-      color: var(--text); cursor: pointer; transition: all 0.2s;
+      border-radius: 6px; text-align: center; font-size: 0.72rem; font-weight: 700;
+      color: var(--text); cursor: pointer; transition: all 0.2s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
     .genre-box:hover { border-color: var(--cyan); color: var(--cyan); background: var(--surface-hover); }
 
@@ -169,9 +166,10 @@
     .card-meta { display: flex; justify-content: space-between; font-size: 0.65rem; color: var(--text-muted); margin-top: 4px; }
 
     .explore-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(clamp(110px, 28vw, 145px), 1fr)); gap: 10px; }
-    .btn-load-more { width: 100%; max-width: 260px; margin: 20px auto 10px; display: block; background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 10px; border-radius: 20px; font-weight: 800; font-size: 0.8rem; cursor: pointer; text-align: center; }
+    
+    .scroll-loader { text-align: center; padding: 20px; font-size: 0.85rem; color: var(--text-muted); font-weight: 700; display: none; }
 
-    #theaterView { display: none; padding: clamp(10px, 3vw, 18px); max-width: 1000px; margin: 0 auto; }
+    #theaterView, #searchResultsView { display: none; padding: clamp(10px, 3vw, 18px); max-width: 1000px; margin: 0 auto; }
     .back-btn { background: var(--surface); color: var(--text); border: 1px solid var(--border); padding: 7px 14px; border-radius: 6px; cursor: pointer; font-size: 0.78rem; margin-bottom: 12px; font-weight: 800; display: inline-flex; align-items: center; gap: 6px; }
     
     .media-details-hero {
@@ -237,8 +235,7 @@
     .auth-toggle-links { display: flex; justify-content: space-between; margin-top: 10px; font-size: 0.75rem; }
     .auth-toggle-links a { color: var(--cyan); text-decoration: none; cursor: pointer; }
 
-    /* لوحة الأدمن المتقدمة */
-    .admin-modal { max-width: 820px; }
+    .admin-modal { max-width: 860px; }
     .admin-nav { display: flex; gap: 6px; margin-bottom: 14px; border-bottom: 1px solid var(--border); padding-bottom: 6px; overflow-x: auto; scrollbar-width: none; }
     .admin-nav-btn { background: none; border: none; color: var(--text-muted); font-weight: 700; font-size: 0.78rem; cursor: pointer; padding: 6px 10px; border-radius: 6px; white-space: nowrap; }
     .admin-nav-btn.active { background: var(--surface-hover); color: var(--cyan); }
@@ -252,6 +249,7 @@
     .admin-table th, .admin-table td { padding: 8px 6px; border-bottom: 1px solid var(--border); vertical-align: middle; }
     .btn-table-del { background: #ef4444; color: #fff; border: none; padding: 4px 8px; border-radius: 4px; font-size: 0.68rem; cursor: pointer; }
     .btn-table-vip { background: var(--gold); color: #000; border: none; padding: 4px 8px; border-radius: 4px; font-size: 0.68rem; cursor: pointer; font-weight: 800; }
+    .btn-table-ads { background: var(--surface-hover); color: var(--cyan); border: 1px solid var(--border); padding: 4px 8px; border-radius: 4px; font-size: 0.68rem; cursor: pointer; font-weight: 800; }
 
     .user-table-avatar { width: 28px; height: 28px; border-radius: 50%; vertical-align: middle; background: #1a2234; border: 1px solid var(--border); }
     .fingerprint-badge { font-family: monospace; font-size: 0.65rem; background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 4px; color: var(--cyan); }
@@ -280,17 +278,8 @@
     <div class="drawer-link" onclick="toggleDrawer(); location.hash='#/tv';"><i class="fa-solid fa-tv"></i> <span data-i18n="nav_tv">المسلسلات</span></div>
     <div class="drawer-link" onclick="toggleDrawer(); openVipModal();"><i class="fa-solid fa-crown" style="color:var(--gold);"></i> <span data-i18n="vip_title">اشتراكات VIP</span></div>
 
-    <div class="drawer-section-title" data-i18n="nav_genres">التصنيفات السينمائية</div>
-    <div class="genre-boxes-grid">
-      <div class="genre-box" onclick="toggleDrawer(); location.hash='#/category/28';">Action</div>
-      <div class="genre-box" onclick="toggleDrawer(); location.hash='#/category/35';">Comedy</div>
-      <div class="genre-box" onclick="toggleDrawer(); location.hash='#/category/18';">Drama</div>
-      <div class="genre-box" onclick="toggleDrawer(); location.hash='#/category/27';">Horror</div>
-      <div class="genre-box" onclick="toggleDrawer(); location.hash='#/category/10749';">Romance</div>
-      <div class="genre-box" onclick="toggleDrawer(); location.hash='#/category/878';">Sci-Fi</div>
-      <div class="genre-box" onclick="toggleDrawer(); location.hash='#/category/turkish';">Turkish</div>
-      <div class="genre-box" onclick="toggleDrawer(); location.hash='#/category/korean';">Korean</div>
-    </div>
+    <div class="drawer-section-title" data-i18n="nav_genres">جميع التصنيفات</div>
+    <div class="genre-boxes-grid" id="genreBoxesContainer"></div>
 
     <div class="drawer-section-title" data-i18n="nav_settings">إعدادات المنصة</div>
     <div class="drawer-link" onclick="toggleTheme()"><i class="fa-solid fa-circle-half-stroke"></i> <span id="themeToggleText">الوضع النهاري</span></div>
@@ -310,7 +299,7 @@
 
     <div class="header-center">
       <div class="search-wrapper">
-        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <i class="fa-solid fa-magnifying-glass search-icon" onclick="triggerFullSearch()"></i>
         <input type="text" id="searchInput" placeholder="بحث ذكي..." autocomplete="off">
       </div>
       <div class="search-dropdown" id="searchDropdown"></div>
@@ -362,8 +351,17 @@
       <div class="shelf">
         <div class="shelf-title" id="exploreSectionTitle">🌐 <span data-i18n="shelf_explore">استكشاف العروض</span></div>
         <div class="explore-grid" id="deckExplore"></div>
-        <button class="btn-load-more" id="loadMoreBtn" onclick="loadMoreExploreMedia()" data-i18n="load_more">تحميل المزيد</button>
+        <div class="scroll-loader" id="scrollLoader"><i class="fa-solid fa-spinner fa-spin"></i> جاري جلب المزيد...</div>
       </div>
+    </div>
+  </div>
+
+  <!-- واجهة نتائج البحث المستقلة -->
+  <div id="searchResultsView">
+    <button class="back-btn" onclick="history.back()"><i class="fa-solid fa-arrow-right"></i> <span data-i18n="btn_back">العودة</span></button>
+    <div class="shelf">
+      <div class="shelf-title" id="searchHeaderTitle">🔍 نتائج البحث</div>
+      <div class="explore-grid" id="deckSearchResults"></div>
     </div>
   </div>
 
@@ -395,7 +393,6 @@
       </div>
     </div>
 
-    <!-- أزرار السيرفرات الموحدة من 1 إلى 6 -->
     <div class="servers-bar" id="serversContainer">
       <div style="font-size: 0.8rem; font-weight: 800;" data-i18n="select_server">اختر سيرفر المشاهدة:</div>
       <div class="servers-list">
@@ -426,32 +423,31 @@
       <i class="fa-solid fa-xmark modal-close" onclick="closeModal('vipModal')"></i>
       <div class="modal-title"><i class="fa-solid fa-crown" style="color: var(--gold);"></i> <span data-i18n="vip_title">اشتراكات وباقات VIP</span></div>
       <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;" data-i18n="vip_desc">
-        استمتع ببث مباشر فائق السرعة بدون إعلانات مع روابط سحابية خاصة ومكتبة VIP الحصرية.
+        استمتع ببث مباشر فائق السرعة بدون إعلانات نهائياً مع روابط سحابية خاصة ومكتبة VIP الحصرية.
       </p>
 
       <div class="vip-pricing-grid">
         <div class="vip-card">
           <div class="vip-card-title">الباقة الشهرية</div>
-          <div class="vip-card-price">$4.99 <span style="font-size:0.7rem; color:var(--text-muted);">/ شهر</span></div>
-          <div class="vip-features">✓ بدون إعلانات نهائياً<br>✓ سيرفرات فائقة السرعة<br>✓ دعم فني مباشر</div>
-          <a href="https://t.me/ONEBR?text=ارغب+بالاشتراك+في+باقة+VIP+الشهرية" target="_blank" class="vip-btn-plan">تفعيل عبر تليكرام</a>
+          <div class="vip-card-price">$1.00 <span style="font-size:0.7rem; color:var(--text-muted);">/ شهر</span></div>
+          <div class="vip-features">✓ منع الإعلانات نهائياً<br>✓ سيرفرات فائقة السرعة<br>✓ دعم فني مباشر</div>
+          <a href="https://t.me/ONEBR?text=ارغب+بالاشتراك+في+باقة+VIP+الشهرية+(1$)" target="_blank" class="vip-btn-plan">تفعيل عبر تليكرام ($1)</a>
         </div>
         <div class="vip-card featured">
           <div class="vip-card-title">الباقة السنوية (الأفضل)</div>
-          <div class="vip-card-price">$39.99 <span style="font-size:0.7rem; color:var(--text-muted);">/ سنة</span></div>
-          <div class="vip-features">✓ جميع ميزات VIP<br>✓ توفير أكثر من 35%<br>✓ إضافة أعمال حسب الطلب</div>
-          <a href="https://t.me/ONEBR?text=ارغب+بالاشتراك+في+باقة+VIP+السنوية" target="_blank" class="vip-btn-plan" style="background:var(--gold); color:#000;">تفعيل عبر تليكرام</a>
+          <div class="vip-card-price">$10.00 <span style="font-size:0.7rem; color:var(--text-muted);">/ سنة</span></div>
+          <div class="vip-features">✓ جميع ميزات VIP<br>✓ منع الإعلانات بالكامل<br>✓ إضافة أعمال حسب الطلب</div>
+          <a href="https://t.me/ONEBR?text=ارغب+بالاشتراك+في+باقة+VIP+السنوية+(10$)" target="_blank" class="vip-btn-plan" style="background:var(--gold); color:#000;">تفعيل عبر تليكرام ($10)</a>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- نافذة المصادقة المحدثة مع إعادة تعيين كلمة المرور -->
+  <!-- نافذة المصادقة -->
   <div class="modal-overlay" id="authModal">
     <div class="modal-box">
       <i class="fa-solid fa-xmark modal-close" onclick="closeModal('authModal')"></i>
       
-      <!-- تسجيل الدخول -->
       <div id="loginFormBox">
         <div class="modal-title"><i class="fa-solid fa-user-shield" style="color: var(--cyan);"></i> <span data-i18n="auth_title">تسجيل الدخول</span></div>
         <div class="form-group"><label data-i18n="auth_email">البريد الإلكتروني:</label><input type="text" id="loginEmail"></div>
@@ -463,7 +459,6 @@
         </div>
       </div>
 
-      <!-- إنشاء حساب جديد -->
       <div id="registerFormBox" style="display: none;">
         <div class="modal-title"><i class="fa-solid fa-user-plus" style="color: var(--cyan);"></i> <span>إنشاء حساب جديد</span></div>
         <div class="form-group"><label data-i18n="auth_email">البريد الإلكتروني:</label><input type="email" id="regEmail"></div>
@@ -474,7 +469,6 @@
         </div>
       </div>
 
-      <!-- نسيت كلمة المرور (خطوة 1: فحص البريد) -->
       <div id="forgotFormBox" style="display: none;">
         <div class="modal-title"><i class="fa-solid fa-key" style="color: var(--gold);"></i> <span>استعادة الحساب</span></div>
         <div class="form-group"><label data-i18n="auth_email">أدخل بريدك الإلكتروني المسجل:</label><input type="email" id="forgotEmail"></div>
@@ -484,7 +478,6 @@
         </div>
       </div>
 
-      <!-- إعادة تعيين كلمة المرور (خطوة 2: كلمة المرور الجديدة) -->
       <div id="resetPassFormBox" style="display: none;">
         <div class="modal-title"><i class="fa-solid fa-lock-open" style="color: var(--cyan);"></i> <span>تعيين كلمة مرور جديدة</span></div>
         <p id="resetTargetEmail" style="font-size:0.75rem; color:var(--text-muted); margin-bottom:8px;"></p>
@@ -492,26 +485,25 @@
         <button class="btn-submit" style="background:var(--cyan); color:#000;" onclick="applyNewPassword()">حفظ وتحديث كلمة المرور</button>
       </div>
 
-      <!-- الملف الشخصي -->
       <div id="authProfile" style="display: none; text-align: center;">
         <div class="modal-title" style="justify-content: center;"><i class="fa-solid fa-circle-user" style="color: var(--cyan);"></i> <span data-i18n="auth_profile">الحساب الشخصي</span></div>
         <div style="width: 76px; height: 76px; border-radius: 50%; overflow: hidden; margin: 0 auto 10px; border: 2px solid var(--cyan); box-shadow: 0 0 12px rgba(0,240,255,0.4);">
           <img id="profileAvatarBig" src="" style="width: 100%; height: 100%; object-fit: cover;">
         </div>
         <p id="profileEmail" style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 700; color: var(--text);"></p>
-        <p id="profileRoleBadge" style="font-size: 0.7rem; color: var(--gold); font-weight: 800; margin-bottom: 14px;"></p>
+        <p id="profileRoleBadge" style="font-size: 0.7rem; color: var(--gold); font-weight: 800; margin-bottom: 6px;"></p>
+        <p id="profileAdsStatusBadge" style="font-size: 0.68rem; color: var(--cyan); font-weight: 700; margin-bottom: 14px;"></p>
         <button class="btn-submit" style="background: #ef4444;" onclick="logoutUser()" data-i18n="auth_logout">تسجيل الخروج</button>
       </div>
     </div>
   </div>
 
-  <!-- لوحة تحكم الأدمن المحدثة مع إحصائيات وإدارة متقدمة -->
+  <!-- لوحة تحكم الأدمن -->
   <div class="modal-overlay" id="adminModal">
     <div class="modal-box admin-modal">
       <i class="fa-solid fa-xmark modal-close" onclick="closeModal('adminModal'); location.hash='#/home';"></i>
       <div class="modal-title"><i class="fa-solid fa-shield-halved" style="color: var(--gold);"></i> <span data-i18n="admin_title">لوحة تحكم المشرفين (ONEBR TV)</span></div>
       
-      <!-- إحصائيات المنصة السريعة -->
       <div class="admin-stats-grid">
         <div class="admin-stat-card"><div class="stat-label">👥 إجمالي الزيارات</div><div class="stat-number" id="statVisitorsCount">0</div></div>
         <div class="admin-stat-card"><div class="stat-label">👤 المسجلين</div><div class="stat-number" id="statUsersCount">0</div></div>
@@ -528,17 +520,17 @@
         <button class="admin-nav-btn" onclick="switchAdminTab('banner', this)">📢 التنبيهات</button>
       </div>
 
-      <!-- تبويب إدارة المستخدمين المسجلين -->
+      <!-- تبويب إدارة المستخدمين -->
       <div id="tabUsersManage">
         <div style="max-height: 280px; overflow-y: auto;">
           <table class="admin-table">
-            <thead><tr><th>المستخدم</th><th>البريد</th><th>تاريخ التسجيل</th><th>الحالة</th><th>الإجراءات</th></tr></thead>
+            <thead><tr><th>المستخدم</th><th>البريد</th><th>الرتبة</th><th>حالة الإعلانات</th><th>الإجراءات</th></tr></thead>
             <tbody id="adminUsersTableBody"></tbody>
           </table>
         </div>
       </div>
 
-      <!-- تبويب سجل الزوار مع البصمة المميزة -->
+      <!-- تبويب سجل الزوار -->
       <div id="tabVisitors" style="display: none;">
         <div style="max-height: 280px; overflow-y: auto;">
           <table class="admin-table">
@@ -591,9 +583,6 @@
     <div><strong>ONEBR TV</strong> © 2026. All rights reserved.</div>
   </footer>
 
-  <!-- 📢 إعلان Social Bar -->
-  <script src="https://pl31046352.profitableratecpmnetwork.com/24/e2/59/24e259929d0a94f08f92e8373055a876.js"></script>
-
   <script>
     const API_KEY = "8265bd1679663a7ea12ac168da84d2e8";
     const API_BASE = "https://api.themoviedb.org/3";
@@ -605,26 +594,48 @@
     const SUPER_ADMIN_EMAIL = "altrfybaqer0@gmail.com";
     const SUPER_ADMIN_PASS = "Aann22@@55";
 
+    const ALL_GENRES = [
+      { id: "28", ar: "أكشن", en: "Action" },
+      { id: "12", ar: "مغامرة", en: "Adventure" },
+      { id: "16", ar: "أنيميشن", en: "Animation" },
+      { id: "35", ar: "كوميديا", en: "Comedy" },
+      { id: "80", ar: "جريمة", en: "Crime" },
+      { id: "99", ar: "وثائقي", en: "Documentary" },
+      { id: "18", ar: "دراما", en: "Drama" },
+      { id: "10751", ar: "عائلي", en: "Family" },
+      { id: "14", ar: "فانتازيا", en: "Fantasy" },
+      { id: "36", ar: "تاريخي", en: "History" },
+      { id: "27", ar: "رعب", en: "Horror" },
+      { id: "10402", ar: "موسيقى", en: "Music" },
+      { id: "9648", ar: "غموض", en: "Mystery" },
+      { id: "10749", ar: "رومانسي", en: "Romance" },
+      { id: "878", ar: "خيال علمي", en: "Sci-Fi" },
+      { id: "53", ar: "إثارة", en: "Thriller" },
+      { id: "10752", ar: "حرب", en: "War" },
+      { id: "turkish", ar: "تركي", en: "Turkish" },
+      { id: "korean", ar: "كوري", en: "Korean" }
+    ];
+
     let currentLang = localStorage.getItem('site_lang') || 'ar';
     let currentTheme = localStorage.getItem('site_theme') || 'dark';
 
     const translations = {
       ar: {
-        nav_sections: "الأقسام الرئيسية", nav_genres: "التصنيفات السينمائية", nav_settings: "إعدادات المنصة",
+        nav_sections: "الأقسام الرئيسية", nav_genres: "جميع التصنيفات", nav_settings: "إعدادات المنصة",
         nav_home: "الرئيسية", nav_movies: "الأفلام", nav_tv: "المسلسلات",
         watch_now: "مشاهدة العمل", shelf_custom: "أعمال مضافة بواسطة الإدارة (مباشرة / VIP)",
         shelf_trending: "الأكثر رواجاً اليوم", shelf_turkish: "الدراما والمسلسلات التركية",
         shelf_movies: "أحدث الأفلام العالمية", shelf_explore: "استكشاف العروض", shelf_similar: "أعمال مقترحة ومشابهة",
         load_more: "تحميل المزيد", btn_back: "العودة", select_server: "اختر سيرفر المشاهدة:",
         srv_prefix: "سيرفر", episodes_title: "المواسم والحلقات:", vip_title: "اشتراكات وباقات VIP",
-        vip_desc: "استمتع ببث مباشر فائق السرعة بدون إعلانات مع روابط سحابية خاصة ومكتبة VIP الحصرية.",
+        vip_desc: "استمتع ببث مباشر فائق السرعة بدون إعلانات نهائياً مع روابط سحابية خاصة ومكتبة VIP الحصرية.",
         auth_title: "تسجيل الدخول", auth_email: "البريد الإلكتروني:", auth_pass: "رمز المرور:",
         auth_btn: "دخول الحساب", auth_profile: "الحساب الشخصي", auth_logout: "تسجيل الخروج",
         admin_title: "لوحة تحكم المشرفين (ONEBR TV)", search_ph: "بحث ذكي...",
         season_prefix: "الموسم", ep_prefix: "حلقة"
       },
       en: {
-        nav_sections: "Main Sections", nav_genres: "Movie Genres", nav_settings: "Platform Settings",
+        nav_sections: "Main Sections", nav_genres: "All Genres", nav_settings: "Platform Settings",
         nav_home: "Home", nav_movies: "Movies", nav_tv: "TV Shows",
         watch_now: "Watch Now", shelf_custom: "Admin Direct Releases (VIP)",
         shelf_trending: "Trending Today", shelf_turkish: "Turkish Drama & Series",
@@ -647,16 +658,16 @@
     let heroInterval = null;
     let explorePage = 1;
     let currentExploreEndpoint = '/trending/all/day';
+    let isFetchingMore = false;
+    let hasMoreExploreMedia = true;
     let hlsInstance = null;
     let searchDebounceTimer = null;
     let verifyingForgotEmailAddress = '';
 
-    // توليد رابط الأفاتار الرقمي المميز تلقائياً
     function getAvatarUrl(seed) {
       return `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(seed || 'guest')}`;
     }
 
-    // توليد أو جلب البصمة الفريدة للزائر
     function getVisitorFingerprint() {
       let fp = localStorage.getItem('visitor_uuid');
       if (!fp) {
@@ -666,18 +677,51 @@
       return fp;
     }
 
+    // إدارة الإعلانات بفحص خاصية adsDisabled المستقلة
+    function injectAdScriptsIfEligible() {
+      if (currentUser && (currentUser.isVip || currentUser.isAdmin || currentUser.adsDisabled)) {
+        console.log("Ads Disabled for current user (VIP / Admin / Custom Exemption)");
+        return;
+      }
+      
+      const popScript = document.createElement('script');
+      popScript.src = "https://pl31046353.profitableratecpmnetwork.com/61/4f/72/614f728ad484f449400870c3be110111.js";
+      document.head.appendChild(popScript);
+
+      const socialScript = document.createElement('script');
+      socialScript.src = "https://pl31046352.profitableratecpmnetwork.com/24/e2/59/24e259929d0a94f08f92e8373055a876.js";
+      document.body.appendChild(socialScript);
+    }
+
     async function initSite() {
       applyTheme(currentTheme);
       applyLanguage(currentLang);
       await verifyUserStatus();
+      injectAdScriptsIfEligible();
       logVisitor();
       loadCustomMediaFromFirebase();
       loadBannerAnnouncement();
       initHeroRotation();
       initSearchAutocomplete();
+      initInfiniteScroll();
 
       window.addEventListener('hashchange', handleRouting);
       handleRouting();
+    }
+
+    function renderGenreBoxes() {
+      const box = document.getElementById('genreBoxesContainer');
+      box.innerHTML = '';
+      ALL_GENRES.forEach(g => {
+        const div = document.createElement('div');
+        div.className = 'genre-box';
+        div.innerText = (currentLang === 'ar') ? g.ar : g.en;
+        div.onclick = () => {
+          toggleDrawer();
+          location.hash = `#/category/${g.id}`;
+        };
+        box.appendChild(div);
+      });
     }
 
     function toggleDrawer() {
@@ -714,6 +758,8 @@
         const key = el.getAttribute('data-i18n');
         if (translations[lang][key]) el.innerText = translations[lang][key];
       });
+
+      renderGenreBoxes();
     }
 
     function handleRouting() {
@@ -744,6 +790,9 @@
         else if (cat === 'korean') currentExploreEndpoint = '/discover/tv?with_original_language=ko&sort_by=popularity.desc';
         else currentExploreEndpoint = `/discover/movie?with_genres=${cat}&sort_by=popularity.desc`;
         loadMoreExploreMedia(true);
+      } else if (route === 'search') {
+        const q = decodeURIComponent(parts[2] || '');
+        openSearchResultsPage(q);
       } else if (route === 'theater') {
         fetchMediaAndOpenTheater(parts[3], parts[2], parseInt(parts[4] || 1), parseInt(parts[5] || 1));
       } else if (route === 'admin') {
@@ -753,6 +802,7 @@
 
     function showHomeView() {
       document.getElementById('theaterView').style.display = 'none';
+      document.getElementById('searchResultsView').style.display = 'none';
       document.getElementById('homeView').style.display = 'block';
       
       const frame = document.getElementById('streamFrame');
@@ -764,6 +814,130 @@
 
       document.getElementById('mainPlayerContainer').style.display = 'none';
       document.getElementById('serversContainer').style.display = 'none';
+    }
+
+    function initInfiniteScroll() {
+      window.addEventListener('scroll', () => {
+        if (document.getElementById('homeView').style.display === 'none') return;
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500) {
+          if (!isFetchingMore && hasMoreExploreMedia) {
+            loadMoreExploreMedia(false);
+          }
+        }
+      });
+    }
+
+    async function loadMoreExploreMedia(reset = false) {
+      if (isFetchingMore) return;
+      isFetchingMore = true;
+      const loader = document.getElementById('scrollLoader');
+      loader.style.display = 'block';
+
+      if (reset) {
+        explorePage = 1;
+        document.getElementById('deckExplore').innerHTML = "";
+        hasMoreExploreMedia = true;
+      }
+
+      try {
+        const res = await fetch(`${API_BASE}${currentExploreEndpoint}${currentExploreEndpoint.includes('?') ? '&' : '?'}api_key=${API_KEY}&language=${currentLang}&page=${explorePage}`);
+        const json = await res.json();
+        const results = json.results || [];
+
+        if (results.length === 0) {
+          hasMoreExploreMedia = false;
+        } else {
+          renderCards(results, document.getElementById('deckExplore'));
+          explorePage++;
+        }
+      } catch (e) {
+      } finally {
+        isFetchingMore = false;
+        loader.style.display = 'none';
+      }
+    }
+
+    function triggerFullSearch() {
+      const q = document.getElementById('searchInput').value.trim();
+      if (!q) return;
+      document.getElementById('searchDropdown').style.display = 'none';
+      location.hash = `#/search/${encodeURIComponent(q)}`;
+    }
+
+    async function openSearchResultsPage(query) {
+      document.getElementById('homeView').style.display = 'none';
+      document.getElementById('theaterView').style.display = 'none';
+      document.getElementById('searchResultsView').style.display = 'block';
+      window.scrollTo(0, 0);
+
+      document.getElementById('searchHeaderTitle').innerText = `🔍 نتائج البحث عن: "${query}"`;
+      const container = document.getElementById('deckSearchResults');
+      container.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:20px;">جاري البحث...</div>';
+
+      try {
+        const res = await fetch(`${API_BASE}/search/multi?query=${encodeURIComponent(query)}&api_key=${API_KEY}&language=${currentLang}`);
+        const data = await res.json();
+        container.innerHTML = '';
+        const validResults = (data.results || []).filter(i => i.poster_path);
+        if (validResults.length === 0) {
+          container.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:20px; color:var(--text-muted);">لم يتم العثور على أي نتائج مطابقة.</div>';
+          return;
+        }
+        renderCards(validResults, container);
+      } catch(e) {
+        container.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:20px;">تعذر جلب النتائج.</div>';
+      }
+    }
+
+    function initSearchAutocomplete() {
+      const searchInput = document.getElementById('searchInput');
+      const searchDropdown = document.getElementById('searchDropdown');
+
+      searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') triggerFullSearch();
+      });
+
+      searchInput.addEventListener('input', (e) => {
+        clearTimeout(searchDebounceTimer);
+        const q = e.target.value.trim();
+        if (!q) { searchDropdown.style.display = 'none'; return; }
+
+        searchDebounceTimer = setTimeout(async () => {
+          try {
+            const res = await fetch(`${API_BASE}/search/multi?query=${encodeURIComponent(q)}&api_key=${API_KEY}&language=${currentLang}`);
+            const data = await res.json();
+            const results = (data.results || []).filter(i => i.poster_path).slice(0, 6);
+            if (results.length === 0) { searchDropdown.style.display = 'none'; return; }
+
+            searchDropdown.innerHTML = '';
+            results.forEach(item => {
+              const isMovie = (item.media_type === 'movie' || item.title);
+              const type = isMovie ? 'movie' : 'tv';
+              const title = item.title || item.name;
+
+              const row = document.createElement('div');
+              row.className = 'search-item';
+              row.onclick = () => {
+                searchDropdown.style.display = 'none';
+                searchInput.value = '';
+                location.hash = `#/theater/${type}/${item.id}`;
+              };
+              row.innerHTML = `
+                <img src="${POSTER_BASE + item.poster_path}">
+                <div class="search-item-title">${title}</div>
+              `;
+              searchDropdown.appendChild(row);
+            });
+            searchDropdown.style.display = 'flex';
+          } catch(e) {}
+        }, 220);
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!searchInput.contains(e.target) && !searchDropdown.contains(e.target)) {
+          searchDropdown.style.display = 'none';
+        }
+      });
     }
 
     async function initHeroRotation() {
@@ -813,7 +987,7 @@
         const type = isMovie ? 'movie' : 'tv';
         const title = item.title || item.name;
         const score = item.vote_average ? item.vote_average.toFixed(1) : '7.5';
-        const date = (item.release_date || item.first_air_date || '2024').substring(0, 4);
+        const date = (item.release_date || item.first_air_date || '2026').substring(0, 4);
 
         const card = document.createElement('div');
         card.className = 'card';
@@ -829,65 +1003,9 @@
       });
     }
 
-    async function loadMoreExploreMedia(reset = false) {
-      if (reset) { explorePage = 1; document.getElementById('deckExplore').innerHTML = ""; }
-      try {
-        const res = await fetch(`${API_BASE}${currentExploreEndpoint}${currentExploreEndpoint.includes('?') ? '&' : '?'}api_key=${API_KEY}&language=${currentLang}&page=${explorePage}`);
-        const json = await res.json();
-        renderCards(json.results || [], document.getElementById('deckExplore'));
-        explorePage++;
-      } catch (e) {}
-    }
-
-    function initSearchAutocomplete() {
-      const searchInput = document.getElementById('searchInput');
-      const searchDropdown = document.getElementById('searchDropdown');
-
-      searchInput.addEventListener('input', (e) => {
-        clearTimeout(searchDebounceTimer);
-        const q = e.target.value.trim();
-        if (!q) { searchDropdown.style.display = 'none'; return; }
-
-        searchDebounceTimer = setTimeout(async () => {
-          try {
-            const res = await fetch(`${API_BASE}/search/multi?query=${encodeURIComponent(q)}&api_key=${API_KEY}&language=${currentLang}`);
-            const data = await res.json();
-            const results = (data.results || []).filter(i => i.poster_path).slice(0, 6);
-            if (results.length === 0) { searchDropdown.style.display = 'none'; return; }
-
-            searchDropdown.innerHTML = '';
-            results.forEach(item => {
-              const isMovie = (item.media_type === 'movie' || item.title);
-              const type = isMovie ? 'movie' : 'tv';
-              const title = item.title || item.name;
-
-              const row = document.createElement('div');
-              row.className = 'search-item';
-              row.onclick = () => {
-                searchDropdown.style.display = 'none';
-                searchInput.value = '';
-                location.hash = `#/theater/${type}/${item.id}`;
-              };
-              row.innerHTML = `
-                <img src="${POSTER_BASE + item.poster_path}">
-                <div class="search-item-title">${title}</div>
-              `;
-              searchDropdown.appendChild(row);
-            });
-            searchDropdown.style.display = 'flex';
-          } catch(e) {}
-        }, 220);
-      });
-
-      document.addEventListener('click', (e) => {
-        if (!searchInput.contains(e.target) && !searchDropdown.contains(e.target)) {
-          searchDropdown.style.display = 'none';
-        }
-      });
-    }
-
     async function fetchMediaAndOpenTheater(id, type, season = 1, episode = 1) {
       document.getElementById('homeView').style.display = 'none';
+      document.getElementById('searchResultsView').style.display = 'none';
       document.getElementById('theaterView').style.display = 'block';
       document.getElementById('mainPlayerContainer').style.display = 'none';
       document.getElementById('serversContainer').style.display = 'none';
@@ -1003,7 +1121,7 @@
             3: `https://embed.smashystream.com/playere.php?tmdb=${id}`,
             4: `https://multiembed.mov/?video_id=${id}&tmdb=1`,
             5: `https://vidsrc.to/embed/movie/${id}`,
-            6: `https://autoembed.co/movie/tmdb/${id}`
+            6: `https://player.videasy.net/movie/${id}`
           }
         : { 
             1: `https://vidlink.pro/tv/${id}/${s}/${e}`,
@@ -1011,7 +1129,7 @@
             3: `https://embed.smashystream.com/playere.php?tmdb=${id}&season=${s}&episode=${e}`,
             4: `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}`,
             5: `https://vidsrc.to/embed/tv/${id}/${s}/${e}`,
-            6: `https://autoembed.co/tv/tmdb/${id}/${s}/${e}`
+            6: `https://player.videasy.net/tv/${id}/${s}/${e}`
           };
 
       const frame = document.getElementById('streamFrame');
@@ -1025,6 +1143,7 @@
     function playDirectMedia(title, streamUrl, poster) {
       currentItem = { id: 'custom', type: 'custom', title, isCustom: true, directUrl: streamUrl };
       document.getElementById('homeView').style.display = 'none';
+      document.getElementById('searchResultsView').style.display = 'none';
       document.getElementById('theaterView').style.display = 'block';
       document.getElementById('detailHeroBox').style.display = 'none';
       document.getElementById('mainPlayerContainer').style.display = 'block';
@@ -1055,7 +1174,6 @@
       }
     }
 
-    // إدارة تبديل نوافذ المصادقة
     function switchAuthView(view) {
       document.getElementById('loginFormBox').style.display = view === 'login' ? 'block' : 'none';
       document.getElementById('registerFormBox').style.display = view === 'register' ? 'block' : 'none';
@@ -1072,7 +1190,7 @@
       if (isBanned) return alert('هذا الحساب محظور من استخدام المنصة!');
 
       if (email === SUPER_ADMIN_EMAIL.toLowerCase() && pass === SUPER_ADMIN_PASS) {
-        currentUser = { email, isAdmin: true, isVip: true };
+        currentUser = { email, isAdmin: true, isVip: true, adsDisabled: true };
         localStorage.setItem('cinema_user', JSON.stringify(currentUser));
         closeModal('authModal');
         verifyUserStatus();
@@ -1084,10 +1202,16 @@
         const res = await fetch(`${FIREBASE_DB}/users/${key}.json`);
         const user = await res.json();
         if (user && user.pass === pass) {
-          currentUser = { email, isAdmin: false, isVip: user.isVip || false };
+          currentUser = { 
+            email, 
+            isAdmin: false, 
+            isVip: user.isVip || false,
+            adsDisabled: user.adsDisabled || false
+          };
           localStorage.setItem('cinema_user', JSON.stringify(currentUser));
           closeModal('authModal');
           verifyUserStatus();
+          location.reload();
         } else {
           alert('بيانات الدخول غير صحيحة!');
         }
@@ -1102,13 +1226,12 @@
       const key = email.replace(/[^a-zA-Z0-9]/g, '_');
       await fetch(`${FIREBASE_DB}/users/${key}.json`, {
         method: 'PUT',
-        body: JSON.stringify({ email, pass, created: new Date().toLocaleString('ar-EG'), isVip: false })
+        body: JSON.stringify({ email, pass, created: new Date().toLocaleString('ar-EG'), isVip: false, adsDisabled: false })
       });
       alert('تم إنشاء الحساب بنجاح! يمكنك الآن تسجيل الدخول.');
       switchAuthView('login');
     }
 
-    // فحص البريد لاستعادة كلمة المرور
     async function verifyForgotEmail() {
       const email = document.getElementById('forgotEmail').value.trim().toLowerCase();
       if (!email) return alert('يرجى كتابة البريد الإلكتروني المسجل');
@@ -1129,7 +1252,6 @@
       }
     }
 
-    // حفظ كلمة المرور الجديدة
     async function applyNewPassword() {
       const newPass = document.getElementById('newResetPass').value.trim();
       if (!newPass || newPass.length < 6) return alert('يرجى إدخال كلمة مرور جديدة من 6 خانات على الأقل');
@@ -1159,7 +1281,6 @@
       guestBtn.style.display = 'none';
       avatarBtn.style.display = 'flex';
       
-      // تعيين الأفاتار الرقمي المميز
       const avatarSrc = getAvatarUrl(currentUser.email);
       avatarImg.src = avatarSrc;
       document.getElementById('profileAvatarBig').src = avatarSrc;
@@ -1182,6 +1303,7 @@
         switchAuthView('profile');
         document.getElementById('profileEmail').innerText = currentUser.email;
         document.getElementById('profileRoleBadge').innerText = currentUser.isAdmin ? '⭐ مشرف النظام (Super Admin)' : (currentUser.isVip ? '👑 عضو مميز (VIP)' : 'عضو مسجل (Free Member)');
+        document.getElementById('profileAdsStatusBadge').innerText = (currentUser.isVip || currentUser.isAdmin || currentUser.adsDisabled) ? '🛡️ حالة الإعلانات: معطلة بالكامل' : '📢 حالة الإعلانات: مفعّلة';
       } else {
         switchAuthView('login');
       }
@@ -1220,7 +1342,6 @@
       loadAdminUsersTable();
     }
 
-    // جلب وحساب إحصائيات لوحة الأدمن
     async function loadAdminStats() {
       try {
         const [visRes, usersRes, mediaRes, banRes] = await Promise.all([
@@ -1242,7 +1363,6 @@
       } catch(e) {}
     }
 
-    // إدارة جدول المستخدمين في الأدمن
     async function loadAdminUsersTable() {
       try {
         const res = await fetch(`${FIREBASE_DB}/users.json`);
@@ -1253,15 +1373,21 @@
           Object.keys(data).forEach(k => {
             const u = data[k];
             const av = getAvatarUrl(u.email);
+            const adsDisabled = !!u.adsDisabled;
+            const isVip = !!u.isVip;
+
             const row = document.createElement('tr');
             row.innerHTML = `
               <td><img class="user-table-avatar" src="${av}"></td>
               <td><strong>${u.email}</strong></td>
-              <td>${u.created || '-'}</td>
-              <td><span style="color:${u.isVip ? 'var(--gold)' : 'var(--text-muted)'}; font-weight:800;">${u.isVip ? 'VIP' : 'Regular'}</span></td>
+              <td><span style="color:${isVip ? 'var(--gold)' : 'var(--text-muted)'}; font-weight:800;">${isVip ? 'VIP' : 'عادي'}</span></td>
+              <td><span style="color:${adsDisabled ? '#10b981' : '#f59e0b'}; font-weight:700;">${adsDisabled ? '🚫 معطلة' : '📢 مفعلة'}</span></td>
               <td>
-                <button class="btn-table-vip" onclick="toggleVipStatus('${k}', ${!u.isVip})">${u.isVip ? 'إلغاء VIP' : 'ترقية VIP'}</button>
-                <button class="btn-table-del" onclick="deleteUserAccount('${k}')">حذف</button>
+                <div style="display:flex; gap:4px; flex-wrap:wrap;">
+                  <button class="btn-table-vip" onclick="toggleVipStatus('${k}', ${!isVip})">${isVip ? 'إلغاء VIP' : 'ترقية VIP'}</button>
+                  <button class="btn-table-ads" onclick="toggleUserAdsExemption('${k}', ${!adsDisabled})">${adsDisabled ? 'تفعيل الإعلانات' : 'إلغاء الإعلانات'}</button>
+                  <button class="btn-table-del" onclick="deleteUserAccount('${k}')">حذف</button>
+                </div>
               </td>
             `;
             tbody.appendChild(row);
@@ -1270,9 +1396,16 @@
       } catch(e) {}
     }
 
+    // تبديل خاصية تعطيل الإعلانات المستقلة لحساب المستخدم
+    async function toggleUserAdsExemption(key, disableState) {
+      await fetch(`${FIREBASE_DB}/users/${key}/adsDisabled.json`, { method: 'PUT', body: JSON.stringify(disableState) });
+      loadAdminUsersTable();
+    }
+
     async function toggleVipStatus(key, newStatus) {
       await fetch(`${FIREBASE_DB}/users/${key}/isVip.json`, { method: 'PUT', body: JSON.stringify(newStatus) });
       loadAdminUsersTable();
+      loadAdminStats();
     }
 
     async function deleteUserAccount(key) {
@@ -1282,7 +1415,6 @@
       loadAdminStats();
     }
 
-    // تسجيل وحفظ بيانات الزوار مع البصمة المميزة
     async function logVisitor() {
       try {
         const fp = getVisitorFingerprint();
