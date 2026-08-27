@@ -5,8 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>ONEBR TV | ون بر تي في - مشاهدة أحدث المسلسلات والأفلام وقنوات البث</title>
-  <meta name="description" content="منصة ONEBR TV لمشاهدة وتحميل أحدث الأفلام والمسلسلات وقنوات الأفلام المباشرة.">
+  <title>ONEBR TV | ون بر تي في - أفلام ومسلسلات وبث مباشر</title>
+  <meta name="description" content="منصة ONEBR TV لمشاهدة أحدث الأفلام والمسلسلات العالمية، التركية، الكورية، والأنمي.">
   <meta name="theme-color" content="#e50914">
 
   <link rel="icon" type="image/png" href="https://img.icons8.com/color/96/play--v1.png">
@@ -29,7 +29,7 @@
       --radius: 12px;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
     body { background-color: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
 
     #announcementBanner {
@@ -39,7 +39,7 @@
     }
 
     .sidebar-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+      position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px);
       z-index: 2500; display: none;
     }
     .sidebar {
@@ -116,27 +116,29 @@
     .explore-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; }
     .btn-load-more { width: 100%; max-width: 320px; margin: 24px auto 10px; display: block; background: rgba(255, 255, 255, 0.08); border: 1px solid var(--border); color: #fff; padding: 12px; border-radius: 30px; font-weight: 800; font-size: 0.9rem; cursor: pointer; }
 
-    /* شاشة المشغل */
+    /* شاشة المشغل وتفاصيل العمل */
     #theaterView { display: none; padding: 12px; max-width: 1150px; margin: 0 auto; }
-    .back-btn { background: var(--card-bg); color: #fff; border: 1px solid var(--border); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; margin-bottom: 12px; }
+    .back-btn { background: var(--card-bg); color: #fff; border: 1px solid var(--border); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; margin-bottom: 12px; font-weight: 800; }
     .media-info-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 16px; display: flex; flex-direction: column; gap: 16px; }
     @media(min-width: 768px) { .media-info-card { flex-direction: row; } }
     .media-poster-box { width: 140px; height: 210px; border-radius: 8px; overflow: hidden; flex-shrink: 0; margin: 0 auto; }
     .media-poster-box img { width: 100%; height: 100%; object-fit: cover; }
     .media-details { flex: 1; display: flex; flex-direction: column; gap: 8px; }
     .media-main-title { font-size: 1.4rem; font-weight: 900; }
+    .media-overview { font-size: 0.88rem; color: #cbd5e1; line-height: 1.6; }
 
-    #directPlayerBox { display: none; width: 100%; background: #000; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); }
+    .player-container { width: 100%; background: #000; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); margin-bottom: 16px; position: relative; }
+    #directPlayerBox { display: none; width: 100%; }
     #nativeVideo { width: 100%; max-height: 70vh; display: block; }
-    .player-box { position: relative; width: 100%; padding-top: 56.25%; background: #000; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); }
+    .player-box { position: relative; width: 100%; padding-top: 56.25%; }
     .player-box iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
 
     .servers-bar, .episodes-bar { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; margin-top: 14px; display: flex; flex-direction: column; gap: 8px; }
-    .servers-list { display: flex; flex-wrap: wrap; gap: 6px; }
-    .srv-btn { background: rgba(255,255,255,0.04); border: 1px solid var(--border); color: var(--text-muted); padding: 7px 14px; border-radius: 8px; font-size: 0.78rem; font-weight: 700; cursor: pointer; }
+    .servers-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .srv-btn { background: rgba(255,255,255,0.06); border: 1px solid var(--border); color: var(--text-muted); padding: 8px 14px; border-radius: 8px; font-size: 0.8rem; font-weight: 700; cursor: pointer; }
     .srv-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-    .seasons-scroll { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; }
+    .seasons-scroll { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; }
     .season-btn { background: rgba(255,255,255,0.06); border: 1px solid var(--border); color: #fff; padding: 6px 14px; border-radius: 6px; font-size: 0.78rem; cursor: pointer; }
     .season-btn.active { background: var(--cyan); color: #000; font-weight: 800; }
     .episodes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(75px, 1fr)); gap: 6px; max-height: 220px; overflow-y: auto; }
@@ -151,7 +153,7 @@
 
     .form-group { margin-bottom: 12px; }
     .form-group label { display: block; font-size: 0.78rem; color: var(--text-muted); margin-bottom: 4px; }
-    .form-group input, .form-group select { width: 100%; padding: 9px 12px; border-radius: 8px; border: 1px solid var(--border); background: rgba(255,255,255,0.05); color: #fff; font-size: 0.85rem; outline: none; }
+    .form-group input { width: 100%; padding: 9px 12px; border-radius: 8px; border: 1px solid var(--border); background: rgba(255,255,255,0.05); color: #fff; font-size: 0.85rem; outline: none; }
     .btn-submit { width: 100%; background: var(--primary); color: #fff; border: none; padding: 11px; border-radius: 8px; font-weight: 800; font-size: 0.88rem; cursor: pointer; }
 
     .admin-modal { max-width: 820px; }
@@ -160,11 +162,6 @@
     .admin-nav-btn.active { background: rgba(255,255,255,0.08); color: var(--cyan); }
     .admin-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; text-align: right; }
     .admin-table th, .admin-table td { padding: 8px 6px; border-bottom: 1px solid var(--border); }
-    .badge { padding: 2px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 700; }
-    .badge-online { background: rgba(16,185,129,0.2); color: var(--green); }
-    .badge-banned { background: rgba(239,68,68,0.2); color: #ef4444; }
-    .badge-vip { background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; font-weight: 800; }
-    .btn-sm-action { padding: 3px 8px; border-radius: 4px; font-size: 0.7rem; border: none; cursor: pointer; font-weight: 700; margin-left: 2px; }
 
     .telegram-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: #229ED9; color: #fff; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: 800; font-size: 0.9rem; margin-top: 10px; width: 100%; }
 
@@ -205,7 +202,7 @@
 
     <div class="search-box">
       <i class="fa-solid fa-magnifying-glass"></i>
-      <input type="text" id="searchInput" placeholder="بحث في آلاف العروض..." oninput="searchMedia()">
+      <input type="text" id="searchInput" placeholder="بحث في آلاف الأفلام والمسلسلات..." oninput="searchMedia()">
     </div>
 
     <div class="header-actions">
@@ -219,8 +216,6 @@
   <div id="homeView">
     <div class="nav-tabs">
       <button class="tab-btn active" onclick="switchCategory('all', this)">✨ الكل</button>
-      <button class="tab-btn" onclick="switchCategory('iptv_movies', this)">📡 قنوات أفلام مباشرة</button>
-      <button class="tab-btn" onclick="switchCategory('iptv_series', this)">📺 قنوات مسلسلات مباشرة</button>
       <button class="tab-btn" onclick="switchCategory('turkish', this)">🇹🇷 مسلسلات تركية</button>
       <button class="tab-btn" onclick="switchCategory('korean', this)">🇰🇷 دراما كورية وآسيوية</button>
       <button class="tab-btn" onclick="switchCategory('arabic', this)">🇮🇶 🇪🇬 أفلام ومسلسلات عربية</button>
@@ -230,7 +225,7 @@
     <section class="hero" id="heroBanner">
       <div class="hero-content">
         <h1 class="hero-title" id="heroTitle">جاري تحميل أحدث العروض...</h1>
-        <p class="hero-desc" id="heroDesc">استمتع بأكبر منصة سينمائية تجمع المستودعات وسيرفرات البث المباشرة.</p>
+        <p class="hero-desc" id="heroDesc">استمتع بأكبر منصة سينمائية تتيح مشاهدة أحدث الأفلام والمسلسلات بأعلى جودة.</p>
         <div class="hero-actions">
           <button class="hero-btn" id="heroBtn"><i class="fa-solid fa-play"></i> مشاهدة العمل الآن</button>
         </div>
@@ -238,14 +233,8 @@
     </section>
 
     <div class="catalog">
-      <!-- رف القنوات التلفزيونية الحية للأفلام والمسلسلات -->
-      <div class="shelf">
-        <div class="shelf-title">📡 قنوات سينمائية حية (M3U Live Streams)</div>
-        <div class="shelf-grid" id="deckIptvMovies"></div>
-      </div>
-
       <div class="shelf" id="customShelfBox" style="display: none;">
-        <div class="shelf-title">⭐ أعمال مضافة بواسطة الإدارة (Ok.ru / m3u8)</div>
+        <div class="shelf-title">⭐ أعمال مضافة بواسطة الإدارة (مباشرة / VIP)</div>
         <div class="shelf-grid" id="deckCustom"></div>
       </div>
 
@@ -296,29 +285,32 @@
       </div>
     </div>
 
-    <!-- مشغل البث المباشر المخصص للقنوات و m3u8 -->
-    <div id="directPlayerBox">
-      <video id="nativeVideo" controls playsinline></video>
-    </div>
+    <!-- حاوية مشغل الفيديو -->
+    <div class="player-container">
+      <!-- مشغل البث المباشر (HLS / m3u8) -->
+      <div id="directPlayerBox">
+        <video id="nativeVideo" controls playsinline></video>
+      </div>
 
-    <!-- مشغل التضمين للأعمال الخارجية -->
-    <div class="player-box" id="iframePlayerBox">
-      <iframe id="streamFrame" src="" allowfullscreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture"></iframe>
+      <!-- مشغل التضمين للأفلام والمسلسلات -->
+      <div class="player-box" id="iframeBox">
+        <iframe id="streamFrame" src="" allowfullscreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture"></iframe>
+      </div>
     </div>
 
     <div class="servers-bar" id="serversContainer">
       <div style="font-size: 0.85rem; font-weight: 800; color: #fff;">
-        <i class="fa-solid fa-server" style="color: var(--cyan); margin-left: 6px;"></i> سيرفرات البث المتاحة:
+        <i class="fa-solid fa-server" style="color: var(--cyan); margin-left: 6px;"></i> سيرفرات المشاهدة المتاحة:
       </div>
       <div class="servers-list">
-        <button class="srv-btn active" onclick="changeServer(1)">سيرفر 1 (SuperEmbed)</button>
-        <button class="srv-btn" onclick="changeServer(2)">سيرفر 2 (VidSrc To)</button>
-        <button class="srv-btn" onclick="changeServer(3)">سيرفر 3 (2Embed)</button>
-        <button class="srv-btn" onclick="changeServer(4)">سيرفر 4 (AutoEmbed Co)</button>
+        <button class="srv-btn active" onclick="changeServer(1)">سيرفر 1 (VidSrc V2)</button>
+        <button class="srv-btn" onclick="changeServer(2)">سيرفر 2 (Embed SU)</button>
+        <button class="srv-btn" onclick="changeServer(3)">سيرفر 3 (VidLink Pro)</button>
+        <button class="srv-btn" onclick="changeServer(4)">سيرفر 4 (AutoEmbed)</button>
       </div>
     </div>
 
-    <div class="episodes-bar" id="episodesContainer">
+    <div class="episodes-bar" id="episodesContainer" style="display: none;">
       <div style="font-size: 0.85rem; font-weight: 800; color: #fff;">المواسم والحلقات:</div>
       <div class="seasons-scroll" id="seasonsList"></div>
       <div class="episodes-grid" id="episodesList"></div>
@@ -331,7 +323,7 @@
       <i class="fa-solid fa-xmark modal-close" onclick="closeModal('vipModal')"></i>
       <div class="modal-title"><i class="fa-solid fa-crown" style="color: var(--yellow);"></i> تفعيل عضوية VIP في ONEBR TV</div>
       <p style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.6; margin-bottom: 12px;">
-        تمتع بتجربة مشاهدة نقية بدون أي إعلانات نهائياً مع قنوات وبثوث سريعة.
+        تمتع بتجربة مشاهدة نقية بدون إعلانات مع سيرفرات سريعة ومحتوى حصري.
       </p>
       <a href="https://t.me/ONEBR" target="_blank" class="telegram-btn">
         <i class="fa-brands fa-telegram"></i> تواصل مع المشرف عبر تليكرام (@ONEBR)
@@ -367,7 +359,7 @@
       <i class="fa-solid fa-xmark modal-close" onclick="closeModal('termsModal')"></i>
       <div class="modal-title"><i class="fa-solid fa-file-contract" style="color:var(--cyan);"></i> سياسة الاستخدام والخصوصية</div>
       <div style="font-size: 0.82rem; color: #cbd5e1; line-height: 1.7;">
-        <p>يتم جلب القنوات المباشرة من مصادر البث العام المفتوحة وتمريرها عبر مشغل المنصة المباشر.</p>
+        <p>موقع ONEBR TV هو منصة لعرض وسائط الترفيه والأفلام والمسلسلات عبر مزودات التضمين والسيرفرات السحابية المفتوحة.</p>
       </div>
     </div>
   </div>
@@ -380,49 +372,39 @@
       
       <div class="admin-nav">
         <button class="admin-nav-btn active" onclick="switchAdminTab('visitors', this)">👥 الزوار</button>
-        <button class="admin-nav-btn" onclick="switchAdminTab('users', this)">👤 الأعضاء والـ VIP</button>
-        <button class="admin-nav-btn" onclick="switchAdminTab('addMedia', this)">➕ إضافة محتوى</button>
+        <button class="admin-nav-btn" onclick="switchAdminTab('addMedia', this)">➕ إضافة محتوى مباشر</button>
         <button class="admin-nav-btn" onclick="switchAdminTab('banner', this)">📢 شريط التنبيهات</button>
       </div>
 
       <div id="tabVisitors">
         <div style="max-height: 280px; overflow-y: auto;">
           <table class="admin-table">
-            <thead><tr><th>الوقت</th><th>الجهاز</th><th>المستخدم</th></tr></thead>
+            <thead><tr><th>الوقت</th><th>المتصفح/الجهاز</th><th>المستخدم</th></tr></thead>
             <tbody id="visitorsTableBody"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <div id="tabUsers" style="display: none;">
-        <div style="max-height: 280px; overflow-y: auto;">
-          <table class="admin-table">
-            <thead><tr><th>المستخدم</th><th>الرتبة</th><th>الحالة</th><th>الإجراء</th></tr></thead>
-            <tbody id="usersTableBody"></tbody>
           </table>
         </div>
       </div>
 
       <div id="tabAddMedia" style="display: none;">
         <div class="form-group">
-          <label>اسم العمل:</label>
-          <input type="text" id="customTitle" placeholder="اسم الفيلم أو الحلقة">
+          <label>اسم العمل (فيلم أو حلقة):</label>
+          <input type="text" id="customTitle" placeholder="مثال: قيامة عثمان الحلقة 1">
         </div>
         <div class="form-group">
           <label>رابط البوستر:</label>
           <input type="text" id="customPoster" placeholder="https://image.tmdb.org/...">
         </div>
         <div class="form-group">
-          <label>رابط الفيديو المباشر (.m3u8 أو Ok.ru):</label>
-          <input type="text" id="customStreamUrl" placeholder="https://.../stream.m3u8">
+          <label>رابط الفيديو المباشر (.m3u8 أو .mp4 أو رابط خارجي):</label>
+          <input type="text" id="customStreamUrl" placeholder="https://.../video.m3u8">
         </div>
-        <button class="btn-submit" style="background: var(--cyan); color: #000;" onclick="saveCustomMedia()">نشر العمل</button>
+        <button class="btn-submit" style="background: var(--cyan); color: #000;" onclick="saveCustomMedia()">نشر العمل في المنصة</button>
       </div>
 
       <div id="tabBanner" style="display: none;">
         <div class="form-group">
-          <label>نص الشريط:</label>
-          <input type="text" id="adminBannerText" placeholder="مثال: تم إضافة قنوات جديدة!">
+          <label>نص الشريط الإعلاني:</label>
+          <input type="text" id="adminBannerText" placeholder="مثال: تم تحديث سيرفرات المشاهدة!">
         </div>
         <button class="btn-submit" onclick="saveBannerAnnouncement()">تحديث التنبيه</button>
         <button class="btn-submit" style="background: rgba(255,255,255,0.1); margin-top: 6px;" onclick="removeBannerAnnouncement()">إخفاء التنبيه</button>
@@ -440,11 +422,14 @@
     const POSTER_BASE = "https://image.tmdb.org/t/p/w500";
     const BACKDROP_BASE = "https://image.tmdb.org/t/p/original";
     const FIREBASE_DB = "https://cinemavip-a9a21-default-rtdb.firebaseio.com";
+    
+    // وسيط Cloudflare Worker الخاص بك ⚡
+    const PROXY_BASE = "https://cold-dust-ef5a.altrfybaqer0.workers.dev/?url=";
 
     const SUPER_ADMIN_EMAIL = "altrfybaqer0@gmail.com";
     const SUPER_ADMIN_PASS = "Aann22@@55";
 
-    let currentItem = { id: null, title: '', type: 'movie', season: 1, episode: 1, isCustom: false };
+    let currentItem = { id: null, title: '', type: 'movie', season: 1, episode: 1, isCustom: false, directUrl: '' };
     let currentServer = 1;
     let currentUser = JSON.parse(localStorage.getItem('cinema_user') || 'null');
     let explorePage = 1;
@@ -453,8 +438,7 @@
 
     async function initSite() {
       await verifyUserStatus();
-      injectAdsIfNotVip();
-      loadM3UChannels('https://iptv-org.github.io/iptv/categories/movies.m3u', 'deckIptvMovies', 12);
+      logVisitor();
       loadCustomMediaFromFirebase();
       loadBannerAnnouncement();
       
@@ -465,87 +449,6 @@
       loadShelf('/discover/tv?with_genres=16&sort_by=popularity.desc', 'deckAnime', false, 'tv');
       
       loadMoreExploreMedia(true);
-    }
-
-    // دالة معالجة واستخراج القنوات من ملفات M3U النصية
-    async function loadM3UChannels(m3uUrl, containerId, limit = 20) {
-      try {
-        const res = await fetch(m3uUrl);
-        const text = await res.text();
-        const lines = text.split('\n');
-        const container = document.getElementById(containerId);
-        if (!container) return;
-        container.innerHTML = "";
-
-        let currentChannel = null;
-        let count = 0;
-
-        for (let i = 0; i < lines.length && count < limit; i++) {
-          const line = lines[i].trim();
-          if (line.startsWith('#EXTINF:')) {
-            const nameMatch = line.match(/,(.+)$/);
-            const logoMatch = line.match(/tvg-logo="([^"]+)"/);
-            currentChannel = {
-              title: nameMatch ? nameMatch[1].trim() : "قناة بث مباشر",
-              logo: logoMatch ? logoMatch[1] : "https://img.icons8.com/color/96/tv.png"
-            };
-          } else if (line.startsWith('http') && currentChannel) {
-            currentChannel.url = line;
-            renderChannelCard(currentChannel, container);
-            currentChannel = null;
-            count++;
-          }
-        }
-      } catch (e) {}
-    }
-
-    function renderChannelCard(channel, container) {
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.onclick = () => playLiveStream(channel.title, channel.url, channel.logo);
-      card.innerHTML = `
-        <img src="${channel.logo}" onerror="this.src='https://img.icons8.com/color/96/tv.png'" style="object-fit:contain; background:#000; padding:10px;">
-        <div class="card-body">
-          <div class="card-title">${channel.title}</div>
-          <div class="card-meta"><span>بث حي</span><span class="rating">🔴 LIVE</span></div>
-        </div>
-      `;
-      container.appendChild(card);
-    }
-
-    // تشغيل البث المباشر عبر Hls.js
-    function playLiveStream(title, streamUrl, logo) {
-      document.getElementById('homeView').style.display = 'none';
-      document.getElementById('theaterView').style.display = 'block';
-      document.getElementById('iframePlayerBox').style.display = 'none';
-      document.getElementById('serversContainer').style.display = 'none';
-      document.getElementById('episodesContainer').style.display = 'none';
-      document.getElementById('directPlayerBox').style.display = 'block';
-      window.scrollTo(0, 0);
-
-      document.getElementById('detailTitle').innerText = title;
-      document.getElementById('detailPoster').src = logo;
-      document.getElementById('detailOverview').innerText = "بث مباشر عبر بروتوكول HLS.";
-
-      const video = document.getElementById('nativeVideo');
-      if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
-
-      if (Hls.isSupported()) {
-        hlsInstance = new Hls();
-        hlsInstance.loadSource(streamUrl);
-        hlsInstance.attachMedia(video);
-        hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => video.play().catch(()=>{}));
-      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        video.src = streamUrl;
-        video.play().catch(()=>{});
-      }
-    }
-
-    function injectAdsIfNotVip() {
-      if (currentUser && currentUser.isVip) return;
-      const script1 = document.createElement('script');
-      script1.src = "https://pl31046353.profitableratecpmnetwork.com/61/4f/72/614f728ad484f449400870c3be110111.js";
-      document.head.appendChild(script1);
     }
 
     async function verifyUserStatus() {
@@ -616,31 +519,133 @@
     }
 
     async function openTheater(id, type, basicInfo) {
-      currentItem = { id, type, title: basicInfo.title || basicInfo.name, season: 1, episode: 1, isCustom: false };
+      currentItem = { id, type, title: basicInfo.title || basicInfo.name, season: 1, episode: 1, isCustom: false, directUrl: '' };
       document.getElementById('homeView').style.display = 'none';
       document.getElementById('theaterView').style.display = 'block';
-      document.getElementById('iframePlayerBox').style.display = 'block';
+      document.getElementById('iframeBox').style.display = 'block';
       document.getElementById('directPlayerBox').style.display = 'none';
       document.getElementById('serversContainer').style.display = 'flex';
       window.scrollTo(0, 0);
 
       document.getElementById('detailTitle').innerText = currentItem.title;
-      document.getElementById('detailPoster').src = basicInfo.poster_path ? (POSTER_BASE + basicInfo.poster_path) : 'https://image.tmdb.org/t/p/w500/mXk9kEw9u5dF72Tsk4O9Jt0rGgG.jpg';
-      document.getElementById('detailOverview').innerText = basicInfo.overview || "استمتع بالمشاهدة.";
+      document.getElementById('detailPoster').src = basicInfo.poster_path ? (POSTER_BASE + basicInfo.poster_path) : (basicInfo.poster || 'https://image.tmdb.org/t/p/w500/mXk9kEw9u5dF72Tsk4O9Jt0rGgG.jpg');
+      document.getElementById('detailOverview').innerText = basicInfo.overview || "استمتع بالمشاهدة بأعلى جودة.";
+
+      if (type === 'tv') {
+        document.getElementById('episodesContainer').style.display = 'block';
+        loadTvSeasons(id);
+      } else {
+        document.getElementById('episodesContainer').style.display = 'none';
+      }
 
       changeServer(1);
     }
 
+    // تشغيل الأعمال المباشرة (Custom VOD) عبر المشغل الداخلي
+    function playDirectMedia(title, streamUrl, poster) {
+      currentItem = { id: 'custom', type: 'custom', title: title, isCustom: true, directUrl: streamUrl };
+      document.getElementById('homeView').style.display = 'none';
+      document.getElementById('theaterView').style.display = 'block';
+      document.getElementById('iframeBox').style.display = 'none';
+      document.getElementById('serversContainer').style.display = 'none';
+      document.getElementById('episodesContainer').style.display = 'none';
+      document.getElementById('directPlayerBox').style.display = 'block';
+      window.scrollTo(0, 0);
+
+      document.getElementById('detailTitle').innerText = title;
+      document.getElementById('detailPoster').src = poster || 'https://image.tmdb.org/t/p/w500/mXk9kEw9u5dF72Tsk4O9Jt0rGgG.jpg';
+      document.getElementById('detailOverview').innerText = "مشاهدة مباشرة بدون إعلانات.";
+
+      const video = document.getElementById('nativeVideo');
+      const proxiedUrl = PROXY_BASE + encodeURIComponent(streamUrl);
+
+      if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
+
+      if (streamUrl.includes('.m3u8')) {
+        if (Hls.isSupported()) {
+          hlsInstance = new Hls();
+          hlsInstance.loadSource(proxiedUrl);
+          hlsInstance.attachMedia(video);
+          hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => video.play().catch(()=>{}));
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+          video.src = proxiedUrl;
+          video.play().catch(()=>{});
+        }
+      } else {
+        video.src = proxiedUrl;
+        video.play().catch(()=>{});
+      }
+    }
+
+    async function loadTvSeasons(tvId) {
+      try {
+        const res = await fetch(`${API_BASE}/tv/${tvId}?api_key=${API_KEY}&language=ar`);
+        const data = await res.json();
+        const seasonsList = document.getElementById('seasonsList');
+        seasonsList.innerHTML = '';
+        
+        const seasons = (data.seasons || []).filter(s => s.season_number > 0);
+        seasons.forEach((s, idx) => {
+          const btn = document.createElement('button');
+          btn.className = `season-btn ${idx === 0 ? 'active' : ''}`;
+          btn.innerText = `الموسم ${s.season_number}`;
+          btn.onclick = () => {
+            document.querySelectorAll('.season-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentItem.season = s.season_number;
+            loadTvEpisodes(tvId, s.season_number, s.episode_count);
+          };
+          seasonsList.appendChild(btn);
+        });
+
+        if (seasons.length > 0) {
+          currentItem.season = seasons[0].season_number;
+          loadTvEpisodes(tvId, seasons[0].season_number, seasons[0].episode_count);
+        }
+      } catch(e) {}
+    }
+
+    function loadTvEpisodes(tvId, seasonNum, count) {
+      const epList = document.getElementById('episodesList');
+      epList.innerHTML = '';
+      for (let i = 1; i <= count; i++) {
+        const btn = document.createElement('button');
+        btn.className = `ep-btn ${i === currentItem.episode ? 'active' : ''}`;
+        btn.innerText = `حلقة ${i}`;
+        btn.onclick = () => {
+          document.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentItem.episode = i;
+          changeServer(currentServer);
+        };
+        epList.appendChild(btn);
+      }
+    }
+
+    // أحدث السيرفرات المستقرة للأفلام والمسلسلات 🚀
     function changeServer(idx) {
       currentServer = idx;
       document.querySelectorAll('.srv-btn').forEach((b, i) => b.classList.toggle('active', i + 1 === idx));
       if (!currentItem.id || currentItem.isCustom) return;
 
       const { id, type, season: s, episode: e } = currentItem;
-      const srvs = type === "movie" 
-        ? { 1: `https://multiembed.mov/?video_id=${id}&tmdb=1`, 2: `https://vidsrc.to/embed/movie/${id}`, 3: `https://www.2embed.cc/embed/${id}`, 4: `https://autoembed.co/movie/tmdb/${id}` }
-        : { 1: `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}`, 2: `https://vidsrc.to/embed/tv/${id}/${s}/${e}`, 3: `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}`, 4: `https://autoembed.co/tv/tmdb/${id}-${s}-${e}` };
 
+      const srvs = type === "movie" 
+        ? { 
+            1: `https://vidsrc.cc/v2/embed/movie/${id}`,
+            2: `https://embed.su/embed/movie/${id}`,
+            3: `https://vidlink.pro/movie/${id}`,
+            4: `https://autoembed.co/movie/tmdb/${id}`
+          }
+        : { 
+            1: `https://vidsrc.cc/v2/embed/tv/${id}/${s}/${e}`,
+            2: `https://embed.su/embed/tv/${id}/${s}/${e}`,
+            3: `https://vidlink.pro/tv/${id}/${s}/${e}`,
+            4: `https://autoembed.co/tv/tmdb/${id}-${s}-${e}`
+          };
+
+      document.getElementById('iframeBox').style.display = 'block';
+      document.getElementById('directPlayerBox').style.display = 'none';
       document.getElementById('streamFrame').src = srvs[currentServer] || srvs[1];
     }
 
@@ -657,17 +662,6 @@
     async function switchCategory(cat, btn) {
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-
-      if (cat === 'iptv_movies') {
-        document.getElementById('exploreSectionTitle').innerText = "📡 قنوات الأفلام الحية";
-        loadM3UChannels('https://iptv-org.github.io/iptv/categories/movies.m3u', 'deckExplore', 40);
-        return;
-      }
-      if (cat === 'iptv_series') {
-        document.getElementById('exploreSectionTitle').innerText = "📺 قنوات المسلسلات الحية";
-        loadM3UChannels('https://iptv-org.github.io/iptv/categories/series.m3u', 'deckExplore', 40);
-        return;
-      }
 
       if (cat === 'turkish') currentExploreEndpoint = '/discover/tv?with_original_language=tr&sort_by=popularity.desc';
       if (cat === 'arabic') currentExploreEndpoint = '/discover/movie?with_original_language=ar&sort_by=popularity.desc';
@@ -692,6 +686,18 @@
       } catch (e) {}
     }
 
+    async function searchMedia() {
+      const q = document.getElementById('searchInput').value.trim();
+      if (!q) return loadMoreExploreMedia(true);
+      try {
+        const res = await fetch(`${API_BASE}/search/multi?query=${encodeURIComponent(q)}&api_key=${API_KEY}&language=ar`);
+        const json = await res.json();
+        document.getElementById('exploreSectionTitle').innerText = `🔍 نتائج البحث عن: "${q}"`;
+        document.getElementById('deckExplore').innerHTML = "";
+        renderCards(json.results || [], document.getElementById('deckExplore'));
+      } catch(e) {}
+    }
+
     async function handleAuthSubmit() {
       const email = document.getElementById('authEmail').value.trim().toLowerCase();
       const pass = document.getElementById('authPass').value.trim();
@@ -700,6 +706,8 @@
         localStorage.setItem('cinema_user', JSON.stringify(currentUser));
         closeModal('authModal');
         verifyUserStatus();
+      } else {
+        alert('بيانات الدخول غير صحيحة');
       }
     }
 
@@ -713,29 +721,58 @@
     function openAdminModal() {
       if (!currentUser || !currentUser.isAdmin) return alert('غير مصرح لك!');
       document.getElementById('adminModal').style.display = 'flex';
+      loadAdminVisitors();
     }
 
     function switchAdminTab(tab, btn) {
       document.querySelectorAll('.admin-nav-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       document.getElementById('tabVisitors').style.display = tab === 'visitors' ? 'block' : 'none';
-      document.getElementById('tabUsers').style.display = tab === 'users' ? 'block' : 'none';
       document.getElementById('tabAddMedia').style.display = tab === 'addMedia' ? 'block' : 'none';
       document.getElementById('tabBanner').style.display = tab === 'banner' ? 'block' : 'none';
+    }
+
+    async function logVisitor() {
+      try {
+        const visitorData = {
+          time: new Date().toLocaleString('ar-EG'),
+          agent: navigator.userAgent.substring(0, 45),
+          user: currentUser ? currentUser.email : "زائر"
+        };
+        await fetch(`${FIREBASE_DB}/visitors.json`, { method: 'POST', body: JSON.stringify(visitorData) });
+      } catch(e) {}
+    }
+
+    async function loadAdminVisitors() {
+      try {
+        const res = await fetch(`${FIREBASE_DB}/visitors.json`);
+        const data = await res.json();
+        const tbody = document.getElementById('visitorsTableBody');
+        tbody.innerHTML = "";
+        if (data) {
+          Object.keys(data).slice(-15).reverse().forEach(k => {
+            const v = data[k];
+            const row = document.createElement('tr');
+            row.innerHTML = `<td>${v.time}</td><td>${v.agent}</td><td>${v.user}</td>`;
+            tbody.appendChild(row);
+          });
+        }
+      } catch(e) {}
     }
 
     async function saveCustomMedia() {
       const title = document.getElementById('customTitle').value.trim();
       const poster = document.getElementById('customPoster').value.trim();
       const url = document.getElementById('customStreamUrl').value.trim();
-      if (!title || !url) return alert('أدخل البيانات كاملة');
+      if (!title || !url) return alert('يرجى ملء جميع الحقول');
 
       const id = title.replace(/[^a-zA-Z0-9_\u0600-\u06FF]/g, '_').toLowerCase();
       await fetch(`${FIREBASE_DB}/series/${id}.json`, {
         method: 'PUT',
         body: JSON.stringify({ id, title, poster: poster || "https://image.tmdb.org/t/p/w500/mXk9kEw9u5dF72Tsk4O9Jt0rGgG.jpg", url })
       });
-      alert('تم النشر بنجاح!');
+      alert('تم نشر العمل بنجاح!');
+      loadCustomMediaFromFirebase();
     }
 
     async function loadCustomMediaFromFirebase() {
@@ -750,7 +787,7 @@
             const item = data[key];
             const card = document.createElement('div');
             card.className = 'card';
-            card.onclick = () => playLiveStream(item.title, item.url, item.poster);
+            card.onclick = () => playDirectMedia(item.title, item.url, item.poster);
             card.innerHTML = `
               <img src="${item.poster}" loading="lazy">
               <div class="card-body"><div class="card-title">${item.title}</div><div class="card-meta"><span>مباشر</span><span class="rating">⭐ VIP</span></div></div>
