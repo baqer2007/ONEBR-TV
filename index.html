@@ -292,9 +292,18 @@
         <video id="nativeVideo" controls playsinline></video>
       </div>
 
-      <!-- مشغل التضمين للأفلام والمسلسلات -->
+      <!-- مشغل التضمين للأفلام والمسلسلات مع الصلاحيات الكاملة لمنع الحظر -->
       <div class="player-box" id="iframeBox">
-        <iframe id="streamFrame" src="" allowfullscreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture"></iframe>
+        <iframe 
+          id="streamFrame" 
+          src="" 
+          allowfullscreen="true" 
+          webkitallowfullscreen="true" 
+          mozallowfullscreen="true"
+          referrerpolicy="origin"
+          allow="autoplay; fullscreen; encrypted-media; picture-in-picture; cross-origin-isolated; accelerometer; gyroscope"
+          sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-presentation">
+        </iframe>
       </div>
     </div>
 
@@ -622,7 +631,7 @@
       }
     }
 
-    // أحدث السيرفرات المستقرة للأفلام والمسلسلات 🚀
+    // تبديل سيرفرات التضمين
     function changeServer(idx) {
       currentServer = idx;
       document.querySelectorAll('.srv-btn').forEach((b, i) => b.classList.toggle('active', i + 1 === idx));
