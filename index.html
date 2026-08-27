@@ -104,9 +104,29 @@
       width: 38px; height: 38px; border-radius: 50%; overflow: hidden;
       border: 2px solid var(--cyan); box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
       cursor: pointer; display: none; align-items: center; justify-content: center;
-      background: var(--surface); padding: 0;
+      background: var(--surface); padding: 0; position: relative;
+    }
+    .user-avatar-btn.vip-active {
+      border: 2px solid var(--gold);
+      box-shadow: 0 0 14px rgba(245, 158, 11, 0.8);
+      animation: vipGlow 2s infinite alternate;
+    }
+    @keyframes vipGlow {
+      from { box-shadow: 0 0 8px rgba(245, 158, 11, 0.5); }
+      to { box-shadow: 0 0 18px rgba(245, 158, 11, 1); }
     }
     .user-avatar-btn img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* شارة VIP المتوهجة */
+    .vip-badge-glow {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: linear-gradient(135deg, #f59e0b, #b45309);
+      color: #000 !important; font-weight: 900; font-size: 0.68rem;
+      padding: 3px 8px; border-radius: 12px;
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.7);
+      border: 1px solid #fde68a;
+      letter-spacing: 0.5px;
+    }
 
     .drawer-overlay {
       position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
@@ -166,7 +186,6 @@
     .card-meta { display: flex; justify-content: space-between; font-size: 0.65rem; color: var(--text-muted); margin-top: 4px; }
 
     .explore-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(clamp(110px, 28vw, 145px), 1fr)); gap: 10px; }
-    
     .scroll-loader { text-align: center; padding: 20px; font-size: 0.85rem; color: var(--text-muted); font-weight: 700; display: none; }
 
     #theaterView, #searchResultsView { display: none; padding: clamp(10px, 3vw, 18px); max-width: 1000px; margin: 0 auto; }
@@ -196,8 +215,19 @@
     .play-circle-btn i { color: #ffffff; font-size: 1.3rem; margin-inline-start: 3px; }
 
     .player-container { width: 100%; background: #000; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 14px; position: relative; display: none; }
-    #directPlayerBox { display: none; width: 100%; }
+    #directPlayerBox { display: none; width: 100%; position: relative; }
     #nativeVideo { width: 100%; max-height: 70vh; display: block; }
+    
+    /* زر تخطي المقدمة */
+    .skip-intro-btn {
+      position: absolute; bottom: 65px; left: 20px; z-index: 30;
+      background: rgba(15, 20, 34, 0.85); border: 1px solid var(--gold); color: #fff;
+      padding: 8px 14px; border-radius: 6px; font-size: 0.75rem; font-weight: 800;
+      cursor: pointer; display: none; backdrop-filter: blur(6px);
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+    }
+    .skip-intro-btn:hover { background: var(--gold); color: #000; }
+
     .player-box { position: relative; width: 100%; padding-top: 56.25%; }
     .player-box iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
 
@@ -205,6 +235,21 @@
     .servers-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
     .srv-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text-muted); padding: 7px 14px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer; }
     .srv-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+    /* تصميم أزرار سيرفرات VIP الذهبية المتوهجة */
+    .srv-btn-vip {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #000 !important; font-weight: 800; border: 1px solid #fbbf24;
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.4); transition: all 0.25s ease;
+    }
+    .srv-btn-vip:hover {
+      box-shadow: 0 0 16px rgba(245, 158, 11, 0.8);
+      transform: translateY(-2px);
+    }
+    .srv-btn-vip.active {
+      background: #ffffff; color: #d97706 !important; border-color: #f59e0b;
+      box-shadow: 0 0 18px rgba(255, 255, 255, 0.9);
+    }
 
     .seasons-scroll { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin-top: 8px; }
     .season-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; }
@@ -240,7 +285,7 @@
     .admin-nav-btn { background: none; border: none; color: var(--text-muted); font-weight: 700; font-size: 0.78rem; cursor: pointer; padding: 6px 10px; border-radius: 6px; white-space: nowrap; }
     .admin-nav-btn.active { background: var(--surface-hover); color: var(--cyan); }
     
-    .admin-stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-bottom: 14px; }
+    .admin-stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; margin-bottom: 14px; }
     .admin-stat-card { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px; text-align: center; }
     .stat-number { font-size: 1.3rem; font-weight: 900; color: var(--cyan); margin-top: 4px; }
     .stat-label { font-size: 0.7rem; color: var(--text-muted); font-weight: 700; }
@@ -277,6 +322,7 @@
     <div class="drawer-link" onclick="toggleDrawer(); location.hash='#/movies';"><i class="fa-solid fa-clapperboard"></i> <span data-i18n="nav_movies">الأفلام</span></div>
     <div class="drawer-link" onclick="toggleDrawer(); location.hash='#/tv';"><i class="fa-solid fa-tv"></i> <span data-i18n="nav_tv">المسلسلات</span></div>
     <div class="drawer-link" onclick="toggleDrawer(); openVipModal();"><i class="fa-solid fa-crown" style="color:var(--gold);"></i> <span data-i18n="vip_title">اشتراكات VIP</span></div>
+    <div class="drawer-link" id="drawerVipReqLink" style="display:none;" onclick="toggleDrawer(); openRequestMediaModal();"><i class="fa-solid fa-paper-plane" style="color:var(--cyan);"></i> <span>طلب عمل حصري (VIP)</span></div>
 
     <div class="drawer-section-title" data-i18n="nav_genres">جميع التصنيفات</div>
     <div class="genre-boxes-grid" id="genreBoxesContainer"></div>
@@ -387,25 +433,19 @@
     </div>
 
     <div class="player-container" id="mainPlayerContainer">
-      <div id="directPlayerBox"><video id="nativeVideo" controls playsinline></video></div>
+      <div id="directPlayerBox">
+        <video id="nativeVideo" controls playsinline></video>
+        <button class="skip-intro-btn" id="skipIntroBtn" onclick="skipIntro()">⏭️ تخطي المقدمة (+85s)</button>
+      </div>
       <div class="player-box" id="iframeBox">
         <iframe id="streamFrame" src="" allowfullscreen allow="autoplay; fullscreen; encrypted-media; picture-in-picture"></iframe>
       </div>
     </div>
 
-    <!-- السيرفرات من 1 إلى 8 -->
+    <!-- شريط السيرفرات الكامل من 1 إلى 8 + سيرفرات VIP الخارقة من 9 إلى 12 -->
     <div class="servers-bar" id="serversContainer">
       <div style="font-size: 0.8rem; font-weight: 800;" data-i18n="select_server">اختر سيرفر المشاهدة:</div>
-      <div class="servers-list">
-        <button class="srv-btn active" onclick="changeServer(1)"><span data-i18n="srv_prefix">سيرفر</span> 1</button>
-        <button class="srv-btn" onclick="changeServer(2)"><span data-i18n="srv_prefix">سيرفر</span> 2</button>
-        <button class="srv-btn" onclick="changeServer(3)"><span data-i18n="srv_prefix">سيرفر</span> 3</button>
-        <button class="srv-btn" onclick="changeServer(4)"><span data-i18n="srv_prefix">سيرفر</span> 4</button>
-        <button class="srv-btn" onclick="changeServer(5)"><span data-i18n="srv_prefix">سيرفر</span> 5</button>
-        <button class="srv-btn" onclick="changeServer(6)"><span data-i18n="srv_prefix">سيرفر</span> 6</button>
-        <button class="srv-btn" onclick="changeServer(7)"><span data-i18n="srv_prefix">سيرفر</span> 7</button>
-        <button class="srv-btn" onclick="changeServer(8)"><span data-i18n="srv_prefix">سيرفر</span> 8</button>
-      </div>
+      <div class="servers-list" id="serversButtonsDeck"></div>
     </div>
 
     <div class="episodes-bar" id="episodesContainer">
@@ -433,20 +473,32 @@
         <div class="vip-card">
           <div class="vip-card-title">الباقة الشهرية</div>
           <div class="vip-card-price">$1.00 <span style="font-size:0.7rem; color:var(--text-muted);">/ شهر</span></div>
-          <div class="vip-features">✓ منع الإعلانات نهائياً<br>✓ سيرفرات فائقة السرعة<br>✓ دعم فني مباشر</div>
+          <div class="vip-features">✓ منع الإعلانات نهائياً<br>✓ فتح 4 سيرفرات VIP خارقة<br>✓ طلب الأعمال الحصرية فوراً</div>
           <a href="https://t.me/ONEBR?text=ارغب+بالاشتراك+في+باقة+VIP+الشهرية+(1$)" target="_blank" class="vip-btn-plan">تفعيل عبر تليكرام ($1)</a>
         </div>
         <div class="vip-card featured">
           <div class="vip-card-title">الباقة السنوية (الأفضل)</div>
           <div class="vip-card-price">$10.00 <span style="font-size:0.7rem; color:var(--text-muted);">/ سنة</span></div>
-          <div class="vip-features">✓ جميع ميزات VIP<br>✓ منع الإعلانات بالكامل<br>✓ إضافة أعمال حسب الطلب</div>
+          <div class="vip-features">✓ جميع ميزات VIP<br>✓ شارة ذهبية متوهجة دائمة<br>✓ سيرفرات 4K فائقة السرعة</div>
           <a href="https://t.me/ONEBR?text=ارغب+بالاشتراك+في+باقة+VIP+السنوية+(10$)" target="_blank" class="vip-btn-plan" style="background:var(--gold); color:#000;">تفعيل عبر تليكرام ($10)</a>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- نافذة المصادقة مع زر الإغلاق المضمون -->
+  <!-- نافذة طلب عمل جديد للأعضاء المميزين -->
+  <div class="modal-overlay" id="requestMediaModal">
+    <div class="modal-box">
+      <i class="fa-solid fa-xmark modal-close" onclick="closeModal('requestMediaModal')"></i>
+      <div class="modal-title"><i class="fa-solid fa-paper-plane" style="color: var(--cyan);"></i> <span>طلب عمل جديد (VIP)</span></div>
+      <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 12px;">اكتب اسم الفيلم أو المسلسل الذي ترغب في إضافته وسيقوم فريق العمل بتوفيره سريعاً.</p>
+      <div class="form-group"><label>اسم العمل المطلوب:</label><input type="text" id="reqMediaTitle" placeholder="مثال: اسم الفيلم أو المسلسل وسنة الإنتاج"></div>
+      <div class="form-group"><label>ملاحظات إضافية (اختياري):</label><textarea id="reqMediaNotes" rows="3" placeholder="حدد الموسم أو الجودة المطلوبة..."></textarea></div>
+      <button class="btn-submit" style="background: var(--cyan); color:#000;" onclick="submitVipMediaRequest()">إرسال الطلب للإدارة</button>
+    </div>
+  </div>
+
+  <!-- نافذة المصادقة -->
   <div class="modal-overlay" id="authModal">
     <div class="modal-box">
       <i class="fa-solid fa-xmark modal-close" onclick="closeModal('authModal')"></i>
@@ -490,13 +542,22 @@
 
       <div id="authProfile" style="display: none; text-align: center;">
         <div class="modal-title" style="justify-content: center;"><i class="fa-solid fa-circle-user" style="color: var(--cyan);"></i> <span data-i18n="auth_profile">الحساب الشخصي</span></div>
-        <div style="width: 76px; height: 76px; border-radius: 50%; overflow: hidden; margin: 0 auto 10px; border: 2px solid var(--cyan); box-shadow: 0 0 12px rgba(0,240,255,0.4);">
+        <div style="width: 76px; height: 76px; border-radius: 50%; overflow: hidden; margin: 0 auto 10px; border: 2px solid var(--cyan); box-shadow: 0 0 12px rgba(0,240,255,0.4);" id="profileAvatarBigBox">
           <img id="profileAvatarBig" src="" style="width: 100%; height: 100%; object-fit: cover;">
         </div>
-        <p id="profileEmail" style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 700; color: var(--text);"></p>
-        <p id="profileRoleBadge" style="font-size: 0.7rem; color: var(--gold); font-weight: 800; margin-bottom: 6px;"></p>
+        
+        <div style="display:flex; align-items:center; justify-content:center; gap:6px; margin-bottom:6px;">
+          <span id="profileEmail" style="font-size: 0.85rem; font-weight: 700; color: var(--text);"></span>
+          <span id="profileGlowBadge" class="vip-badge-glow" style="display:none;"><i class="fa-solid fa-crown"></i> VIP</span>
+        </div>
+
+        <p id="profileRoleBadge" style="font-size: 0.7rem; color: var(--gold); font-weight: 800; margin-bottom: 4px;"></p>
         <p id="profileAdsStatusBadge" style="font-size: 0.68rem; color: var(--cyan); font-weight: 700; margin-bottom: 14px;"></p>
-        <button class="btn-submit" style="background: #ef4444;" onclick="logoutUser()" data-i18n="auth_logout">تسجيل الخروج</button>
+        
+        <div style="display:flex; gap:6px; justify-content:center;">
+          <button class="btn-submit" id="profileVipReqBtn" style="background: var(--surface-hover); color: var(--cyan); border: 1px solid var(--border); display:none;" onclick="closeModal('authModal'); openRequestMediaModal();">طلب فيلم أو مسلسل</button>
+          <button class="btn-submit" style="background: #ef4444;" onclick="logoutUser()" data-i18n="auth_logout">تسجيل الخروج</button>
+        </div>
       </div>
     </div>
   </div>
@@ -510,12 +571,14 @@
       <div class="admin-stats-grid">
         <div class="admin-stat-card"><div class="stat-label">👥 إجمالي الزيارات</div><div class="stat-number" id="statVisitorsCount">0</div></div>
         <div class="admin-stat-card"><div class="stat-label">👤 المسجلين</div><div class="stat-number" id="statUsersCount">0</div></div>
+        <div class="admin-stat-card"><div class="stat-label">📩 طلبات VIP</div><div class="stat-number" id="statRequestsCount" style="color:var(--gold);">0</div></div>
         <div class="admin-stat-card"><div class="stat-label">🎬 الأعمال المباشرة</div><div class="stat-number" id="statMediaCount">0</div></div>
         <div class="admin-stat-card"><div class="stat-label">🚫 المحظورين</div><div class="stat-number" id="statBannedCount" style="color:#ef4444;">0</div></div>
       </div>
 
       <div class="admin-nav">
         <button class="admin-nav-btn active" onclick="switchAdminTab('usersManage', this)">👥 المستخدمين المسجلين</button>
+        <button class="admin-nav-btn" onclick="switchAdminTab('vipRequests', this)">📩 طلبات الأعضاء</button>
         <button class="admin-nav-btn" onclick="switchAdminTab('visitors', this)">🌐 سجل الزوار</button>
         <button class="admin-nav-btn" onclick="switchAdminTab('mediaManage', this)">🎬 الأعمال المباشرة</button>
         <button class="admin-nav-btn" onclick="switchAdminTab('addMedia', this)">➕ إضافة عمل</button>
@@ -523,15 +586,27 @@
         <button class="admin-nav-btn" onclick="switchAdminTab('banner', this)">📢 التنبيهات</button>
       </div>
 
+      <!-- إدارة المستخدمين -->
       <div id="tabUsersManage">
         <div style="max-height: 280px; overflow-y: auto;">
           <table class="admin-table">
-            <thead><tr><th>المستخدم</th><th>البريد</th><th>الرتبة</th><th>حالة الإعلانات</th><th>الإجراءات</th></tr></thead>
+            <thead><tr><th>المستخدم</th><th>البريد</th><th>الرتبة</th><th>الإعلانات</th><th>الإجراءات</th></tr></thead>
             <tbody id="adminUsersTableBody"></tbody>
           </table>
         </div>
       </div>
 
+      <!-- تبويب طلبات VIP -->
+      <div id="tabVipRequests" style="display: none;">
+        <div style="max-height: 280px; overflow-y: auto;">
+          <table class="admin-table">
+            <thead><tr><th>العمل المطلوب</th><th>الملاحظات</th><th>المرسل</th><th>الإجراء</th></tr></thead>
+            <tbody id="adminVipRequestsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- سجل الزوار -->
       <div id="tabVisitors" style="display: none;">
         <div style="max-height: 280px; overflow-y: auto;">
           <table class="admin-table">
@@ -541,6 +616,7 @@
         </div>
       </div>
 
+      <!-- إدارة الأعمال المباشرة -->
       <div id="tabMediaManage" style="display: none;">
         <div style="max-height: 280px; overflow-y: auto;">
           <table class="admin-table">
@@ -550,6 +626,7 @@
         </div>
       </div>
 
+      <!-- إضافة عمل -->
       <div id="tabAddMedia" style="display: none;">
         <div class="form-group"><label>اسم العمل:</label><input type="text" id="customTitle" placeholder="مثال: اسم المسلسل أو الفيلم"></div>
         <div class="form-group"><label>رابط البوستر:</label><input type="text" id="customPoster" placeholder="https://image.tmdb.org/..."></div>
@@ -557,6 +634,7 @@
         <button class="btn-submit" style="background: var(--cyan); color: #000;" onclick="saveCustomMedia()">نشر العمل فوراً</button>
       </div>
 
+      <!-- إدارة الحظر -->
       <div id="tabBanManage" style="display: none;">
         <div class="form-group"><label>البريد الإلكتروني المراد حظره:</label><input type="text" id="banUserEmail" placeholder="user@example.com"></div>
         <button class="btn-submit" style="background: #ef4444;" onclick="banUserAction()">حظر المستخدم الآن</button>
@@ -568,6 +646,7 @@
         </div>
       </div>
 
+      <!-- شريط التنبيهات -->
       <div id="tabBanner" style="display: none;">
         <div class="form-group"><label>نص الشريط الإعلاني:</label><input type="text" id="adminBannerText" placeholder="اكتب نص الإعلان..."></div>
         <button class="btn-submit" onclick="saveBannerAnnouncement()">تحديث التنبيه</button>
@@ -700,6 +779,7 @@
       initHeroRotation();
       initSearchAutocomplete();
       initInfiniteScroll();
+      initPlayerSkipTimer();
 
       window.addEventListener('hashchange', handleRouting);
       handleRouting();
@@ -1039,9 +1119,47 @@
           document.getElementById('episodesContainer').style.display = 'none';
         }
 
+        renderDynamicServersDeck();
         loadSimilarMedia(id, type);
 
       } catch(e) {}
+    }
+
+    // توليد أزرار السيرفرات ديناميكياً مع دعم السيرفرات العادية وسيرفرات VIP
+    function renderDynamicServersDeck() {
+      const container = document.getElementById('serversButtonsDeck');
+      container.innerHTML = '';
+      const isVipUser = currentUser && (currentUser.isVip || currentUser.isAdmin);
+
+      // السيرفرات العادية (1 إلى 8)
+      for (let i = 1; i <= 8; i++) {
+        const btn = document.createElement('button');
+        btn.className = `srv-btn ${i === currentServer ? 'active' : ''}`;
+        btn.innerHTML = `<span>${translations[currentLang].srv_prefix}</span> ${i}`;
+        btn.onclick = () => changeServer(i);
+        container.appendChild(btn);
+      }
+
+      // السيرفرات الأربعة الخارقة VIP (9 إلى 12)
+      const vipServers = [
+        { id: 9, label: 'VIP 1 (4K Ultra)' },
+        { id: 10, label: 'VIP 2 (Fast Cloud)' },
+        { id: 11, label: 'VIP 3 (Zero Buffer)' },
+        { id: 12, label: 'VIP 4 (Backup Pro)' }
+      ];
+
+      vipServers.forEach(srv => {
+        const btn = document.createElement('button');
+        btn.className = `srv-btn srv-btn-vip ${srv.id === currentServer ? 'active' : ''}`;
+        if (isVipUser) {
+          btn.innerHTML = `👑 ${srv.label}`;
+          btn.onclick = () => changeServer(srv.id);
+        } else {
+          btn.innerHTML = `🔒 ${srv.label}`;
+          btn.onclick = () => openVipModal();
+        }
+        container.appendChild(btn);
+      });
     }
 
     function startStreamingNow() {
@@ -1104,8 +1222,14 @@
       }
     }
 
-    // إدارة السيرفرات من 1 إلى 8 مع إصلاح السيرفر 6 ودعم السيرفرين 7 و 8
+    // إدارة السيرفرات الكاملة من 1 إلى 12
     function changeServer(idx) {
+      const isVipUser = currentUser && (currentUser.isVip || currentUser.isAdmin);
+      if (idx >= 9 && !isVipUser) {
+        openVipModal();
+        return;
+      }
+
       currentServer = idx;
       document.querySelectorAll('.srv-btn').forEach((b, i) => b.classList.toggle('active', i + 1 === idx));
       if (!currentItem.id || currentItem.isCustom) return;
@@ -1120,7 +1244,11 @@
             5: `https://vidsrc.to/embed/movie/${id}`,
             6: `https://vidsrc.cc/v2/embed/movie/${id}`,
             7: `https://vidsrc.sbs/embed/movie/${id}`,
-            8: `https://vidsrc.pm/embed/movie/${id}`
+            8: `https://vidsrc.pm/embed/movie/${id}`,
+            9: `https://vidsrc.vip/embed/movie/${id}`,
+            10: `https://embed.su/embed/movie/${id}`,
+            11: `https://moviesapi.club/movie/${id}`,
+            12: `https://autoembed.co/movie/tmdb/${id}`
           }
         : { 
             1: `https://vidlink.pro/tv/${id}/${s}/${e}`,
@@ -1130,15 +1258,37 @@
             5: `https://vidsrc.to/embed/tv/${id}/${s}/${e}`,
             6: `https://vidsrc.cc/v2/embed/tv/${id}/${s}/${e}`,
             7: `https://vidsrc.sbs/embed/tv/${id}/${s}/${e}`,
-            8: `https://vidsrc.pm/embed/tv/${id}/${s}/${e}`
+            8: `https://vidsrc.pm/embed/tv/${id}/${s}/${e}`,
+            9: `https://vidsrc.vip/embed/tv/${id}/${s}/${e}`,
+            10: `https://embed.su/embed/tv/${id}/${s}/${e}`,
+            11: `https://moviesapi.club/tv/${id}/${s}/${e}`,
+            12: `https://autoembed.co/tv/tmdb/${id}/${s}/${e}`
           };
 
       const frame = document.getElementById('streamFrame');
       frame.src = srvs[currentServer] || srvs[1];
 
       frame.onerror = () => {
-        if (currentServer < 8) changeServer(currentServer + 1);
+        const limit = isVipUser ? 12 : 8;
+        if (currentServer < limit) changeServer(currentServer + 1);
       };
+    }
+
+    function initPlayerSkipTimer() {
+      const video = document.getElementById('nativeVideo');
+      const skipBtn = document.getElementById('skipIntroBtn');
+      video.addEventListener('timeupdate', () => {
+        if (video.currentTime > 2 && video.currentTime < 120) {
+          skipBtn.style.display = 'block';
+        } else {
+          skipBtn.style.display = 'none';
+        }
+      });
+    }
+
+    function skipIntro() {
+      const video = document.getElementById('nativeVideo');
+      if (video) video.currentTime += 85;
     }
 
     function playDirectMedia(title, streamUrl, poster) {
@@ -1289,6 +1439,19 @@
       let isAdmin = (currentUser.email.toLowerCase() === SUPER_ADMIN_EMAIL.toLowerCase());
       currentUser.isAdmin = isAdmin;
       if (isAdmin) document.getElementById('adminDrawerLink').style.display = 'flex';
+
+      const isVip = (currentUser.isVip || currentUser.isAdmin);
+      if (isVip) {
+        avatarBtn.classList.add('vip-active');
+        document.getElementById('drawerVipReqLink').style.display = 'flex';
+        document.getElementById('profileGlowBadge').style.display = 'inline-flex';
+        document.getElementById('profileVipReqBtn').style.display = 'block';
+      } else {
+        avatarBtn.classList.remove('vip-active');
+        document.getElementById('drawerVipReqLink').style.display = 'none';
+        document.getElementById('profileGlowBadge').style.display = 'none';
+        document.getElementById('profileVipReqBtn').style.display = 'none';
+      }
     }
 
     function logoutUser() {
@@ -1299,6 +1462,37 @@
     }
 
     function openVipModal() { document.getElementById('vipModal').style.display = 'flex'; }
+    function openRequestMediaModal() {
+      if (!currentUser || (!currentUser.isVip && !currentUser.isAdmin)) {
+        openVipModal();
+        return;
+      }
+      document.getElementById('requestMediaModal').style.display = 'flex';
+    }
+
+    async function submitVipMediaRequest() {
+      const title = document.getElementById('reqMediaTitle').value.trim();
+      const notes = document.getElementById('reqMediaNotes').value.trim();
+      if (!title) return alert('يرجى كتابة اسم العمل المطلوب');
+
+      const reqData = {
+        title,
+        notes: notes || '-',
+        user: currentUser.email,
+        time: new Date().toLocaleString('ar-EG')
+      };
+
+      try {
+        await fetch(`${FIREBASE_DB}/vip_requests.json`, { method: 'POST', body: JSON.stringify(reqData) });
+        alert('تم إرسال طلبك للإدارة بنجاح! سيتم توفير العمل في أقرب وقت.');
+        document.getElementById('reqMediaTitle').value = '';
+        document.getElementById('reqMediaNotes').value = '';
+        closeModal('requestMediaModal');
+      } catch(e) {
+        alert('تعذر إرسال الطلب، يرجى المحاولة لاحقاً');
+      }
+    }
+
     function openAuthModal() {
       if (currentUser) {
         switchAuthView('profile');
@@ -1326,6 +1520,7 @@
       document.querySelectorAll('.admin-nav-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       document.getElementById('tabUsersManage').style.display = tab === 'usersManage' ? 'block' : 'none';
+      document.getElementById('tabVipRequests').style.display = tab === 'vipRequests' ? 'block' : 'none';
       document.getElementById('tabVisitors').style.display = tab === 'visitors' ? 'block' : 'none';
       document.getElementById('tabMediaManage').style.display = tab === 'mediaManage' ? 'block' : 'none';
       document.getElementById('tabAddMedia').style.display = tab === 'addMedia' ? 'block' : 'none';
@@ -1333,6 +1528,7 @@
       document.getElementById('tabBanner').style.display = tab === 'banner' ? 'block' : 'none';
       
       if (tab === 'usersManage') loadAdminUsersTable();
+      if (tab === 'vipRequests') loadAdminVipRequestsTable();
       if (tab === 'visitors') loadAdminVisitors();
       if (tab === 'mediaManage') loadAdminMediaTable();
       if (tab === 'banManage') loadBannedUsersTable();
@@ -1345,22 +1541,25 @@
 
     async function loadAdminStats() {
       try {
-        const [visRes, usersRes, mediaRes, banRes] = await Promise.all([
+        const [visRes, usersRes, mediaRes, banRes, reqRes] = await Promise.all([
           fetch(`${FIREBASE_DB}/visitors.json`),
           fetch(`${FIREBASE_DB}/users.json`),
           fetch(`${FIREBASE_DB}/series.json`),
-          fetch(`${FIREBASE_DB}/banned_users.json`)
+          fetch(`${FIREBASE_DB}/banned_users.json`),
+          fetch(`${FIREBASE_DB}/vip_requests.json`)
         ]);
 
         const visData = await visRes.json();
         const usersData = await usersRes.json();
         const mediaData = await mediaRes.json();
         const banData = await banRes.json();
+        const reqData = await reqRes.json();
 
         document.getElementById('statVisitorsCount').innerText = visData ? Object.keys(visData).length : '0';
         document.getElementById('statUsersCount').innerText = usersData ? Object.keys(usersData).length : '0';
         document.getElementById('statMediaCount').innerText = mediaData ? Object.keys(mediaData).length : '0';
         document.getElementById('statBannedCount').innerText = banData ? Object.keys(banData).length : '0';
+        document.getElementById('statRequestsCount').innerText = reqData ? Object.keys(reqData).length : '0';
       } catch(e) {}
     }
 
@@ -1381,7 +1580,7 @@
             row.innerHTML = `
               <td><img class="user-table-avatar" src="${av}"></td>
               <td><strong>${u.email}</strong></td>
-              <td><span style="color:${isVip ? 'var(--gold)' : 'var(--text-muted)'}; font-weight:800;">${isVip ? 'VIP' : 'عادي'}</span></td>
+              <td><span style="color:${isVip ? 'var(--gold)' : 'var(--text-muted)'}; font-weight:800;">${isVip ? 'VIP 👑' : 'عادي'}</span></td>
               <td><span style="color:${adsDisabled ? '#10b981' : '#f59e0b'}; font-weight:700;">${adsDisabled ? '🚫 معطلة' : '📢 مفعلة'}</span></td>
               <td>
                 <div style="display:flex; gap:4px; flex-wrap:wrap;">
@@ -1395,6 +1594,34 @@
           });
         }
       } catch(e) {}
+    }
+
+    async function loadAdminVipRequestsTable() {
+      try {
+        const res = await fetch(`${FIREBASE_DB}/vip_requests.json`);
+        const data = await res.json();
+        const tbody = document.getElementById('adminVipRequestsTableBody');
+        tbody.innerHTML = "";
+        if (data) {
+          Object.keys(data).reverse().forEach(k => {
+            const req = data[k];
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td><strong>${req.title}</strong></td>
+              <td>${req.notes}</td>
+              <td>${req.user}</td>
+              <td><button class="btn-table-del" onclick="deleteVipRequest('${k}')">تم الإنجاز / حذف</button></td>
+            `;
+            tbody.appendChild(row);
+          });
+        }
+      } catch(e) {}
+    }
+
+    async function deleteVipRequest(key) {
+      await fetch(`${FIREBASE_DB}/vip_requests/${key}.json`, { method: 'DELETE' });
+      loadAdminVipRequestsTable();
+      loadAdminStats();
     }
 
     async function toggleUserAdsExemption(key, disableState) {
