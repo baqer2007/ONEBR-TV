@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <!-- كود إثبات ملكية Google -->
   <meta name="google-site-verification" content="BzEBTPOz0r6bMT40aBZm_NO_lS3DtXm_AHMwH_znFC4" />
-  
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>ONEBR TV | ون بر تي في - مشاهدة أحدث المسلسلات والأفلام</title>
-  <meta name="description" content="منصة ONEBR TV لمشاهدة وتحميل أحدث الأفلام والمسلسلات التركية والكورية والعربية بمشغل سريع.">
+  <title>ONEBR TV | ون بر تي في - مشاهدة أحدث المسلسلات والأفلام وقنوات البث</title>
+  <meta name="description" content="منصة ONEBR TV لمشاهدة وتحميل أحدث الأفلام والمسلسلات وقنوات الأفلام المباشرة.">
   <meta name="theme-color" content="#e50914">
 
   <link rel="icon" type="image/png" href="https://img.icons8.com/color/96/play--v1.png">
@@ -28,7 +26,6 @@
       --cyan: #00f0ff;
       --green: #10b981;
       --yellow: #f59e0b;
-      --gold: #fbbf24;
       --radius: 12px;
     }
 
@@ -41,7 +38,6 @@
       text-align: center; position: sticky; top: 0; z-index: 1002;
     }
 
-    /* القائمة الجانبية (Drawer Menu) */
     .sidebar-overlay {
       position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
       z-index: 2500; display: none;
@@ -90,12 +86,8 @@
       padding: 7px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 700;
       cursor: pointer; display: flex; align-items: center; gap: 6px; white-space: nowrap;
     }
-    .btn-vip-header {
-      background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; font-weight: 800; border: none;
-    }
-    #adminNavBtn, #adminSidebarLink {
-      display: none; background: linear-gradient(135deg, #10b981, #059669); color: #fff; font-weight: 800;
-    }
+    .btn-vip-header { background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; font-weight: 800; border: none; }
+    #adminNavBtn, #adminSidebarLink { display: none; background: linear-gradient(135deg, #10b981, #059669); color: #fff; font-weight: 800; }
 
     .nav-tabs { display: flex; gap: 8px; padding: 12px 16px; overflow-x: auto; background: var(--card-bg); border-bottom: 1px solid var(--border); scrollbar-width: none; }
     .tab-btn { background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border); color: var(--text-muted); padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; cursor: pointer; white-space: nowrap; }
@@ -109,7 +101,6 @@
     .hero-content { max-width: 650px; }
     .hero-title { font-size: 1.55rem; font-weight: 900; margin-bottom: 6px; }
     .hero-desc { font-size: 0.85rem; color: #cbd5e1; margin-bottom: 14px; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    .hero-actions { display: flex; gap: 10px; }
     .hero-btn { background: var(--primary); color: #fff; border: none; padding: 9px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 800; cursor: pointer; }
 
     .catalog { padding: 16px; display: flex; flex-direction: column; gap: 24px; }
@@ -135,10 +126,10 @@
     .media-details { flex: 1; display: flex; flex-direction: column; gap: 8px; }
     .media-main-title { font-size: 1.4rem; font-weight: 900; }
 
+    #directPlayerBox { display: none; width: 100%; background: #000; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); }
+    #nativeVideo { width: 100%; max-height: 70vh; display: block; }
     .player-box { position: relative; width: 100%; padding-top: 56.25%; background: #000; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); }
     .player-box iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
-    #directPlayerBox { display: none; width: 100%; background: #000; border-radius: var(--radius); overflow: hidden; }
-    #nativeVideo { width: 100%; max-height: 70vh; display: block; }
 
     .servers-bar, .episodes-bar { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; margin-top: 14px; display: flex; flex-direction: column; gap: 8px; }
     .servers-list { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -184,7 +175,7 @@
 
   <div id="announcementBanner"></div>
 
-  <!-- القائمة الجانبية (Drawer Menu) -->
+  <!-- القائمة الجانبية -->
   <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
   <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
@@ -197,7 +188,6 @@
     <div class="sidebar-links">
       <div class="sidebar-link" onclick="toggleSidebar(); openVipModal();"><i class="fa-solid fa-crown" style="color:var(--yellow);"></i> اشتراك وتفعيل VIP</div>
       <div class="sidebar-link" id="adminSidebarLink" onclick="toggleSidebar(); openAdminModal();"><i class="fa-solid fa-shield-halved"></i> لوحة تحكم المشرفين</div>
-      <div class="sidebar-link" onclick="toggleSidebar(); openSettingsModal();"><i class="fa-solid fa-gear"></i> إعدادات المشغل</div>
       <div class="sidebar-link" onclick="toggleSidebar(); openTermsModal();"><i class="fa-solid fa-file-contract"></i> سياسة الاستخدام والخصوصية</div>
       <div class="sidebar-link" onclick="toggleSidebar(); openVipModal();"><i class="fa-brands fa-telegram" style="color:#229ED9;"></i> الدعم عبر تليكرام (@ONEBR)</div>
     </div>
@@ -229,6 +219,8 @@
   <div id="homeView">
     <div class="nav-tabs">
       <button class="tab-btn active" onclick="switchCategory('all', this)">✨ الكل</button>
+      <button class="tab-btn" onclick="switchCategory('iptv_movies', this)">📡 قنوات أفلام مباشرة</button>
+      <button class="tab-btn" onclick="switchCategory('iptv_series', this)">📺 قنوات مسلسلات مباشرة</button>
       <button class="tab-btn" onclick="switchCategory('turkish', this)">🇹🇷 مسلسلات تركية</button>
       <button class="tab-btn" onclick="switchCategory('korean', this)">🇰🇷 دراما كورية وآسيوية</button>
       <button class="tab-btn" onclick="switchCategory('arabic', this)">🇮🇶 🇪🇬 أفلام ومسلسلات عربية</button>
@@ -246,8 +238,14 @@
     </section>
 
     <div class="catalog">
+      <!-- رف القنوات التلفزيونية الحية للأفلام والمسلسلات -->
+      <div class="shelf">
+        <div class="shelf-title">📡 قنوات سينمائية حية (M3U Live Streams)</div>
+        <div class="shelf-grid" id="deckIptvMovies"></div>
+      </div>
+
       <div class="shelf" id="customShelfBox" style="display: none;">
-        <div class="shelf-title">⭐ أعمال مضافة بواسطة الإدارة (Ok.ru / Uqload / m3u8)</div>
+        <div class="shelf-title">⭐ أعمال مضافة بواسطة الإدارة (Ok.ru / m3u8)</div>
         <div class="shelf-grid" id="deckCustom"></div>
       </div>
 
@@ -294,17 +292,18 @@
       </div>
       <div class="media-details">
         <h2 class="media-main-title" id="detailTitle">اسم العمل</h2>
-        <div class="media-meta-tags" id="detailTags"></div>
-        <p class="media-overview" id="detailOverview">جاري تحميل القصة والتفاصيل...</p>
+        <p class="media-overview" id="detailOverview">جاري تحميل التفاصيل...</p>
       </div>
     </div>
 
-    <div class="player-box" id="iframePlayerBox">
-      <iframe id="streamFrame" src="" allowfullscreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture"></iframe>
-    </div>
-
+    <!-- مشغل البث المباشر المخصص للقنوات و m3u8 -->
     <div id="directPlayerBox">
       <video id="nativeVideo" controls playsinline></video>
+    </div>
+
+    <!-- مشغل التضمين للأعمال الخارجية -->
+    <div class="player-box" id="iframePlayerBox">
+      <iframe id="streamFrame" src="" allowfullscreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture"></iframe>
     </div>
 
     <div class="servers-bar" id="serversContainer">
@@ -312,12 +311,10 @@
         <i class="fa-solid fa-server" style="color: var(--cyan); margin-left: 6px;"></i> سيرفرات البث المتاحة:
       </div>
       <div class="servers-list">
-        <button class="srv-btn active" onclick="changeServer(1)">سيرفر 1 (SuperEmbed - متعدد اللغات)</button>
+        <button class="srv-btn active" onclick="changeServer(1)">سيرفر 1 (SuperEmbed)</button>
         <button class="srv-btn" onclick="changeServer(2)">سيرفر 2 (VidSrc To)</button>
         <button class="srv-btn" onclick="changeServer(3)">سيرفر 3 (2Embed)</button>
         <button class="srv-btn" onclick="changeServer(4)">سيرفر 4 (AutoEmbed Co)</button>
-        <button class="srv-btn" onclick="changeServer(5)">سيرفر 5 (SmashyStream)</button>
-        <button class="srv-btn" onclick="changeServer(6)">سيرفر 6 (EmbedSU)</button>
       </div>
     </div>
 
@@ -328,26 +325,20 @@
     </div>
   </div>
 
-  <!-- نافذة باقات VIP والتواصل عبر تيليجرام -->
+  <!-- النوافذ المنبثقة -->
   <div class="modal-overlay" id="vipModal">
     <div class="modal-box">
       <i class="fa-solid fa-xmark modal-close" onclick="closeModal('vipModal')"></i>
       <div class="modal-title"><i class="fa-solid fa-crown" style="color: var(--yellow);"></i> تفعيل عضوية VIP في ONEBR TV</div>
       <p style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.6; margin-bottom: 12px;">
-        تمتع بتجربة مشاهدة نقية بدون أي إعلانات نهائياً مع مشغل فائق السرعة وإمكانية طلب أي مسلسل حصري.
+        تمتع بتجربة مشاهدة نقية بدون أي إعلانات نهائياً مع قنوات وبثوث سريعة.
       </p>
-      
-      <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border); padding: 14px; border-radius: 8px;">
-        <div style="font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 6px;">📱 للتفعيل الفوري عبر التيليكرام:</div>
-        <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 10px;">أرسل اسم حسابك لتفعيل العضوية مباشرة من قبل المشرف:</div>
-        <a href="https://t.me/ONEBR" target="_blank" class="telegram-btn">
-          <i class="fa-brands fa-telegram"></i> تواصل مع المشرف عبر تليكرام (@ONEBR)
-        </a>
-      </div>
+      <a href="https://t.me/ONEBR" target="_blank" class="telegram-btn">
+        <i class="fa-brands fa-telegram"></i> تواصل مع المشرف عبر تليكرام (@ONEBR)
+      </a>
     </div>
   </div>
 
-  <!-- نافذة تسجيل الدخول -->
   <div class="modal-overlay" id="authModal">
     <div class="modal-box">
       <i class="fa-solid fa-xmark modal-close" onclick="closeModal('authModal')"></i>
@@ -362,136 +353,76 @@
           <input type="password" id="authPass" placeholder="رمز المرور">
         </div>
         <button class="btn-submit" id="authActionBtn" onclick="handleAuthSubmit()">دخول الحساب</button>
-        <div style="text-align: center; margin-top: 12px; font-size: 0.8rem; color: var(--text-muted); cursor: pointer;" onclick="toggleAuthMode()" id="authSwitchText">
-          ليس لديك حساب؟ اضغط هنا لإنشاء عضوية جديدة
-        </div>
       </div>
       <div id="authProfile" style="display: none; text-align: center;">
         <div class="modal-title" style="justify-content: center;"><i class="fa-solid fa-circle-user" style="color: var(--cyan);"></i> حسابك الشخصي</div>
         <p id="profileEmail" style="font-size: 0.95rem; margin-bottom: 6px; color: #fff; font-weight: 700;"></p>
-        <p id="profileRoleBadge" style="margin-bottom: 16px;"></p>
         <button class="btn-submit" style="background: #ef4444;" onclick="logoutUser()">تسجيل الخروج</button>
       </div>
     </div>
   </div>
 
-  <!-- نافذة سياسة الاستخدام -->
   <div class="modal-overlay" id="termsModal">
     <div class="modal-box">
       <i class="fa-solid fa-xmark modal-close" onclick="closeModal('termsModal')"></i>
       <div class="modal-title"><i class="fa-solid fa-file-contract" style="color:var(--cyan);"></i> سياسة الاستخدام والخصوصية</div>
       <div style="font-size: 0.82rem; color: #cbd5e1; line-height: 1.7;">
-        <p>1. <strong>المحتوى:</strong> يتم جلب البيانات الوصفية والبوسترات عبر واجهة TMDb المفتوحة.</p>
-        <p>2. <strong>البث:</strong> لا يتم تخزين أي وسائط على خوادمنا بل يتم جلبها عبر سيرفرات خارجية أو مستخرجات سحابية موثوقة.</p>
-        <p>3. <strong>الخصوصية:</strong> يتم حفظ بيانات الأعضاء بأمان تام وتخصيص تجربة خالية من الإعلانات لأعضاء VIP.</p>
+        <p>يتم جلب القنوات المباشرة من مصادر البث العام المفتوحة وتمريرها عبر مشغل المنصة المباشر.</p>
       </div>
     </div>
   </div>
 
-  <!-- نافذة إعدادات المشغل -->
-  <div class="modal-overlay" id="settingsModal">
-    <div class="modal-box">
-      <i class="fa-solid fa-xmark modal-close" onclick="closeModal('settingsModal')"></i>
-      <div class="modal-title"><i class="fa-solid fa-gear" style="color:var(--cyan);"></i> إعدادات المشغل</div>
-      <div style="font-size: 0.85rem; color: #cbd5e1;">
-        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-          <input type="checkbox" id="autoFallbackCheck" checked>
-          <span>تفعيل التبديل التلقائي عند تعطل أحد السيرفرات</span>
-        </label>
-      </div>
-    </div>
-  </div>
-
-  <!-- لوحة تحكم المشرفين الشاملة -->
+  <!-- لوحة تحكم المشرفين -->
   <div class="modal-overlay" id="adminModal">
     <div class="modal-box admin-modal">
       <i class="fa-solid fa-xmark modal-close" onclick="closeModal('adminModal')"></i>
       <div class="modal-title"><i class="fa-solid fa-shield-halved" style="color: var(--yellow);"></i> لوحة تحكم المشرفين (ONEBR TV)</div>
       
       <div class="admin-nav">
-        <button class="admin-nav-btn active" onclick="switchAdminTab('visitors', this)">👥 الزوار المباشرين</button>
-        <button class="admin-nav-btn" onclick="switchAdminTab('users', this)">👤 الأعضاء والـ VIP والحظر</button>
-        <button class="admin-nav-btn" onclick="switchAdminTab('admins', this)">🛡️ إدارة المشرفين</button>
-        <button class="admin-nav-btn" onclick="switchAdminTab('addMedia', this)">➕ إضافة مسلسل/فيلم</button>
-        <button class="admin-nav-btn" onclick="switchAdminTab('manageMedia', this)">🗑️ إدارة وحذف الأعمال</button>
+        <button class="admin-nav-btn active" onclick="switchAdminTab('visitors', this)">👥 الزوار</button>
+        <button class="admin-nav-btn" onclick="switchAdminTab('users', this)">👤 الأعضاء والـ VIP</button>
+        <button class="admin-nav-btn" onclick="switchAdminTab('addMedia', this)">➕ إضافة محتوى</button>
         <button class="admin-nav-btn" onclick="switchAdminTab('banner', this)">📢 شريط التنبيهات</button>
       </div>
 
-      <!-- 1. الزوار المباشرين -->
       <div id="tabVisitors">
         <div style="max-height: 280px; overflow-y: auto;">
           <table class="admin-table">
-            <thead><tr><th>الوقت</th><th>الجهاز / المتصفح</th><th>المستخدم</th></tr></thead>
+            <thead><tr><th>الوقت</th><th>الجهاز</th><th>المستخدم</th></tr></thead>
             <tbody id="visitorsTableBody"></tbody>
           </table>
         </div>
       </div>
 
-      <!-- 2. المستخدمين والـ VIP والحظر -->
       <div id="tabUsers" style="display: none;">
         <div style="max-height: 280px; overflow-y: auto;">
           <table class="admin-table">
-            <thead><tr><th>المستخدم</th><th>الرتبة</th><th>الحالة</th><th>الإجراءات</th></tr></thead>
+            <thead><tr><th>المستخدم</th><th>الرتبة</th><th>الحالة</th><th>الإجراء</th></tr></thead>
             <tbody id="usersTableBody"></tbody>
           </table>
         </div>
       </div>
 
-      <!-- 3. المشرفين -->
-      <div id="tabAdmins" style="display: none;">
-        <div class="form-group" style="display: flex; gap: 8px;">
-          <input type="email" id="newAdminEmail" placeholder="أدخل بريد المشرف الجديد">
-          <button class="btn-submit" style="width: 140px; margin-top: 0; background: var(--cyan); color: #000;" onclick="addAdminUser()">إضافة مشرف</button>
-        </div>
-        <div style="max-height: 200px; overflow-y: auto; margin-top: 10px;">
-          <table class="admin-table">
-            <thead><tr><th>بريد المشرف</th><th>الرتبة</th><th>الإجراء</th></tr></thead>
-            <tbody id="adminsTableBody"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- 4. إضافة عمل مباشر -->
       <div id="tabAddMedia" style="display: none;">
         <div class="form-group">
           <label>اسم العمل:</label>
-          <input type="text" id="customTitle" placeholder="مثال: قيامة عثمان الحلقة 10">
+          <input type="text" id="customTitle" placeholder="اسم الفيلم أو الحلقة">
         </div>
         <div class="form-group">
-          <label>القسم:</label>
-          <select id="customCategory">
-            <option value="turkish">مسلسلات تركية</option>
-            <option value="korean">دراما كورية وآسيوية</option>
-            <option value="arabic">أفلام ومسلسلات عربية</option>
-            <option value="anime">أنمي</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>رابط البوستر (URL):</label>
+          <label>رابط البوستر:</label>
           <input type="text" id="customPoster" placeholder="https://image.tmdb.org/...">
         </div>
         <div class="form-group">
-          <label>رابط الفيديو المباشر أو التضمين (Ok.ru / Uqload / m3u8):</label>
-          <input type="text" id="customStreamUrl" placeholder="https://ok.ru/videoembed/... أو رابط m3u8">
+          <label>رابط الفيديو المباشر (.m3u8 أو Ok.ru):</label>
+          <input type="text" id="customStreamUrl" placeholder="https://.../stream.m3u8">
         </div>
-        <button class="btn-submit" style="background: var(--cyan); color: #000;" onclick="saveCustomMedia()">نشر العمل للموقع فوراً</button>
+        <button class="btn-submit" style="background: var(--cyan); color: #000;" onclick="saveCustomMedia()">نشر العمل</button>
       </div>
 
-      <!-- 5. حذف الأعمال -->
-      <div id="tabManageMedia" style="display: none;">
-        <div style="max-height: 280px; overflow-y: auto;">
-          <table class="admin-table">
-            <thead><tr><th>اسم العمل</th><th>القسم</th><th>الإجراء</th></tr></thead>
-            <tbody id="customMediaTableBody"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- 6. شريط التنبيهات -->
       <div id="tabBanner" style="display: none;">
         <div class="form-group">
           <label>نص الشريط:</label>
-          <input type="text" id="adminBannerText" placeholder="مثال: تم إضافة حلقات جديدة مترجمة الآن!">
+          <input type="text" id="adminBannerText" placeholder="مثال: تم إضافة قنوات جديدة!">
         </div>
         <button class="btn-submit" onclick="saveBannerAnnouncement()">تحديث التنبيه</button>
         <button class="btn-submit" style="background: rgba(255,255,255,0.1); margin-top: 6px;" onclick="removeBannerAnnouncement()">إخفاء التنبيه</button>
@@ -500,7 +431,7 @@
   </div>
 
   <footer>
-    <div><strong>ONEBR TV</strong> © 2026 جميع الحقوق محفوظة لمنصة ون بر تي في. المشرف: altrfybaqer0@gmail.com</div>
+    <div><strong>ONEBR TV</strong> © 2026 جميع الحقوق محفوظة لمنصة ون بر تي في.</div>
   </footer>
 
   <script>
@@ -515,7 +446,6 @@
 
     let currentItem = { id: null, title: '', type: 'movie', season: 1, episode: 1, isCustom: false };
     let currentServer = 1;
-    let isRegisterMode = false;
     let currentUser = JSON.parse(localStorage.getItem('cinema_user') || 'null');
     let explorePage = 1;
     let currentExploreEndpoint = '/discover/tv?with_original_language=tr&sort_by=popularity.desc';
@@ -524,7 +454,7 @@
     async function initSite() {
       await verifyUserStatus();
       injectAdsIfNotVip();
-      logVisitorEntry();
+      loadM3UChannels('https://iptv-org.github.io/iptv/categories/movies.m3u', 'deckIptvMovies', 12);
       loadCustomMediaFromFirebase();
       loadBannerAnnouncement();
       
@@ -537,63 +467,96 @@
       loadMoreExploreMedia(true);
     }
 
-    // حقن الإعلانات فقط للمستخدم العادي والزائر
+    // دالة معالجة واستخراج القنوات من ملفات M3U النصية
+    async function loadM3UChannels(m3uUrl, containerId, limit = 20) {
+      try {
+        const res = await fetch(m3uUrl);
+        const text = await res.text();
+        const lines = text.split('\n');
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        container.innerHTML = "";
+
+        let currentChannel = null;
+        let count = 0;
+
+        for (let i = 0; i < lines.length && count < limit; i++) {
+          const line = lines[i].trim();
+          if (line.startsWith('#EXTINF:')) {
+            const nameMatch = line.match(/,(.+)$/);
+            const logoMatch = line.match(/tvg-logo="([^"]+)"/);
+            currentChannel = {
+              title: nameMatch ? nameMatch[1].trim() : "قناة بث مباشر",
+              logo: logoMatch ? logoMatch[1] : "https://img.icons8.com/color/96/tv.png"
+            };
+          } else if (line.startsWith('http') && currentChannel) {
+            currentChannel.url = line;
+            renderChannelCard(currentChannel, container);
+            currentChannel = null;
+            count++;
+          }
+        }
+      } catch (e) {}
+    }
+
+    function renderChannelCard(channel, container) {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.onclick = () => playLiveStream(channel.title, channel.url, channel.logo);
+      card.innerHTML = `
+        <img src="${channel.logo}" onerror="this.src='https://img.icons8.com/color/96/tv.png'" style="object-fit:contain; background:#000; padding:10px;">
+        <div class="card-body">
+          <div class="card-title">${channel.title}</div>
+          <div class="card-meta"><span>بث حي</span><span class="rating">🔴 LIVE</span></div>
+        </div>
+      `;
+      container.appendChild(card);
+    }
+
+    // تشغيل البث المباشر عبر Hls.js
+    function playLiveStream(title, streamUrl, logo) {
+      document.getElementById('homeView').style.display = 'none';
+      document.getElementById('theaterView').style.display = 'block';
+      document.getElementById('iframePlayerBox').style.display = 'none';
+      document.getElementById('serversContainer').style.display = 'none';
+      document.getElementById('episodesContainer').style.display = 'none';
+      document.getElementById('directPlayerBox').style.display = 'block';
+      window.scrollTo(0, 0);
+
+      document.getElementById('detailTitle').innerText = title;
+      document.getElementById('detailPoster').src = logo;
+      document.getElementById('detailOverview').innerText = "بث مباشر عبر بروتوكول HLS.";
+
+      const video = document.getElementById('nativeVideo');
+      if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
+
+      if (Hls.isSupported()) {
+        hlsInstance = new Hls();
+        hlsInstance.loadSource(streamUrl);
+        hlsInstance.attachMedia(video);
+        hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => video.play().catch(()=>{}));
+      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = streamUrl;
+        video.play().catch(()=>{});
+      }
+    }
+
     function injectAdsIfNotVip() {
       if (currentUser && currentUser.isVip) return;
       const script1 = document.createElement('script');
       script1.src = "https://pl31046353.profitableratecpmnetwork.com/61/4f/72/614f728ad484f449400870c3be110111.js";
       document.head.appendChild(script1);
-
-      const script2 = document.createElement('script');
-      script2.src = "https://pl31046352.profitableratecpmnetwork.com/24/e2/59/24e259929d0a94f08f92e8373055a876.js";
-      document.head.appendChild(script2);
     }
 
     async function verifyUserStatus() {
-      if (!currentUser) {
-        document.getElementById('adminNavBtn').style.display = 'none';
-        document.getElementById('adminSidebarLink').style.display = 'none';
-        document.getElementById('authBtnText').innerText = 'دخول';
-        return;
-      }
-
-      const emailKey = currentUser.email.toLowerCase().replace(/[^a-zA-Z0-9]/g, '_');
-
-      try {
-        const banRes = await fetch(`${FIREBASE_DB}/banned_users/${emailKey}.json`);
-        if (await banRes.json()) {
-          alert('عذراً، تم حظر حسابك من قبل الإدارة.');
-          logoutUser();
-          return;
-        }
-      } catch (e) {}
-
-      try {
-        const vipRes = await fetch(`${FIREBASE_DB}/vip_users/${emailKey}.json`);
-        currentUser.isVip = !!(await vipRes.json());
-      } catch (e) {}
-
+      if (!currentUser) return;
       let isAdmin = (currentUser.email.toLowerCase() === SUPER_ADMIN_EMAIL.toLowerCase());
-      if (!isAdmin) {
-        try {
-          const admRes = await fetch(`${FIREBASE_DB}/admins/${emailKey}.json`);
-          if (await admRes.json()) isAdmin = true;
-        } catch (e) {}
-      }
-
       currentUser.isAdmin = isAdmin;
-      localStorage.setItem('cinema_user', JSON.stringify(currentUser));
-
       if (isAdmin) {
         document.getElementById('adminNavBtn').style.display = 'flex';
         document.getElementById('adminSidebarLink').style.display = 'flex';
-      } else {
-        document.getElementById('adminNavBtn').style.display = 'none';
-        document.getElementById('adminSidebarLink').style.display = 'none';
       }
-      
-      const badgePrefix = currentUser.isVip ? '⭐ VIP | ' : '';
-      document.getElementById('authBtnText').innerText = badgePrefix + currentUser.email.split('@')[0];
+      document.getElementById('authBtnText').innerText = currentUser.email.split('@')[0];
     }
 
     function toggleSidebar() {
@@ -604,48 +567,9 @@
     }
 
     function openVipModal() { document.getElementById('vipModal').style.display = 'flex'; }
-    function openAuthModal() {
-      document.getElementById('authModal').style.display = 'flex';
-      if (currentUser) {
-        document.getElementById('authForms').style.display = 'none';
-        document.getElementById('authProfile').style.display = 'block';
-        document.getElementById('profileEmail').innerText = currentUser.email;
-        let badgeHtml = currentUser.isAdmin ? `<span class="badge" style="background:#f59e0b; color:#000;">🛡️ مشرف ONEBR TV</span>` : `<span class="badge" style="background:rgba(255,255,255,0.1);">عضو</span>`;
-        if (currentUser.isVip) badgeHtml += ` <span class="badge badge-vip">⭐ VIP مفعل</span>`;
-        document.getElementById('profileRoleBadge').innerHTML = badgeHtml;
-      } else {
-        document.getElementById('authForms').style.display = 'block';
-        document.getElementById('authProfile').style.display = 'none';
-      }
-    }
+    function openAuthModal() { document.getElementById('authModal').style.display = 'flex'; }
     function openTermsModal() { document.getElementById('termsModal').style.display = 'flex'; }
-    function openSettingsModal() { document.getElementById('settingsModal').style.display = 'flex'; }
     function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-
-    async function logVisitorEntry() {
-      try {
-        const payload = {
-          time: new Date().toLocaleTimeString('ar-IQ', { hour: '2-digit', minute: '2-digit' }) + ' ' + new Date().toLocaleDateString('ar-IQ'),
-          ua: navigator.userAgent.substring(0, 45),
-          user: currentUser ? currentUser.email : "زائر"
-        };
-        await fetch(`${FIREBASE_DB}/analytics/visitors.json`, { method: 'POST', body: JSON.stringify(payload) });
-      } catch (e) {}
-    }
-
-    async function loadBannerAnnouncement() {
-      try {
-        const res = await fetch(`${FIREBASE_DB}/settings/banner.json`);
-        const text = await res.json();
-        const banner = document.getElementById('announcementBanner');
-        if (text) {
-          banner.innerText = text;
-          banner.style.display = 'block';
-        } else {
-          banner.style.display = 'none';
-        }
-      } catch (e) {}
-    }
 
     async function loadShelf(path, elemId, isHero = false, fixedType = null) {
       try {
@@ -660,7 +584,7 @@
     function renderHero(item) {
       const isMovie = (item.media_type === 'movie' || item.title);
       document.getElementById('heroTitle').innerText = item.title || item.name;
-      document.getElementById('heroDesc').innerText = item.overview || "استمتع بمشاهدة أحدث الأعمال بجودة عالية.";
+      document.getElementById('heroDesc').innerText = item.overview || "استمتع بمشاهدة أحدث العروض.";
       if (item.backdrop_path) {
         document.getElementById('heroBanner').style.backgroundImage = `linear-gradient(0deg, var(--bg) 15%, rgba(6,8,13,0.6) 60%, rgba(6,8,13,0.2) 100%), url('${BACKDROP_BASE + item.backdrop_path}')`;
       }
@@ -691,22 +615,8 @@
       });
     }
 
-    async function loadMoreExploreMedia(reset = false) {
-      if (reset) {
-        explorePage = 1;
-        document.getElementById('deckExplore').innerHTML = "";
-      }
-      try {
-        const res = await fetch(`${API_BASE}${currentExploreEndpoint}&api_key=${API_KEY}&language=ar&page=${explorePage}`);
-        const json = await res.json();
-        renderCards(json.results || [], document.getElementById('deckExplore'));
-        explorePage++;
-      } catch (e) {}
-    }
-
     async function openTheater(id, type, basicInfo) {
-      currentItem = { id: id, type: type, title: basicInfo.title || basicInfo.name, season: 1, episode: 1, isCustom: false };
-      
+      currentItem = { id, type, title: basicInfo.title || basicInfo.name, season: 1, episode: 1, isCustom: false };
       document.getElementById('homeView').style.display = 'none';
       document.getElementById('theaterView').style.display = 'block';
       document.getElementById('iframePlayerBox').style.display = 'block';
@@ -718,151 +628,20 @@
       document.getElementById('detailPoster').src = basicInfo.poster_path ? (POSTER_BASE + basicInfo.poster_path) : 'https://image.tmdb.org/t/p/w500/mXk9kEw9u5dF72Tsk4O9Jt0rGgG.jpg';
       document.getElementById('detailOverview').innerText = basicInfo.overview || "استمتع بالمشاهدة.";
 
-      try {
-        const res = await fetch(`${API_BASE}/${type}/${id}?api_key=${API_KEY}&language=ar`);
-        const info = await res.json();
-        
-        document.getElementById('detailTitle').innerText = info.title || info.name;
-        document.getElementById('detailOverview').innerText = info.overview || basicInfo.overview || "استمتع بالمشاهدة.";
-        
-        const epBox = document.getElementById('episodesContainer');
-        if (type === 'tv') {
-          epBox.style.display = 'flex';
-          setupSeasonsUI(info.seasons || []);
-        } else {
-          epBox.style.display = 'none';
-        }
-      } catch (e) {}
-
       changeServer(1);
     }
 
-    function setupSeasonsUI(seasons) {
-      const valid = seasons.filter(s => s.season_number > 0);
-      const scroll = document.getElementById('seasonsList');
-      scroll.innerHTML = "";
-      valid.forEach((s, idx) => {
-        const btn = document.createElement('button');
-        btn.className = `season-btn ${idx === 0 ? 'active' : ''}`;
-        btn.innerText = `الموسم ${s.season_number}`;
-        btn.onclick = () => {
-          document.querySelectorAll('.season-btn').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          currentItem.season = s.season_number;
-          setupEpisodesUI(s.episode_count || 12);
-        };
-        scroll.appendChild(btn);
-      });
-      if (valid.length > 0) {
-        currentItem.season = valid[0].season_number;
-        setupEpisodesUI(valid[0].episode_count || 12);
-      }
-    }
-
-    function setupEpisodesUI(count) {
-      const grid = document.getElementById('episodesList');
-      grid.innerHTML = "";
-      for (let i = 1; i <= count; i++) {
-        const btn = document.createElement('div');
-        btn.className = `ep-btn ${i === 1 ? 'active' : ''}`;
-        btn.innerText = `الحلقة ${i}`;
-        btn.onclick = () => {
-          document.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          currentItem.episode = i;
-          changeServer(currentServer);
-        };
-        grid.appendChild(btn);
-      }
-      changeServer(currentServer);
-    }
-
-    // خريطة السيرفرات البديلة والمحدثة
     function changeServer(idx) {
       currentServer = idx;
       document.querySelectorAll('.srv-btn').forEach((b, i) => b.classList.toggle('active', i + 1 === idx));
       if (!currentItem.id || currentItem.isCustom) return;
 
       const { id, type, season: s, episode: e } = currentItem;
-      let streamUrl = "";
+      const srvs = type === "movie" 
+        ? { 1: `https://multiembed.mov/?video_id=${id}&tmdb=1`, 2: `https://vidsrc.to/embed/movie/${id}`, 3: `https://www.2embed.cc/embed/${id}`, 4: `https://autoembed.co/movie/tmdb/${id}` }
+        : { 1: `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}`, 2: `https://vidsrc.to/embed/tv/${id}/${s}/${e}`, 3: `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}`, 4: `https://autoembed.co/tv/tmdb/${id}-${s}-${e}` };
 
-      if (type === "movie") {
-        const srvs = {
-          1: `https://multiembed.mov/?video_id=${id}&tmdb=1`,
-          2: `https://vidsrc.to/embed/movie/${id}`,
-          3: `https://www.2embed.cc/embed/${id}`,
-          4: `https://autoembed.co/movie/tmdb/${id}`,
-          5: `https://player.smashy.stream/movie/${id}`,
-          6: `https://embed.su/embed/movie/${id}`
-        };
-        streamUrl = srvs[currentServer] || srvs[1];
-      } else {
-        const srvs = {
-          1: `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}`,
-          2: `https://vidsrc.to/embed/tv/${id}/${s}/${e}`,
-          3: `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}`,
-          4: `https://autoembed.co/tv/tmdb/${id}-${s}-${e}`,
-          5: `https://player.smashy.stream/tv/${id}?s=${s}&e=${e}`,
-          6: `https://embed.su/embed/tv/${id}/${s}/${e}`
-        };
-        streamUrl = srvs[currentServer] || srvs[1];
-      }
-
-      document.getElementById('streamFrame').src = streamUrl;
-    }
-
-    async function loadCustomMediaFromFirebase() {
-      try {
-        const res = await fetch(`${FIREBASE_DB}/series.json`);
-        const data = await res.json();
-        if (data) {
-          const deck = document.getElementById('deckCustom');
-          deck.innerHTML = "";
-          document.getElementById('customShelfBox').style.display = 'block';
-          Object.keys(data).forEach(key => {
-            const item = data[key];
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.onclick = () => {
-              currentItem = { id: item.id, type: 'custom', title: item.title, isCustom: true };
-              document.getElementById('homeView').style.display = 'none';
-              document.getElementById('theaterView').style.display = 'block';
-              document.getElementById('serversContainer').style.display = 'none';
-              document.getElementById('episodesContainer').style.display = 'none';
-              document.getElementById('detailTitle').innerText = item.title;
-              document.getElementById('detailPoster').src = item.poster || 'https://image.tmdb.org/t/p/w500/mXk9kEw9u5dF72Tsk4O9Jt0rGgG.jpg';
-              document.getElementById('detailOverview').innerText = "عمل مضاف حصرياً بواسطة إدارة ONEBR TV.";
-              
-              if (item.url.includes('.mp4') || item.url.includes('.m3u8')) {
-                document.getElementById('iframePlayerBox').style.display = 'none';
-                document.getElementById('directPlayerBox').style.display = 'block';
-                const video = document.getElementById('nativeVideo');
-                if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
-                if (item.url.includes('.m3u8') && Hls.isSupported()) {
-                  hlsInstance = new Hls();
-                  hlsInstance.loadSource(item.url);
-                  hlsInstance.attachMedia(video);
-                } else {
-                  video.src = item.url;
-                }
-                video.play().catch(()=>{});
-              } else {
-                document.getElementById('directPlayerBox').style.display = 'none';
-                document.getElementById('iframePlayerBox').style.display = 'block';
-                document.getElementById('streamFrame').src = item.url;
-              }
-            };
-            card.innerHTML = `
-              <img src="${item.poster || 'https://image.tmdb.org/t/p/w500/mXk9kEw9u5dF72Tsk4O9Jt0rGgG.jpg'}" loading="lazy">
-              <div class="card-body">
-                <div class="card-title">${item.title}</div>
-                <div class="card-meta"><span>${item.category || 'مباشر'}</span><span class="rating">⭐ VIP</span></div>
-              </div>
-            `;
-            deck.appendChild(card);
-          });
-        }
-      } catch (e) {}
+      document.getElementById('streamFrame').src = srvs[currentServer] || srvs[1];
     }
 
     function goHome() {
@@ -879,6 +658,17 @@
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
 
+      if (cat === 'iptv_movies') {
+        document.getElementById('exploreSectionTitle').innerText = "📡 قنوات الأفلام الحية";
+        loadM3UChannels('https://iptv-org.github.io/iptv/categories/movies.m3u', 'deckExplore', 40);
+        return;
+      }
+      if (cat === 'iptv_series') {
+        document.getElementById('exploreSectionTitle').innerText = "📺 قنوات المسلسلات الحية";
+        loadM3UChannels('https://iptv-org.github.io/iptv/categories/series.m3u', 'deckExplore', 40);
+        return;
+      }
+
       if (cat === 'turkish') currentExploreEndpoint = '/discover/tv?with_original_language=tr&sort_by=popularity.desc';
       if (cat === 'arabic') currentExploreEndpoint = '/discover/movie?with_original_language=ar&sort_by=popularity.desc';
       if (cat === 'korean') currentExploreEndpoint = '/discover/tv?with_original_language=ko&sort_by=popularity.desc';
@@ -889,77 +679,40 @@
       loadMoreExploreMedia(true);
     }
 
-    let delayTimer;
-    function searchMedia() {
-      clearTimeout(delayTimer);
-      const query = document.getElementById('searchInput').value.trim();
-      if (!query) { goHome(); initSite(); return; }
-      delayTimer = setTimeout(async () => {
-        const res = await fetch(`${API_BASE}/search/multi?api_key=${API_KEY}&language=ar&query=${encodeURIComponent(query)}`);
+    async function loadMoreExploreMedia(reset = false) {
+      if (reset) {
+        explorePage = 1;
+        document.getElementById('deckExplore').innerHTML = "";
+      }
+      try {
+        const res = await fetch(`${API_BASE}${currentExploreEndpoint}&api_key=${API_KEY}&language=ar&page=${explorePage}`);
         const json = await res.json();
-        goHome();
-        const trend = document.getElementById('deckTrending');
-        trend.parentElement.querySelector('.shelf-title').innerText = `نتائج البحث عن: "${query}"`;
-        trend.innerHTML = "";
-        renderCards(json.results || [], trend);
-      }, 350);
-    }
-
-    function toggleAuthMode() {
-      isRegisterMode = !isRegisterMode;
-      document.getElementById('authTitle').innerText = isRegisterMode ? 'إنشاء حساب جديد' : 'تسجيل الدخول';
-      document.getElementById('authActionBtn').innerText = isRegisterMode ? 'إنشاء الحساب' : 'تسجيل الدخول';
-      document.getElementById('authSwitchText').innerText = isRegisterMode ? 'لديك حساب بالفعل؟ تسجيل الدخول' : 'ليس لديك حساب؟ اضغط هنا لإنشاء حساب جديد';
+        renderCards(json.results || [], document.getElementById('deckExplore'));
+        explorePage++;
+      } catch (e) {}
     }
 
     async function handleAuthSubmit() {
       const email = document.getElementById('authEmail').value.trim().toLowerCase();
       const pass = document.getElementById('authPass').value.trim();
-      if (!email || !pass) return alert('يرجى كتابة الاسم والرمز السري');
-
       if (email === SUPER_ADMIN_EMAIL.toLowerCase() && pass === SUPER_ADMIN_PASS) {
         currentUser = { email: email, isAdmin: true, isVip: true };
         localStorage.setItem('cinema_user', JSON.stringify(currentUser));
-        alert('مرحباً بك يا باقر! تم الدخول بصلاحيات المشرف الكاملة.');
         closeModal('authModal');
         verifyUserStatus();
-        return;
       }
-
-      const userKey = email.replace(/[^a-zA-Z0-9]/g, '_');
-      const banCheck = await fetch(`${FIREBASE_DB}/banned_users/${userKey}.json`);
-      if (await banCheck.json()) return alert('هذا الحساب محظور من قبل الإدارة.');
-
-      if (isRegisterMode) {
-        await fetch(`${FIREBASE_DB}/users/${userKey}.json`, {
-          method: 'PUT',
-          body: JSON.stringify({ email: email, pass: pass, date: new Date().toLocaleDateString('ar-IQ') })
-        });
-        alert('تم إنشاء الحساب بنجاح!');
-      }
-
-      currentUser = { email: email };
-      localStorage.setItem('cinema_user', JSON.stringify(currentUser));
-      closeModal('authModal');
-      verifyUserStatus();
     }
 
     function logoutUser() {
       currentUser = null;
       localStorage.removeItem('cinema_user');
-      document.getElementById('adminNavBtn').style.display = 'none';
-      document.getElementById('adminSidebarLink').style.display = 'none';
-      document.getElementById('authBtnText').innerText = 'دخول';
       closeModal('authModal');
+      location.reload();
     }
 
     function openAdminModal() {
-      if (!currentUser || !currentUser.isAdmin) return alert('غير مصرح لك بالدخول!');
+      if (!currentUser || !currentUser.isAdmin) return alert('غير مصرح لك!');
       document.getElementById('adminModal').style.display = 'flex';
-      fetchAdminVisitors();
-      fetchAdminUsers();
-      fetchAdminAdmins();
-      fetchAdminCustomMedia();
     }
 
     function switchAdminTab(tab, btn) {
@@ -967,173 +720,66 @@
       btn.classList.add('active');
       document.getElementById('tabVisitors').style.display = tab === 'visitors' ? 'block' : 'none';
       document.getElementById('tabUsers').style.display = tab === 'users' ? 'block' : 'none';
-      document.getElementById('tabAdmins').style.display = tab === 'admins' ? 'block' : 'none';
       document.getElementById('tabAddMedia').style.display = tab === 'addMedia' ? 'block' : 'none';
-      document.getElementById('tabManageMedia').style.display = tab === 'manageMedia' ? 'block' : 'none';
       document.getElementById('tabBanner').style.display = tab === 'banner' ? 'block' : 'none';
     }
 
-    async function fetchAdminVisitors() {
+    async function saveCustomMedia() {
+      const title = document.getElementById('customTitle').value.trim();
+      const poster = document.getElementById('customPoster').value.trim();
+      const url = document.getElementById('customStreamUrl').value.trim();
+      if (!title || !url) return alert('أدخل البيانات كاملة');
+
+      const id = title.replace(/[^a-zA-Z0-9_\u0600-\u06FF]/g, '_').toLowerCase();
+      await fetch(`${FIREBASE_DB}/series/${id}.json`, {
+        method: 'PUT',
+        body: JSON.stringify({ id, title, poster: poster || "https://image.tmdb.org/t/p/w500/mXk9kEw9u5dF72Tsk4O9Jt0rGgG.jpg", url })
+      });
+      alert('تم النشر بنجاح!');
+    }
+
+    async function loadCustomMediaFromFirebase() {
       try {
-        const res = await fetch(`${FIREBASE_DB}/analytics/visitors.json`);
+        const res = await fetch(`${FIREBASE_DB}/series.json`);
         const data = await res.json();
-        const tbody = document.getElementById('visitorsTableBody');
-        tbody.innerHTML = "";
         if (data) {
-          Object.keys(data).reverse().slice(0, 25).forEach(k => {
-            const v = data[k];
-            tbody.innerHTML += `<tr><td>${v.time}</td><td>${v.ua}</td><td><span class="badge badge-online">${v.user || 'زائر'}</span></td></tr>`;
+          const deck = document.getElementById('deckCustom');
+          deck.innerHTML = "";
+          document.getElementById('customShelfBox').style.display = 'block';
+          Object.keys(data).forEach(key => {
+            const item = data[key];
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.onclick = () => playLiveStream(item.title, item.url, item.poster);
+            card.innerHTML = `
+              <img src="${item.poster}" loading="lazy">
+              <div class="card-body"><div class="card-title">${item.title}</div><div class="card-meta"><span>مباشر</span><span class="rating">⭐ VIP</span></div></div>
+            `;
+            deck.appendChild(card);
           });
         }
       } catch (e) {}
     }
 
-    async function fetchAdminUsers() {
+    async function loadBannerAnnouncement() {
       try {
-        const res = await fetch(`${FIREBASE_DB}/users.json`);
-        const users = await res.json() || {};
-        const banRes = await fetch(`${FIREBASE_DB}/banned_users.json`);
-        const bans = await banRes.json() || {};
-        const vipRes = await fetch(`${FIREBASE_DB}/vip_users.json`);
-        const vips = await vipRes.json() || {};
-
-        const tbody = document.getElementById('usersTableBody');
-        tbody.innerHTML = "";
-        Object.keys(users).forEach(k => {
-          const u = users[k];
-          const isBanned = !!bans[k];
-          const isVip = !!vips[k];
-          tbody.innerHTML += `
-            <tr>
-              <td>${u.email}</td>
-              <td>${isVip ? '<span class="badge badge-vip">⭐ VIP</span>' : 'عادي'}</td>
-              <td><span class="badge ${isBanned ? 'badge-banned' : 'badge-online'}">${isBanned ? 'محظور' : 'نشط'}</span></td>
-              <td>
-                <button class="btn-sm-action" style="background: ${isVip ? '#64748b' : '#f59e0b'}; color:#000;" onclick="toggleUserVip('${k}', ${isVip})">
-                  ${isVip ? 'إلغاء VIP' : 'ترقية لـ VIP'}
-                </button>
-                <button class="btn-sm-action" style="background: ${isBanned ? '#10b981' : '#ef4444'}; color:#fff;" onclick="toggleUserBan('${k}', ${isBanned})">
-                  ${isBanned ? 'فك الحظر' : 'حظر'}
-                </button>
-              </td>
-            </tr>
-          `;
-        });
+        const res = await fetch(`${FIREBASE_DB}/settings/banner.json`);
+        const text = await res.json();
+        const banner = document.getElementById('announcementBanner');
+        if (text) { banner.innerText = text; banner.style.display = 'block'; }
       } catch (e) {}
-    }
-
-    async function toggleUserVip(userKey, isVip) {
-      if (isVip) {
-        await fetch(`${FIREBASE_DB}/vip_users/${userKey}.json`, { method: 'DELETE' });
-        alert('تم إلغاء VIP عن المستخدم');
-      } else {
-        await fetch(`${FIREBASE_DB}/vip_users/${userKey}.json`, { method: 'PUT', body: JSON.stringify(true) });
-        alert('تم تفعيل VIP بنجاح!');
-      }
-      fetchAdminUsers();
-    }
-
-    async function toggleUserBan(userKey, isCurrentlyBanned) {
-      if (isCurrentlyBanned) {
-        await fetch(`${FIREBASE_DB}/banned_users/${userKey}.json`, { method: 'DELETE' });
-        alert('تم فك الحظر');
-      } else {
-        await fetch(`${FIREBASE_DB}/banned_users/${userKey}.json`, { method: 'PUT', body: JSON.stringify(true) });
-        alert('تم حظر المستخدم');
-      }
-      fetchAdminUsers();
-    }
-
-    async function fetchAdminAdmins() {
-      try {
-        const res = await fetch(`${FIREBASE_DB}/admins.json`);
-        const admins = await res.json() || {};
-        const tbody = document.getElementById('adminsTableBody');
-        tbody.innerHTML = `<tr><td>${SUPER_ADMIN_EMAIL}</td><td><span class="badge" style="background:#f59e0b; color:#000;">مالك ONEBR TV (Super Admin)</span></td><td>-</td></tr>`;
-        Object.keys(admins).forEach(k => {
-          tbody.innerHTML += `
-            <tr>
-              <td>${admins[k].email}</td>
-              <td><span class="badge" style="background:var(--cyan); color:#000;">مشرف</span></td>
-              <td><button class="btn-sm-action" style="background:#ef4444; color:#fff;" onclick="removeAdminUser('${k}')">إزالة</button></td>
-            </tr>
-          `;
-        });
-      } catch (e) {}
-    }
-
-    async function addAdminUser() {
-      const email = document.getElementById('newAdminEmail').value.trim().toLowerCase();
-      if (!email) return alert('أدخل بريد المشرف');
-      const key = email.replace(/[^a-zA-Z0-9]/g, '_');
-      await fetch(`${FIREBASE_DB}/admins/${key}.json`, { method: 'PUT', body: JSON.stringify({ email: email }) });
-      alert('تمت ترقية المشرف بنجاح!');
-      document.getElementById('newAdminEmail').value = "";
-      fetchAdminAdmins();
-    }
-
-    async function removeAdminUser(key) {
-      await fetch(`${FIREBASE_DB}/admins/${key}.json`, { method: 'DELETE' });
-      alert('تمت الإزالة');
-      fetchAdminAdmins();
-    }
-
-    async function saveCustomMedia() {
-      const title = document.getElementById('customTitle').value.trim();
-      const category = document.getElementById('customCategory').value;
-      const poster = document.getElementById('customPoster').value.trim();
-      const url = document.getElementById('customStreamUrl').value.trim();
-
-      if (!title || !url) return alert('يرجى ملء الحقول المطلوبة');
-
-      const id = title.replace(/[^a-zA-Z0-9_\u0600-\u06FF]/g, '_').toLowerCase();
-      const payload = { id, title, category, poster: poster || "https://image.tmdb.org/t/p/w500/mXk9kEw9u5dF72Tsk4O9Jt0rGgG.jpg", url };
-
-      await fetch(`${FIREBASE_DB}/series/${id}.json`, { method: 'PUT', body: JSON.stringify(payload) });
-      alert('✅ تم نشر العمل بنجاح!');
-      fetchAdminCustomMedia();
-      loadCustomMediaFromFirebase();
-    }
-
-    async function fetchAdminCustomMedia() {
-      try {
-        const res = await fetch(`${FIREBASE_DB}/series.json`);
-        const data = await res.json() || {};
-        const tbody = document.getElementById('customMediaTableBody');
-        tbody.innerHTML = "";
-        Object.keys(data).forEach(id => {
-          const item = data[id];
-          tbody.innerHTML += `
-            <tr>
-              <td>${item.title}</td>
-              <td>${item.category || 'عام'}</td>
-              <td><button class="btn-sm-action" style="background:#ef4444; color:#fff;" onclick="deleteCustomMedia('${id}')">حذف</button></td>
-            </tr>
-          `;
-        });
-      } catch (e) {}
-    }
-
-    async function deleteCustomMedia(seriesId) {
-      if (!confirm('حذف هذا العمل نهائياً؟')) return;
-      await fetch(`${FIREBASE_DB}/series/${seriesId}.json`, { method: 'DELETE' });
-      alert('تم الحذف!');
-      loadCustomMediaFromFirebase();
-      fetchAdminCustomMedia();
     }
 
     async function saveBannerAnnouncement() {
       const text = document.getElementById('adminBannerText').value.trim();
-      if (!text) return alert('اكتب نص الإعلان');
+      if (!text) return;
       await fetch(`${FIREBASE_DB}/settings/banner.json`, { method: 'PUT', body: JSON.stringify(text) });
-      alert('تم تحديث التنبيه بنجاح!');
       loadBannerAnnouncement();
     }
 
     async function removeBannerAnnouncement() {
       await fetch(`${FIREBASE_DB}/settings/banner.json`, { method: 'DELETE' });
-      alert('تم إخفاء التنبيه');
-      loadBannerAnnouncement();
+      document.getElementById('announcementBanner').style.display = 'none';
     }
 
     initSite();
