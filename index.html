@@ -1289,7 +1289,7 @@
       window.scrollTo(0, 0);
 
       const video = document.getElementById('nativeVideo');
-      const proxiedUrl = PROXY_BASE + encodeURIComponent(streamUrl);
+      const proxiedUrl = streamUrl;
 
       if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
 
