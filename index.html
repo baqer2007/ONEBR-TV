@@ -292,7 +292,7 @@
         <video id="nativeVideo" controls playsinline></video>
       </div>
 
-      <!-- مشغل التضمين النظيف بدون قيود sandbox -->
+      <!-- مشغل التضمين للأفلام والمسلسلات بدون قيود sandbox -->
       <div class="player-box" id="iframeBox">
         <iframe 
           id="streamFrame" 
@@ -311,9 +311,9 @@
         <i class="fa-solid fa-server" style="color: var(--cyan); margin-left: 6px;"></i> سيرفرات المشاهدة المتاحة:
       </div>
       <div class="servers-list">
-        <button class="srv-btn active" onclick="changeServer(1)">سيرفر 1 (VidSrc XYZ)</button>
-        <button class="srv-btn" onclick="changeServer(2)">سيرفر 2 (Embed SU)</button>
-        <button class="srv-btn" onclick="changeServer(3)">سيرفر 3 (VidLink Pro)</button>
+        <button class="srv-btn active" onclick="changeServer(1)">سيرفر 1 (VidLink Pro)</button>
+        <button class="srv-btn" onclick="changeServer(2)">سيرفر 2 (2Embed)</button>
+        <button class="srv-btn" onclick="changeServer(3)">سيرفر 3 (SmashyStream)</button>
         <button class="srv-btn" onclick="changeServer(4)">سيرفر 4 (AutoEmbed)</button>
       </div>
     </div>
@@ -431,7 +431,7 @@
     const BACKDROP_BASE = "https://image.tmdb.org/t/p/original";
     const FIREBASE_DB = "https://cinemavip-a9a21-default-rtdb.firebaseio.com";
     
-    // وسيط Cloudflare Worker الخاص بك ⚡
+    // وسيط Cloudflare Worker ⚡
     const PROXY_BASE = "https://cold-dust-ef5a.altrfybaqer0.workers.dev/?url=";
 
     const SUPER_ADMIN_EMAIL = "altrfybaqer0@gmail.com";
@@ -629,7 +629,7 @@
       }
     }
 
-    // تحديث سيرفرات المشاهدة مع النطاقات المستقرة
+    // تبديل السيرفرات المحدثة
     function changeServer(idx) {
       currentServer = idx;
       document.querySelectorAll('.srv-btn').forEach((b, i) => b.classList.toggle('active', i + 1 === idx));
@@ -639,15 +639,15 @@
 
       const srvs = type === "movie" 
         ? { 
-            1: `https://vidsrc.xyz/embed/movie/${id}`,
-            2: `https://embed.su/embed/movie/${id}`,
-            3: `https://vidlink.pro/movie/${id}`,
+            1: `https://vidlink.pro/movie/${id}`,
+            2: `https://www.2embed.cc/embed/${id}`,
+            3: `https://embed.smashystream.com/playere.php?tmdb=${id}`,
             4: `https://player.autoembed.cc/embed/movie/${id}`
           }
         : { 
-            1: `https://vidsrc.xyz/embed/tv/${id}/${s}/${e}`,
-            2: `https://embed.su/embed/tv/${id}/${s}/${e}`,
-            3: `https://vidlink.pro/tv/${id}/${s}/${e}`,
+            1: `https://vidlink.pro/tv/${id}/${s}/${e}`,
+            2: `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}`,
+            3: `https://embed.smashystream.com/playere.php?tmdb=${id}&season=${s}&episode=${e}`,
             4: `https://player.autoembed.cc/embed/tv/${id}/${s}/${e}`
           };
 
