@@ -94,7 +94,7 @@
     .search-item img { width: 36px; height: 50px; object-fit: cover; border-radius: 4px; }
     .search-item-title { font-size: 0.8rem; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-    .header-actions { display: flex; align-items: center; gap: 6px; }
+    .header-actions { display: flex; align-items: center; gap: 8px; }
     .btn-header {
       background: var(--bg); border: 1px solid var(--border); color: var(--text);
       padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700;
@@ -102,7 +102,16 @@
     }
     .btn-vip-gold { background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; font-weight: 800; border: none; }
 
-    /* القائمة الجانبية المنبثقة (Drawer) */
+    /* مظهر الصورة الدائرية للمستخدم */
+    .user-avatar-btn {
+      width: 38px; height: 38px; border-radius: 50%; overflow: hidden;
+      border: 2px solid var(--cyan); box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+      cursor: pointer; display: none; align-items: center; justify-content: center;
+      background: var(--surface); padding: 0;
+    }
+    .user-avatar-btn img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* القائمة الجانبية المنبثقة (Drawer) متوافقة مع اللغتين */
     .drawer-overlay {
       position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
       z-index: 2500; display: none;
@@ -110,11 +119,12 @@
     .drawer {
       position: fixed; top: 0; bottom: 0; width: min(320px, 85vw);
       background: var(--drawer-bg); border-inline-end: 1px solid var(--border);
-      z-index: 2600; transform: translateX(100%); transition: transform 0.3s ease;
+      z-index: 2600; inset-inline-start: 0;
+      transform: translateX(100%); transition: transform 0.3s ease;
       display: flex; flex-direction: column; padding: 18px 16px; overflow-y: auto;
     }
     html[dir="ltr"] .drawer { transform: translateX(-100%); }
-    .drawer.open { transform: translateX(0); }
+    .drawer.open, html[dir="ltr"] .drawer.open { transform: translateX(0) !important; }
 
     .drawer-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
     .drawer-section-title { font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin: 14px 0 8px; }
@@ -259,7 +269,7 @@
     <div class="drawer-link" id="adminDrawerLink" style="display:none;" onclick="toggleDrawer(); location.hash='#/admin';"><i class="fa-solid fa-shield-halved" style="color:var(--cyan);"></i> <span data-i18n="admin_title">لوحة الأدمن</span></div>
   </div>
 
-  <!-- الهيدر -->
+  <!-- الهيدر مع الصورة الدائرية بدلاً من البريد -->
   <header>
     <div class="header-left">
       <button class="menu-btn" onclick="toggleDrawer()"><i class="fa-solid fa-bars"></i></button>
@@ -279,7 +289,14 @@
 
     <div class="header-actions">
       <button class="btn-header btn-vip-gold" onclick="openVipModal()"><i class="fa-solid fa-crown"></i> VIP</button>
-      <button class="btn-header" id="authBtn" onclick="openAuthModal()"><i class="fa-solid fa-user"></i> <span id="authBtnText">دخول</span></button>
+      
+      <!-- زر تسجيل الدخول الافتراضي (للزائر) -->
+      <button class="btn-header" id="guestAuthBtn" onclick="openAuthModal()"><i class="fa-solid fa-user"></i> <span id="authBtnText">دخول</span></button>
+      
+      <!-- صورة المستخدم الدائرية بدلاً من عنوان البريد -->
+      <button class="user-avatar-btn" id="userAvatarBtn" onclick="openAuthModal()" title="الحساب الشخصي">
+        <img id="userAvatarImg" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80" alt="Avatar">
+      </button>
     </div>
   </header>
 
@@ -351,7 +368,7 @@
     </div>
   </div>
 
-  <!-- نافذة باقات VIP المحدثة مع الأسعار والتفاصيل -->
+  <!-- نافذة باقات VIP -->
   <div class="modal-overlay" id="vipModal">
     <div class="modal-box">
       <i class="fa-solid fa-xmark modal-close" onclick="closeModal('vipModal')"></i>
@@ -377,7 +394,7 @@
     </div>
   </div>
 
-  <!-- نافذة الدخول -->
+  <!-- نافذة الدخول والحساب الشخصي -->
   <div class="modal-overlay" id="authModal">
     <div class="modal-box">
       <i class="fa-solid fa-xmark modal-close" onclick="closeModal('authModal')"></i>
@@ -389,13 +406,16 @@
       </div>
       <div id="authProfile" style="display: none; text-align: center;">
         <div class="modal-title" style="justify-content: center;"><i class="fa-solid fa-circle-user" style="color: var(--cyan);"></i> <span data-i18n="auth_profile">الحساب الشخصي</span></div>
-        <p id="profileEmail" style="font-size: 0.9rem; margin-bottom: 12px; font-weight: 700;"></p>
+        <div style="width: 70px; height: 70px; border-radius: 50%; overflow: hidden; margin: 0 auto 10px; border: 2px solid var(--cyan);">
+          <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=140&q=80" style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+        <p id="profileEmail" style="font-size: 0.85rem; margin-bottom: 14px; font-weight: 700; color: var(--text-muted);"></p>
         <button class="btn-submit" style="background: #ef4444;" onclick="logoutUser()" data-i18n="auth_logout">تسجيل الخروج</button>
       </div>
     </div>
   </div>
 
-  <!-- لوحة تحكم المشرفين الكاملة مع ميزات الحذف والحظر -->
+  <!-- لوحة تحكم المشرفين الكاملة -->
   <div class="modal-overlay" id="adminModal">
     <div class="modal-box admin-modal">
       <i class="fa-solid fa-xmark modal-close" onclick="closeModal('adminModal'); location.hash='#/home';"></i>
@@ -409,7 +429,7 @@
         <button class="admin-nav-btn" onclick="switchAdminTab('banner', this)">📢 التنبيهات</button>
       </div>
 
-      <!-- تبويب إدارة وحذف الأعمال -->
+      <!-- إدارة الأعمال وحذفها -->
       <div id="tabMediaManage">
         <div style="max-height: 280px; overflow-y: auto;">
           <table class="admin-table">
@@ -419,7 +439,7 @@
         </div>
       </div>
 
-      <!-- تبويب إضافة محتوى -->
+      <!-- إضافة عمل مباشر -->
       <div id="tabAddMedia" style="display: none;">
         <div class="form-group"><label>اسم العمل:</label><input type="text" id="customTitle" placeholder="مثال: اسم المسلسل أو الفيلم"></div>
         <div class="form-group"><label>رابط البوستر:</label><input type="text" id="customPoster" placeholder="https://image.tmdb.org/..."></div>
@@ -427,7 +447,7 @@
         <button class="btn-submit" style="background: var(--cyan); color: #000;" onclick="saveCustomMedia()">نشر العمل فوراً</button>
       </div>
 
-      <!-- تبويب حظر وإدارة المستخدمين -->
+      <!-- إدارة الحظر -->
       <div id="tabUsersManage" style="display: none;">
         <div class="form-group"><label>البريد الإلكتروني المراد حظره:</label><input type="text" id="banUserEmail" placeholder="user@example.com"></div>
         <button class="btn-submit" style="background: #ef4444;" onclick="banUserAction()">حظر المستخدم الآن</button>
@@ -439,7 +459,7 @@
         </div>
       </div>
 
-      <!-- تبويب الزوار -->
+      <!-- الزوار -->
       <div id="tabVisitors" style="display: none;">
         <div style="max-height: 260px; overflow-y: auto;">
           <table class="admin-table">
@@ -449,7 +469,7 @@
         </div>
       </div>
 
-      <!-- تبويب شريط التنبيهات -->
+      <!-- شريط التنبيهات -->
       <div id="tabBanner" style="display: none;">
         <div class="form-group"><label>نص الشريط الإعلاني:</label><input type="text" id="adminBannerText" placeholder="اكتب نص الإعلان..."></div>
         <button class="btn-submit" onclick="saveBannerAnnouncement()">تحديث التنبيه</button>
@@ -484,7 +504,7 @@
         shelf_trending: "الأكثر رواجاً اليوم", shelf_turkish: "الدراما والمسلسلات التركية",
         shelf_movies: "أحدث الأفلام العالمية", shelf_explore: "استكشاف العروض",
         load_more: "تحميل المزيد", btn_back: "العودة", select_server: "اختر سيرفر المشاهدة:",
-        srv_prefix: "سيرفر", episodes_title: "المواسم والحلحقات:", vip_title: "اشتراكات وباقات VIP",
+        srv_prefix: "سيرفر", episodes_title: "المواسم والحلقات:", vip_title: "اشتراكات وباقات VIP",
         vip_desc: "استمتع ببث مباشر فائق السرعة بدون إعلانات مع روابط سحابية خاصة ومكتبة VIP الحصرية.",
         auth_title: "تسجيل الدخول", auth_email: "البريد الإلكتروني:", auth_pass: "رمز المرور:",
         auth_btn: "دخول الحساب", auth_profile: "الحساب الشخصي", auth_logout: "تسجيل الخروج",
@@ -571,7 +591,7 @@
       });
     }
 
-    // التوجيه الذكي
+    // التوجيه الذكي (Routing)
     function handleRouting() {
       const hash = window.location.hash || '#/home';
       const parts = hash.split('/');
@@ -804,7 +824,7 @@
       }
     }
 
-    // تبديل السيرفرات تلقائياً
+    // تبديل السيرفرات
     function changeServer(idx) {
       currentServer = idx;
       document.querySelectorAll('.srv-btn').forEach((b, i) => b.classList.toggle('active', i + 1 === idx));
@@ -828,13 +848,12 @@
       const frame = document.getElementById('streamFrame');
       frame.src = srvs[currentServer] || srvs[1];
 
-      // Auto fallback if error occurs
       frame.onerror = () => {
         if (currentServer < 4) changeServer(currentServer + 1);
       };
     }
 
-    // المشغل الداخلي المباشر
+    // تشغيل الروابط المباشرة
     function playDirectMedia(title, streamUrl, poster) {
       currentItem = { id: 'custom', type: 'custom', title, isCustom: true, directUrl: streamUrl };
       document.getElementById('homeView').style.display = 'none';
@@ -866,20 +885,30 @@
       }
     }
 
-    // الحسابات والأدمن
+    // إدارة الحساب والتحقق من حالة المستخدم
     async function verifyUserStatus() {
-      if (!currentUser) return;
+      const guestBtn = document.getElementById('guestAuthBtn');
+      const avatarBtn = document.getElementById('userAvatarBtn');
+
+      if (!currentUser) {
+        guestBtn.style.display = 'flex';
+        avatarBtn.style.display = 'none';
+        return;
+      }
+
+      // إذا كان المستخدم مسجلاً، يتم إخفاء زر الدخول وإظهار الصورة الدائرية
+      guestBtn.style.display = 'none';
+      avatarBtn.style.display = 'flex';
+
       let isAdmin = (currentUser.email.toLowerCase() === SUPER_ADMIN_EMAIL.toLowerCase());
       currentUser.isAdmin = isAdmin;
       if (isAdmin) document.getElementById('adminDrawerLink').style.display = 'flex';
-      document.getElementById('authBtnText').innerText = currentUser.email.split('@')[0];
     }
 
     async function handleAuthSubmit() {
       const email = document.getElementById('authEmail').value.trim().toLowerCase();
       const pass = document.getElementById('authPass').value.trim();
 
-      // التحقق من الحظر
       const isBanned = await checkUserBanned(email);
       if (isBanned) return alert('هذا الحساب محظور من استخدام المنصة!');
 
