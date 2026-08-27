@@ -223,7 +223,7 @@
 
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; z-index: 3000; padding: 12px; }
     .modal-box { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; padding: 18px; position: relative; }
-    .modal-close { position: absolute; top: 14px; color: var(--text-muted); cursor: pointer; font-size: 1.1rem; }
+    .modal-close { position: absolute; top: 14px; color: var(--text-muted); cursor: pointer; font-size: 1.1rem; z-index: 10; }
     html[dir="rtl"] .modal-close { left: 14px; }
     html[dir="ltr"] .modal-close { right: 14px; }
     .modal-title { font-size: 1.1rem; font-weight: 800; margin-bottom: 12px; color: var(--text); display: flex; align-items: center; gap: 8px; }
@@ -393,6 +393,7 @@
       </div>
     </div>
 
+    <!-- السيرفرات من 1 إلى 8 -->
     <div class="servers-bar" id="serversContainer">
       <div style="font-size: 0.8rem; font-weight: 800;" data-i18n="select_server">اختر سيرفر المشاهدة:</div>
       <div class="servers-list">
@@ -402,6 +403,8 @@
         <button class="srv-btn" onclick="changeServer(4)"><span data-i18n="srv_prefix">سيرفر</span> 4</button>
         <button class="srv-btn" onclick="changeServer(5)"><span data-i18n="srv_prefix">سيرفر</span> 5</button>
         <button class="srv-btn" onclick="changeServer(6)"><span data-i18n="srv_prefix">سيرفر</span> 6</button>
+        <button class="srv-btn" onclick="changeServer(7)"><span data-i18n="srv_prefix">سيرفر</span> 7</button>
+        <button class="srv-btn" onclick="changeServer(8)"><span data-i18n="srv_prefix">سيرفر</span> 8</button>
       </div>
     </div>
 
@@ -443,7 +446,7 @@
     </div>
   </div>
 
-  <!-- نافذة المصادقة -->
+  <!-- نافذة المصادقة مع زر الإغلاق المضمون -->
   <div class="modal-overlay" id="authModal">
     <div class="modal-box">
       <i class="fa-solid fa-xmark modal-close" onclick="closeModal('authModal')"></i>
@@ -520,7 +523,6 @@
         <button class="admin-nav-btn" onclick="switchAdminTab('banner', this)">📢 التنبيهات</button>
       </div>
 
-      <!-- تبويب إدارة المستخدمين -->
       <div id="tabUsersManage">
         <div style="max-height: 280px; overflow-y: auto;">
           <table class="admin-table">
@@ -530,7 +532,6 @@
         </div>
       </div>
 
-      <!-- تبويب سجل الزوار -->
       <div id="tabVisitors" style="display: none;">
         <div style="max-height: 280px; overflow-y: auto;">
           <table class="admin-table">
@@ -540,7 +541,6 @@
         </div>
       </div>
 
-      <!-- إدارة الأعمال المباشرة -->
       <div id="tabMediaManage" style="display: none;">
         <div style="max-height: 280px; overflow-y: auto;">
           <table class="admin-table">
@@ -550,7 +550,6 @@
         </div>
       </div>
 
-      <!-- إضافة عمل -->
       <div id="tabAddMedia" style="display: none;">
         <div class="form-group"><label>اسم العمل:</label><input type="text" id="customTitle" placeholder="مثال: اسم المسلسل أو الفيلم"></div>
         <div class="form-group"><label>رابط البوستر:</label><input type="text" id="customPoster" placeholder="https://image.tmdb.org/..."></div>
@@ -558,7 +557,6 @@
         <button class="btn-submit" style="background: var(--cyan); color: #000;" onclick="saveCustomMedia()">نشر العمل فوراً</button>
       </div>
 
-      <!-- إدارة الحظر -->
       <div id="tabBanManage" style="display: none;">
         <div class="form-group"><label>البريد الإلكتروني المراد حظره:</label><input type="text" id="banUserEmail" placeholder="user@example.com"></div>
         <button class="btn-submit" style="background: #ef4444;" onclick="banUserAction()">حظر المستخدم الآن</button>
@@ -570,7 +568,6 @@
         </div>
       </div>
 
-      <!-- شريط التنبيهات -->
       <div id="tabBanner" style="display: none;">
         <div class="form-group"><label>نص الشريط الإعلاني:</label><input type="text" id="adminBannerText" placeholder="اكتب نص الإعلان..."></div>
         <button class="btn-submit" onclick="saveBannerAnnouncement()">تحديث التنبيه</button>
@@ -677,7 +674,6 @@
       return fp;
     }
 
-    // إدارة الإعلانات بفحص خاصية adsDisabled المستقلة
     function injectAdScriptsIfEligible() {
       if (currentUser && (currentUser.isVip || currentUser.isAdmin || currentUser.adsDisabled)) {
         console.log("Ads Disabled for current user (VIP / Admin / Custom Exemption)");
@@ -1108,6 +1104,7 @@
       }
     }
 
+    // إدارة السيرفرات من 1 إلى 8 مع إصلاح السيرفر 6 ودعم السيرفرين 7 و 8
     function changeServer(idx) {
       currentServer = idx;
       document.querySelectorAll('.srv-btn').forEach((b, i) => b.classList.toggle('active', i + 1 === idx));
@@ -1121,7 +1118,9 @@
             3: `https://embed.smashystream.com/playere.php?tmdb=${id}`,
             4: `https://multiembed.mov/?video_id=${id}&tmdb=1`,
             5: `https://vidsrc.to/embed/movie/${id}`,
-            6: `https://player.videasy.net/movie/${id}`
+            6: `https://vidsrc.cc/v2/embed/movie/${id}`,
+            7: `https://vidsrc.sbs/embed/movie/${id}`,
+            8: `https://vidsrc.pm/embed/movie/${id}`
           }
         : { 
             1: `https://vidlink.pro/tv/${id}/${s}/${e}`,
@@ -1129,14 +1128,16 @@
             3: `https://embed.smashystream.com/playere.php?tmdb=${id}&season=${s}&episode=${e}`,
             4: `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}`,
             5: `https://vidsrc.to/embed/tv/${id}/${s}/${e}`,
-            6: `https://player.videasy.net/tv/${id}/${s}/${e}`
+            6: `https://vidsrc.cc/v2/embed/tv/${id}/${s}/${e}`,
+            7: `https://vidsrc.sbs/embed/tv/${id}/${s}/${e}`,
+            8: `https://vidsrc.pm/embed/tv/${id}/${s}/${e}`
           };
 
       const frame = document.getElementById('streamFrame');
       frame.src = srvs[currentServer] || srvs[1];
 
       frame.onerror = () => {
-        if (currentServer < 6) changeServer(currentServer + 1);
+        if (currentServer < 8) changeServer(currentServer + 1);
       };
     }
 
@@ -1396,7 +1397,6 @@
       } catch(e) {}
     }
 
-    // تبديل خاصية تعطيل الإعلانات المستقلة لحساب المستخدم
     async function toggleUserAdsExemption(key, disableState) {
       await fetch(`${FIREBASE_DB}/users/${key}/adsDisabled.json`, { method: 'PUT', body: JSON.stringify(disableState) });
       loadAdminUsersTable();
