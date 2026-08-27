@@ -292,7 +292,7 @@
         <video id="nativeVideo" controls playsinline></video>
       </div>
 
-      <!-- مشغل التضمين للأفلام والمسلسلات مع الصلاحيات الكاملة لمنع الحظر -->
+      <!-- مشغل التضمين النظيف بدون قيود sandbox -->
       <div class="player-box" id="iframeBox">
         <iframe 
           id="streamFrame" 
@@ -301,8 +301,7 @@
           webkitallowfullscreen="true" 
           mozallowfullscreen="true"
           referrerpolicy="origin"
-          allow="autoplay; fullscreen; encrypted-media; picture-in-picture; cross-origin-isolated; accelerometer; gyroscope"
-          sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-presentation">
+          allow="autoplay; fullscreen; encrypted-media; picture-in-picture">
         </iframe>
       </div>
     </div>
@@ -312,7 +311,7 @@
         <i class="fa-solid fa-server" style="color: var(--cyan); margin-left: 6px;"></i> سيرفرات المشاهدة المتاحة:
       </div>
       <div class="servers-list">
-        <button class="srv-btn active" onclick="changeServer(1)">سيرفر 1 (VidSrc V2)</button>
+        <button class="srv-btn active" onclick="changeServer(1)">سيرفر 1 (VidSrc XYZ)</button>
         <button class="srv-btn" onclick="changeServer(2)">سيرفر 2 (Embed SU)</button>
         <button class="srv-btn" onclick="changeServer(3)">سيرفر 3 (VidLink Pro)</button>
         <button class="srv-btn" onclick="changeServer(4)">سيرفر 4 (AutoEmbed)</button>
@@ -550,7 +549,6 @@
       changeServer(1);
     }
 
-    // تشغيل الأعمال المباشرة (Custom VOD) عبر المشغل الداخلي
     function playDirectMedia(title, streamUrl, poster) {
       currentItem = { id: 'custom', type: 'custom', title: title, isCustom: true, directUrl: streamUrl };
       document.getElementById('homeView').style.display = 'none';
@@ -631,7 +629,7 @@
       }
     }
 
-    // تبديل سيرفرات التضمين
+    // تحديث سيرفرات المشاهدة مع النطاقات المستقرة
     function changeServer(idx) {
       currentServer = idx;
       document.querySelectorAll('.srv-btn').forEach((b, i) => b.classList.toggle('active', i + 1 === idx));
@@ -641,16 +639,16 @@
 
       const srvs = type === "movie" 
         ? { 
-            1: `https://vidsrc.cc/v2/embed/movie/${id}`,
+            1: `https://vidsrc.xyz/embed/movie/${id}`,
             2: `https://embed.su/embed/movie/${id}`,
             3: `https://vidlink.pro/movie/${id}`,
-            4: `https://autoembed.co/movie/tmdb/${id}`
+            4: `https://player.autoembed.cc/embed/movie/${id}`
           }
         : { 
-            1: `https://vidsrc.cc/v2/embed/tv/${id}/${s}/${e}`,
+            1: `https://vidsrc.xyz/embed/tv/${id}/${s}/${e}`,
             2: `https://embed.su/embed/tv/${id}/${s}/${e}`,
             3: `https://vidlink.pro/tv/${id}/${s}/${e}`,
-            4: `https://autoembed.co/tv/tmdb/${id}-${s}-${e}`
+            4: `https://player.autoembed.cc/embed/tv/${id}/${s}/${e}`
           };
 
       document.getElementById('iframeBox').style.display = 'block';
