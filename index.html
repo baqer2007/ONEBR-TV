@@ -117,7 +117,6 @@
     }
     .user-avatar-btn img { width: 100%; height: 100%; object-fit: cover; }
 
-    /* شارة VIP المتوهجة */
     .vip-badge-glow {
       display: inline-flex; align-items: center; gap: 4px;
       background: linear-gradient(135deg, #f59e0b, #b45309);
@@ -218,7 +217,6 @@
     #directPlayerBox { display: none; width: 100%; position: relative; }
     #nativeVideo { width: 100%; max-height: 70vh; display: block; }
     
-    /* زر تخطي المقدمة */
     .skip-intro-btn {
       position: absolute; bottom: 65px; left: 20px; z-index: 30;
       background: rgba(15, 20, 34, 0.85); border: 1px solid var(--gold); color: #fff;
@@ -236,7 +234,6 @@
     .srv-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text-muted); padding: 7px 14px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer; }
     .srv-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-    /* تصميم أزرار سيرفرات VIP الذهبية المتوهجة */
     .srv-btn-vip {
       background: linear-gradient(135deg, #f59e0b, #d97706);
       color: #000 !important; font-weight: 800; border: 1px solid #fbbf24;
@@ -402,7 +399,7 @@
     </div>
   </div>
 
-  <!-- واجهة نتائج البحث المستقلة -->
+  <!-- واجهة نتائج البحث -->
   <div id="searchResultsView">
     <button class="back-btn" onclick="history.back()"><i class="fa-solid fa-arrow-right"></i> <span data-i18n="btn_back">العودة</span></button>
     <div class="shelf">
@@ -442,7 +439,6 @@
       </div>
     </div>
 
-    <!-- شريط السيرفرات الكامل من 1 إلى 8 + سيرفرات VIP الخارقة من 9 إلى 12 -->
     <div class="servers-bar" id="serversContainer">
       <div style="font-size: 0.8rem; font-weight: 800;" data-i18n="select_server">اختر سيرفر المشاهدة:</div>
       <div class="servers-list" id="serversButtonsDeck"></div>
@@ -586,7 +582,6 @@
         <button class="admin-nav-btn" onclick="switchAdminTab('banner', this)">📢 التنبيهات</button>
       </div>
 
-      <!-- إدارة المستخدمين -->
       <div id="tabUsersManage">
         <div style="max-height: 280px; overflow-y: auto;">
           <table class="admin-table">
@@ -596,7 +591,6 @@
         </div>
       </div>
 
-      <!-- تبويب طلبات VIP -->
       <div id="tabVipRequests" style="display: none;">
         <div style="max-height: 280px; overflow-y: auto;">
           <table class="admin-table">
@@ -606,7 +600,6 @@
         </div>
       </div>
 
-      <!-- سجل الزوار -->
       <div id="tabVisitors" style="display: none;">
         <div style="max-height: 280px; overflow-y: auto;">
           <table class="admin-table">
@@ -616,7 +609,6 @@
         </div>
       </div>
 
-      <!-- إدارة الأعمال المباشرة -->
       <div id="tabMediaManage" style="display: none;">
         <div style="max-height: 280px; overflow-y: auto;">
           <table class="admin-table">
@@ -626,7 +618,6 @@
         </div>
       </div>
 
-      <!-- إضافة عمل -->
       <div id="tabAddMedia" style="display: none;">
         <div class="form-group"><label>اسم العمل:</label><input type="text" id="customTitle" placeholder="مثال: اسم المسلسل أو الفيلم"></div>
         <div class="form-group"><label>رابط البوستر:</label><input type="text" id="customPoster" placeholder="https://image.tmdb.org/..."></div>
@@ -634,7 +625,6 @@
         <button class="btn-submit" style="background: var(--cyan); color: #000;" onclick="saveCustomMedia()">نشر العمل فوراً</button>
       </div>
 
-      <!-- إدارة الحظر -->
       <div id="tabBanManage" style="display: none;">
         <div class="form-group"><label>البريد الإلكتروني المراد حظره:</label><input type="text" id="banUserEmail" placeholder="user@example.com"></div>
         <button class="btn-submit" style="background: #ef4444;" onclick="banUserAction()">حظر المستخدم الآن</button>
@@ -646,7 +636,6 @@
         </div>
       </div>
 
-      <!-- شريط التنبيهات -->
       <div id="tabBanner" style="display: none;">
         <div class="form-group"><label>نص الشريط الإعلاني:</label><input type="text" id="adminBannerText" placeholder="اكتب نص الإعلان..."></div>
         <button class="btn-submit" onclick="saveBannerAnnouncement()">تحديث التنبيه</button>
@@ -755,7 +744,6 @@
 
     function injectAdScriptsIfEligible() {
       if (currentUser && (currentUser.isVip || currentUser.isAdmin || currentUser.adsDisabled)) {
-        console.log("Ads Disabled for current user (VIP / Admin / Custom Exemption)");
         return;
       }
       
@@ -1125,13 +1113,11 @@
       } catch(e) {}
     }
 
-    // توليد أزرار السيرفرات ديناميكياً مع دعم السيرفرات العادية وسيرفرات VIP
     function renderDynamicServersDeck() {
       const container = document.getElementById('serversButtonsDeck');
       container.innerHTML = '';
       const isVipUser = currentUser && (currentUser.isVip || currentUser.isAdmin);
 
-      // السيرفرات العادية (1 إلى 8)
       for (let i = 1; i <= 8; i++) {
         const btn = document.createElement('button');
         btn.className = `srv-btn ${i === currentServer ? 'active' : ''}`;
@@ -1140,7 +1126,6 @@
         container.appendChild(btn);
       }
 
-      // السيرفرات الأربعة الخارقة VIP (9 إلى 12)
       const vipServers = [
         { id: 9, label: 'VIP 1 (4K Ultra)' },
         { id: 10, label: 'VIP 2 (Fast Cloud)' },
@@ -1245,10 +1230,10 @@
             6: `https://vidsrc.cc/v2/embed/movie/${id}`,
             7: `https://vidsrc.sbs/embed/movie/${id}`,
             8: `https://vidsrc.pm/embed/movie/${id}`,
-            9: `https://vidsrc.vip/embed/movie/${id}`,
-            10: `https://embed.su/embed/movie/${id}`,
-            11: `https://moviesapi.club/movie/${id}`,
-            12: `https://autoembed.co/movie/tmdb/${id}`
+            9: `https://vidsrc.xyz/embed/movie/${id}`,
+            10: `https://player.smashy.stream/movie/${id}`,
+            11: `https://vidsrc.in/embed/movie/${id}`,
+            12: `https://superembed.stream/index.php?video_id=${id}&tmdb=1`
           }
         : { 
             1: `https://vidlink.pro/tv/${id}/${s}/${e}`,
@@ -1259,10 +1244,10 @@
             6: `https://vidsrc.cc/v2/embed/tv/${id}/${s}/${e}`,
             7: `https://vidsrc.sbs/embed/tv/${id}/${s}/${e}`,
             8: `https://vidsrc.pm/embed/tv/${id}/${s}/${e}`,
-            9: `https://vidsrc.vip/embed/tv/${id}/${s}/${e}`,
-            10: `https://embed.su/embed/tv/${id}/${s}/${e}`,
-            11: `https://moviesapi.club/tv/${id}/${s}/${e}`,
-            12: `https://autoembed.co/tv/tmdb/${id}/${s}/${e}`
+            9: `https://vidsrc.xyz/embed/tv?tmdb=${id}&season=${s}&episode=${e}`,
+            10: `https://player.smashy.stream/tv/${id}?s=${s}&e=${e}`,
+            11: `https://vidsrc.in/embed/tv/${id}/${s}/${e}`,
+            12: `https://superembed.stream/index.php?video_id=${id}&tmdb=1&s=${s}&e=${e}`
           };
 
       const frame = document.getElementById('streamFrame');
@@ -1532,11 +1517,6 @@
       if (tab === 'visitors') loadAdminVisitors();
       if (tab === 'mediaManage') loadAdminMediaTable();
       if (tab === 'banManage') loadBannedUsersTable();
-    }
-
-    async function loadAdminDashboard() {
-      loadAdminStats();
-      loadAdminUsersTable();
     }
 
     async function loadAdminStats() {
