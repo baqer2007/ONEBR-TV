@@ -25,6 +25,7 @@
       --cyan: #00f0ff;
       --gold: #f59e0b;
       --drawer-bg: #0b0f19;
+      --watched: #10b981;
     }
 
     :root[data-theme="light"] {
@@ -38,6 +39,7 @@
       --cyan: #0284c7;
       --gold: #d97706;
       --drawer-bg: #ffffff;
+      --watched: #059669;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
@@ -177,17 +179,22 @@
     .card {
       min-width: clamp(125px, 28vw, 150px); max-width: clamp(125px, 28vw, 150px);
       background: var(--surface); border-radius: 10px; overflow: hidden;
-      cursor: pointer; border: 1px solid var(--border); flex-shrink: 0;
+      cursor: pointer; border: 1px solid var(--border); flex-shrink: 0; position: relative;
     }
     .card img { width: 100%; height: clamp(170px, 40vw, 210px); object-fit: cover; background: #1a2234; }
     .card-body { padding: 8px; }
     .card-title { font-size: 0.75rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text); }
     .card-meta { display: flex; justify-content: space-between; font-size: 0.65rem; color: var(--text-muted); margin-top: 4px; }
 
+    .card-watched-badge {
+      position: absolute; top: 6px; right: 6px; background: rgba(16, 185, 129, 0.9);
+      color: #fff; font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; font-weight: 800;
+    }
+
     .explore-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(clamp(110px, 28vw, 145px), 1fr)); gap: 10px; }
     .scroll-loader { text-align: center; padding: 20px; font-size: 0.85rem; color: var(--text-muted); font-weight: 700; display: none; }
 
-    #theaterView, #searchResultsView { display: none; padding: clamp(10px, 3vw, 18px); max-width: 1000px; margin: 0 auto; }
+    #theaterView, #searchResultsView, #favoritesView { display: none; padding: clamp(10px, 3vw, 18px); max-width: 1000px; margin: 0 auto; }
     .back-btn { background: var(--surface); color: var(--text); border: 1px solid var(--border); padding: 7px 14px; border-radius: 6px; cursor: pointer; font-size: 0.78rem; margin-bottom: 12px; font-weight: 800; display: inline-flex; align-items: center; gap: 6px; }
     
     .media-details-hero {
@@ -204,14 +211,23 @@
     .badge-tag { background: rgba(255,255,255,0.1); border: 1px solid var(--border); padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; }
     .badge-score { background: var(--gold); color: #000; font-weight: 800; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; }
     
+    .action-buttons-row { display: flex; align-items: center; gap: 10px; margin-top: 6px; }
     .play-circle-btn {
-      width: 58px; height: 58px; background: var(--primary); border-radius: 50%;
+      width: 54px; height: 54px; background: var(--primary); border-radius: 50%;
       display: flex; align-items: center; justify-content: center; cursor: pointer;
       box-shadow: 0 0 20px rgba(229, 9, 20, 0.6); transition: transform 0.2s, background-color 0.2s;
-      border: none; margin-top: 6px;
+      border: none;
     }
     .play-circle-btn:hover { transform: scale(1.08); background: #ff1e27; }
-    .play-circle-btn i { color: #ffffff; font-size: 1.3rem; margin-inline-start: 3px; }
+    .play-circle-btn i { color: #ffffff; font-size: 1.2rem; margin-inline-start: 2px; }
+
+    .btn-detail-action {
+      background: var(--surface); border: 1px solid var(--border); color: var(--text);
+      padding: 10px 16px; border-radius: 25px; font-size: 0.8rem; font-weight: 700;
+      cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+    }
+    .btn-detail-action.active-fav { color: var(--gold); border-color: var(--gold); }
+    .btn-detail-action.active-watched { color: var(--watched); border-color: var(--watched); }
 
     .player-container { width: 100%; background: #000; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 14px; position: relative; display: none; }
     #directPlayerBox { display: none; width: 100%; position: relative; }
@@ -234,26 +250,15 @@
     .srv-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text-muted); padding: 7px 14px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer; }
     .srv-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-    .srv-btn-vip {
-      background: linear-gradient(135deg, #f59e0b, #d97706);
-      color: #000 !important; font-weight: 800; border: 1px solid #fbbf24;
-      box-shadow: 0 0 10px rgba(245, 158, 11, 0.4); transition: all 0.25s ease;
-    }
-    .srv-btn-vip:hover {
-      box-shadow: 0 0 16px rgba(245, 158, 11, 0.8);
-      transform: translateY(-2px);
-    }
-    .srv-btn-vip.active {
-      background: #ffffff; color: #d97706 !important; border-color: #f59e0b;
-      box-shadow: 0 0 18px rgba(255, 255, 255, 0.9);
-    }
-
     .seasons-scroll { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin-top: 8px; }
     .season-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; }
     .season-btn.active { background: var(--cyan); color: #000; font-weight: 800; }
-    .episodes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 6px; max-height: 200px; overflow-y: auto; margin-top: 8px; }
-    .ep-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 7px 4px; border-radius: 6px; text-align: center; font-size: 0.75rem; cursor: pointer; }
+    .episodes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(75px, 1fr)); gap: 6px; max-height: 220px; overflow-y: auto; margin-top: 8px; }
+    .ep-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 7px 4px; border-radius: 6px; text-align: center; font-size: 0.75rem; cursor: pointer; position: relative; }
     .ep-btn.active { background: var(--primary); color: #fff; }
+    .ep-btn.is-watched::after {
+      content: '✓'; position: absolute; top: 2px; right: 4px; font-size: 0.65rem; color: var(--watched); font-weight: 900;
+    }
 
     .vip-pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin: 14px 0; }
     .vip-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
@@ -318,6 +323,7 @@
     <div class="drawer-link" onclick="toggleDrawer(); location.hash='#/home';"><i class="fa-solid fa-house"></i> <span data-i18n="nav_home">الرئيسية</span></div>
     <div class="drawer-link" onclick="toggleDrawer(); location.hash='#/movies';"><i class="fa-solid fa-clapperboard"></i> <span data-i18n="nav_movies">الأفلام</span></div>
     <div class="drawer-link" onclick="toggleDrawer(); location.hash='#/tv';"><i class="fa-solid fa-tv"></i> <span data-i18n="nav_tv">المسلسلات</span></div>
+    <div class="drawer-link" onclick="toggleDrawer(); location.hash='#/favorites';"><i class="fa-solid fa-bookmark" style="color:var(--gold);"></i> <span>قائمة المفضلة</span></div>
     <div class="drawer-link" onclick="toggleDrawer(); openVipModal();"><i class="fa-solid fa-crown" style="color:var(--gold);"></i> <span data-i18n="vip_title">اشتراكات VIP</span></div>
     <div class="drawer-link" id="drawerVipReqLink" style="display:none;" onclick="toggleDrawer(); openRequestMediaModal();"><i class="fa-solid fa-paper-plane" style="color:var(--cyan);"></i> <span>طلب عمل حصري (VIP)</span></div>
 
@@ -349,6 +355,7 @@
     </div>
 
     <div class="header-actions">
+      <button class="btn-header" onclick="location.hash='#/favorites'" title="المفضلة"><i class="fa-solid fa-bookmark" style="color:var(--gold);"></i></button>
       <button class="btn-header btn-vip-gold" onclick="openVipModal()"><i class="fa-solid fa-crown"></i> VIP</button>
       
       <button class="btn-header" id="guestAuthBtn" onclick="openAuthModal()"><i class="fa-solid fa-user"></i> <span id="authBtnText">دخول</span></button>
@@ -371,8 +378,13 @@
     </section>
 
     <div class="catalog">
+      <div class="shelf" id="resumeShelfBox" style="display: none;">
+        <div class="shelf-title">⏱️ <span>متابعة المشاهدة</span></div>
+        <div class="shelf-grid" id="deckResume"></div>
+      </div>
+
       <div class="shelf" id="customShelfBox" style="display: none;">
-        <div class="shelf-title">⭐ <span data-i18n="shelf_custom">أعمال مضافة بواسطة الإدارة (مباشرة / VIP)</span></div>
+        <div class="shelf-title">⭐ <span data-i18n="shelf_custom">أعمال مضافة بواسطة الإدارة</span></div>
         <div class="shelf-grid" id="deckCustom"></div>
       </div>
 
@@ -396,6 +408,15 @@
         <div class="explore-grid" id="deckExplore"></div>
         <div class="scroll-loader" id="scrollLoader"><i class="fa-solid fa-spinner fa-spin"></i> جاري جلب المزيد...</div>
       </div>
+    </div>
+  </div>
+
+  <!-- واجهة المفضلة -->
+  <div id="favoritesView">
+    <button class="back-btn" onclick="history.back()"><i class="fa-solid fa-arrow-right"></i> <span data-i18n="btn_back">العودة</span></button>
+    <div class="shelf">
+      <div class="shelf-title">⭐ قائمة المفضلة الخاصة بك</div>
+      <div class="explore-grid" id="deckFavorites"></div>
     </div>
   </div>
 
@@ -423,9 +444,13 @@
         <h1 class="hero-title" id="detailTitle" style="margin:0;">اسم العمل</h1>
         <p class="hero-desc" id="detailOverview" style="max-width:700px; -webkit-line-clamp:3;">قصة العمل وتفاصيله...</p>
         
-        <button class="play-circle-btn" onclick="startStreamingNow()" title="تشغيل الفيديو">
-          <i class="fa-solid fa-play"></i>
-        </button>
+        <div class="action-buttons-row">
+          <button class="play-circle-btn" onclick="startStreamingNow()" title="تشغيل الفيديو">
+            <i class="fa-solid fa-play"></i>
+          </button>
+          <button class="btn-detail-action" id="btnToggleFav" onclick="toggleCurrentFavorite()"><i class="fa-solid fa-bookmark"></i> المفضلة</button>
+          <button class="btn-detail-action" id="btnToggleWatched" onclick="toggleCurrentWatched()"><i class="fa-solid fa-check"></i> تمت المشاهدة</button>
+        </div>
       </div>
     </div>
 
@@ -462,20 +487,20 @@
       <i class="fa-solid fa-xmark modal-close" onclick="closeModal('vipModal')"></i>
       <div class="modal-title"><i class="fa-solid fa-crown" style="color: var(--gold);"></i> <span data-i18n="vip_title">اشتراكات وباقات VIP</span></div>
       <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;" data-i18n="vip_desc">
-        استمتع ببث مباشر فائق السرعة بدون إعلانات نهائياً مع روابط سحابية خاصة ومكتبة VIP الحصرية.
+        استمتع بتجربة خالية تماماً من الإعلانات مع شارات توهج ذهبية لحسابك وأولوية قصوى لطلبات الأفلام والمسلسلات.
       </p>
 
       <div class="vip-pricing-grid">
         <div class="vip-card">
           <div class="vip-card-title">الباقة الشهرية</div>
           <div class="vip-card-price">$1.00 <span style="font-size:0.7rem; color:var(--text-muted);">/ شهر</span></div>
-          <div class="vip-features">✓ منع الإعلانات نهائياً<br>✓ فتح 4 سيرفرات VIP خارقة<br>✓ طلب الأعمال الحصرية فوراً</div>
+          <div class="vip-features">✓ منع الإعلانات نهائياً<br>✓ شارة VIP مذهبة<br>✓ طلب الأعمال الحصرية فوراً</div>
           <a href="https://t.me/ONEBR?text=ارغب+بالاشتراك+في+باقة+VIP+الشهرية+(1$)" target="_blank" class="vip-btn-plan">تفعيل عبر تليكرام ($1)</a>
         </div>
         <div class="vip-card featured">
           <div class="vip-card-title">الباقة السنوية (الأفضل)</div>
           <div class="vip-card-price">$10.00 <span style="font-size:0.7rem; color:var(--text-muted);">/ سنة</span></div>
-          <div class="vip-features">✓ جميع ميزات VIP<br>✓ شارة ذهبية متوهجة دائمة<br>✓ سيرفرات 4K فائقة السرعة</div>
+          <div class="vip-features">✓ جميع ميزات VIP<br>✓ شارة ذهبية متوهجة دائمة<br>✓ أولوية تنفيذ الطلبات المباشرة</div>
           <a href="https://t.me/ONEBR?text=ارغب+بالاشتراك+في+باقة+VIP+السنوية+(10$)" target="_blank" class="vip-btn-plan" style="background:var(--gold); color:#000;">تفعيل عبر تليكرام ($10)</a>
         </div>
       </div>
@@ -487,8 +512,8 @@
     <div class="modal-box">
       <i class="fa-solid fa-xmark modal-close" onclick="closeModal('requestMediaModal')"></i>
       <div class="modal-title"><i class="fa-solid fa-paper-plane" style="color: var(--cyan);"></i> <span>طلب عمل جديد (VIP)</span></div>
-      <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 12px;">اكتب اسم الفيلم أو المسلسل الذي ترغب في إضافته وسيقوم فريق العمل بتوفيره سريعاً.</p>
-      <div class="form-group"><label>اسم العمل المطلوب:</label><input type="text" id="reqMediaTitle" placeholder="مثال: اسم الفيلم أو المسلسل وسنة الإنتاج"></div>
+      <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 12px;">اكتب اسم الفيلم أو المسلسل وسيقوم فريق العمل بتوفيره سريعاً.</p>
+      <div class="form-group"><label>اسم العمل المطلوب:</label><input type="text" id="reqMediaTitle" placeholder="مثال: اسم العمل وسنة الإنتاج"></div>
       <div class="form-group"><label>ملاحظات إضافية (اختياري):</label><textarea id="reqMediaNotes" rows="3" placeholder="حدد الموسم أو الجودة المطلوبة..."></textarea></div>
       <button class="btn-submit" style="background: var(--cyan); color:#000;" onclick="submitVipMediaRequest()">إرسال الطلب للإدارة</button>
     </div>
@@ -688,12 +713,12 @@
       ar: {
         nav_sections: "الأقسام الرئيسية", nav_genres: "جميع التصنيفات", nav_settings: "إعدادات المنصة",
         nav_home: "الرئيسية", nav_movies: "الأفلام", nav_tv: "المسلسلات",
-        watch_now: "مشاهدة العمل", shelf_custom: "أعمال مضافة بواسطة الإدارة (مباشرة / VIP)",
+        watch_now: "مشاهدة العمل", shelf_custom: "أعمال مضافة بواسطة الإدارة",
         shelf_trending: "الأكثر رواجاً اليوم", shelf_turkish: "الدراما والمسلسلات التركية",
         shelf_movies: "أحدث الأفلام العالمية", shelf_explore: "استكشاف العروض", shelf_similar: "أعمال مقترحة ومشابهة",
         load_more: "تحميل المزيد", btn_back: "العودة", select_server: "اختر سيرفر المشاهدة:",
         srv_prefix: "سيرفر", episodes_title: "المواسم والحلقات:", vip_title: "اشتراكات وباقات VIP",
-        vip_desc: "استمتع ببث مباشر فائق السرعة بدون إعلانات نهائياً مع روابط سحابية خاصة ومكتبة VIP الحصرية.",
+        vip_desc: "استمتع بتجربة خالية تماماً من الإعلانات مع شارات توهج ذهبية لحسابك وأولوية قصوى لطلبات الأفلام والمسلسلات.",
         auth_title: "تسجيل الدخول", auth_email: "البريد الإلكتروني:", auth_pass: "رمز المرور:",
         auth_btn: "دخول الحساب", auth_profile: "الحساب الشخصي", auth_logout: "تسجيل الخروج",
         admin_title: "لوحة تحكم المشرفين (ONEBR TV)", search_ph: "بحث ذكي...",
@@ -702,12 +727,12 @@
       en: {
         nav_sections: "Main Sections", nav_genres: "All Genres", nav_settings: "Platform Settings",
         nav_home: "Home", nav_movies: "Movies", nav_tv: "TV Shows",
-        watch_now: "Watch Now", shelf_custom: "Admin Direct Releases (VIP)",
+        watch_now: "Watch Now", shelf_custom: "Admin Releases",
         shelf_trending: "Trending Today", shelf_turkish: "Turkish Drama & Series",
         shelf_movies: "Latest World Movies", shelf_explore: "Explore Media", shelf_similar: "Similar & Recommended Titles",
         load_more: "Load More", btn_back: "Back", select_server: "Select Stream Server:",
         srv_prefix: "Server", episodes_title: "Seasons & Episodes:", vip_title: "VIP Memberships & Plans",
-        vip_desc: "Enjoy ad-free fast streaming with dedicated cloud links and exclusive VIP library.",
+        vip_desc: "Enjoy ad-free fast streaming with dedicated gold profile badges and VIP priority media requests.",
         auth_title: "User Login", auth_email: "Email Address:", auth_pass: "Password:",
         auth_btn: "Login", auth_profile: "User Profile", auth_logout: "Logout",
         admin_title: "Admin Dashboard (ONEBR TV)", search_ph: "Smart search...",
@@ -716,7 +741,7 @@
     };
 
     let currentUser = JSON.parse(localStorage.getItem('cinema_user') || 'null');
-    let currentItem = { id: null, title: '', type: 'movie', season: 1, episode: 1, isCustom: false, directUrl: '' };
+    let currentItem = { id: null, title: '', type: 'movie', poster_path: '', season: 1, episode: 1, isCustom: false, directUrl: '' };
     let currentServer = 1;
     let heroRotationItems = [];
     let heroRotationIndex = 0;
@@ -728,6 +753,81 @@
     let hlsInstance = null;
     let searchDebounceTimer = null;
     let verifyingForgotEmailAddress = '';
+
+    // إدارة التخزين المحلي
+    function getFavorites() { return JSON.parse(localStorage.getItem('user_favorites') || '[]'); }
+    function saveFavorites(list) { localStorage.setItem('user_favorites', JSON.stringify(list)); }
+
+    function getWatchedItems() { return JSON.parse(localStorage.getItem('user_watched_items') || '[]'); }
+    function saveWatchedItems(list) { localStorage.setItem('user_watched_items', JSON.stringify(list)); }
+
+    function getResumeList() { return JSON.parse(localStorage.getItem('user_resume_list') || '[]'); }
+    function saveResumeList(list) { localStorage.setItem('user_resume_list', JSON.stringify(list)); }
+
+    function recordResumeProgress(item) {
+      if (!item.id || item.isCustom) return;
+      let list = getResumeList().filter(i => String(i.id) !== String(item.id));
+      list.unshift({
+        id: item.id,
+        type: item.type,
+        title: item.title,
+        poster_path: item.poster_path,
+        season: item.season || 1,
+        episode: item.episode || 1,
+        time: Date.now()
+      });
+      if (list.length > 10) list.pop();
+      saveResumeList(list);
+    }
+
+    function isItemFavorited(id) {
+      return getFavorites().some(i => String(i.id) === String(id));
+    }
+
+    function isItemWatched(key) {
+      return getWatchedItems().includes(String(key));
+    }
+
+    function toggleCurrentFavorite() {
+      if (!currentItem.id) return;
+      let favs = getFavorites();
+      const idx = favs.findIndex(i => String(i.id) === String(currentItem.id));
+      const btn = document.getElementById('btnToggleFav');
+
+      if (idx > -1) {
+        favs.splice(idx, 1);
+        btn.classList.remove('active-fav');
+      } else {
+        favs.unshift({
+          id: currentItem.id,
+          type: currentItem.type,
+          title: currentItem.title,
+          poster_path: currentItem.poster_path
+        });
+        btn.classList.add('active-fav');
+      }
+      saveFavorites(favs);
+    }
+
+    function toggleCurrentWatched() {
+      if (!currentItem.id) return;
+      const key = currentItem.type === 'movie' ? `movie_${currentItem.id}` : `tv_${currentItem.id}_s${currentItem.season}_e${currentItem.episode}`;
+      let watched = getWatchedItems();
+      const idx = watched.indexOf(key);
+      const btn = document.getElementById('btnToggleWatched');
+
+      if (idx > -1) {
+        watched.splice(idx, 1);
+        btn.classList.remove('active-watched');
+      } else {
+        watched.push(key);
+        btn.classList.add('active-watched');
+      }
+      saveWatchedItems(watched);
+      if (currentItem.type === 'tv') {
+        renderTvEpisodes(currentItem.id, currentItem.season, currentItem.totalEpisodes || 10);
+      }
+    }
 
     function getAvatarUrl(seed) {
       return `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(seed || 'guest')}`;
@@ -764,6 +864,7 @@
       logVisitor();
       loadCustomMediaFromFirebase();
       loadBannerAnnouncement();
+      loadResumeShelf();
       initHeroRotation();
       initSearchAutocomplete();
       initInfiniteScroll();
@@ -836,6 +937,7 @@
         document.getElementById('defaultShelves').style.display = 'block';
         currentExploreEndpoint = '/trending/all/day';
         loadMoreExploreMedia(true);
+        loadResumeShelf();
       } else if (route === 'movies') {
         showHomeView();
         document.getElementById('defaultShelves').style.display = 'none';
@@ -846,6 +948,8 @@
         document.getElementById('defaultShelves').style.display = 'none';
         currentExploreEndpoint = '/discover/tv?sort_by=popularity.desc';
         loadMoreExploreMedia(true);
+      } else if (route === 'favorites') {
+        openFavoritesPage();
       } else if (route === 'category') {
         showHomeView();
         const cat = parts[2];
@@ -867,6 +971,7 @@
     function showHomeView() {
       document.getElementById('theaterView').style.display = 'none';
       document.getElementById('searchResultsView').style.display = 'none';
+      document.getElementById('favoritesView').style.display = 'none';
       document.getElementById('homeView').style.display = 'block';
       
       const frame = document.getElementById('streamFrame');
@@ -878,6 +983,47 @@
 
       document.getElementById('mainPlayerContainer').style.display = 'none';
       document.getElementById('serversContainer').style.display = 'none';
+    }
+
+    function openFavoritesPage() {
+      document.getElementById('homeView').style.display = 'none';
+      document.getElementById('theaterView').style.display = 'none';
+      document.getElementById('searchResultsView').style.display = 'none';
+      document.getElementById('favoritesView').style.display = 'block';
+      window.scrollTo(0, 0);
+
+      const container = document.getElementById('deckFavorites');
+      const favs = getFavorites();
+      container.innerHTML = '';
+      if (favs.length === 0) {
+        container.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:30px; color:var(--text-muted);">لم تقم بإضافة أي أعمال إلى المفضلة بعد.</div>';
+        return;
+      }
+      renderCards(favs, container);
+    }
+
+    function loadResumeShelf() {
+      const deck = document.getElementById('deckResume');
+      const list = getResumeList();
+      if (list.length > 0) {
+        deck.innerHTML = '';
+        document.getElementById('resumeShelfBox').style.display = 'block';
+        list.forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.onclick = () => { location.hash = `#/theater/${item.type}/${item.id}/${item.season}/${item.episode}`; };
+          card.innerHTML = `
+            <img src="${item.poster_path ? POSTER_BASE + item.poster_path : 'https://image.tmdb.org/t/p/w500/mXk9kEw9u5dF72Tsk4O9Jt0rGgG.jpg'}" loading="lazy">
+            <div class="card-body">
+              <div class="card-title">${item.title}</div>
+              <div class="card-meta"><span>${item.type === 'tv' ? `م${item.season} ح${item.episode}` : 'فيلم'}</span><span style="color:var(--gold);">استئناف ▶</span></div>
+            </div>
+          `;
+          deck.appendChild(card);
+        });
+      } else {
+        document.getElementById('resumeShelfBox').style.display = 'none';
+      }
     }
 
     function initInfiniteScroll() {
@@ -931,6 +1077,7 @@
     async function openSearchResultsPage(query) {
       document.getElementById('homeView').style.display = 'none';
       document.getElementById('theaterView').style.display = 'none';
+      document.getElementById('favoritesView').style.display = 'none';
       document.getElementById('searchResultsView').style.display = 'block';
       window.scrollTo(0, 0);
 
@@ -1052,11 +1199,13 @@
         const title = item.title || item.name;
         const score = item.vote_average ? item.vote_average.toFixed(1) : '7.5';
         const date = (item.release_date || item.first_air_date || '2026').substring(0, 4);
+        const watched = isItemWatched(`movie_${item.id}`) || isItemWatched(`tv_${item.id}_s1_e1`);
 
         const card = document.createElement('div');
         card.className = 'card';
         card.onclick = () => { location.hash = `#/theater/${type}/${item.id}`; };
         card.innerHTML = `
+          ${watched ? '<span class="card-watched-badge">✓ تمت المشاهدة</span>' : ''}
           <img src="${POSTER_BASE + item.poster_path}" loading="lazy">
           <div class="card-body">
             <div class="card-title">${title}</div>
@@ -1070,17 +1219,19 @@
     async function fetchMediaAndOpenTheater(id, type, season = 1, episode = 1) {
       document.getElementById('homeView').style.display = 'none';
       document.getElementById('searchResultsView').style.display = 'none';
+      document.getElementById('favoritesView').style.display = 'none';
       document.getElementById('theaterView').style.display = 'block';
       document.getElementById('mainPlayerContainer').style.display = 'none';
       document.getElementById('serversContainer').style.display = 'none';
       window.scrollTo(0, 0);
 
-      currentItem = { id, type, title: '', season, episode, isCustom: false, directUrl: '' };
+      currentItem = { id, type, title: '', poster_path: '', season, episode, isCustom: false, directUrl: '' };
 
       try {
         const res = await fetch(`${API_BASE}/${type}/${id}?api_key=${API_KEY}&language=${currentLang}`);
         const data = await res.json();
         currentItem.title = data.title || data.name;
+        currentItem.poster_path = data.poster_path;
 
         document.getElementById('detailTitle').innerText = currentItem.title;
         document.getElementById('detailOverview').innerText = data.overview || "Enjoy high quality streaming.";
@@ -1100,6 +1251,13 @@
           genresBox.appendChild(badge);
         });
 
+        // تحديث أزرار المفضلة والمشاهدة
+        const isFav = isItemFavorited(id);
+        document.getElementById('btnToggleFav').classList.toggle('active-fav', isFav);
+
+        const watchedKey = type === 'movie' ? `movie_${id}` : `tv_${id}_s${season}_e${episode}`;
+        document.getElementById('btnToggleWatched').classList.toggle('active-watched', isItemWatched(watchedKey));
+
         if (type === 'tv') {
           document.getElementById('episodesContainer').style.display = 'block';
           renderTvSeasons(data.seasons || [], id);
@@ -1116,7 +1274,6 @@
     function renderDynamicServersDeck() {
       const container = document.getElementById('serversButtonsDeck');
       container.innerHTML = '';
-      const isVipUser = currentUser && (currentUser.isVip || currentUser.isAdmin);
 
       for (let i = 1; i <= 8; i++) {
         const btn = document.createElement('button');
@@ -1125,26 +1282,6 @@
         btn.onclick = () => changeServer(i);
         container.appendChild(btn);
       }
-
-      const vipServers = [
-        { id: 9, label: 'VIP 1 (VidCore 4K)' },
-        { id: 10, label: 'VIP 2 (VidSrc Cloud)' },
-        { id: 11, label: 'VIP 3 (MultiEmbed Fast)' },
-        { id: 12, label: 'VIP 4 (VidSrc Net)' }
-      ];
-
-      vipServers.forEach(srv => {
-        const btn = document.createElement('button');
-        btn.className = `srv-btn srv-btn-vip ${srv.id === currentServer ? 'active' : ''}`;
-        if (isVipUser) {
-          btn.innerHTML = `👑 ${srv.label}`;
-          btn.onclick = () => changeServer(srv.id);
-        } else {
-          btn.innerHTML = `🔒 ${srv.label}`;
-          btn.onclick = () => openVipModal();
-        }
-        container.appendChild(btn);
-      });
     }
 
     function startStreamingNow() {
@@ -1153,6 +1290,7 @@
       document.getElementById('directPlayerBox').style.display = 'none';
       document.getElementById('serversContainer').style.display = 'block';
       changeServer(1);
+      recordResumeProgress(currentItem);
       document.getElementById('mainPlayerContainer').scrollIntoView({ behavior: 'smooth' });
     }
 
@@ -1186,15 +1324,19 @@
       });
 
       const activeSeasonObj = validSeasons.find(s => s.season_number === currentItem.season) || validSeasons[0];
-      if (activeSeasonObj) renderTvEpisodes(tvId, activeSeasonObj.season_number, activeSeasonObj.episode_count);
+      if (activeSeasonObj) {
+        currentItem.totalEpisodes = activeSeasonObj.episode_count;
+        renderTvEpisodes(tvId, activeSeasonObj.season_number, activeSeasonObj.episode_count);
+      }
     }
 
     function renderTvEpisodes(tvId, seasonNum, count) {
       const epList = document.getElementById('episodesList');
       epList.innerHTML = '';
       for (let i = 1; i <= count; i++) {
+        const isWatched = isItemWatched(`tv_${tvId}_s${seasonNum}_e${i}`);
         const btn = document.createElement('button');
-        btn.className = `ep-btn ${i === currentItem.episode ? 'active' : ''}`;
+        btn.className = `ep-btn ${i === currentItem.episode ? 'active' : ''} ${isWatched ? 'is-watched' : ''}`;
         btn.innerText = `${translations[currentLang].ep_prefix} ${i}`;
         btn.onclick = () => {
           document.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
@@ -1208,12 +1350,6 @@
     }
 
     function changeServer(idx) {
-      const isVipUser = currentUser && (currentUser.isVip || currentUser.isAdmin);
-      if (idx >= 9 && !isVipUser) {
-        openVipModal();
-        return;
-      }
-
       currentServer = idx;
       document.querySelectorAll('.srv-btn').forEach((b, i) => b.classList.toggle('active', i + 1 === idx));
       if (!currentItem.id || currentItem.isCustom) return;
@@ -1221,7 +1357,6 @@
       const { id, type, season: s, episode: e } = currentItem;
       const srvs = type === "movie" 
         ? { 
-            // السيرفرات الأساسية المجانية (1 - 8)
             1: `https://vidlink.pro/movie/${id}`,
             2: `https://www.2embed.cc/embed/${id}`,
             3: `https://embed.smashystream.com/playere.php?tmdb=${id}`,
@@ -1229,16 +1364,9 @@
             5: `https://vidsrc.to/embed/movie/${id}`,
             6: `https://vidsrc.cc/v2/embed/movie/${id}`,
             7: `https://vidsrc.sbs/embed/movie/${id}`,
-            8: `https://vidsrc.pm/embed/movie/${id}`,
-            
-            // سيرفرات VIP المستقلة كلياً (9 - 12)
-            9: `https://vidcore.org/embed/movie/${id}`,
-            10: `https://vidsrc.me/embed/movie?tmdb=${id}`,
-            11: `https://multiembed.mov/?video_id=${id}&tmdb=1`,
-            12: `https://vidsrc.net/embed/movie/${id}`
+            8: `https://multiembed.mov/?video_id=${id}&tmdb=1`
           }
         : { 
-            // السيرفرات الأساسية المجانية (1 - 8)
             1: `https://vidlink.pro/tv/${id}/${s}/${e}`,
             2: `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}`,
             3: `https://embed.smashystream.com/playere.php?tmdb=${id}&season=${s}&episode=${e}`,
@@ -1246,21 +1374,14 @@
             5: `https://vidsrc.to/embed/tv/${id}/${s}/${e}`,
             6: `https://vidsrc.cc/v2/embed/tv/${id}/${s}/${e}`,
             7: `https://vidsrc.sbs/embed/tv/${id}/${s}/${e}`,
-            8: `https://vidsrc.pm/embed/tv/${id}/${s}/${e}`,
-            
-            // سيرفرات VIP المستقلة كلياً (9 - 12)
-            9: `https://vidcore.org/embed/series/${id}/${s}/${e}`,
-            10: `https://vidsrc.me/embed/tv?tmdb=${id}&season=${s}&episode=${e}`,
-            11: `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}`,
-            12: `https://vidsrc.net/embed/tv/${id}/${s}/${e}`
+            8: `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}`
           };
 
       const frame = document.getElementById('streamFrame');
       frame.src = srvs[currentServer] || srvs[1];
 
       frame.onerror = () => {
-        const limit = isVipUser ? 12 : 8;
-        if (currentServer < limit) changeServer(currentServer + 1);
+        if (currentServer < 8) changeServer(currentServer + 1);
       };
     }
 
@@ -1282,9 +1403,10 @@
     }
 
     function playDirectMedia(title, streamUrl, poster) {
-      currentItem = { id: 'custom', type: 'custom', title, isCustom: true, directUrl: streamUrl };
+      currentItem = { id: 'custom', type: 'custom', title, poster_path: poster, isCustom: true, directUrl: streamUrl };
       document.getElementById('homeView').style.display = 'none';
       document.getElementById('searchResultsView').style.display = 'none';
+      document.getElementById('favoritesView').style.display = 'none';
       document.getElementById('theaterView').style.display = 'block';
       document.getElementById('detailHeroBox').style.display = 'none';
       document.getElementById('mainPlayerContainer').style.display = 'block';
