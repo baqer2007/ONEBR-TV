@@ -1219,7 +1219,7 @@
       if (!currentItem.id || currentItem.isCustom) return;
 
       const { id, type, season: s, episode: e } = currentItem;
-      const srvs = type === "movie" 
+            const srvs = type === "movie" 
         ? { 
             1: `https://vidlink.pro/movie/${id}`,
             2: `https://www.2embed.cc/embed/${id}`,
@@ -1229,10 +1229,11 @@
             6: `https://vidsrc.cc/v2/embed/movie/${id}`,
             7: `https://vidsrc.sbs/embed/movie/${id}`,
             8: `https://vidsrc.pm/embed/movie/${id}`,
-            9: `https://embed.su/embed/movie/${id}`,
-            10: `https://vidsrc.icu/embed/movie/${id}`,
-            11: `https://player.autoembed.cc/embed/movie/${id}`,
-            12: `https://moviesapi.club/movie/${id}`
+            // سيرفرات بديلة ومستقرة لـ VIP (9 - 12)
+            9: `https://vidsrc.xyz/embed/movie/${id}`,
+            10: `https://player.smashy.stream/movie/${id}`,
+            11: `https://multiembed.mov/?video_id=${id}&tmdb=1`,
+            12: `https://vidsrc.net/embed/movie/${id}`
           }
         : { 
             1: `https://vidlink.pro/tv/${id}/${s}/${e}`,
@@ -1243,10 +1244,11 @@
             6: `https://vidsrc.cc/v2/embed/tv/${id}/${s}/${e}`,
             7: `https://vidsrc.sbs/embed/tv/${id}/${s}/${e}`,
             8: `https://vidsrc.pm/embed/tv/${id}/${s}/${e}`,
-            9: `https://embed.su/embed/tv/${id}/${s}/${e}`,
-            10: `https://vidsrc.icu/embed/tv/${id}/${s}/${e}`,
-            11: `https://player.autoembed.cc/embed/tv/${id}/${s}/${e}`,
-            12: `https://moviesapi.club/tv/${id}-${s}-${e}`
+            // سيرفرات بديلة ومستقرة لـ VIP (9 - 12)
+            9: `https://vidsrc.xyz/embed/tv?tmdb=${id}&season=${s}&episode=${e}`,
+            10: `https://player.smashy.stream/tv/${id}?s=${s}&e=${e}`,
+            11: `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}`,
+            12: `https://vidsrc.net/embed/tv/${id}/${s}/${e}`
           };
 
       const frame = document.getElementById('streamFrame');
