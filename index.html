@@ -308,7 +308,7 @@
 
   <div id="announcementBanner"></div>
 
-  <!-- القائمة الجانبية -->
+  <!-- القائمة الجانبية (تم التعديل كما طلبت) -->
   <div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
   <div class="drawer" id="drawer">
     <div class="drawer-header">
@@ -378,8 +378,14 @@
     </section>
 
     <div class="catalog">
+      <!-- سجل المشاهدة المعدل مع زر الحذف الكلي والفردي -->
       <div class="shelf" id="resumeShelfBox" style="display: none;">
-        <div class="shelf-title">⏱️ <span>متابعة المشاهدة</span></div>
+        <div class="shelf-title" style="display: flex; justify-content: space-between; align-items: center;">
+          <div>⏱️ <span>متابعة المشاهدة</span></div>
+          <button onclick="clearAllHistory()" style="background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; font-weight: bold; display: flex; align-items: center; gap: 6px;">
+            <i class="fa-solid fa-trash"></i> مسح الكل
+          </button>
+        </div>
         <div class="shelf-grid" id="deckResume"></div>
       </div>
 
@@ -780,6 +786,21 @@
       saveResumeList(list);
     }
 
+    // دوال الحذف الخاصة بسجل المشاهدة (التي تمت إضافتها)
+    function clearAllHistory() {
+      if(confirm('هل أنت متأكد من مسح سجل المشاهدة بالكامل؟')) {
+        localStorage.removeItem('user_resume_list');
+        loadResumeShelf();
+      }
+    }
+
+    function removeResumeItem(itemId) {
+      let list = getResumeList();
+      list = list.filter(item => String(item.id) !== String(itemId));
+      saveResumeList(list);
+      loadResumeShelf();
+    }
+
     function isItemFavorited(id) {
       return getFavorites().some(i => String(i.id) === String(id));
     }
@@ -1002,6 +1023,7 @@
       renderCards(favs, container);
     }
 
+    // دالة عرض سجل المشاهدة تم تعديلها لعرض زر X فوق كل بطاقة
     function loadResumeShelf() {
       const deck = document.getElementById('deckResume');
       const list = getResumeList();
@@ -1011,10 +1033,12 @@
         list.forEach(item => {
           const card = document.createElement('div');
           card.className = 'card';
-          card.onclick = () => { location.hash = `#/theater/${item.type}/${item.id}/${item.season}/${item.episode}`; };
           card.innerHTML = `
-            <img src="${item.poster_path ? POSTER_BASE + item.poster_path : 'https://image.tmdb.org/t/p/w500/mXk9kEw9u5dF72Tsk4O9Jt0rGgG.jpg'}" loading="lazy">
-            <div class="card-body">
+            <div style="position: absolute; top: 5px; left: 5px; z-index: 10; background: rgba(0,0,0,0.8); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer;" onclick="event.stopPropagation(); removeResumeItem('${item.id}')">
+               <i class="fa-solid fa-xmark" style="color: #ef4444; font-size: 0.85rem;"></i>
+            </div>
+            <img src="${item.poster_path ? POSTER_BASE + item.poster_path : 'https://image.tmdb.org/t/p/w500/mXk9kEw9u5dF72Tsk4O9Jt0rGgG.jpg'}" loading="lazy" onclick="location.hash = '#/theater/${item.type}/${item.id}/${item.season}/${item.episode}'">
+            <div class="card-body" onclick="location.hash = '#/theater/${item.type}/${item.id}/${item.season}/${item.episode}'">
               <div class="card-title">${item.title}</div>
               <div class="card-meta"><span>${item.type === 'tv' ? `م${item.season} ح${item.episode}` : 'فيلم'}</span><span style="color:var(--gold);">استئناف ▶</span></div>
             </div>
