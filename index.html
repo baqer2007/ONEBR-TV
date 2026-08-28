@@ -1127,10 +1127,10 @@
       }
 
       const vipServers = [
-        { id: 9, label: 'VIP 1 (Smashy)' },
-        { id: 10, label: 'VIP 2 (2Embed)' },
-        { id: 11, label: 'VIP 3 (MultiEmbed)' },
-        { id: 12, label: 'VIP 4 (VidSrc)' }
+        { id: 9, label: 'VIP 1 (VidCore 4K)' },
+        { id: 10, label: 'VIP 2 (VidSrc Cloud)' },
+        { id: 11, label: 'VIP 3 (MultiEmbed Fast)' },
+        { id: 12, label: 'VIP 4 (VidSrc Net)' }
       ];
 
       vipServers.forEach(srv => {
@@ -1221,32 +1221,38 @@
       const { id, type, season: s, episode: e } = currentItem;
       const srvs = type === "movie" 
         ? { 
+            // السيرفرات الأساسية المجانية (1 - 8)
             1: `https://vidlink.pro/movie/${id}`,
             2: `https://www.2embed.cc/embed/${id}`,
             3: `https://embed.smashystream.com/playere.php?tmdb=${id}`,
-            4: `https://multiembed.mov/?video_id=${id}&tmdb=1`,
+            4: `https://player.smashy.stream/movie/${id}`,
             5: `https://vidsrc.to/embed/movie/${id}`,
             6: `https://vidsrc.cc/v2/embed/movie/${id}`,
             7: `https://vidsrc.sbs/embed/movie/${id}`,
             8: `https://vidsrc.pm/embed/movie/${id}`,
-            9: `https://player.smashy.stream/movie/${id}`,
-            10: `https://www.2embed.cc/embed/${id}`,
+            
+            // سيرفرات VIP المستقلة كلياً (9 - 12)
+            9: `https://vidcore.org/embed/movie/${id}`,
+            10: `https://vidsrc.me/embed/movie?tmdb=${id}`,
             11: `https://multiembed.mov/?video_id=${id}&tmdb=1`,
-            12: `https://vidsrc.xyz/embed/movie/${id}`
+            12: `https://vidsrc.net/embed/movie/${id}`
           }
         : { 
+            // السيرفرات الأساسية المجانية (1 - 8)
             1: `https://vidlink.pro/tv/${id}/${s}/${e}`,
             2: `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}`,
             3: `https://embed.smashystream.com/playere.php?tmdb=${id}&season=${s}&episode=${e}`,
-            4: `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}`,
+            4: `https://player.smashy.stream/tv/${id}?s=${s}&e=${e}`,
             5: `https://vidsrc.to/embed/tv/${id}/${s}/${e}`,
             6: `https://vidsrc.cc/v2/embed/tv/${id}/${s}/${e}`,
             7: `https://vidsrc.sbs/embed/tv/${id}/${s}/${e}`,
             8: `https://vidsrc.pm/embed/tv/${id}/${s}/${e}`,
-            9: `https://player.smashy.stream/tv/${id}?s=${s}&e=${e}`,
-            10: `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}`,
+            
+            // سيرفرات VIP المستقلة كلياً (9 - 12)
+            9: `https://vidcore.org/embed/series/${id}/${s}/${e}`,
+            10: `https://vidsrc.me/embed/tv?tmdb=${id}&season=${s}&episode=${e}`,
             11: `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}`,
-            12: `https://vidsrc.xyz/embed/tv?tmdb=${id}&season=${s}&episode=${e}`
+            12: `https://vidsrc.net/embed/tv/${id}/${s}/${e}`
           };
 
       const frame = document.getElementById('streamFrame');
