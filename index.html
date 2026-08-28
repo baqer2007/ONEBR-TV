@@ -45,6 +45,24 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
     body { background-color: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; transition: background-color 0.3s, color 0.3s; }
 
+    /* --- التنسيقات الجديدة الخاصة بكود الدخول --- */
+    .masked-pin {
+      -webkit-text-security: disc; /* يحول النص إلى نقاط */
+    }
+    .toggle-eye {
+      position: absolute;
+      left: 12px;
+      top: 36px;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1.1rem;
+    }
+    html[dir="ltr"] .toggle-eye {
+      left: auto;
+      right: 12px;
+    }
+    /* --------------------------------------------- */
+
     #announcementBanner {
       display: none; background: linear-gradient(90deg, #991b1b, #e50914, #991b1b);
       color: #fff; padding: 8px 14px; font-size: 0.8rem; font-weight: 700;
@@ -308,7 +326,7 @@
 
   <div id="announcementBanner"></div>
 
-  <!-- القائمة الجانبية (تم التعديل كما طلبت) -->
+  <!-- القائمة الجانبية -->
   <div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
   <div class="drawer" id="drawer">
     <div class="drawer-header">
@@ -378,7 +396,7 @@
     </section>
 
     <div class="catalog">
-      <!-- سجل المشاهدة المعدل مع زر الحذف الكلي والفردي -->
+      <!-- سجل المشاهدة مع أزرار الإزالة -->
       <div class="shelf" id="resumeShelfBox" style="display: none;">
         <div class="shelf-title" style="display: flex; justify-content: space-between; align-items: center;">
           <div>⏱️ <span>متابعة المشاهدة</span></div>
@@ -525,7 +543,7 @@
     </div>
   </div>
 
-  <!-- نافذة المصادقة -->
+  <!-- نافذة المصادقة (تم تغيير حقول الباسوورد) -->
   <div class="modal-overlay" id="authModal">
     <div class="modal-box">
       <i class="fa-solid fa-xmark modal-close" onclick="closeModal('authModal')"></i>
@@ -533,7 +551,14 @@
       <div id="loginFormBox">
         <div class="modal-title"><i class="fa-solid fa-user-shield" style="color: var(--cyan);"></i> <span data-i18n="auth_title">تسجيل الدخول</span></div>
         <div class="form-group"><label data-i18n="auth_email">البريد الإلكتروني:</label><input type="text" id="loginEmail"></div>
-        <div class="form-group"><label data-i18n="auth_pass">رمز المرور:</label><input type="password" id="loginPass"></div>
+        
+        <!-- حقل كود الدخول الجديد (بدلاً من كلمة المرور) -->
+        <div class="form-group" style="position: relative;">
+          <label data-i18n="auth_pass">كود الدخول (PIN):</label>
+          <input type="text" id="loginPass" class="masked-pin" placeholder="أدخل الكود...">
+          <i class="fa-solid fa-eye-slash toggle-eye" onclick="togglePinVisibility('loginPass', this)"></i>
+        </div>
+        
         <button class="btn-submit" onclick="handleLoginSubmit()" data-i18n="auth_btn">دخول الحساب</button>
         <div class="auth-toggle-links">
           <a onclick="switchAuthView('register')">إنشاء حساب جديد</a>
@@ -544,7 +569,14 @@
       <div id="registerFormBox" style="display: none;">
         <div class="modal-title"><i class="fa-solid fa-user-plus" style="color: var(--cyan);"></i> <span>إنشاء حساب جديد</span></div>
         <div class="form-group"><label data-i18n="auth_email">البريد الإلكتروني:</label><input type="email" id="regEmail"></div>
-        <div class="form-group"><label data-i18n="auth_pass">رمز المرور الجديد:</label><input type="password" id="regPass"></div>
+        
+        <!-- حقل إنشاء الكود الجديد -->
+        <div class="form-group" style="position: relative;">
+          <label data-i18n="auth_pass">كود الدخول الجديد (PIN):</label>
+          <input type="text" id="regPass" class="masked-pin" placeholder="6 خانات على الأقل...">
+          <i class="fa-solid fa-eye-slash toggle-eye" onclick="togglePinVisibility('regPass', this)"></i>
+        </div>
+        
         <button class="btn-submit" style="background:var(--cyan); color:#000;" onclick="handleRegisterSubmit()">إنشاء الحساب الآن</button>
         <div class="auth-toggle-links" style="justify-content:center;">
           <a onclick="switchAuthView('login')">لديك حساب بالفعل؟ تسجيل الدخول</a>
@@ -561,10 +593,14 @@
       </div>
 
       <div id="resetPassFormBox" style="display: none;">
-        <div class="modal-title"><i class="fa-solid fa-lock-open" style="color: var(--cyan);"></i> <span>تعيين كلمة مرور جديدة</span></div>
+        <div class="modal-title"><i class="fa-solid fa-lock-open" style="color: var(--cyan);"></i> <span>تعيين كود دخول جديد</span></div>
         <p id="resetTargetEmail" style="font-size:0.75rem; color:var(--text-muted); margin-bottom:8px;"></p>
-        <div class="form-group"><label>كلمة المرور الجديدة:</label><input type="password" id="newResetPass" placeholder="6 خانات على الأقل"></div>
-        <button class="btn-submit" style="background:var(--cyan); color:#000;" onclick="applyNewPassword()">حفظ وتحديث كلمة المرور</button>
+        <div class="form-group" style="position: relative;">
+          <label>الكود الجديد:</label>
+          <input type="text" id="newResetPass" class="masked-pin" placeholder="6 خانات على الأقل">
+          <i class="fa-solid fa-eye-slash toggle-eye" onclick="togglePinVisibility('newResetPass', this)"></i>
+        </div>
+        <button class="btn-submit" style="background:var(--cyan); color:#000;" onclick="applyNewPassword()">حفظ وتحديث الكود</button>
       </div>
 
       <div id="authProfile" style="display: none; text-align: center;">
@@ -725,7 +761,7 @@
         load_more: "تحميل المزيد", btn_back: "العودة", select_server: "اختر سيرفر المشاهدة:",
         srv_prefix: "سيرفر", episodes_title: "المواسم والحلقات:", vip_title: "اشتراكات وباقات VIP",
         vip_desc: "استمتع بتجربة خالية تماماً من الإعلانات مع شارات توهج ذهبية لحسابك وأولوية قصوى لطلبات الأفلام والمسلسلات.",
-        auth_title: "تسجيل الدخول", auth_email: "البريد الإلكتروني:", auth_pass: "رمز المرور:",
+        auth_title: "تسجيل الدخول", auth_email: "البريد الإلكتروني:", auth_pass: "كود الدخول:",
         auth_btn: "دخول الحساب", auth_profile: "الحساب الشخصي", auth_logout: "تسجيل الخروج",
         admin_title: "لوحة تحكم المشرفين (ONEBR TV)", search_ph: "بحث ذكي...",
         season_prefix: "الموسم", ep_prefix: "حلقة"
@@ -739,7 +775,7 @@
         load_more: "Load More", btn_back: "Back", select_server: "Select Stream Server:",
         srv_prefix: "Server", episodes_title: "Seasons & Episodes:", vip_title: "VIP Memberships & Plans",
         vip_desc: "Enjoy ad-free fast streaming with dedicated gold profile badges and VIP priority media requests.",
-        auth_title: "User Login", auth_email: "Email Address:", auth_pass: "Password:",
+        auth_title: "User Login", auth_email: "Email Address:", auth_pass: "PIN Code:",
         auth_btn: "Login", auth_profile: "User Profile", auth_logout: "Logout",
         admin_title: "Admin Dashboard (ONEBR TV)", search_ph: "Smart search...",
         season_prefix: "Season", ep_prefix: "Ep"
@@ -759,6 +795,23 @@
     let hlsInstance = null;
     let searchDebounceTimer = null;
     let verifyingForgotEmailAddress = '';
+
+    // --- الدالة الجديدة الخاصة بزر العين وإخفاء الكود ---
+    function togglePinVisibility(inputId, iconElement) {
+      const input = document.getElementById(inputId);
+      if (input.classList.contains('masked-pin')) {
+        // إظهار الكود
+        input.classList.remove('masked-pin');
+        iconElement.classList.remove('fa-eye-slash');
+        iconElement.classList.add('fa-eye');
+      } else {
+        // إخفاء الكود
+        input.classList.add('masked-pin');
+        iconElement.classList.remove('fa-eye');
+        iconElement.classList.add('fa-eye-slash');
+      }
+    }
+    // ----------------------------------------------------
 
     // إدارة التخزين المحلي
     function getFavorites() { return JSON.parse(localStorage.getItem('user_favorites') || '[]'); }
@@ -786,7 +839,6 @@
       saveResumeList(list);
     }
 
-    // دوال الحذف الخاصة بسجل المشاهدة (التي تمت إضافتها)
     function clearAllHistory() {
       if(confirm('هل أنت متأكد من مسح سجل المشاهدة بالكامل؟')) {
         localStorage.removeItem('user_resume_list');
@@ -1023,7 +1075,6 @@
       renderCards(favs, container);
     }
 
-    // دالة عرض سجل المشاهدة تم تعديلها لعرض زر X فوق كل بطاقة
     function loadResumeShelf() {
       const deck = document.getElementById('deckResume');
       const list = getResumeList();
