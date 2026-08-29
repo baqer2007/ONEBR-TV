@@ -12,7 +12,7 @@ export async function onRequest(context) {
   if (request.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    // 1. محرك الفحص الذكي واستخراج روابط الفيديو الخام
+    // 1. محرك الفحص والاستخراج الذكي متعدد المسارات
     if (path === "/api/resolve") {
       const tmdbId = url.searchParams.get("tmdb");
       const type = url.searchParams.get("type") || "movie";
@@ -22,7 +22,7 @@ export async function onRequest(context) {
       if (!tmdbId) return new Response(JSON.stringify({ error: "Missing TMDB ID" }), { status: 400, headers: corsHeaders });
 
       const isMov = (type === "movie");
-      const cacheKey = `stream_verified_v5_${type}_${tmdbId}_${season}_${episode}`;
+      const cacheKey = `ultra_stream_v6_${type}_${tmdbId}_${season}_${episode}`;
 
       // فحص الكاش السحابي السريع
       if (env.STREAM_KV) {
@@ -30,126 +30,130 @@ export async function onRequest(context) {
         if (cached) return new Response(JSON.stringify({ success: true, source: "kv-cache", ...cached }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
 
-      // قائمة المزودات الموسعة (أكثر من 10 مصادر عالمية)
-      const providers = [
-        // المزود 1: VidLink API (استخراج مباشر)
+      // شبكة استخراج من المزودات العالمية وفحص توفر البث
+      const extractors = [
+        // استخراج فوري من شبكة VidLink السريعة
         async () => {
-          const u = isMov ? `https://vidlink.pro/api/b/movie/${tmdbId}` : `https://vidlink.pro/api/b/tv/${tmdbId}/${season}/${episode}`;
-          const res = await fetch(u, {
+          const target = isMov ? `https://vidlink.pro/api/b/movie/${tmdbId}` : `https://vidlink.pro/api/b/tv/${tmdbId}/${season}/${episode}`;
+          const res = await fetch(target, {
             headers: {
               "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
               "Referer": "https://vidlink.pro/",
               "Origin": "https://vidlink.pro"
             },
-            signal: AbortSignal.timeout(3500)
+            signal: AbortSignal.timeout(3000)
           });
           if (!res.ok) return null;
-          const json = await res.json();
-          if (json?.stream?.playlist) {
-            return { directStreamUrl: json.stream.playlist, referer: "https://vidlink.pro/", serverName: "Ultra Direct 1 (VidLink)" };
+          const data = await res.json();
+          if (data?.stream?.playlist) {
+            return { directStreamUrl: data.stream.playlist, referer: "https://vidlink.pro/", serverName: "VidLink Core" };
           }
           return null;
         },
-        // المزود 2: Embed.su (فك تشفير واستخراج)
+
+        // استخراج مباشر من مشغل AutoEmbed
         async () => {
-          const u = isMov ? `https://embed.su/api/e/movie/${tmdbId}` : `https://embed.su/api/e/tv/${tmdbId}/${season}/${episode}`;
-          const res = await fetch(u, {
-            headers: { "User-Agent": "Mozilla/5.0", "Referer": "https://embed.su/" },
-            signal: AbortSignal.timeout(3500)
+          const target = isMov ? `https://player.autoembed.cc/embed/movie/${tmdbId}` : `https://player.autoembed.cc/embed/tv/${tmdbId}/${season}/${episode}`;
+          const res = await fetch(target, {
+            headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" },
+            signal: AbortSignal.timeout(3000)
           });
-          if (!res.ok) return null;
-          const json = await res.json();
-          if (json?.source) {
-            return { directStreamUrl: json.source, referer: "https://embed.su/", serverName: "Ultra Direct 2 (EmbedSu)" };
-          }
-          return null;
-        },
-        // المزود 3: AutoEmbed Pro (استخراج مباشر)
-        async () => {
-          const u = isMov ? `https://player.autoembed.cc/embed/movie/${tmdbId}` : `https://player.autoembed.cc/embed/tv/${tmdbId}/${season}/${episode}`;
-          const res = await fetch(u, { headers: { "User-Agent": "Mozilla/5.0" }, signal: AbortSignal.timeout(3000) });
           if (!res.ok) return null;
           const html = await res.text();
           const match = html.match(/file:\s*["']([^"']+\.m3u8[^"']*)["']/i);
           if (match && match[1]) {
             return { directStreamUrl: match[1], referer: "https://player.autoembed.cc/", serverName: "AutoEmbed Stream" };
           }
-          if (html.length > 800 && !html.includes("not found") && !html.includes("Captcha")) {
-            return { workingServerUrl: u, serverName: "AutoEmbed Pro" };
+          if (html.length > 1000 && !html.includes("not found")) {
+            return { workingServerUrl: target, serverName: "AutoEmbed Server" };
           }
           return null;
         },
-        // المزود 4: MultiEmbed (مخزن الأعمال العالمية والتركية)
+
+        // فحص سيرفر VidSrc المعتمد والخالي من الكابتشا
         async () => {
-          const u = isMov ? `https://multiembed.mov/?video_id=${tmdbId}&tmdb=1` : `https://multiembed.mov/?video_id=${tmdbId}&tmdb=1&s=${season}&e=${episode}`;
-          const res = await fetch(u, { headers: { "User-Agent": "Mozilla/5.0" }, signal: AbortSignal.timeout(3000) });
+          const target = isMov ? `https://vidsrc.cc/v2/embed/movie/${tmdbId}` : `https://vidsrc.cc/v2/embed/tv/${tmdbId}/${season}/${episode}`;
+          const res = await fetch(target, {
+            headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" },
+            signal: AbortSignal.timeout(2800)
+          });
+          if (!res.ok) return null;
+          const html = await res.text();
+          if (!html.includes("404 Not Found") && html.length > 800) {
+            return { workingServerUrl: target, serverName: "VidSrc HighSpeed" };
+          }
+          return null;
+        },
+
+        // فحص سيرفر 2Embed VIP
+        async () => {
+          const target = isMov ? `https://www.2embed.cc/embed/${tmdbId}` : `https://www.2embed.cc/embedtv/${tmdbId}&s=${season}&e=${episode}`;
+          const res = await fetch(target, {
+            headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" },
+            signal: AbortSignal.timeout(2800)
+          });
+          if (res.ok) return { workingServerUrl: target, serverName: "2Embed VIP" };
+          return null;
+        },
+
+        // فحص سيرفر MultiEmbed (الأشمل للأعمال القديمة والتركية)
+        async () => {
+          const target = isMov ? `https://multiembed.mov/?video_id=${tmdbId}&tmdb=1` : `https://multiembed.mov/?video_id=${tmdbId}&tmdb=1&s=${season}&e=${episode}`;
+          const res = await fetch(target, {
+            headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" },
+            signal: AbortSignal.timeout(2800)
+          });
           if (!res.ok) return null;
           const html = await res.text();
           if (!html.includes("There are no sources yet") && !html.includes("404 Not Found") && html.length > 600) {
-            return { workingServerUrl: u, serverName: "MultiEmbed VIP" };
+            return { workingServerUrl: target, serverName: "MultiEmbed Global" };
           }
-          return null;
-        },
-        // المزود 5: VidSrc.cc
-        async () => {
-          const u = isMov ? `https://vidsrc.cc/v2/embed/movie/${tmdbId}` : `https://vidsrc.cc/v2/embed/tv/${tmdbId}/${season}/${episode}`;
-          const res = await fetch(u, { headers: { "User-Agent": "Mozilla/5.0" }, signal: AbortSignal.timeout(3000) });
-          if (!res.ok) return null;
-          const html = await res.text();
-          if (!html.includes("404 Not Found") && html.length > 600) {
-            return { workingServerUrl: u, serverName: "VidSrc.cc" };
-          }
-          return null;
-        },
-        // المزود 6: 2Embed VIP
-        async () => {
-          const u = isMov ? `https://www.2embed.cc/embed/${tmdbId}` : `https://www.2embed.cc/embedtv/${tmdbId}&s=${season}&e=${episode}`;
-          const res = await fetch(u, { headers: { "User-Agent": "Mozilla/5.0" }, signal: AbortSignal.timeout(3000) });
-          if (res.ok) return { workingServerUrl: u, serverName: "2Embed VIP" };
-          return null;
-        },
-        // المزود 7: SmashyStream
-        async () => {
-          const u = isMov ? `https://embed.smashystream.com/playere.php?tmdb=${tmdbId}` : `https://embed.smashystream.com/playere.php?tmdb=${tmdbId}&season=${season}&episode=${episode}`;
-          const res = await fetch(u, { headers: { "User-Agent": "Mozilla/5.0" }, signal: AbortSignal.timeout(3000) });
-          if (res.ok) return { workingServerUrl: u, serverName: "SmashyStream" };
-          return null;
-        },
-        // المزود 8: NontonGo
-        async () => {
-          const u = isMov ? `https://www.nontongo.win/embed/movie/${tmdbId}` : `https://www.nontongo.win/embed/tv/${tmdbId}/${season}/${episode}`;
-          const res = await fetch(u, { headers: { "User-Agent": "Mozilla/5.0" }, signal: AbortSignal.timeout(3000) });
-          if (res.ok) return { workingServerUrl: u, serverName: "NontonGo" };
           return null;
         }
       ];
 
-      // إطلاق الفحص بالتوازي للحصول على أول سيرفر شغال فوري
-      for (const getSource of providers) {
+      // إطلاق الفحص بالتوازي واختيار أول خيار متاح وموثوق
+      let resolvedData = null;
+      for (const extract of extractors) {
         try {
-          const res = await getSource();
-          if (res) {
-            if (env.STREAM_KV) {
-              await env.STREAM_KV.put(cacheKey, JSON.stringify(res), { expirationTtl: 1800 });
+          const result = await extract();
+          if (result) {
+            // إذا كان الرابط مباشراً، نقوم بفحص صلاحية أول بايتات منه للتأكد من أنه ليس صفحة 403
+            if (result.directStreamUrl) {
+              const checkStream = await fetch(result.directStreamUrl, {
+                method: "HEAD",
+                headers: { "Referer": result.referer, "User-Agent": "Mozilla/5.0" }
+              });
+              if (checkStream.ok) {
+                resolvedData = result;
+                break;
+              }
+            } else {
+              resolvedData = result;
+              break;
             }
-            return new Response(JSON.stringify({ success: true, ...res }), {
-              headers: { ...corsHeaders, "Content-Type": "application/json" }
-            });
           }
         } catch (e) {}
       }
 
-      // في حال لم ينجح الاستخراج الآلي، إرجاع سيرفر بديل
-      return new Response(JSON.stringify({
-        success: true,
-        workingServerUrl: isMov ? `https://vidsrc.cc/v2/embed/movie/${tmdbId}` : `https://vidsrc.cc/v2/embed/tv/${tmdbId}/${season}/${episode}`,
-        serverName: "VidSrc Alternative"
-      }), {
+      // خطة الأمان الأخيرة إذا كان العمل قديماً جداً ونادراً
+      if (!resolvedData) {
+        resolvedData = {
+          workingServerUrl: isMov ? `https://vidsrc.cc/v2/embed/movie/${tmdbId}` : `https://vidsrc.cc/v2/embed/tv/${tmdbId}/${season}/${episode}`,
+          serverName: "VidSrc Reserve"
+        };
+      }
+
+      if (env.STREAM_KV) {
+        await env.STREAM_KV.put(cacheKey, JSON.stringify(resolvedData), { expirationTtl: 1800 });
+      }
+
+      return new Response(JSON.stringify({ success: true, ...resolvedData }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" }
       });
     }
 
-    // 2. البروكسي العميق لتجاوز حظر الكوكيز ومفاتيح AES-128
+    // 2. مسار البروكسي العميق لكسر حظر الكوكيز ومفاتيح AES-128
     if (path === "/api/proxy") {
       const targetUrl = decodeURIComponent(url.searchParams.get("url") || "");
       const customReferer = url.searchParams.get("referer") || "https://vidlink.pro/";
@@ -162,8 +166,7 @@ export async function onRequest(context) {
           "Referer": customReferer,
           "Origin": new URL(customReferer).origin,
           "Accept": "*/*",
-          "Sec-Fetch-Mode": "cors",
-          "Sec-Fetch-Site": "cross-site"
+          "Sec-Fetch-Mode": "cors"
         }
       });
 
@@ -209,7 +212,7 @@ export async function onRequest(context) {
       return new Response(JSON.stringify(subs), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    return new Response(JSON.stringify({ status: "Deep Scraper Active 🚀" }), { headers: corsHeaders });
+    return new Response(JSON.stringify({ status: "Ultra Resolver Engine Active" }), { headers: corsHeaders });
   } catch (err) {
     return new Response(JSON.stringify({ error: err.message }), { status: 500, headers: corsHeaders });
   }
