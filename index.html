@@ -7,63 +7,25 @@
 
   <title>ONEBR TV | مشاهدة وتحميل أحدث الأفلام والمسلسلات والأنمي</title>
   <meta name="description" content="منصة ONEBR TV لمشاهدة أحدث الأفلام، المسلسلات، الأنمي، والدراما الآسيوية والتركية بجودة عالية وسيرفرات سريعة.">
-  <meta name="keywords" content="أفلام, مسلسلات, أنمي, دراما كورية, دراما تركية, سينما, ONEBR TV">
-  <meta name="robots" content="index, follow">
-  <meta name="theme-color" content="#e50914">
-
   <link rel="manifest" href="/manifest.json">
   <link rel="icon" type="image/png" href="https://img.icons8.com/color/96/movie-projector.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
   <style>
-    :root[data-theme="dark"] {
-      --primary: #e50914;
-      --bg: #07090e;
-      --surface: #0f1422;
-      --surface-hover: #172033;
-      --border: rgba(255, 255, 255, 0.08);
-      --text: #f8fafc;
-      --text-muted: #94a3b8;
-      --cyan: #00f0ff;
-      --gold: #f59e0b;
-      --drawer-bg: #0b0f19;
-      --watched: #10b981;
-    }
-
-    :root[data-theme="light"] {
-      --primary: #e50914;
-      --bg: #f1f5f9;
-      --surface: #ffffff;
-      --surface-hover: #f8fafc;
-      --border: rgba(0, 0, 0, 0.08);
-      --text: #0f172a;
-      --text-muted: #64748b;
-      --cyan: #0284c7;
-      --gold: #d97706;
-      --drawer-bg: #ffffff;
-      --watched: #059669;
-    }
+    :root[data-theme="dark"] { --primary: #e50914; --bg: #07090e; --surface: #0f1422; --surface-hover: #172033; --border: rgba(255, 255, 255, 0.08); --text: #f8fafc; --text-muted: #94a3b8; --cyan: #00f0ff; --gold: #f59e0b; --drawer-bg: #0b0f19; --watched: #10b981; }
+    :root[data-theme="light"] { --primary: #e50914; --bg: #f1f5f9; --surface: #ffffff; --surface-hover: #f8fafc; --border: rgba(0, 0, 0, 0.08); --text: #0f172a; --text-muted: #64748b; --cyan: #0284c7; --gold: #d97706; --drawer-bg: #ffffff; --watched: #059669; }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
     body { background-color: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; transition: background-color 0.3s, color 0.3s; }
 
-    :focus-visible, .tv-active-focus {
-      outline: 3px solid var(--cyan) !important;
-      box-shadow: 0 0 16px rgba(0, 240, 255, 0.8) !important;
-      transform: scale(1.04) !important;
-      transition: transform 0.15s ease, box-shadow 0.15s ease !important;
-      z-index: 99 !important;
-    }
-
+    :focus-visible, .tv-active-focus { outline: 3px solid var(--cyan) !important; box-shadow: 0 0 16px rgba(0, 240, 255, 0.8) !important; transform: scale(1.04) !important; z-index: 99 !important; }
     .masked-pin { -webkit-text-security: disc; }
     .toggle-eye { position: absolute; left: 12px; top: 36px; color: var(--text-muted); cursor: pointer; font-size: 1.1rem; }
     html[dir="ltr"] .toggle-eye { left: auto; right: 12px; }
 
     .progress-bar-container { width: 100%; height: 4px; background: rgba(255, 255, 255, 0.15); border-radius: 2px; margin-top: 6px; overflow: hidden; }
     .progress-bar-fill { height: 100%; background: var(--cyan); border-radius: 2px; transition: width 0.3s ease; }
-
-    #announcementBanner { display: none; background: linear-gradient(90deg, #991b1b, #e50914, #991b1b); color: #fff; padding: 8px 14px; font-size: 0.8rem; font-weight: 700; text-align: center; position: sticky; top: 0; z-index: 1200; }
 
     header { position: sticky; top: 0; height: 64px; padding: 0 clamp(10px, 3vw, 20px); display: flex; justify-content: space-between; align-items: center; background: var(--surface); backdrop-filter: blur(16px); z-index: 1000; border-bottom: 1px solid var(--border); gap: 10px; }
     .header-left { display: flex; align-items: center; gap: 10px; }
@@ -89,12 +51,8 @@
     .header-actions { display: flex; align-items: center; gap: 8px; }
     .btn-header { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px; white-space: nowrap; }
     .btn-vip-gold { background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; font-weight: 800; border: none; }
-
     .user-avatar-btn { width: 38px; height: 38px; border-radius: 50%; overflow: hidden; border: 2px solid var(--cyan); box-shadow: 0 0 10px rgba(0, 240, 255, 0.3); cursor: pointer; display: none; align-items: center; justify-content: center; background: var(--surface); padding: 0; position: relative; }
-    .user-avatar-btn.vip-active { border: 2px solid var(--gold); box-shadow: 0 0 14px rgba(245, 158, 11, 0.8); animation: vipGlow 2s infinite alternate; }
-    @keyframes vipGlow { from { box-shadow: 0 0 8px rgba(245, 158, 11, 0.5); } to { box-shadow: 0 0 18px rgba(245, 158, 11, 1); } }
     .user-avatar-btn img { width: 100%; height: 100%; object-fit: cover; }
-    .vip-badge-glow { display: inline-flex; align-items: center; gap: 4px; background: linear-gradient(135deg, #f59e0b, #b45309); color: #000 !important; font-weight: 900; font-size: 0.68rem; padding: 3px 8px; border-radius: 12px; box-shadow: 0 0 10px rgba(245, 158, 11, 0.7); border: 1px solid #fde68a; letter-spacing: 0.5px; }
 
     .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 2500; display: none; }
     .drawer { position: fixed; top: 0; bottom: 0; width: min(320px, 85vw); background: var(--drawer-bg); border-inline-end: 1px solid var(--border); z-index: 2600; inset-inline-start: 0; transform: translateX(100%); transition: transform 0.3s ease; display: flex; flex-direction: column; padding: 18px 16px; overflow-y: auto; }
@@ -104,9 +62,8 @@
     .drawer-section-title { font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin: 14px 0 8px; }
     .drawer-link { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px; color: var(--text); text-decoration: none; font-size: 0.85rem; font-weight: 700; cursor: pointer; margin-bottom: 4px; }
     .drawer-link:hover, .drawer-link.active { background: var(--surface-hover); color: var(--primary); }
-
     .genre-boxes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
-    .genre-box { background: var(--surface); border: 1px solid var(--border); padding: 8px 10px; border-radius: 6px; text-align: center; font-size: 0.72rem; font-weight: 700; color: var(--text); cursor: pointer; transition: all 0.2s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .genre-box { background: var(--surface); border: 1px solid var(--border); padding: 8px 10px; border-radius: 6px; text-align: center; font-size: 0.72rem; font-weight: 700; cursor: pointer; transition: all 0.2s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .genre-box:hover { border-color: var(--cyan); color: var(--cyan); background: var(--surface-hover); }
 
     .hero { position: relative; height: clamp(260px, 42vh, 440px); display: flex; align-items: flex-end; padding: clamp(14px, 4vw, 24px); background-size: cover; background-position: center; transition: background-image 0.8s ease-in-out; }
@@ -143,10 +100,28 @@
     .play-circle-btn { width: 54px; height: 54px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 0 20px rgba(229, 9, 20, 0.6); transition: transform 0.2s, background-color 0.2s; border: none; }
     .play-circle-btn:hover { transform: scale(1.08); background: #ff1e27; }
     .play-circle-btn i { color: #ffffff; font-size: 1.2rem; margin-inline-start: 2px; }
-
     .btn-detail-action { background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 10px 16px; border-radius: 25px; font-size: 0.8rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
     .btn-detail-action.active-fav { color: var(--gold); border-color: var(--gold); }
     .btn-detail-action.active-watched { color: var(--watched); border-color: var(--watched); }
+
+    /* رادار الفحص السحابي السحري */
+    .radar-container {
+      width: 100%; background: #000; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 14px; position: relative; height: 350px; display: none; align-items: center; justify-content: center; flex-direction: column;
+    }
+    .radar-spinner { width: 50px; height: 50px; border: 4px solid rgba(0, 240, 255, 0.2); border-top-color: var(--cyan); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 16px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .radar-text { font-size: 0.9rem; font-weight: 800; color: var(--cyan); letter-spacing: 0.5px; animation: pulse 1.5s infinite alternate; }
+    .radar-subtext { font-size: 0.7rem; color: var(--text-muted); margin-top: 8px; }
+
+    .player-container { width: 100%; background: #000; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 14px; position: relative; display: none; }
+    #directPlayerBox { display: none; width: 100%; position: relative; }
+    #nativeVideo { width: 100%; max-height: 70vh; display: block; background: #000; }
+    ::cue { background-color: rgba(0, 0, 0, 0.8); color: #ffffff; font-size: 1.1rem; font-weight: bold; text-shadow: 0 0 4px #000; }
+    .skip-intro-btn { position: absolute; bottom: 65px; left: 20px; z-index: 30; background: rgba(15, 20, 34, 0.85); border: 1px solid var(--gold); color: #fff; padding: 8px 14px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; cursor: pointer; display: none; backdrop-filter: blur(6px); box-shadow: 0 0 10px rgba(245, 158, 11, 0.4); }
+    .skip-intro-btn:hover { background: var(--gold); color: #000; }
+    
+    .player-box { position: relative; width: 100%; padding-top: 56.25%; }
+    .player-box iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
 
     .server-dropdown-container { position: relative; margin-top: 15px; z-index: 50; display: none; }
     .server-toggle-btn { background: var(--primary); color: #fff; border: none; padding: 10px 16px; border-radius: 6px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-family: inherit; }
@@ -156,25 +131,18 @@
     .server-menu-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 10px 12px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; font-weight: 700; transition: all 0.2s; text-align: right; }
     .server-menu-btn:hover, .server-menu-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-    .player-container { width: 100%; background: #000; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 14px; position: relative; display: none; }
-    #directPlayerBox { display: none; width: 100%; position: relative; }
-    #nativeVideo { width: 100%; max-height: 70vh; display: block; background: #000; }
-    
-    ::cue { background-color: rgba(0, 0, 0, 0.8); color: #ffffff; font-size: 1.1rem; font-weight: bold; text-shadow: 0 0 4px #000; }
-    .skip-intro-btn { position: absolute; bottom: 65px; left: 20px; z-index: 30; background: rgba(15, 20, 34, 0.85); border: 1px solid var(--gold); color: #fff; padding: 8px 14px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; cursor: pointer; display: none; backdrop-filter: blur(6px); box-shadow: 0 0 10px rgba(245, 158, 11, 0.4); }
-    .skip-intro-btn:hover { background: var(--gold); color: #000; }
-    
-    .player-box { position: relative; width: 100%; padding-top: 56.25%; }
-    .player-box iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
-
     .episodes-bar { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px; margin-top: 10px; display: none; }
     .seasons-scroll { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin-top: 8px; }
     .season-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; }
     .season-btn.active { background: var(--cyan); color: #000; font-weight: 800; }
     .episodes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(75px, 1fr)); gap: 6px; max-height: 220px; overflow-y: auto; margin-top: 8px; }
     .ep-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 7px 4px; border-radius: 6px; text-align: center; font-size: 0.75rem; cursor: pointer; position: relative; }
-    .ep-btn.active { background: var(--primary); color: #fff; }
+    .ep-btn.active { background: var(--primary); color: #fff; box-shadow: 0 0 10px rgba(229,9,20,0.5); }
     .ep-btn.is-watched::after { content: '✓'; position: absolute; top: 2px; right: 4px; font-size: 0.65rem; color: var(--watched); font-weight: 900; }
+    
+    /* تحديد الحلقة الذكي */
+    .ep-btn.suggested-next { border-color: var(--gold); color: var(--gold); font-weight: 900; }
+    .ep-btn.suggested-next::before { content: '▶'; position: absolute; left: 4px; top: 5px; font-size: 0.6rem; animation: pulse 1s infinite alternate; }
 
     .vip-pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin: 14px 0; }
     .vip-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
@@ -251,7 +219,6 @@
     <div class="drawer-link" id="adminDrawerLink" style="display:none;" onclick="toggleDrawer(); location.hash='#/admin';"><i class="fa-solid fa-shield-halved" style="color:var(--cyan);"></i> <span data-i18n="admin_title">لوحة الأدمن</span></div>
   </div>
 
-  <!-- الهيدر -->
   <header>
     <div class="header-left">
       <button class="menu-btn" onclick="toggleDrawer()"><i class="fa-solid fa-bars"></i></button>
@@ -279,7 +246,6 @@
     </div>
   </header>
 
-  <!-- الصفحة الرئيسية -->
   <div id="homeView">
     <section class="hero" id="heroBanner">
       <div class="hero-overlay"></div>
@@ -329,7 +295,6 @@
     </div>
   </div>
 
-  <!-- واجهات المفضلة والبحث -->
   <div id="favoritesView">
     <button class="back-btn" onclick="history.back()"><i class="fa-solid fa-arrow-right"></i> <span data-i18n="btn_back">العودة</span></button>
     <div class="shelf">
@@ -346,7 +311,6 @@
     </div>
   </div>
 
-  <!-- شاشة المشغل وتفاصيل العمل 🎬 -->
   <div id="theaterView">
     <button class="back-btn" onclick="history.back()"><i class="fa-solid fa-arrow-right"></i> <span data-i18n="btn_back">العودة</span></button>
     
@@ -371,17 +335,24 @@
       </div>
     </div>
 
-    <!-- قائمة السيرفرات المنسدلة الذكية مع زر التخطي السريع -->
+    <!-- قائمة السيرفرات المنسدلة الذكية مع زر التبديل -->
     <div class="server-dropdown-container" id="serversContainer" style="display:none; gap:8px; align-items:center; flex-wrap:wrap;">
       <button id="serverToggleBtn" class="server-toggle-btn" onclick="toggleServerMenu()">
         📺 <span data-i18n="select_server">قائمة السيرفرات</span>
       </button>
 
       <button class="server-toggle-btn" style="background: var(--surface-hover); border: 1px solid var(--border); color: var(--gold);" onclick="manualSkipServer()" title="تخطي فوري للسيرفر التالي">
-        ⏭️ تخطي للسيرفر التالي
+        ⏭️ تبديل السيرفر
       </button>
 
       <div id="serverDropdown" class="server-menu-list"></div>
+    </div>
+
+    <!-- شاشة رادار الفحص السحابي -->
+    <div class="radar-container" id="radarLoader">
+      <div class="radar-spinner"></div>
+      <div class="radar-text">السحابة تفحص السيرفرات...</div>
+      <div class="radar-subtext">يتم إيجاد أفضل سيرفر يعمل حالياً</div>
     </div>
 
     <div class="player-container" id="mainPlayerContainer">
@@ -406,7 +377,6 @@
     </div>
   </div>
 
-  <!-- النوافذ المنبثقة -->
   <div class="modal-overlay" id="confirmClearModal">
     <div class="modal-box" style="max-width: 340px; text-align: center; padding: 25px;">
       <div style="color: #ef4444; margin-bottom: 15px;"><i class="fa-solid fa-triangle-exclamation" style="font-size: 3rem;"></i></div>
@@ -455,7 +425,6 @@
   <div class="modal-overlay" id="authModal">
     <div class="modal-box">
       <i class="fa-solid fa-xmark modal-close" onclick="closeModal('authModal')"></i>
-      
       <div id="loginFormBox">
         <div class="modal-title"><i class="fa-solid fa-user-shield" style="color: var(--cyan);"></i> <span data-i18n="auth_title">تسجيل الدخول</span></div>
         <div class="form-group"><label data-i18n="auth_email">البريد الإلكتروني:</label><input type="text" id="loginEmail"></div>
@@ -465,10 +434,7 @@
           <i class="fa-solid fa-eye-slash toggle-eye" onclick="togglePinVisibility('loginPass', this)"></i>
         </div>
         <button class="btn-submit" onclick="handleLoginSubmit()" data-i18n="auth_btn">دخول الحساب</button>
-        <div class="auth-toggle-links">
-          <a onclick="switchAuthView('register')">إنشاء حساب جديد</a>
-          <a onclick="switchAuthView('forgot')">نسيت رمز الدخول؟</a>
-        </div>
+        <div class="auth-toggle-links"><a onclick="switchAuthView('register')">إنشاء حساب جديد</a><a onclick="switchAuthView('forgot')">نسيت رمز الدخول؟</a></div>
       </div>
 
       <div id="registerFormBox" style="display: none;">
@@ -511,13 +477,8 @@
 
       <div id="authProfile" style="display: none; text-align: center;">
         <div class="modal-title" style="justify-content: center;"><i class="fa-solid fa-circle-user" style="color: var(--cyan);"></i> <span data-i18n="auth_profile">الحساب الشخصي</span></div>
-        <div style="width: 76px; height: 76px; border-radius: 50%; overflow: hidden; margin: 0 auto 10px; border: 2px solid var(--cyan); box-shadow: 0 0 12px rgba(0,240,255,0.4);" id="profileAvatarBigBox">
-          <img id="profileAvatarBig" src="" style="width: 100%; height: 100%; object-fit: cover;">
-        </div>
-        <div style="display:flex; align-items:center; justify-content:center; gap:6px; margin-bottom:6px;">
-          <span id="profileEmail" style="font-size: 0.85rem; font-weight: 700; color: var(--text);"></span>
-          <span id="profileGlowBadge" class="vip-badge-glow" style="display:none;"><i class="fa-solid fa-crown"></i> VIP</span>
-        </div>
+        <div style="width: 76px; height: 76px; border-radius: 50%; overflow: hidden; margin: 0 auto 10px; border: 2px solid var(--cyan); box-shadow: 0 0 12px rgba(0,240,255,0.4);" id="profileAvatarBigBox"><img id="profileAvatarBig" src="" style="width: 100%; height: 100%; object-fit: cover;"></div>
+        <div style="display:flex; align-items:center; justify-content:center; gap:6px; margin-bottom:6px;"><span id="profileEmail" style="font-size: 0.85rem; font-weight: 700; color: var(--text);"></span><span id="profileGlowBadge" class="vip-badge-glow" style="display:none;"><i class="fa-solid fa-crown"></i> VIP</span></div>
         <p id="profileRoleBadge" style="font-size: 0.7rem; color: var(--gold); font-weight: 800; margin-bottom: 4px;"></p>
         <p id="profileAdsStatusBadge" style="font-size: 0.68rem; color: var(--cyan); font-weight: 700; margin-bottom: 14px;"></p>
         <div style="display:flex; gap:6px; justify-content:center;">
@@ -551,60 +512,21 @@
         <button class="admin-nav-btn" onclick="switchAdminTab('banner', this)">📢 التنبيهات</button>
       </div>
 
-      <div id="tabUsersManage">
-        <div style="max-height: 280px; overflow-y: auto;">
-          <table class="admin-table">
-            <thead><tr><th>المستخدم</th><th>البريد</th><th>الرتبة</th><th>الإعلانات</th><th>الإجراءات</th></tr></thead>
-            <tbody id="adminUsersTableBody"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <div id="tabVipRequests" style="display: none;">
-        <div style="max-height: 280px; overflow-y: auto;">
-          <table class="admin-table">
-            <thead><tr><th>العمل المطلوب</th><th>الملاحظات</th><th>المرسل</th><th>الإجراء</th></tr></thead>
-            <tbody id="adminVipRequestsTableBody"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <div id="tabVisitors" style="display: none;">
-        <div style="max-height: 280px; overflow-y: auto;">
-          <table class="admin-table">
-            <thead><tr><th>البصمة الفريدة</th><th>الوقت</th><th>المتصفح والجهاز</th><th>الحساب</th></tr></thead>
-            <tbody id="visitorsTableBody"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <div id="tabMediaManage" style="display: none;">
-        <div style="max-height: 280px; overflow-y: auto;">
-          <table class="admin-table">
-            <thead><tr><th>اسم العمل</th><th>الرابط</th><th>الإجراء</th></tr></thead>
-            <tbody id="adminMediaTableBody"></tbody>
-          </table>
-        </div>
-      </div>
-
+      <div id="tabUsersManage"><div style="max-height: 280px; overflow-y: auto;"><table class="admin-table"><thead><tr><th>المستخدم</th><th>البريد</th><th>الرتبة</th><th>الإعلانات</th><th>الإجراءات</th></tr></thead><tbody id="adminUsersTableBody"></tbody></table></div></div>
+      <div id="tabVipRequests" style="display: none;"><div style="max-height: 280px; overflow-y: auto;"><table class="admin-table"><thead><tr><th>العمل المطلوب</th><th>الملاحظات</th><th>المرسل</th><th>الإجراء</th></tr></thead><tbody id="adminVipRequestsTableBody"></tbody></table></div></div>
+      <div id="tabVisitors" style="display: none;"><div style="max-height: 280px; overflow-y: auto;"><table class="admin-table"><thead><tr><th>البصمة الفريدة</th><th>الوقت</th><th>المتصفح والجهاز</th><th>الحساب</th></tr></thead><tbody id="visitorsTableBody"></tbody></table></div></div>
+      <div id="tabMediaManage" style="display: none;"><div style="max-height: 280px; overflow-y: auto;"><table class="admin-table"><thead><tr><th>اسم العمل</th><th>الرابط</th><th>الإجراء</th></tr></thead><tbody id="adminMediaTableBody"></tbody></table></div></div>
       <div id="tabAddMedia" style="display: none;">
         <div class="form-group"><label>اسم العمل:</label><input type="text" id="customTitle" placeholder="مثال: اسم المسلسل أو الفيلم"></div>
         <div class="form-group"><label>رابط البوستر:</label><input type="text" id="customPoster" placeholder="https://image.tmdb.org/..."></div>
         <div class="form-group"><label>رابط الفيديو المباشر (.m3u8 أو .mp4):</label><input type="text" id="customStreamUrl" placeholder="https://.../video.m3u8"></div>
         <button class="btn-submit" style="background: var(--cyan); color: #000;" onclick="saveCustomMedia()">نشر العمل فوراً</button>
       </div>
-
       <div id="tabBanManage" style="display: none;">
         <div class="form-group"><label>البريد الإلكتروني المراد حظره:</label><input type="text" id="banUserEmail" placeholder="user@example.com"></div>
         <button class="btn-submit" style="background: #ef4444;" onclick="banUserAction()">حظر المستخدم الآن</button>
-        <div style="margin-top: 14px; max-height: 160px; overflow-y: auto;">
-          <div style="font-size: 0.75rem; font-weight: 800; margin-bottom: 6px;">قائمة المحظورين:</div>
-          <table class="admin-table">
-            <tbody id="bannedUsersTableBody"></tbody>
-          </table>
-        </div>
+        <div style="margin-top: 14px; max-height: 160px; overflow-y: auto;"><div style="font-size: 0.75rem; font-weight: 800; margin-bottom: 6px;">قائمة المحظورين:</div><table class="admin-table"><tbody id="bannedUsersTableBody"></tbody></table></div>
       </div>
-
       <div id="tabBanner" style="display: none;">
         <div class="form-group"><label>نص الشريط الإعلاني:</label><input type="text" id="adminBannerText" placeholder="اكتب نص الإعلان..."></div>
         <button class="btn-submit" onclick="saveBannerAnnouncement()">تحديث التنبيه</button>
@@ -613,9 +535,7 @@
     </div>
   </div>
 
-  <footer>
-    <div><strong>ONEBR TV</strong> © 2026. All rights reserved.</div>
-  </footer>
+  <footer><div><strong>ONEBR TV</strong> © 2026. All rights reserved.</div></footer>
 
   <script>
     const API_KEY = "8265bd1679663a7ea12ac168da84d2e8";
@@ -628,66 +548,21 @@
     const SUPER_ADMIN_EMAIL = "altrfybaqer0@gmail.com";
     const SUPER_ADMIN_PASS = "Aann22@@55";
 
-    const ALL_GENRES = [
-      { id: "28", ar: "أكشن", en: "Action" },
-      { id: "12", ar: "مغامرة", en: "Adventure" },
-      { id: "16", ar: "أنيميشن", en: "Animation" },
-      { id: "35", ar: "كوميديا", en: "Comedy" },
-      { id: "80", ar: "جريمة", en: "Crime" },
-      { id: "99", ar: "وثائقي", en: "Documentary" },
-      { id: "18", ar: "دراما", en: "Drama" },
-      { id: "10751", ar: "عائلي", en: "Family" },
-      { id: "14", ar: "فانتازيا", en: "Fantasy" },
-      { id: "36", ar: "تاريخي", en: "History" },
-      { id: "27", ar: "رعب", en: "Horror" },
-      { id: "10402", ar: "موسيقى", en: "Music" },
-      { id: "9648", ar: "غموض", en: "Mystery" },
-      { id: "10749", ar: "رومانسي", en: "Romance" },
-      { id: "878", ar: "خيال علمي", en: "Sci-Fi" },
-      { id: "53", ar: "إثارة", en: "Thriller" },
-      { id: "10752", ar: "حرب", en: "War" },
-      { id: "turkish", ar: "تركي", en: "Turkish" },
-      { id: "korean", ar: "كوري", en: "Korean" }
-    ];
+    const ALL_GENRES = [ { id: "28", ar: "أكشن", en: "Action" }, { id: "12", ar: "مغامرة", en: "Adventure" }, { id: "16", ar: "أنيميشن", en: "Animation" }, { id: "35", ar: "كوميديا", en: "Comedy" }, { id: "80", ar: "جريمة", en: "Crime" }, { id: "99", ar: "وثائقي", en: "Documentary" }, { id: "18", ar: "دراما", en: "Drama" }, { id: "10751", ar: "عائلي", en: "Family" }, { id: "14", ar: "فانتازيا", en: "Fantasy" }, { id: "36", ar: "تاريخي", en: "History" }, { id: "27", ar: "رعب", en: "Horror" }, { id: "10402", ar: "موسيقى", en: "Music" }, { id: "9648", ar: "غموض", en: "Mystery" }, { id: "10749", ar: "رومانسي", en: "Romance" }, { id: "878", ar: "خيال علمي", en: "Sci-Fi" }, { id: "53", ar: "إثارة", en: "Thriller" }, { id: "10752", ar: "حرب", en: "War" }, { id: "turkish", ar: "تركي", en: "Turkish" }, { id: "korean", ar: "كوري", en: "Korean" } ];
 
     let currentLang = localStorage.getItem('site_lang') || 'ar';
     let currentTheme = localStorage.getItem('site_theme') || 'dark';
 
     const translations = {
-      ar: {
-        nav_sections: "الأقسام الرئيسية", nav_genres: "جميع التصنيفات", nav_settings: "إعدادات المنصة",
-        nav_home: "الرئيسية", nav_movies: "الأفلام", nav_tv: "المسلسلات",
-        watch_now: "مشاهدة العمل", shelf_custom: "أعمال مضافة بواسطة الإدارة",
-        shelf_trending: "الأكثر رواجاً اليوم", shelf_turkish: "الدراما والمسلسلات التركية",
-        shelf_movies: "أحدث الأفلام العالمية", shelf_explore: "استكشاف العروض", shelf_similar: "أعمال مقترحة ومشابهة",
-        load_more: "تحميل المزيد", btn_back: "العودة", select_server: "اختر سيرفر المشاهدة:",
-        srv_prefix: "سيرفر", episodes_title: "المواسم والحلقات:", vip_title: "اشتراكات وباقات VIP",
-        vip_desc: "استمتع بتجربة خالية تماماً من الإعلانات مع شارات توهج ذهبية لحسابك وأولوية قصوى لطلبات الأفلام والمسلسلات.",
-        auth_title: "تسجيل الدخول", auth_email: "البريد الإلكتروني:", auth_pass: "كود الدخول:",
-        auth_btn: "دخول الحساب", auth_profile: "الحساب الشخصي", auth_logout: "تسجيل الخروج",
-        admin_title: "لوحة تحكم المشرفين (ONEBR TV)", search_ph: "بحث ذكي...",
-        season_prefix: "الموسم", ep_prefix: "حلقة"
-      },
-      en: {
-        nav_sections: "Main Sections", nav_genres: "All Genres", nav_settings: "Platform Settings",
-        nav_home: "Home", nav_movies: "Movies", nav_tv: "TV Shows",
-        watch_now: "Watch Now", shelf_custom: "Admin Releases",
-        shelf_trending: "Trending Today", shelf_turkish: "Turkish Drama & Series",
-        shelf_movies: "Latest World Movies", shelf_explore: "Explore Media", shelf_similar: "Similar & Recommended Titles",
-        load_more: "Load More", btn_back: "Back", select_server: "Select Stream Server:",
-        srv_prefix: "Server", episodes_title: "Seasons & Episodes:", vip_title: "VIP Memberships & Plans",
-        vip_desc: "Enjoy ad-free fast streaming with dedicated gold profile badges and VIP priority media requests.",
-        auth_title: "User Login", auth_email: "Email Address:", auth_pass: "PIN Code:",
-        auth_btn: "Login", auth_profile: "User Profile", auth_logout: "Logout",
-        admin_title: "Admin Dashboard (ONEBR TV)", search_ph: "Smart search...",
-        season_prefix: "Season", ep_prefix: "Ep"
-      }
+      ar: { nav_sections: "الأقسام الرئيسية", nav_genres: "جميع التصنيفات", nav_settings: "إعدادات المنصة", nav_home: "الرئيسية", nav_movies: "الأفلام", nav_tv: "المسلسلات", watch_now: "مشاهدة العمل", shelf_custom: "أعمال مضافة بواسطة الإدارة", shelf_trending: "الأكثر رواجاً اليوم", shelf_turkish: "الدراما والمسلسلات التركية", shelf_movies: "أحدث الأفلام العالمية", shelf_explore: "استكشاف العروض", shelf_similar: "أعمال مقترحة ومشابهة", load_more: "تحميل المزيد", btn_back: "العودة", select_server: "قائمة السيرفرات", srv_prefix: "سيرفر", episodes_title: "المواسم والحلقات:", vip_title: "اشتراكات وباقات VIP", vip_desc: "استمتع بتجربة خالية تماماً من الإعلانات مع شارات توهج ذهبية لحسابك وأولوية قصوى لطلبات الأفلام والمسلسلات.", auth_title: "تسجيل الدخول", auth_email: "البريد الإلكتروني:", auth_pass: "كود الدخول:", auth_btn: "دخول الحساب", auth_profile: "الحساب الشخصي", auth_logout: "تسجيل الخروج", admin_title: "لوحة تحكم المشرفين (ONEBR TV)", search_ph: "بحث ذكي...", season_prefix: "الموسم", ep_prefix: "حلقة" },
+      en: { nav_sections: "Main Sections", nav_genres: "All Genres", nav_settings: "Platform Settings", nav_home: "Home", nav_movies: "Movies", nav_tv: "TV Shows", watch_now: "Watch Now", shelf_custom: "Admin Releases", shelf_trending: "Trending Today", shelf_turkish: "Turkish Drama & Series", shelf_movies: "Latest World Movies", shelf_explore: "Explore Media", shelf_similar: "Similar & Recommended Titles", load_more: "Load More", btn_back: "Back", select_server: "Servers", srv_prefix: "Server", episodes_title: "Seasons & Episodes:", vip_title: "VIP Memberships & Plans", vip_desc: "Enjoy ad-free fast streaming with dedicated gold profile badges and VIP priority media requests.", auth_title: "User Login", auth_email: "Email Address:", auth_pass: "PIN Code:", auth_btn: "Login", auth_profile: "User Profile", auth_logout: "Logout", admin_title: "Admin Dashboard (ONEBR TV)", search_ph: "Smart search...", season_prefix: "Season", ep_prefix: "Ep" }
     };
 
     let currentUser = JSON.parse(localStorage.getItem('cinema_user') || 'null');
     let currentItem = { id: null, imdb_id: '', title: '', origTitle: '', slug: '', origLang: '', isAnime: false, isAsian: false, isTurkish: false, type: 'movie', poster_path: '', season: 1, episode: 1, isCustom: false, directUrl: '' };
-    let currentServer = 1;
     let activeServerList = [];
+    let currentServer = 1;
+    let hlsInstance = null;
     let heroRotationItems = [];
     let heroRotationIndex = 0;
     let heroInterval = null;
@@ -695,370 +570,24 @@
     let currentExploreEndpoint = '/trending/all/day';
     let isFetchingMore = false;
     let hasMoreExploreMedia = true;
-    let hlsInstance = null;
     let searchDebounceTimer = null;
     let verifyingForgotEmailAddress = '';
     let generatedOtp = '';
 
     // ==========================================
-    // محرك الفحص الذكي وتتبع تفاعل المستخدم 2.0
-    // ==========================================
-    function generateServerEndpoints() {
-      const { id, type, season: s, episode: e } = currentItem;
-      const isMov = (type === 'movie');
-
-      const allProviders = [
-        {
-          id: 'multiembed',
-          name: 'سيرفر 1 (MultiEmbed - شامل دراما كورية وتركي 🇹🇷 🇰🇷)',
-          url: isMov ? `https://multiembed.mov/?video_id=${id}&tmdb=1` : `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}`,
-          priority: (currentItem.isTurkish || currentItem.isAsian) ? 1 : 4
-        },
-        {
-          id: 'nontongo',
-          name: 'سيرفر 2 (NontonGo - متخصص آسيوي 🎎)',
-          url: isMov ? `https://www.nontongo.win/embed/movie/${id}` : `https://www.nontongo.win/embed/tv/${id}/${s}/${e}`,
-          priority: (currentItem.isAsian || currentItem.isTurkish) ? 2 : 7
-        },
-        {
-          id: 'smashy',
-          name: 'سيرفر 3 (SmashyStream - آسيا وأنمي متعدد 🎌)',
-          url: isMov ? `https://embed.smashystream.com/playere.php?tmdb=${id}` : `https://embed.smashystream.com/playere.php?tmdb=${id}&season=${s}&episode=${e}`,
-          priority: (currentItem.isAnime || currentItem.isAsian) ? 1 : 5
-        },
-        {
-          id: 'vidlink',
-          name: 'سيرفر 4 (VidLink - فائق السرعة بترجمة عربية)',
-          url: isMov ? `https://vidlink.pro/movie/${id}?primaryColor=e50914&sub=ar` : `https://vidlink.pro/tv/${id}/${s}/${e}?primaryColor=e50914&sub=ar`,
-          priority: currentItem.isAnime ? 4 : 1
-        },
-        {
-          id: 'embedsu',
-          name: 'سيرفر 5 (Embed.su - جودات متعددة وترجمة تلقائية)',
-          url: isMov ? `https://embed.su/embed/movie/${id}` : `https://embed.su/embed/tv/${id}/${s}/${e}`,
-          priority: 2
-        },
-        {
-          id: 'autoembed',
-          name: 'سيرفر 6 (AutoEmbed Server)',
-          url: isMov ? `https://player.autoembed.cc/embed/movie/${id}` : `https://player.autoembed.cc/embed/tv/${id}/${s}/${e}`,
-          priority: currentItem.isAnime ? 2 : 6
-        },
-        {
-          id: 'twoembed',
-          name: 'سيرفر 7 (2Embed VIP)',
-          url: isMov ? `https://www.2embed.cc/embed/${id}` : `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}`,
-          priority: 3
-        },
-        {
-          id: 'vidsrccc',
-          name: 'سيرفر 8 (VidSrc.cc Pro)',
-          url: isMov ? `https://vidsrc.cc/v2/embed/movie/${id}?autoPlay=true` : `https://vidsrc.cc/v2/embed/tv/${id}/${s}/${e}?autoPlay=true`,
-          priority: 5
-        },
-        {
-          id: 'vidsrcto',
-          name: 'سيرفر 9 (VidSrc.to)',
-          url: isMov ? `https://vidsrc.to/embed/movie/${id}` : `https://vidsrc.to/embed/tv/${id}/${s}/${e}`,
-          priority: 6
-        },
-        {
-          id: 'vidsrcme',
-          name: 'سيرفر 10 (VidSrc.me)',
-          url: isMov ? `https://vidsrc.me/embed/movie?tmdb=${id}` : `https://vidsrc.me/embed/tv?tmdb=${id}&season=${s}&episode=${e}`,
-          priority: 8
-        },
-        {
-          id: 'rive',
-          name: 'سيرفر 11 (Rive Stream Fast)',
-          url: isMov ? `https://rive.stream/embed/movie/${id}` : `https://rive.stream/embed/tv/${id}/${s}/${e}`,
-          priority: 9
-        },
-        {
-          id: 'moviesapi',
-          name: 'سيرفر 12 (MoviesAPI Club)',
-          url: isMov ? `https://moviesapi.club/movie/${id}` : `https://moviesapi.club/tv/${id}-${s}-${e}`,
-          priority: 10
-        },
-        {
-          id: 'superembed',
-          name: 'سيرفر 13 (SuperEmbed Net)',
-          url: isMov ? `https://multiembed.mov/directstream.php?video_id=${id}&tmdb=1` : `https://multiembed.mov/directstream.php?video_id=${id}&tmdb=1&s=${s}&e=${e}`,
-          priority: 11
-        },
-        {
-          id: 'vidsrcvip',
-          name: 'سيرفر 14 (VidSrc VIP)',
-          url: isMov ? `https://vidsrc.vip/embed/movie/${id}` : `https://vidsrc.vip/embed/tv/${id}/${s}/${e}`,
-          priority: 12
-        },
-        {
-          id: 'frembed',
-          name: 'سيرفر 15 (Frembed Stream)',
-          url: isMov ? `https://frembed.top/api/film.php?id=${id}` : `https://frembed.top/api/serie.php?id=${id}&s=${s}&e=${e}`,
-          priority: 13
-        },
-        {
-          id: '111movies',
-          name: 'سيرفر 16 (111Movies Direct)',
-          url: isMov ? `https://111movies.com/movie/${id}` : `https://111movies.com/tv/${id}/${s}/${e}`,
-          priority: 14
-        }
-      ];
-
-      allProviders.sort((a, b) => a.priority - b.priority);
-      activeServerList = allProviders;
-    }
-
-    function initServerResponseWatcher() {
-      // كاشف التفاعل اللحظي مع المشغل (Iframe Focus Tracker)
-      window.addEventListener('blur', () => {
-        setTimeout(() => {
-          if (document.activeElement && document.activeElement.tagName === 'IFRAME') {
-            confirmServerSuccess();
-          }
-        }, 100);
-      });
-
-      // مستمع رسائل المشغلات الدولية
-      window.addEventListener('message', (event) => {
-        if (!event.data) return;
-        try {
-          const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
-
-          if (
-            data.type === 'PLAYER_READY' || 
-            data.event === 'playing' || 
-            data.event === 'play' || 
-            data.status === 'playing' ||
-            data.event === 'timeupdate'
-          ) {
-            confirmServerSuccess();
-          }
-
-          if (
-            data.event === 'error' || 
-            data.event === 'no_source' || 
-            data.type === 'MEDIA_NOT_FOUND' || 
-            data.status === 'error' ||
-            data.error === true
-          ) {
-            manualSkipServer();
-          }
-        } catch(e) {}
-      });
-    }
-
-    function startSmartAutoProbe() {
-      generateServerEndpoints();
-      renderDynamicServersDeck();
-
-      const mediaKey = `winning_srv_${currentItem.type}_${currentItem.id}_s${currentItem.season}_e${currentItem.episode}`;
-      const savedWinningServer = parseInt(localStorage.getItem(mediaKey) || '1');
-
-      currentServer = (savedWinningServer <= activeServerList.length) ? savedWinningServer : 1;
-      executeServerLaunch(currentServer);
-    }
-
-    function executeServerLaunch(serverIdx) {
-      if (serverIdx > activeServerList.length) {
-        currentServer = 1;
-        serverIdx = 1;
-      }
-
-      currentServer = serverIdx;
-      const target = activeServerList[serverIdx - 1];
-      const frame = document.getElementById('streamFrame');
-      const toggleBtn = document.getElementById('serverToggleBtn');
-
-      toggleBtn.innerHTML = `📺 <span>سيرفر ${serverIdx} (محدد)</span>`;
-      
-      document.querySelectorAll('.server-menu-btn').forEach((b, i) => b.classList.toggle('active', i + 1 === serverIdx));
-
-      frame.src = target.url;
-    }
-
-    function confirmServerSuccess() {
-      const target = activeServerList[currentServer - 1];
-      const toggleBtn = document.getElementById('serverToggleBtn');
-
-      if (toggleBtn) toggleBtn.innerHTML = `📺 <span>سيرفر ${currentServer} (يعمل بنجاح 🟢)</span>`;
-
-      const mediaKey = `winning_srv_${currentItem.type}_${currentItem.id}_s${currentItem.season}_e${currentItem.episode}`;
-      localStorage.setItem(mediaKey, currentServer);
-    }
-
-    function manualSkipServer() {
-      if (currentServer < activeServerList.length) {
-        currentServer++;
-      } else {
-        currentServer = 1;
-      }
-      executeServerLaunch(currentServer);
-    }
-
-    function changeServer(idx) {
-      currentServer = idx;
-      executeServerLaunch(idx);
-    }
-
-    function renderDynamicServersDeck() {
-      const container = document.getElementById('serverDropdown');
-      container.innerHTML = '';
-
-      activeServerList.forEach((srv, index) => {
-        const srvIndex = index + 1;
-        const btn = document.createElement('button');
-        btn.className = `server-menu-btn ${srvIndex === currentServer ? 'active' : ''}`;
-        btn.innerText = srv.name;
-        btn.onclick = () => { 
-          changeServer(srvIndex); 
-          toggleServerMenu(); 
-        };
-        container.appendChild(btn);
-      });
-    }
-
-    function toggleServerMenu() {
-      const menu = document.getElementById("serverDropdown");
-      menu.style.display = menu.style.display === "flex" ? "none" : "flex";
-    }
-
-    document.addEventListener("click", function(event) {
-      const menu = document.getElementById("serverDropdown");
-      const btn = document.getElementById("serverToggleBtn");
-      if (menu && btn && !btn.contains(event.target) && !menu.contains(event.target)) {
-        menu.style.display = "none";
-      }
-    });
-
-    // ==========================================
-    // تشغيل البث المباشر والكاش السحابي
-    // ==========================================
-    async function startStreamingNow() {
-      const { id, type, season = 1, episode = 1 } = currentItem;
-      const mainContainer = document.getElementById('mainPlayerContainer');
-      const directBox = document.getElementById('directPlayerBox');
-      const iframeBox = document.getElementById('iframeBox');
-      const srvContainer = document.getElementById('serversContainer');
-      const video = document.getElementById('nativeVideo');
-
-      mainContainer.style.display = 'block';
-      mainContainer.scrollIntoView({ behavior: 'smooth' });
-
-      // 1. محاولة استخراج البث المباشر عبر Cloudflare Function
-      try {
-        const res = await fetch(`${CLOUDFLARE_WORKER_BASE}/api/resolve?tmdb=${id}&type=${type}&s=${season}&e=${episode}`);
-        const data = await res.json();
-
-        if (data.success && data.streams && data.streams.length > 0) {
-          const streamUrl = data.streams[0].url;
-          const referer = data.streams[0].referer || "https://vidlink.pro/";
-          const proxiedStreamUrl = `${CLOUDFLARE_WORKER_BASE}/api/proxy?url=${encodeURIComponent(streamUrl)}&referer=${encodeURIComponent(referer)}`;
-
-          iframeBox.style.display = 'none';
-          directBox.style.display = 'block';
-          srvContainer.style.display = 'none';
-
-          if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
-
-          if (Hls.isSupported()) {
-            hlsInstance = new Hls({ enableWorker: true, lowLatencyMode: true, backBufferLength: 90 });
-            hlsInstance.loadSource(proxiedStreamUrl);
-            hlsInstance.attachMedia(video);
-            hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => { video.play().catch(() => {}); });
-          } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-            video.src = proxiedStreamUrl;
-            video.play().catch(() => {});
-          }
-
-          loadAutoSubtitles(id, type, season, episode);
-          recordResumeProgress(currentItem, 25);
-          return;
-        }
-      } catch (err) {}
-
-      // 2. تفعيل نظام السيرفرات الذكي
-      directBox.style.display = 'none';
-      iframeBox.style.display = 'block';
-      srvContainer.style.display = 'flex';
-
-      startSmartAutoProbe();
-      recordResumeProgress(currentItem, 20);
-    }
-
-    async function loadAutoSubtitles(tmdb, type, s, e) {
-      try {
-        const res = await fetch(`${CLOUDFLARE_WORKER_BASE}/api/subtitles?tmdb=${tmdb}&type=${type}&s=${s}&e=${e}`);
-        const subs = await res.json();
-        if (subs && subs.length > 0) {
-          SubtitleManager.injectTrack(subs[0].url, subs[0].label);
-        }
-      } catch (e) {}
-    }
-
-    const SubtitleManager = {
-      injectTrack(vttUrl, label = "العربية") {
-        const video = document.getElementById('nativeVideo');
-        Array.from(video.querySelectorAll('track')).forEach(t => t.remove());
-
-        const track = document.createElement('track');
-        track.kind = 'subtitles';
-        track.label = label;
-        track.srclang = 'ar';
-        track.src = vttUrl;
-        track.default = true;
-        video.appendChild(track);
-
-        if (video.textTracks && video.textTracks[0]) {
-          video.textTracks[0].mode = 'showing';
-        }
-      }
-    };
-
-    function stopPlayer() {
-      const frame = document.getElementById('streamFrame');
-      if (frame) frame.src = "";
-
-      const video = document.getElementById('nativeVideo');
-      if (video) {
-        video.pause();
-        video.src = "";
-      }
-
-      if (hlsInstance) {
-        hlsInstance.destroy();
-        hlsInstance = null;
-      }
-
-      const mainPlayer = document.getElementById('mainPlayerContainer');
-      if (mainPlayer) mainPlayer.style.display = 'none';
-
-      const srvContainer = document.getElementById('serversContainer');
-      if (srvContainer) srvContainer.style.display = 'none';
-    }
-
-    // ==========================================
-    // التحكم بالريموت والتنقل لشاشات التلفزيون
+    // محرك التحكم بالريموت كنترول لشاشات Smart TV
     // ==========================================
     const TVController = {
       focusables: 'a, button, input, .card, .genre-box, .season-btn, .ep-btn, [tabindex="0"]',
-      init() {
-        document.addEventListener('keydown', this.handleKey.bind(this));
-      },
+      init() { document.addEventListener('keydown', this.handleKey.bind(this)); },
       handleKey(e) {
         const key = e.key;
-        const focusable = Array.from(document.querySelectorAll(this.focusables)).filter(
-          el => el.offsetParent !== null && !el.disabled
-        );
+        const focusable = Array.from(document.querySelectorAll(this.focusables)).filter(el => el.offsetParent !== null && !el.disabled);
         let activeIndex = focusable.indexOf(document.activeElement);
 
         if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(key)) {
           e.preventDefault();
-          if (activeIndex === -1) {
-            if (focusable.length > 0) focusable[0].focus();
-            return;
-          }
+          if (activeIndex === -1) { if (focusable.length > 0) focusable[0].focus(); return; }
           const rect = focusable[activeIndex].getBoundingClientRect();
           let bestIndex = -1;
           let minDistance = Infinity;
@@ -1068,7 +597,6 @@
             const targetRect = target.getBoundingClientRect();
             const dx = (targetRect.left + targetRect.width / 2) - (rect.left + rect.width / 2);
             const dy = (targetRect.top + targetRect.height / 2) - (rect.top + rect.height / 2);
-
             let isValid = false;
             if (key === 'ArrowRight' && dx > 10 && Math.abs(dy) < Math.abs(dx)) isValid = true;
             if (key === 'ArrowLeft' && dx < -10 && Math.abs(dy) < Math.abs(dx)) isValid = true;
@@ -1077,85 +605,201 @@
 
             if (isValid) {
               const distance = Math.hypot(dx, dy);
-              if (distance < minDistance) {
-                minDistance = distance;
-                bestIndex = i;
-              }
+              if (distance < minDistance) { minDistance = distance; bestIndex = i; }
             }
           });
-
-          if (bestIndex !== -1) {
-            focusable[bestIndex].focus();
-            focusable[bestIndex].scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
-          }
+          if (bestIndex !== -1) { focusable[bestIndex].focus(); focusable[bestIndex].scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' }); }
         } else if (key === 'Enter') {
-          if (document.activeElement && typeof document.activeElement.click === 'function') {
-            document.activeElement.click();
-          }
+          if (document.activeElement && typeof document.activeElement.click === 'function') document.activeElement.click();
         } else if (key === 'Escape' || key === 'Back' || key === 'GoBack') {
-          if (window.location.hash !== '#/home') {
-            window.history.back();
-          }
+          if (window.location.hash !== '#/home') window.history.back();
         }
       }
     };
 
+    // ==========================================
+    // مدير الترجمات التلقائية
+    // ==========================================
+    const SubtitleManager = {
+      injectTrack(vttUrl, label = "العربية") {
+        const video = document.getElementById('nativeVideo');
+        Array.from(video.querySelectorAll('track')).forEach(t => t.remove());
+        const track = document.createElement('track');
+        track.kind = 'subtitles'; track.label = label; track.srclang = 'ar'; track.src = vttUrl; track.default = true;
+        video.appendChild(track);
+        if (video.textTracks && video.textTracks[0]) video.textTracks[0].mode = 'showing';
+      }
+    };
+
+    // ==========================================
+    // محرك البث الذكي مع واجهة الرادار والذاكرة
+    // ==========================================
+    function buildFallbackServers(id, type, s, e) {
+      const isMov = (type === 'movie');
+      return [
+        { name: 'MultiEmbed', url: isMov ? `https://multiembed.mov/?video_id=${id}&tmdb=1` : `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}` },
+        { name: 'VidLink', url: isMov ? `https://vidlink.pro/movie/${id}?primaryColor=e50914` : `https://vidlink.pro/tv/${id}/${s}/${e}?primaryColor=e50914` },
+        { name: 'Embed.su', url: isMov ? `https://embed.su/embed/movie/${id}` : `https://embed.su/embed/tv/${id}/${s}/${e}` },
+        { name: 'VidSrc.cc', url: isMov ? `https://vidsrc.cc/v2/embed/movie/${id}` : `https://vidsrc.cc/v2/embed/tv/${id}/${s}/${e}` },
+        { name: 'NontonGo', url: isMov ? `https://www.nontongo.win/embed/movie/${id}` : `https://www.nontongo.win/embed/tv/${id}/${s}/${e}` }
+      ];
+    }
+
+    async function startStreamingNow() {
+      const { id, type, season = 1, episode = 1 } = currentItem;
+      const mainContainer = document.getElementById('mainPlayerContainer');
+      const directBox = document.getElementById('directPlayerBox');
+      const iframeBox = document.getElementById('iframeBox');
+      const srvContainer = document.getElementById('serversContainer');
+      const frame = document.getElementById('streamFrame');
+      const video = document.getElementById('nativeVideo');
+      const radar = document.getElementById('radarLoader');
+      const toggleBtn = document.getElementById('serverToggleBtn');
+
+      mainContainer.style.display = 'block';
+      mainContainer.scrollIntoView({ behavior: 'smooth' });
+
+      // إظهار شاشة الرادار السحابي وإخفاء المشغلات القديمة
+      radar.style.display = 'flex';
+      directBox.style.display = 'none';
+      iframeBox.style.display = 'none';
+      srvContainer.style.display = 'none';
+
+      try {
+        // إرسال الطلب للفحص السحابي المتوازي (سباق السيرفرات)
+        const res = await fetch(`${CLOUDFLARE_WORKER_BASE}/api/resolve?tmdb=${id}&type=${type}&s=${season}&e=${episode}`);
+        const data = await res.json();
+
+        radar.style.display = 'none';
+
+        if (data && data.success) {
+          if (data.directStreamUrl) {
+            directBox.style.display = 'block';
+            srvContainer.style.display = 'none';
+            const proxiedUrl = `${CLOUDFLARE_WORKER_BASE}/api/proxy?url=${encodeURIComponent(data.directStreamUrl)}`;
+
+            if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
+            if (Hls.isSupported()) {
+              hlsInstance = new Hls({ enableWorker: true, lowLatencyMode: true });
+              hlsInstance.loadSource(proxiedUrl);
+              hlsInstance.attachMedia(video);
+              hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => { video.play().catch(() => {}); });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+              video.src = proxiedUrl;
+              video.play().catch(() => {});
+            }
+            loadAutoSubtitles(id, type, season, episode);
+            recordResumeProgress(currentItem, 25);
+            return;
+          }
+
+          if (data.workingServerUrl) {
+            iframeBox.style.display = 'block';
+            srvContainer.style.display = 'flex';
+            activeServerList = buildFallbackServers(id, type, season, episode);
+            renderDynamicServersDeck();
+            
+            frame.src = data.workingServerUrl;
+            toggleBtn.innerHTML = `📺 <span>${data.serverName || 'السيرفر الآلي'} (نشط)</span>`;
+            recordResumeProgress(currentItem, 20);
+            return;
+          }
+        }
+      } catch (err) {}
+
+      // خطة الطوارئ القصوى إذا فشل الاتصال بالسحابة نهائياً
+      radar.style.display = 'none';
+      iframeBox.style.display = 'block';
+      srvContainer.style.display = 'flex';
+      activeServerList = buildFallbackServers(id, type, season, episode);
+      renderDynamicServersDeck();
+      
+      frame.src = activeServerList[0].url;
+      toggleBtn.innerHTML = `📺 <span>${activeServerList[0].name}</span>`;
+      recordResumeProgress(currentItem, 20);
+    }
+
+    async function loadAutoSubtitles(tmdb, type, s, e) {
+      try {
+        const res = await fetch(`${CLOUDFLARE_WORKER_BASE}/api/subtitles?tmdb=${tmdb}&type=${type}&s=${s}&e=${e}`);
+        const subs = await res.json();
+        if (subs && subs.length > 0) SubtitleManager.injectTrack(subs[0].url, subs[0].label);
+      } catch (e) {}
+    }
+
+    function renderDynamicServersDeck() {
+      const container = document.getElementById('serverDropdown');
+      container.innerHTML = '';
+      activeServerList.forEach((srv, index) => {
+        const srvIndex = index + 1;
+        const btn = document.createElement('button');
+        btn.className = `server-menu-btn ${index === 0 ? 'active' : ''}`;
+        btn.innerText = srv.name;
+        btn.onclick = () => { 
+          document.getElementById('streamFrame').src = srv.url;
+          document.getElementById('serverToggleBtn').innerHTML = `📺 <span>${srv.name}</span>`;
+          document.querySelectorAll('.server-menu-btn').forEach((b, i) => b.classList.toggle('active', i === index));
+          toggleServerMenu(); 
+        };
+        container.appendChild(btn);
+      });
+    }
+
+    function manualSkipServer() {
+      const frame = document.getElementById('streamFrame');
+      const currentIndex = activeServerList.findIndex(s => s.url === frame.src);
+      const nextIndex = (currentIndex + 1) % activeServerList.length;
+      const target = activeServerList[nextIndex];
+      frame.src = target.url;
+      document.getElementById('serverToggleBtn').innerHTML = `📺 <span>${target.name}</span>`;
+      document.querySelectorAll('.server-menu-btn').forEach((b, i) => b.classList.toggle('active', i === nextIndex));
+    }
+
+    function toggleServerMenu() {
+      const menu = document.getElementById("serverDropdown");
+      menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+    }
+
+    function stopPlayer() {
+      const frame = document.getElementById('streamFrame');
+      if (frame) frame.src = "";
+      const video = document.getElementById('nativeVideo');
+      if (video) { video.pause(); video.src = ""; }
+      if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
+      const mainPlayer = document.getElementById('mainPlayerContainer');
+      if (mainPlayer) mainPlayer.style.display = 'none';
+      const srvContainer = document.getElementById('serversContainer');
+      if (srvContainer) srvContainer.style.display = 'none';
+      document.getElementById('radarLoader').style.display = 'none';
+    }
+
+    // ==========================================
+    // بقية دوال الموقع الأساسية والملاحة
+    // ==========================================
     function togglePinVisibility(inputId, iconElement) {
       const input = document.getElementById(inputId);
-      if (input.classList.contains('masked-pin')) {
-        input.classList.remove('masked-pin');
-        iconElement.classList.remove('fa-eye-slash');
-        iconElement.classList.add('fa-eye');
-      } else {
-        input.classList.add('masked-pin');
-        iconElement.classList.remove('fa-eye');
-        iconElement.classList.add('fa-eye-slash');
-      }
+      if (input.classList.contains('masked-pin')) { input.classList.remove('masked-pin'); iconElement.classList.remove('fa-eye-slash'); iconElement.classList.add('fa-eye'); }
+      else { input.classList.add('masked-pin'); iconElement.classList.remove('fa-eye'); iconElement.classList.add('fa-eye-slash'); }
     }
 
     function getFavorites() { return JSON.parse(localStorage.getItem('user_favorites') || '[]'); }
     function saveFavorites(list) { localStorage.setItem('user_favorites', JSON.stringify(list)); }
-
     function getWatchedItems() { return JSON.parse(localStorage.getItem('user_watched_items') || '[]'); }
     function saveWatchedItems(list) { localStorage.setItem('user_watched_items', JSON.stringify(list)); }
-
     function getResumeList() { return JSON.parse(localStorage.getItem('user_resume_list') || '[]'); }
     function saveResumeList(list) { localStorage.setItem('user_resume_list', JSON.stringify(list)); }
 
     function recordResumeProgress(item, progressPercent = 35) {
       if (!item.id || item.isCustom) return;
       let list = getResumeList().filter(i => String(i.id) !== String(item.id));
-      list.unshift({
-        id: item.id,
-        type: item.type,
-        title: item.title,
-        poster_path: item.poster_path,
-        season: item.season || 1,
-        episode: item.episode || 1,
-        progress: progressPercent,
-        time: Date.now()
-      });
+      list.unshift({ id: item.id, type: item.type, title: item.title, poster_path: item.poster_path, season: item.season || 1, episode: item.episode || 1, progress: progressPercent, time: Date.now() });
       if (list.length > 10) list.pop();
       saveResumeList(list);
     }
 
-    function clearAllHistory() {
-      document.getElementById('confirmClearModal').style.display = 'flex';
-    }
-
-    function executeClearHistory() {
-      localStorage.removeItem('user_resume_list');
-      loadResumeShelf();
-      closeModal('confirmClearModal');
-    }
-
-    function removeResumeItem(itemId) {
-      let list = getResumeList();
-      list = list.filter(item => String(item.id) !== String(itemId));
-      saveResumeList(list);
-      loadResumeShelf();
-    }
-
+    function clearAllHistory() { document.getElementById('confirmClearModal').style.display = 'flex'; }
+    function executeClearHistory() { localStorage.removeItem('user_resume_list'); loadResumeShelf(); closeModal('confirmClearModal'); }
+    function removeResumeItem(itemId) { let list = getResumeList(); list = list.filter(item => String(item.id) !== String(itemId)); saveResumeList(list); loadResumeShelf(); }
     function isItemFavorited(id) { return getFavorites().some(i => String(i.id) === String(id)); }
     function isItemWatched(key) { return getWatchedItems().includes(String(key)); }
 
@@ -1164,14 +808,8 @@
       let favs = getFavorites();
       const idx = favs.findIndex(i => String(i.id) === String(currentItem.id));
       const btn = document.getElementById('btnToggleFav');
-
-      if (idx > -1) {
-        favs.splice(idx, 1);
-        btn.classList.remove('active-fav');
-      } else {
-        favs.unshift({ id: currentItem.id, type: currentItem.type, title: currentItem.title, poster_path: currentItem.poster_path });
-        btn.classList.add('active-fav');
-      }
+      if (idx > -1) { favs.splice(idx, 1); btn.classList.remove('active-fav'); }
+      else { favs.unshift({ id: currentItem.id, type: currentItem.type, title: currentItem.title, poster_path: currentItem.poster_path }); btn.classList.add('active-fav'); }
       saveFavorites(favs);
     }
 
@@ -1182,323 +820,140 @@
       const idx = watched.indexOf(key);
       const btn = document.getElementById('btnToggleWatched');
 
-      if (idx > -1) {
-        watched.splice(idx, 1);
-        btn.classList.remove('active-watched');
-      } else {
-        watched.push(key);
-        btn.classList.add('active-watched');
-      }
+      if (idx > -1) { watched.splice(idx, 1); btn.classList.remove('active-watched'); }
+      else { watched.push(key); btn.classList.add('active-watched'); }
       saveWatchedItems(watched);
-      if (currentItem.type === 'tv') {
-        renderTvEpisodes(currentItem.id, currentItem.season, currentItem.totalEpisodes || 10);
+      
+      // حفظ الحلقة القادمة كحلقة مقترحة
+      if (currentItem.type === 'tv' && currentItem.episode < (currentItem.totalEpisodes || 99)) {
+        localStorage.setItem(`next_ep_${currentItem.id}_s${currentItem.season}`, currentItem.episode + 1);
       }
+      
+      if (currentItem.type === 'tv') renderTvEpisodes(currentItem.id, currentItem.season, currentItem.totalEpisodes || 10);
     }
 
-    function getAvatarUrl(seed) {
-      return `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(seed || 'guest')}`;
-    }
-
+    function getAvatarUrl(seed) { return `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(seed || 'guest')}`; }
     function getVisitorFingerprint() {
       let fp = localStorage.getItem('visitor_uuid');
-      if (!fp) {
-        fp = 'ID-' + Math.random().toString(36).substring(2, 7).toUpperCase() + '-' + Date.now().toString(36).substring(4).toUpperCase();
-        localStorage.setItem('visitor_uuid', fp);
-      }
+      if (!fp) { fp = 'ID-' + Math.random().toString(36).substring(2, 7).toUpperCase() + '-' + Date.now().toString(36).substring(4).toUpperCase(); localStorage.setItem('visitor_uuid', fp); }
       return fp;
     }
 
     function injectAdScriptsIfEligible() {
-      if (currentUser && (currentUser.isVip || currentUser.isAdmin || currentUser.adsDisabled)) {
-        return;
-      }
-      const popScript = document.createElement('script');
-      popScript.src = "https://pl31046353.profitableratecpmnetwork.com/61/4f/72/614f728ad484f449400870c3be110111.js";
-      document.head.appendChild(popScript);
-
-      const socialScript = document.createElement('script');
-      socialScript.src = "https://pl31046352.profitableratecpmnetwork.com/24/e2/59/24e259929d0a94f08f92e8373055a876.js";
-      document.body.appendChild(socialScript);
+      if (currentUser && (currentUser.isVip || currentUser.isAdmin || currentUser.adsDisabled)) return;
+      const popScript = document.createElement('script'); popScript.src = "https://pl31046353.profitableratecpmnetwork.com/61/4f/72/614f728ad484f449400870c3be110111.js"; document.head.appendChild(popScript);
+      const socialScript = document.createElement('script'); socialScript.src = "https://pl31046352.profitableratecpmnetwork.com/24/e2/59/24e259929d0a94f08f92e8373055a876.js"; document.body.appendChild(socialScript);
     }
 
     async function initSite() {
-      applyTheme(currentTheme);
-      applyLanguage(currentLang);
-      initServerResponseWatcher();
-      TVController.init();
-      await verifyUserStatus();
-      injectAdScriptsIfEligible();
-      logVisitor();
-      loadCustomMediaFromFirebase();
-      loadBannerAnnouncement();
-      loadResumeShelf();
-      initHeroRotation();
-      initSearchAutocomplete();
-      initInfiniteScroll();
-      initPlayerSkipTimer();
-
-      window.addEventListener('hashchange', handleRouting);
-      handleRouting();
+      applyTheme(currentTheme); applyLanguage(currentLang); TVController.init(); await verifyUserStatus(); injectAdScriptsIfEligible(); logVisitor();
+      loadCustomMediaFromFirebase(); loadBannerAnnouncement(); loadResumeShelf(); initHeroRotation(); initSearchAutocomplete(); initInfiniteScroll(); initPlayerSkipTimer();
+      window.addEventListener('hashchange', handleRouting); handleRouting();
     }
 
     function renderGenreBoxes() {
-      const box = document.getElementById('genreBoxesContainer');
-      box.innerHTML = '';
+      const box = document.getElementById('genreBoxesContainer'); box.innerHTML = '';
       ALL_GENRES.forEach(g => {
-        const div = document.createElement('div');
-        div.className = 'genre-box';
-        div.innerText = (currentLang === 'ar') ? g.ar : g.en;
-        div.onclick = () => {
-          toggleDrawer();
-          location.hash = `#/category/${g.id}`;
-        };
-        box.appendChild(div);
+        const div = document.createElement('div'); div.className = 'genre-box'; div.innerText = (currentLang === 'ar') ? g.ar : g.en;
+        div.onclick = () => { toggleDrawer(); location.hash = `#/category/${g.id}`; }; box.appendChild(div);
       });
     }
 
     function toggleDrawer() {
-      const drawer = document.getElementById('drawer');
-      const overlay = document.getElementById('drawerOverlay');
-      drawer.classList.toggle('open');
-      overlay.style.display = drawer.classList.contains('open') ? 'block' : 'none';
+      const drawer = document.getElementById('drawer'); const overlay = document.getElementById('drawerOverlay');
+      drawer.classList.toggle('open'); overlay.style.display = drawer.classList.contains('open') ? 'block' : 'none';
     }
 
-    function toggleTheme() {
-      currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
-      localStorage.setItem('site_theme', currentTheme);
-      applyTheme(currentTheme);
-    }
-    function applyTheme(theme) {
-      document.documentElement.setAttribute('data-theme', theme);
-      document.getElementById('themeToggleText').innerText = theme === 'dark' ? 'الوضع النهاري (Light)' : 'الوضع الليلي (Dark)';
-    }
-
-    function toggleLanguage() {
-      currentLang = currentLang === 'ar' ? 'en' : 'ar';
-      localStorage.setItem('site_lang', currentLang);
-      applyLanguage(currentLang);
-      handleRouting();
-      initHeroRotation();
-    }
+    function toggleTheme() { currentTheme = currentTheme === 'dark' ? 'light' : 'dark'; localStorage.setItem('site_theme', currentTheme); applyTheme(currentTheme); }
+    function applyTheme(theme) { document.documentElement.setAttribute('data-theme', theme); document.getElementById('themeToggleText').innerText = theme === 'dark' ? 'الوضع النهاري (Light)' : 'الوضع الليلي (Dark)'; }
+    function toggleLanguage() { currentLang = currentLang === 'ar' ? 'en' : 'ar'; localStorage.setItem('site_lang', currentLang); applyLanguage(currentLang); handleRouting(); initHeroRotation(); }
     function applyLanguage(lang) {
-      document.documentElement.lang = lang;
-      document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+      document.documentElement.lang = lang; document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
       document.getElementById('langToggleText').innerText = lang === 'ar' ? 'English' : 'العربية';
       document.getElementById('searchInput').placeholder = translations[lang].search_ph;
-
-      document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (translations[lang][key]) el.innerText = translations[lang][key];
-      });
+      document.querySelectorAll('[data-i18n]').forEach(el => { const key = el.getAttribute('data-i18n'); if (translations[lang][key]) el.innerText = translations[lang][key]; });
       renderGenreBoxes();
     }
 
     function handleRouting() {
       stopPlayer();
-      const hash = window.location.hash || '#/home';
-      const parts = hash.split('/');
-      const route = parts[1] || 'home';
-
-      if (route === 'home') {
-        showHomeView();
-        document.getElementById('defaultShelves').style.display = 'block';
-        currentExploreEndpoint = '/trending/all/day';
-        loadMoreExploreMedia(true);
-        loadResumeShelf();
-      } else if (route === 'movies') {
-        showHomeView();
-        document.getElementById('defaultShelves').style.display = 'none';
-        currentExploreEndpoint = '/discover/movie?sort_by=popularity.desc';
-        loadMoreExploreMedia(true);
-      } else if (route === 'tv') {
-        showHomeView();
-        document.getElementById('defaultShelves').style.display = 'none';
-        currentExploreEndpoint = '/discover/tv?sort_by=popularity.desc';
-        loadMoreExploreMedia(true);
-      } else if (route === 'favorites') {
-        openFavoritesPage();
-      } else if (route === 'category') {
-        showHomeView();
-        const cat = parts[2];
-        document.getElementById('defaultShelves').style.display = 'none';
-        if (cat === 'turkish') currentExploreEndpoint = '/discover/tv?with_original_language=tr&sort_by=popularity.desc';
-        else if (cat === 'korean') currentExploreEndpoint = '/discover/tv?with_original_language=ko&sort_by=popularity.desc';
-        else currentExploreEndpoint = `/discover/movie?with_genres=${cat}&sort_by=popularity.desc`;
-        loadMoreExploreMedia(true);
-      } else if (route === 'search') {
-        const q = decodeURIComponent(parts[2] || '');
-        openSearchResultsPage(q);
-      } else if (route === 'theater') {
-        fetchMediaAndOpenTheater(parts[3], parts[2], parseInt(parts[4] || 1), parseInt(parts[5] || 1));
-      } else if (route === 'admin') {
-        openAdminModal();
-      }
+      const hash = window.location.hash || '#/home'; const parts = hash.split('/'); const route = parts[1] || 'home';
+      if (route === 'home') { showHomeView(); document.getElementById('defaultShelves').style.display = 'block'; currentExploreEndpoint = '/trending/all/day'; loadMoreExploreMedia(true); loadResumeShelf(); }
+      else if (route === 'movies') { showHomeView(); document.getElementById('defaultShelves').style.display = 'none'; currentExploreEndpoint = '/discover/movie?sort_by=popularity.desc'; loadMoreExploreMedia(true); }
+      else if (route === 'tv') { showHomeView(); document.getElementById('defaultShelves').style.display = 'none'; currentExploreEndpoint = '/discover/tv?sort_by=popularity.desc'; loadMoreExploreMedia(true); }
+      else if (route === 'favorites') { openFavoritesPage(); }
+      else if (route === 'category') { showHomeView(); const cat = parts[2]; document.getElementById('defaultShelves').style.display = 'none'; if (cat === 'turkish') currentExploreEndpoint = '/discover/tv?with_original_language=tr&sort_by=popularity.desc'; else if (cat === 'korean') currentExploreEndpoint = '/discover/tv?with_original_language=ko&sort_by=popularity.desc'; else currentExploreEndpoint = `/discover/movie?with_genres=${cat}&sort_by=popularity.desc`; loadMoreExploreMedia(true); }
+      else if (route === 'search') { const q = decodeURIComponent(parts[2] || ''); openSearchResultsPage(q); }
+      else if (route === 'theater') { fetchMediaAndOpenTheater(parts[3], parts[2], parseInt(parts[4] || 1), parseInt(parts[5] || 1)); }
+      else if (route === 'admin') { openAdminModal(); }
     }
 
-    function showHomeView() {
-      document.getElementById('theaterView').style.display = 'none';
-      document.getElementById('searchResultsView').style.display = 'none';
-      document.getElementById('favoritesView').style.display = 'none';
-      document.getElementById('homeView').style.display = 'block';
-    }
-
+    function showHomeView() { document.getElementById('theaterView').style.display = 'none'; document.getElementById('searchResultsView').style.display = 'none'; document.getElementById('favoritesView').style.display = 'none'; document.getElementById('homeView').style.display = 'block'; }
     function openFavoritesPage() {
-      document.getElementById('homeView').style.display = 'none';
-      document.getElementById('theaterView').style.display = 'none';
-      document.getElementById('searchResultsView').style.display = 'none';
-      document.getElementById('favoritesView').style.display = 'block';
-      window.scrollTo(0, 0);
-
-      const container = document.getElementById('deckFavorites');
-      const favs = getFavorites();
-      container.innerHTML = '';
-      if (favs.length === 0) {
-        container.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:30px; color:var(--text-muted);">لم تقم بإضافة أي أعمال إلى المفضلة بعد.</div>';
-        return;
-      }
+      document.getElementById('homeView').style.display = 'none'; document.getElementById('theaterView').style.display = 'none'; document.getElementById('searchResultsView').style.display = 'none'; document.getElementById('favoritesView').style.display = 'block'; window.scrollTo(0, 0);
+      const container = document.getElementById('deckFavorites'); const favs = getFavorites(); container.innerHTML = '';
+      if (favs.length === 0) { container.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:30px; color:var(--text-muted);">لم تقم بإضافة أي أعمال إلى المفضلة بعد.</div>'; return; }
       renderCards(favs, container);
     }
 
     function loadResumeShelf() {
-      const deck = document.getElementById('deckResume');
-      const list = getResumeList();
+      const deck = document.getElementById('deckResume'); const list = getResumeList();
       if (list.length > 0) {
-        deck.innerHTML = '';
-        document.getElementById('resumeShelfBox').style.display = 'block';
+        deck.innerHTML = ''; document.getElementById('resumeShelfBox').style.display = 'block';
         list.forEach(item => {
-          const card = document.createElement('div');
-          card.className = 'card';
-          const progressVal = item.progress || 50;
-          card.innerHTML = `
-            <div style="position: absolute; top: 5px; left: 5px; z-index: 10; background: rgba(0,0,0,0.8); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer;" onclick="event.stopPropagation(); removeResumeItem('${item.id}')">
-               <i class="fa-solid fa-xmark" style="color: #ef4444; font-size: 0.85rem;"></i>
-            </div>
-            <img src="${item.poster_path ? POSTER_BASE + item.poster_path : 'https://image.tmdb.org/t/p/w500/mXk9kEw9u5dF72Tsk4O9Jt0rGgG.jpg'}" loading="lazy" onclick="location.hash = '#/theater/${item.type}/${item.id}/${item.season}/${item.episode}'">
-            <div class="card-body" onclick="location.hash = '#/theater/${item.type}/${item.id}/${item.season}/${item.episode}'">
-              <div class="card-title">${item.title}</div>
-              <div class="card-meta"><span>${item.type === 'tv' ? `م${item.season} ح${item.episode}` : 'فيلم'}</span><span style="color:var(--gold);">استئناف ▶</span></div>
-              <div class="progress-bar-container"><div class="progress-bar-fill" style="width: ${progressVal}%;"></div></div>
-            </div>
-          `;
+          const card = document.createElement('div'); card.className = 'card'; const progressVal = item.progress || 50;
+          card.innerHTML = `<div style="position: absolute; top: 5px; left: 5px; z-index: 10; background: rgba(0,0,0,0.8); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer;" onclick="event.stopPropagation(); removeResumeItem('${item.id}')"><i class="fa-solid fa-xmark" style="color: #ef4444; font-size: 0.85rem;"></i></div><img src="${item.poster_path ? POSTER_BASE + item.poster_path : 'https://image.tmdb.org/t/p/w500/mXk9kEw9u5dF72Tsk4O9Jt0rGgG.jpg'}" loading="lazy" onclick="location.hash = '#/theater/${item.type}/${item.id}/${item.season}/${item.episode}'"><div class="card-body" onclick="location.hash = '#/theater/${item.type}/${item.id}/${item.season}/${item.episode}'"><div class="card-title">${item.title}</div><div class="card-meta"><span>${item.type === 'tv' ? `م${item.season} ح${item.episode}` : 'فيلم'}</span><span style="color:var(--gold);">استئناف ▶</span></div><div class="progress-bar-container"><div class="progress-bar-fill" style="width: ${progressVal}%;"></div></div></div>`;
           deck.appendChild(card);
         });
-      } else {
-        document.getElementById('resumeShelfBox').style.display = 'none';
-      }
+      } else { document.getElementById('resumeShelfBox').style.display = 'none'; }
     }
 
     function initInfiniteScroll() {
       window.addEventListener('scroll', () => {
         if (document.getElementById('homeView').style.display === 'none') return;
-        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500) {
-          if (!isFetchingMore && hasMoreExploreMedia) {
-            loadMoreExploreMedia(false);
-          }
-        }
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500) { if (!isFetchingMore && hasMoreExploreMedia) loadMoreExploreMedia(false); }
       });
     }
 
     async function loadMoreExploreMedia(reset = false) {
-      if (isFetchingMore) return;
-      isFetchingMore = true;
-      const loader = document.getElementById('scrollLoader');
-      loader.style.display = 'block';
-
-      if (reset) {
-        explorePage = 1;
-        document.getElementById('deckExplore').innerHTML = "";
-        hasMoreExploreMedia = true;
-      }
-
+      if (isFetchingMore) return; isFetchingMore = true; const loader = document.getElementById('scrollLoader'); loader.style.display = 'block';
+      if (reset) { explorePage = 1; document.getElementById('deckExplore').innerHTML = ""; hasMoreExploreMedia = true; }
       try {
         const res = await fetch(`${API_BASE}${currentExploreEndpoint}${currentExploreEndpoint.includes('?') ? '&' : '?'}api_key=${API_KEY}&language=${currentLang}&page=${explorePage}`);
-        const json = await res.json();
-        const results = json.results || [];
-
-        if (results.length === 0) {
-          hasMoreExploreMedia = false;
-        } else {
-          renderCards(results, document.getElementById('deckExplore'));
-          explorePage++;
-        }
-      } catch (e) {
-      } finally {
-        isFetchingMore = false;
-        loader.style.display = 'none';
-      }
+        const json = await res.json(); const results = json.results || [];
+        if (results.length === 0) hasMoreExploreMedia = false; else { renderCards(results, document.getElementById('deckExplore')); explorePage++; }
+      } catch (e) {} finally { isFetchingMore = false; loader.style.display = 'none'; }
     }
 
-    function triggerFullSearch() {
-      const q = document.getElementById('searchInput').value.trim();
-      if (!q) return;
-      document.getElementById('searchDropdown').style.display = 'none';
-      location.hash = `#/search/${encodeURIComponent(q)}`;
-    }
+    function triggerFullSearch() { const q = document.getElementById('searchInput').value.trim(); if (!q) return; document.getElementById('searchDropdown').style.display = 'none'; location.hash = `#/search/${encodeURIComponent(q)}`; }
 
     async function openSearchResultsPage(query) {
-      document.getElementById('homeView').style.display = 'none';
-      document.getElementById('theaterView').style.display = 'none';
-      document.getElementById('favoritesView').style.display = 'none';
-      document.getElementById('searchResultsView').style.display = 'block';
-      window.scrollTo(0, 0);
-
-      document.getElementById('searchHeaderTitle').innerText = `🔍 نتائج البحث عن: "${query}"`;
-      const container = document.getElementById('deckSearchResults');
-      container.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:20px;">جاري البحث...</div>';
-
+      document.getElementById('homeView').style.display = 'none'; document.getElementById('theaterView').style.display = 'none'; document.getElementById('favoritesView').style.display = 'none'; document.getElementById('searchResultsView').style.display = 'block'; window.scrollTo(0, 0);
+      document.getElementById('searchHeaderTitle').innerText = `🔍 نتائج البحث عن: "${query}"`; const container = document.getElementById('deckSearchResults'); container.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:20px;">جاري البحث...</div>';
       try {
         const res = await fetch(`${API_BASE}/search/multi?query=${encodeURIComponent(query)}&api_key=${API_KEY}&language=${currentLang}`);
-        const data = await res.json();
-        container.innerHTML = '';
-        const validResults = (data.results || []).filter(i => i.poster_path);
-        if (validResults.length === 0) {
-          container.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:20px; color:var(--text-muted);">لم يتم العثور على أي نتائج مطابقة.</div>';
-          return;
-        }
+        const data = await res.json(); container.innerHTML = ''; const validResults = (data.results || []).filter(i => i.poster_path);
+        if (validResults.length === 0) { container.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:20px; color:var(--text-muted);">لم يتم العثور على أي نتائج مطابقة.</div>'; return; }
         renderCards(validResults, container);
-      } catch(e) {
-        container.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:20px;">تعذر جلب النتائج.</div>';
-      }
+      } catch(e) { container.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:20px;">تعذر جلب النتائج.</div>'; }
     }
 
     function initSearchAutocomplete() {
-      const searchInput = document.getElementById('searchInput');
-      const searchDropdown = document.getElementById('searchDropdown');
-
-      searchInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') triggerFullSearch();
-      });
-
+      const searchInput = document.getElementById('searchInput'); const searchDropdown = document.getElementById('searchDropdown');
+      searchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') triggerFullSearch(); });
       searchInput.addEventListener('input', (e) => {
-        clearTimeout(searchDebounceTimer);
-        const q = e.target.value.trim();
-        if (!q) { searchDropdown.style.display = 'none'; return; }
-
+        clearTimeout(searchDebounceTimer); const q = e.target.value.trim(); if (!q) { searchDropdown.style.display = 'none'; return; }
         searchDebounceTimer = setTimeout(async () => {
           try {
             const res = await fetch(`${API_BASE}/search/multi?query=${encodeURIComponent(q)}&api_key=${API_KEY}&language=${currentLang}`);
-            const data = await res.json();
-            const results = (data.results || []).filter(i => i.poster_path).slice(0, 6);
+            const data = await res.json(); const results = (data.results || []).filter(i => i.poster_path).slice(0, 6);
             if (results.length === 0) { searchDropdown.style.display = 'none'; return; }
-
             searchDropdown.innerHTML = '';
             results.forEach(item => {
-              const isMovie = (item.media_type === 'movie' || item.title);
-              const type = isMovie ? 'movie' : 'tv';
-              const title = item.title || item.name;
-
-              const row = document.createElement('div');
-              row.className = 'search-item';
-              row.onclick = () => {
-                searchDropdown.style.display = 'none';
-                searchInput.value = '';
-                location.hash = `#/theater/${type}/${item.id}`;
-              };
-              row.innerHTML = `
-                <img src="${POSTER_BASE + item.poster_path}">
-                <div class="search-item-title">${title}</div>
-              `;
-              searchDropdown.appendChild(row);
+              const isMovie = (item.media_type === 'movie' || item.title); const type = isMovie ? 'movie' : 'tv'; const title = item.title || item.name;
+              const row = document.createElement('div'); row.className = 'search-item';
+              row.onclick = () => { searchDropdown.style.display = 'none'; searchInput.value = ''; location.hash = `#/theater/${type}/${item.id}`; };
+              row.innerHTML = `<img src="${POSTER_BASE + item.poster_path}"><div class="search-item-title">${title}</div>`; searchDropdown.appendChild(row);
             });
             searchDropdown.style.display = 'flex';
           } catch(e) {}
@@ -1509,15 +964,10 @@
     async function initHeroRotation() {
       try {
         const res = await fetch(`${API_BASE}/trending/all/day?api_key=${API_KEY}&language=${currentLang}`);
-        const data = await res.json();
-        heroRotationItems = (data.results || []).filter(i => i.backdrop_path);
+        const data = await res.json(); heroRotationItems = (data.results || []).filter(i => i.backdrop_path);
         if (heroRotationItems.length > 0) {
-          renderHeroItem(heroRotationItems[0]);
-          if (heroInterval) clearInterval(heroInterval);
-          heroInterval = setInterval(() => {
-            heroRotationIndex = (heroRotationIndex + 1) % heroRotationItems.length;
-            renderHeroItem(heroRotationItems[heroRotationIndex]);
-          }, 8000);
+          renderHeroItem(heroRotationItems[0]); if (heroInterval) clearInterval(heroInterval);
+          heroInterval = setInterval(() => { heroRotationIndex = (heroRotationIndex + 1) % heroRotationItems.length; renderHeroItem(heroRotationItems[heroRotationIndex]); }, 8000);
         }
       } catch(e) {}
     }
@@ -1538,11 +988,7 @@
     loadShelves();
 
     async function loadShelfList(path, elemId, fixedType = null) {
-      try {
-        const res = await fetch(`${API_BASE}${path}${path.includes('?') ? '&' : '?'}api_key=${API_KEY}&language=${currentLang}`);
-        const json = await res.json();
-        renderCards(json.results || [], document.getElementById(elemId), fixedType);
-      } catch (e) {}
+      try { const res = await fetch(`${API_BASE}${path}${path.includes('?') ? '&' : '?'}api_key=${API_KEY}&language=${currentLang}`); const json = await res.json(); renderCards(json.results || [], document.getElementById(elemId), fixedType); } catch (e) {}
     }
 
     function renderCards(list, container, fixedType) {
@@ -1550,46 +996,32 @@
       list.forEach(item => {
         if (!item.poster_path) return;
         const isMovie = fixedType ? (fixedType === 'movie') : (item.media_type === 'movie' || item.title);
-        const type = isMovie ? 'movie' : 'tv';
-        const title = item.title || item.name;
-        const score = item.vote_average ? item.vote_average.toFixed(1) : '7.5';
-        const date = (item.release_date || item.first_air_date || '2026').substring(0, 4);
+        const type = isMovie ? 'movie' : 'tv'; const title = item.title || item.name;
+        const score = item.vote_average ? item.vote_average.toFixed(1) : '7.5'; const date = (item.release_date || item.first_air_date || '2026').substring(0, 4);
         const watched = isItemWatched(`movie_${item.id}`) || isItemWatched(`tv_${item.id}_s1_e1`);
-
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.onclick = () => { location.hash = `#/theater/${type}/${item.id}`; };
-        card.innerHTML = `
-          ${watched ? '<span class="card-watched-badge">✓ تمت المشاهدة</span>' : ''}
-          <img src="${POSTER_BASE + item.poster_path}" loading="lazy">
-          <div class="card-body">
-            <div class="card-title">${title}</div>
-            <div class="card-meta"><span>${date}</span><span class="rating">⭐ ${score}</span></div>
-          </div>
-        `;
+        const card = document.createElement('div'); card.className = 'card'; card.onclick = () => { location.hash = `#/theater/${type}/${item.id}`; };
+        card.innerHTML = `${watched ? '<span class="card-watched-badge">✓ تمت المشاهدة</span>' : ''}<img src="${POSTER_BASE + item.poster_path}" loading="lazy"><div class="card-body"><div class="card-title">${title}</div><div class="card-meta"><span>${date}</span><span class="rating">⭐ ${score}</span></div></div>`;
         container.appendChild(card);
       });
     }
 
-    async function fetchMediaAndOpenTheater(id, type, season = 1, episode = 1) {
-      document.getElementById('homeView').style.display = 'none';
-      document.getElementById('searchResultsView').style.display = 'none';
-      document.getElementById('favoritesView').style.display = 'none';
-      document.getElementById('theaterView').style.display = 'block';
-      document.getElementById('mainPlayerContainer').style.display = 'none';
-      document.getElementById('serversContainer').style.display = 'none';
-      window.scrollTo(0, 0);
-
-      currentItem = { id, imdb_id: '', title: '', origTitle: '', slug: '', origLang: '', isAnime: false, isAsian: false, isTurkish: false, type, poster_path: '', season, episode, isCustom: false, directUrl: '' };
+    async function fetchMediaAndOpenTheater(id, type, season = null, episode = null) {
+      document.getElementById('homeView').style.display = 'none'; document.getElementById('searchResultsView').style.display = 'none'; document.getElementById('favoritesView').style.display = 'none'; document.getElementById('theaterView').style.display = 'block';
+      document.getElementById('mainPlayerContainer').style.display = 'none'; document.getElementById('serversContainer').style.display = 'none'; document.getElementById('radarLoader').style.display = 'none'; window.scrollTo(0, 0);
 
       try {
         const res = await fetch(`${API_BASE}/${type}/${id}?api_key=${API_KEY}&language=${currentLang}&append_to_response=external_ids`);
         const data = await res.json();
         
-        currentItem.title = data.title || data.name;
-        currentItem.origTitle = data.original_title || data.original_name || currentItem.title;
-        currentItem.poster_path = data.poster_path;
-        currentItem.origLang = data.original_language || '';
+        // استرجاع الذاكرة الذكية إذا لم يتم تمرير حلقة معينة في الرابط
+        let s = season || 1;
+        let e = episode || 1;
+        if (!season && type === 'tv') {
+           const nextEp = localStorage.getItem(`next_ep_${id}_s${s}`);
+           if (nextEp) e = parseInt(nextEp);
+        }
+
+        currentItem = { id, imdb_id: '', title: data.title || data.name, origTitle: data.original_title || data.original_name || data.title, origLang: data.original_language || '', isAnime: false, isAsian: false, isTurkish: false, type, poster_path: data.poster_path, season: s, episode: e, isCustom: false, directUrl: '' };
         
         const genreIds = (data.genres || []).map(g => g.id);
         currentItem.isAnime = genreIds.includes(16) || currentItem.origLang === 'ja';
@@ -1600,643 +1032,95 @@
         document.getElementById('detailOverview').innerText = data.overview || "Enjoy high quality streaming.";
         document.getElementById('detailScore').innerText = `⭐ ${data.vote_average ? data.vote_average.toFixed(1) : '8.0'}`;
         document.getElementById('detailYear').innerText = (data.release_date || data.first_air_date || '2026').substring(0, 4);
+        if (data.backdrop_path) document.getElementById('detailHeroBox').style.backgroundImage = `url('${BACKDROP_BASE + data.backdrop_path}')`;
 
-        if (data.backdrop_path) {
-          document.getElementById('detailHeroBox').style.backgroundImage = `url('${BACKDROP_BASE + data.backdrop_path}')`;
-        }
+        const genresBox = document.getElementById('detailGenres'); genresBox.innerHTML = '';
+        (data.genres || []).forEach(g => { const badge = document.createElement('span'); badge.className = 'badge-tag'; badge.innerText = g.name; genresBox.appendChild(badge); });
 
-        const genresBox = document.getElementById('detailGenres');
-        genresBox.innerHTML = '';
-        (data.genres || []).forEach(g => {
-          const badge = document.createElement('span');
-          badge.className = 'badge-tag';
-          badge.innerText = g.name;
-          genresBox.appendChild(badge);
-        });
+        const isFav = isItemFavorited(id); document.getElementById('btnToggleFav').classList.toggle('active-fav', isFav);
+        const watchedKey = type === 'movie' ? `movie_${id}` : `tv_${id}_s${s}_e${e}`; document.getElementById('btnToggleWatched').classList.toggle('active-watched', isItemWatched(watchedKey));
 
-        const isFav = isItemFavorited(id);
-        document.getElementById('btnToggleFav').classList.toggle('active-fav', isFav);
-
-        const watchedKey = type === 'movie' ? `movie_${id}` : `tv_${id}_s${season}_e${episode}`;
-        document.getElementById('btnToggleWatched').classList.toggle('active-watched', isItemWatched(watchedKey));
-
-        if (type === 'tv') {
-          document.getElementById('episodesContainer').style.display = 'block';
-          renderTvSeasons(data.seasons || [], id);
-        } else {
-          document.getElementById('episodesContainer').style.display = 'none';
-        }
-
+        if (type === 'tv') { document.getElementById('episodesContainer').style.display = 'block'; renderTvSeasons(data.seasons || [], id); }
+        else { document.getElementById('episodesContainer').style.display = 'none'; }
         loadSimilarMedia(id, type);
-
       } catch(e) {}
     }
 
-    async function loadSimilarMedia(id, type) {
-      try {
-        const res = await fetch(`${API_BASE}/${type}/${id}/similar?api_key=${API_KEY}&language=${currentLang}`);
-        const data = await res.json();
-        const deck = document.getElementById('deckSimilar');
-        deck.innerHTML = '';
-        renderCards(data.results || [], deck, type);
-      } catch(e) {}
-    }
+    async function loadSimilarMedia(id, type) { try { const res = await fetch(`${API_BASE}/${type}/${id}/similar?api_key=${API_KEY}&language=${currentLang}`); const data = await res.json(); const deck = document.getElementById('deckSimilar'); deck.innerHTML = ''; renderCards(data.results || [], deck, type); } catch(e) {} }
 
     function renderTvSeasons(seasons, tvId) {
-      const seasonsList = document.getElementById('seasonsList');
-      seasonsList.innerHTML = '';
+      const seasonsList = document.getElementById('seasonsList'); seasonsList.innerHTML = '';
       const validSeasons = seasons.filter(s => s.season_number > 0);
-
       validSeasons.forEach(s => {
-        const btn = document.createElement('button');
-        btn.className = `season-btn ${s.season_number === currentItem.season ? 'active' : ''}`;
-        btn.innerText = `${translations[currentLang].season_prefix} ${s.season_number}`;
-        btn.onclick = () => {
-          document.querySelectorAll('.season-btn').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          currentItem.season = s.season_number;
-          currentItem.episode = 1;
-          location.hash = `#/theater/tv/${tvId}/${s.season_number}/1`;
-        };
+        const btn = document.createElement('button'); btn.className = `season-btn ${s.season_number === currentItem.season ? 'active' : ''}`; btn.innerText = `${translations[currentLang].season_prefix} ${s.season_number}`;
+        btn.onclick = () => { document.querySelectorAll('.season-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); currentItem.season = s.season_number; currentItem.episode = 1; location.hash = `#/theater/tv/${tvId}/${s.season_number}/1`; };
         seasonsList.appendChild(btn);
       });
-
       const activeSeasonObj = validSeasons.find(s => s.season_number === currentItem.season) || validSeasons[0];
-      if (activeSeasonObj) {
-        currentItem.totalEpisodes = activeSeasonObj.episode_count;
-        renderTvEpisodes(tvId, activeSeasonObj.season_number, activeSeasonObj.episode_count);
-      }
+      if (activeSeasonObj) { currentItem.totalEpisodes = activeSeasonObj.episode_count; renderTvEpisodes(tvId, activeSeasonObj.season_number, activeSeasonObj.episode_count); }
     }
 
     function renderTvEpisodes(tvId, seasonNum, count) {
-      const epList = document.getElementById('episodesList');
-      epList.innerHTML = '';
+      const epList = document.getElementById('episodesList'); epList.innerHTML = '';
+      const suggestedNextEp = parseInt(localStorage.getItem(`next_ep_${tvId}_s${seasonNum}`) || '0');
+
       for (let i = 1; i <= count; i++) {
         const isWatched = isItemWatched(`tv_${tvId}_s${seasonNum}_e${i}`);
         const btn = document.createElement('button');
-        btn.className = `ep-btn ${i === currentItem.episode ? 'active' : ''} ${isWatched ? 'is-watched' : ''}`;
+        btn.className = `ep-btn ${i === currentItem.episode ? 'active' : ''} ${isWatched ? 'is-watched' : ''} ${i === suggestedNextEp && !isWatched ? 'suggested-next' : ''}`;
         btn.innerText = `${translations[currentLang].ep_prefix} ${i}`;
-        btn.onclick = () => {
-          document.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          currentItem.episode = i;
-          location.hash = `#/theater/tv/${tvId}/${seasonNum}/${i}`;
-          startStreamingNow();
-        };
+        btn.onclick = () => { document.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); currentItem.episode = i; location.hash = `#/theater/tv/${tvId}/${seasonNum}/${i}`; startStreamingNow(); };
         epList.appendChild(btn);
       }
     }
 
-    function initPlayerSkipTimer() {
-      const video = document.getElementById('nativeVideo');
-      const skipBtn = document.getElementById('skipIntroBtn');
-      video.addEventListener('timeupdate', () => {
-        if (video.currentTime > 2 && video.currentTime < 120) {
-          skipBtn.style.display = 'block';
-        } else {
-          skipBtn.style.display = 'none';
-        }
-      });
-    }
-
-    function skipIntro() {
-      const video = document.getElementById('nativeVideo');
-      if (video) video.currentTime += 85;
-    }
+    function initPlayerSkipTimer() { const video = document.getElementById('nativeVideo'); const skipBtn = document.getElementById('skipIntroBtn'); video.addEventListener('timeupdate', () => { if (video.currentTime > 2 && video.currentTime < 120) { skipBtn.style.display = 'block'; } else { skipBtn.style.display = 'none'; } }); }
+    function skipIntro() { const video = document.getElementById('nativeVideo'); if (video) video.currentTime += 85; }
 
     function playDirectMedia(title, streamUrl, poster) {
       currentItem = { id: 'custom', type: 'custom', title, poster_path: poster, isCustom: true, directUrl: streamUrl };
-      document.getElementById('homeView').style.display = 'none';
-      document.getElementById('searchResultsView').style.display = 'none';
-      document.getElementById('favoritesView').style.display = 'none';
-      document.getElementById('theaterView').style.display = 'block';
-      document.getElementById('detailHeroBox').style.display = 'none';
-      document.getElementById('mainPlayerContainer').style.display = 'block';
-      document.getElementById('iframeBox').style.display = 'none';
-      document.getElementById('serversContainer').style.display = 'none';
-      document.getElementById('episodesContainer').style.display = 'none';
-      document.getElementById('directPlayerBox').style.display = 'block';
-      window.scrollTo(0, 0);
-
-      const video = document.getElementById('nativeVideo');
-      const proxiedUrl = `${CLOUDFLARE_WORKER_BASE}/api/proxy?url=${encodeURIComponent(streamUrl)}`;
-
+      document.getElementById('homeView').style.display = 'none'; document.getElementById('searchResultsView').style.display = 'none'; document.getElementById('favoritesView').style.display = 'none'; document.getElementById('theaterView').style.display = 'block'; document.getElementById('detailHeroBox').style.display = 'none'; document.getElementById('mainPlayerContainer').style.display = 'block'; document.getElementById('iframeBox').style.display = 'none'; document.getElementById('serversContainer').style.display = 'none'; document.getElementById('episodesContainer').style.display = 'none'; document.getElementById('directPlayerBox').style.display = 'block'; document.getElementById('radarLoader').style.display = 'none'; window.scrollTo(0, 0);
+      const video = document.getElementById('nativeVideo'); const proxiedUrl = `${CLOUDFLARE_WORKER_BASE}/api/proxy?url=${encodeURIComponent(streamUrl)}`;
       if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
-
-      if (streamUrl.includes('.m3u8')) {
-        if (Hls.isSupported()) {
-          hlsInstance = new Hls();
-          hlsInstance.loadSource(proxiedUrl);
-          hlsInstance.attachMedia(video);
-          hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => video.play().catch(()=>{}));
-        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-          video.src = proxiedUrl;
-          video.play().catch(()=>{});
-        }
-      } else {
-        video.src = proxiedUrl;
-        video.play().catch(()=>{});
-      }
+      if (streamUrl.includes('.m3u8')) { if (Hls.isSupported()) { hlsInstance = new Hls(); hlsInstance.loadSource(proxiedUrl); hlsInstance.attachMedia(video); hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => video.play().catch(()=>{})); } else if (video.canPlayType('application/vnd.apple.mpegurl')) { video.src = proxiedUrl; video.play().catch(()=>{}); } } else { video.src = proxiedUrl; video.play().catch(()=>{}); }
     }
 
-    function switchAuthView(view) {
-      document.getElementById('loginFormBox').style.display = view === 'login' ? 'block' : 'none';
-      document.getElementById('registerFormBox').style.display = view === 'register' ? 'block' : 'none';
-      document.getElementById('forgotFormBox').style.display = view === 'forgot' ? 'block' : 'none';
-      document.getElementById('otpVerifyBox').style.display = view === 'otp' ? 'block' : 'none';
-      document.getElementById('resetPassFormBox').style.display = view === 'reset' ? 'block' : 'none';
-      document.getElementById('authProfile').style.display = view === 'profile' ? 'block' : 'none';
-    }
-
-    async function handleLoginSubmit() {
-      const email = document.getElementById('loginEmail').value.trim().toLowerCase();
-      const pass = document.getElementById('loginPass').value.trim();
-
-      const isBanned = await checkUserBanned(email);
-      if (isBanned) return alert('هذا الحساب محظور من استخدام المنصة!');
-
-      if (email === SUPER_ADMIN_EMAIL.toLowerCase() && pass === SUPER_ADMIN_PASS) {
-        currentUser = { email, isAdmin: true, isVip: true, adsDisabled: true };
-        localStorage.setItem('cinema_user', JSON.stringify(currentUser));
-        closeModal('authModal');
-        verifyUserStatus();
-        return;
-      }
-
-      const key = email.replace(/[^a-zA-Z0-9]/g, '_');
-      try {
-        const res = await fetch(`${FIREBASE_DB}/users/${key}.json`);
-        const user = await res.json();
-        if (user && user.pass === pass) {
-          currentUser = { 
-            email, 
-            isAdmin: false, 
-            isVip: user.isVip || false,
-            adsDisabled: user.adsDisabled || false
-          };
-          localStorage.setItem('cinema_user', JSON.stringify(currentUser));
-          closeModal('authModal');
-          verifyUserStatus();
-          location.reload();
-        } else {
-          alert('بيانات الدخول غير صحيحة!');
-        }
-      } catch(e) { alert('تعذر تسجيل الدخول، يرجى المحاولة لاحقاً'); }
-    }
-
-    async function handleRegisterSubmit() {
-      const email = document.getElementById('regEmail').value.trim().toLowerCase();
-      const pass = document.getElementById('regPass').value.trim();
-      if (!email || pass.length < 6) return alert('يرجى إدخال بريد صحيح ورمز من 6 خانات على الأقل');
-
-      const key = email.replace(/[^a-zA-Z0-9]/g, '_');
-      await fetch(`${FIREBASE_DB}/users/${key}.json`, {
-        method: 'PUT',
-        body: JSON.stringify({ email, pass, created: new Date().toLocaleString('ar-EG'), isVip: false, adsDisabled: false })
-      });
-      alert('تم إنشاء الحساب بنجاح! يمكنك الآن تسجيل الدخول.');
-      switchAuthView('login');
-    }
-
-    async function sendVerificationCode() {
-      const email = document.getElementById('forgotEmail').value.trim().toLowerCase();
-      if (!email) return alert('يرجى كتابة البريد الإلكتروني المسجل أولاً.');
-      
-      const key = email.replace(/[^a-zA-Z0-9]/g, '_');
-      try {
-        const res = await fetch(`${FIREBASE_DB}/users/${key}.json`);
-        const user = await res.json();
-        
-        if (user) {
-          verifyingForgotEmailAddress = email;
-          generatedOtp = Math.floor(100000 + Math.random() * 900000).toString(); 
-          alert(`[محاكاة نظام البريد 📧]\nتم إرسال رسالة إلى بريدك الإلكتروني.\nرمز التحقق الخاص بك هو: ${generatedOtp}`);
-          switchAuthView('otp');
-        } else {
-          alert('هذا البريد غير مسجل في النظام لدينا!');
-        }
-      } catch(e) {
-        alert('تعذر الاتصال بالخادم، يرجى المحاولة لاحقاً.');
-      }
-    }
-
-    function verifyOtpCode() {
-      const inputOtp = document.getElementById('otpInput').value.trim();
-      
-      if (inputOtp === generatedOtp) {
-        document.getElementById('resetTargetEmail').innerText = `إعادة تعيين كود الدخول للحساب: ${verifyingForgotEmailAddress}`;
-        switchAuthView('reset');
-      } else {
-        alert('رمز التحقق غير صحيح! يرجى التأكد من الأرقام والمحاولة مجدداً.');
-      }
-    }
-
-    async function applyNewPassword() {
-      const newPass = document.getElementById('newResetPass').value.trim();
-      if (!newPass || newPass.length < 6) return alert('يرجى إدخال كود جديد من 6 خانات على الأقل');
-
-      const key = verifyingForgotEmailAddress.replace(/[^a-zA-Z0-9]/g, '_');
-      try {
-        await fetch(`${FIREBASE_DB}/users/${key}/pass.json`, { method: 'PUT', body: JSON.stringify(newPass) });
-        alert('تم تحديث كود الدخول بنجاح! يمكنك تسجيل الدخول الآن.');
-        document.getElementById('newResetPass').value = '';
-        switchAuthView('login');
-      } catch(e) {
-        alert('حدث خطأ أثناء تحديث كود الدخول');
-      }
-    }
-
-    async function verifyUserStatus() {
-      const guestBtn = document.getElementById('guestAuthBtn');
-      const avatarBtn = document.getElementById('userAvatarBtn');
-      const avatarImg = document.getElementById('userAvatarImg');
-
-      if (!currentUser) {
-        guestBtn.style.display = 'flex';
-        avatarBtn.style.display = 'none';
-        return;
-      }
-
-      guestBtn.style.display = 'none';
-      avatarBtn.style.display = 'flex';
-      
-      const avatarSrc = getAvatarUrl(currentUser.email);
-      avatarImg.src = avatarSrc;
-      document.getElementById('profileAvatarBig').src = avatarSrc;
-
-      let isAdmin = (currentUser.email.toLowerCase() === SUPER_ADMIN_EMAIL.toLowerCase());
-      currentUser.isAdmin = isAdmin;
-      if (isAdmin) document.getElementById('adminDrawerLink').style.display = 'flex';
-
-      const isVip = (currentUser.isVip || currentUser.isAdmin);
-      if (isVip) {
-        avatarBtn.classList.add('vip-active');
-        document.getElementById('drawerVipReqLink').style.display = 'flex';
-        document.getElementById('profileGlowBadge').style.display = 'inline-flex';
-        document.getElementById('profileVipReqBtn').style.display = 'block';
-      } else {
-        avatarBtn.classList.remove('vip-active');
-        document.getElementById('drawerVipReqLink').style.display = 'none';
-        document.getElementById('profileGlowBadge').style.display = 'none';
-        document.getElementById('profileVipReqBtn').style.display = 'none';
-      }
-    }
-
-    function logoutUser() {
-      currentUser = null;
-      localStorage.removeItem('cinema_user');
-      closeModal('authModal');
-      location.reload();
-    }
-
+    function switchAuthView(view) { document.getElementById('loginFormBox').style.display = view === 'login' ? 'block' : 'none'; document.getElementById('registerFormBox').style.display = view === 'register' ? 'block' : 'none'; document.getElementById('forgotFormBox').style.display = view === 'forgot' ? 'block' : 'none'; document.getElementById('otpVerifyBox').style.display = view === 'otp' ? 'block' : 'none'; document.getElementById('resetPassFormBox').style.display = view === 'reset' ? 'block' : 'none'; document.getElementById('authProfile').style.display = view === 'profile' ? 'block' : 'none'; }
+    async function handleLoginSubmit() { const email = document.getElementById('loginEmail').value.trim().toLowerCase(); const pass = document.getElementById('loginPass').value.trim(); const isBanned = await checkUserBanned(email); if (isBanned) return alert('هذا الحساب محظور من استخدام المنصة!'); if (email === SUPER_ADMIN_EMAIL.toLowerCase() && pass === SUPER_ADMIN_PASS) { currentUser = { email, isAdmin: true, isVip: true, adsDisabled: true }; localStorage.setItem('cinema_user', JSON.stringify(currentUser)); closeModal('authModal'); verifyUserStatus(); return; } const key = email.replace(/[^a-zA-Z0-9]/g, '_'); try { const res = await fetch(`${FIREBASE_DB}/users/${key}.json`); const user = await res.json(); if (user && user.pass === pass) { currentUser = { email, isAdmin: false, isVip: user.isVip || false, adsDisabled: user.adsDisabled || false }; localStorage.setItem('cinema_user', JSON.stringify(currentUser)); closeModal('authModal'); verifyUserStatus(); location.reload(); } else { alert('بيانات الدخول غير صحيحة!'); } } catch(e) { alert('تعذر تسجيل الدخول، يرجى المحاولة لاحقاً'); } }
+    async function handleRegisterSubmit() { const email = document.getElementById('regEmail').value.trim().toLowerCase(); const pass = document.getElementById('regPass').value.trim(); if (!email || pass.length < 6) return alert('يرجى إدخال بريد صحيح ورمز من 6 خانات على الأقل'); const key = email.replace(/[^a-zA-Z0-9]/g, '_'); await fetch(`${FIREBASE_DB}/users/${key}.json`, { method: 'PUT', body: JSON.stringify({ email, pass, created: new Date().toLocaleString('ar-EG'), isVip: false, adsDisabled: false }) }); alert('تم إنشاء الحساب بنجاح! يمكنك الآن تسجيل الدخول.'); switchAuthView('login'); }
+    async function sendVerificationCode() { const email = document.getElementById('forgotEmail').value.trim().toLowerCase(); if (!email) return alert('يرجى كتابة البريد الإلكتروني المسجل أولاً.'); const key = email.replace(/[^a-zA-Z0-9]/g, '_'); try { const res = await fetch(`${FIREBASE_DB}/users/${key}.json`); const user = await res.json(); if (user) { verifyingForgotEmailAddress = email; generatedOtp = Math.floor(100000 + Math.random() * 900000).toString(); alert(`[محاكاة نظام البريد 📧]\nتم إرسال رسالة إلى بريدك الإلكتروني.\nرمز التحقق الخاص بك هو: ${generatedOtp}`); switchAuthView('otp'); } else { alert('هذا البريد غير مسجل في النظام لدينا!'); } } catch(e) { alert('تعذر الاتصال بالخادم، يرجى المحاولة لاحقاً.'); } }
+    function verifyOtpCode() { const inputOtp = document.getElementById('otpInput').value.trim(); if (inputOtp === generatedOtp) { document.getElementById('resetTargetEmail').innerText = `إعادة تعيين كود الدخول للحساب: ${verifyingForgotEmailAddress}`; switchAuthView('reset'); } else { alert('رمز التحقق غير صحيح! يرجى التأكد من الأرقام والمحاولة مجدداً.'); } }
+    async function applyNewPassword() { const newPass = document.getElementById('newResetPass').value.trim(); if (!newPass || newPass.length < 6) return alert('يرجى إدخال كود جديد من 6 خانات على الأقل'); const key = verifyingForgotEmailAddress.replace(/[^a-zA-Z0-9]/g, '_'); try { await fetch(`${FIREBASE_DB}/users/${key}/pass.json`, { method: 'PUT', body: JSON.stringify(newPass) }); alert('تم تحديث كود الدخول بنجاح! يمكنك تسجيل الدخول الآن.'); document.getElementById('newResetPass').value = ''; switchAuthView('login'); } catch(e) { alert('حدث خطأ أثناء تحديث كود الدخول'); } }
+    async function verifyUserStatus() { const guestBtn = document.getElementById('guestAuthBtn'); const avatarBtn = document.getElementById('userAvatarBtn'); const avatarImg = document.getElementById('userAvatarImg'); if (!currentUser) { guestBtn.style.display = 'flex'; avatarBtn.style.display = 'none'; return; } guestBtn.style.display = 'none'; avatarBtn.style.display = 'flex'; const avatarSrc = getAvatarUrl(currentUser.email); avatarImg.src = avatarSrc; document.getElementById('profileAvatarBig').src = avatarSrc; let isAdmin = (currentUser.email.toLowerCase() === SUPER_ADMIN_EMAIL.toLowerCase()); currentUser.isAdmin = isAdmin; if (isAdmin) document.getElementById('adminDrawerLink').style.display = 'flex'; const isVip = (currentUser.isVip || currentUser.isAdmin); if (isVip) { avatarBtn.classList.add('vip-active'); document.getElementById('drawerVipReqLink').style.display = 'flex'; document.getElementById('profileGlowBadge').style.display = 'inline-flex'; document.getElementById('profileVipReqBtn').style.display = 'block'; } else { avatarBtn.classList.remove('vip-active'); document.getElementById('drawerVipReqLink').style.display = 'none'; document.getElementById('profileGlowBadge').style.display = 'none'; document.getElementById('profileVipReqBtn').style.display = 'none'; } }
+    function logoutUser() { currentUser = null; localStorage.removeItem('cinema_user'); closeModal('authModal'); location.reload(); }
     function openVipModal() { document.getElementById('vipModal').style.display = 'flex'; }
-    function openRequestMediaModal() {
-      if (!currentUser || (!currentUser.isVip && !currentUser.isAdmin)) {
-        openVipModal();
-        return;
-      }
-      document.getElementById('requestMediaModal').style.display = 'flex';
-    }
-
-    async function submitVipMediaRequest() {
-      const title = document.getElementById('reqMediaTitle').value.trim();
-      const notes = document.getElementById('reqMediaNotes').value.trim();
-      if (!title) return alert('يرجى كتابة اسم العمل المطلوب');
-
-      const reqData = {
-        title,
-        notes: notes || '-',
-        user: currentUser.email,
-        time: new Date().toLocaleString('ar-EG')
-      };
-
-      try {
-        await fetch(`${FIREBASE_DB}/vip_requests.json`, { method: 'POST', body: JSON.stringify(reqData) });
-        alert('تم إرسال طلبك للإدارة بنجاح! سيتم توفير العمل في أقرب وقت.');
-        document.getElementById('reqMediaTitle').value = '';
-        document.getElementById('reqMediaNotes').value = '';
-        closeModal('requestMediaModal');
-      } catch(e) {
-        alert('تعذر إرسال الطلب، يرجى المحاولة لاحقاً');
-      }
-    }
-
-    function openAuthModal() {
-      if (currentUser) {
-        switchAuthView('profile');
-        document.getElementById('profileEmail').innerText = currentUser.email;
-        document.getElementById('profileRoleBadge').innerText = currentUser.isAdmin ? '⭐ مشرف النظام (Super Admin)' : (currentUser.isVip ? '👑 عضو مميز (VIP)' : 'عضو مسجل (Free Member)');
-        document.getElementById('profileAdsStatusBadge').innerText = (currentUser.isVip || currentUser.isAdmin || currentUser.adsDisabled) ? '🛡️ حالة الإعلانات: معطلة بالكامل' : '📢 حالة الإعلانات: مفعّلة';
-      } else {
-        switchAuthView('login');
-      }
-      document.getElementById('authModal').style.display = 'flex';
-    }
-    
-    function openAdminModal() {
-      if (!currentUser || !currentUser.isAdmin) {
-        alert('غير مصرح لك بالدخول!');
-        location.hash = '#/home';
-        return;
-      }
-      document.getElementById('adminModal').style.display = 'flex';
-      loadAdminDashboard();
-    }
+    function openRequestMediaModal() { if (!currentUser || (!currentUser.isVip && !currentUser.isAdmin)) { openVipModal(); return; } document.getElementById('requestMediaModal').style.display = 'flex'; }
+    async function submitVipMediaRequest() { const title = document.getElementById('reqMediaTitle').value.trim(); const notes = document.getElementById('reqMediaNotes').value.trim(); if (!title) return alert('يرجى كتابة اسم العمل المطلوب'); const reqData = { title, notes: notes || '-', user: currentUser.email, time: new Date().toLocaleString('ar-EG') }; try { await fetch(`${FIREBASE_DB}/vip_requests.json`, { method: 'POST', body: JSON.stringify(reqData) }); alert('تم إرسال طلبك للإدارة بنجاح! سيتم توفير العمل في أقرب وقت.'); document.getElementById('reqMediaTitle').value = ''; document.getElementById('reqMediaNotes').value = ''; closeModal('requestMediaModal'); } catch(e) { alert('تعذر إرسال الطلب، يرجى المحاولة لاحقاً'); } }
+    function openAuthModal() { if (currentUser) { switchAuthView('profile'); document.getElementById('profileEmail').innerText = currentUser.email; document.getElementById('profileRoleBadge').innerText = currentUser.isAdmin ? '⭐ مشرف النظام (Super Admin)' : (currentUser.isVip ? '👑 عضو مميز (VIP)' : 'عضو مسجل (Free Member)'); document.getElementById('profileAdsStatusBadge').innerText = (currentUser.isVip || currentUser.isAdmin || currentUser.adsDisabled) ? '🛡️ حالة الإعلانات: معطلة بالكامل' : '📢 حالة الإعلانات: مفعّلة'; } else { switchAuthView('login'); } document.getElementById('authModal').style.display = 'flex'; }
+    function openAdminModal() { if (!currentUser || !currentUser.isAdmin) { alert('غير مصرح لك بالدخول!'); location.hash = '#/home'; return; } document.getElementById('adminModal').style.display = 'flex'; loadAdminDashboard(); }
     function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-
-    function switchAdminTab(tab, btn) {
-      document.querySelectorAll('.admin-nav-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById('tabUsersManage').style.display = tab === 'usersManage' ? 'block' : 'none';
-      document.getElementById('tabVipRequests').style.display = tab === 'vipRequests' ? 'block' : 'none';
-      document.getElementById('tabVisitors').style.display = tab === 'visitors' ? 'block' : 'none';
-      document.getElementById('tabMediaManage').style.display = tab === 'mediaManage' ? 'block' : 'none';
-      document.getElementById('tabAddMedia').style.display = tab === 'addMedia' ? 'block' : 'none';
-      document.getElementById('tabBanManage').style.display = tab === 'banManage' ? 'block' : 'none';
-      document.getElementById('tabBanner').style.display = tab === 'banner' ? 'block' : 'none';
-      
-      if (tab === 'usersManage') loadAdminUsersTable();
-      if (tab === 'vipRequests') loadAdminVipRequestsTable();
-      if (tab === 'visitors') loadAdminVisitors();
-      if (tab === 'mediaManage') loadAdminMediaTable();
-      if (tab === 'banManage') loadBannedUsersTable();
-    }
-
-    async function loadAdminDashboard() {
-      loadAdminStats();
-      loadAdminUsersTable();
-    }
-
-    async function loadAdminStats() {
-      try {
-        const [visRes, usersRes, mediaRes, banRes, reqRes] = await Promise.all([
-          fetch(`${FIREBASE_DB}/visitors.json`),
-          fetch(`${FIREBASE_DB}/users.json`),
-          fetch(`${FIREBASE_DB}/series.json`),
-          fetch(`${FIREBASE_DB}/banned_users.json`),
-          fetch(`${FIREBASE_DB}/vip_requests.json`)
-        ]);
-
-        const visData = await visRes.json();
-        const usersData = await usersRes.json();
-        const mediaData = await mediaRes.json();
-        const banData = await banRes.json();
-        const reqData = await reqRes.json();
-
-        document.getElementById('statVisitorsCount').innerText = visData ? Object.keys(visData).length : '0';
-        document.getElementById('statUsersCount').innerText = usersData ? Object.keys(usersData).length : '0';
-        document.getElementById('statMediaCount').innerText = mediaData ? Object.keys(mediaData).length : '0';
-        document.getElementById('statBannedCount').innerText = banData ? Object.keys(banData).length : '0';
-        document.getElementById('statRequestsCount').innerText = reqData ? Object.keys(reqData).length : '0';
-      } catch(e) {}
-    }
-
-    async function loadAdminUsersTable() {
-      try {
-        const res = await fetch(`${FIREBASE_DB}/users.json`);
-        const data = await res.json();
-        const tbody = document.getElementById('adminUsersTableBody');
-        tbody.innerHTML = "";
-        if (data) {
-          Object.keys(data).forEach(k => {
-            const u = data[k];
-            const av = getAvatarUrl(u.email);
-            const adsDisabled = !!u.adsDisabled;
-            const isVip = !!u.isVip;
-
-            const row = document.createElement('tr');
-            row.innerHTML = `
-              <td><img class="user-table-avatar" src="${av}"></td>
-              <td><strong>${u.email}</strong></td>
-              <td><span style="color:${isVip ? 'var(--gold)' : 'var(--text-muted)'}; font-weight:800;">${isVip ? 'VIP 👑' : 'عادي'}</span></td>
-              <td><span style="color:${adsDisabled ? '#10b981' : '#f59e0b'}; font-weight:700;">${adsDisabled ? '🚫 معطلة' : '📢 مفعلة'}</span></td>
-              <td>
-                <div style="display:flex; gap:4px; flex-wrap:wrap;">
-                  <button class="btn-table-vip" onclick="toggleVipStatus('${k}', ${!isVip})">${isVip ? 'إلغاء VIP' : 'ترقية VIP'}</button>
-                  <button class="btn-table-ads" onclick="toggleUserAdsExemption('${k}', ${!adsDisabled})">${adsDisabled ? 'تفعيل الإعلانات' : 'إلغاء الإعلانات'}</button>
-                  <button class="btn-table-del" onclick="deleteUserAccount('${k}')">حذف</button>
-                </div>
-              </td>
-            `;
-            tbody.appendChild(row);
-          });
-        }
-      } catch(e) {}
-    }
-
-    async function loadAdminVipRequestsTable() {
-      try {
-        const res = await fetch(`${FIREBASE_DB}/vip_requests.json`);
-        const data = await res.json();
-        const tbody = document.getElementById('adminVipRequestsTableBody');
-        tbody.innerHTML = "";
-        if (data) {
-          Object.keys(data).reverse().forEach(k => {
-            const req = data[k];
-            const row = document.createElement('tr');
-            row.innerHTML = `
-              <td><strong>${req.title}</strong></td>
-              <td>${req.notes}</td>
-              <td>${req.user}</td>
-              <td><button class="btn-table-del" onclick="deleteVipRequest('${k}')">تم الإنجاز / حذف</button></td>
-            `;
-            tbody.appendChild(row);
-          });
-        }
-      } catch(e) {}
-    }
-
-    async function deleteVipRequest(key) {
-      await fetch(`${FIREBASE_DB}/vip_requests/${key}.json`, { method: 'DELETE' });
-      loadAdminVipRequestsTable();
-      loadAdminStats();
-    }
-
-    async function toggleUserAdsExemption(key, disableState) {
-      await fetch(`${FIREBASE_DB}/users/${key}/adsDisabled.json`, { method: 'PUT', body: JSON.stringify(disableState) });
-      loadAdminUsersTable();
-    }
-
-    async function toggleVipStatus(key, newStatus) {
-      await fetch(`${FIREBASE_DB}/users/${key}/isVip.json`, { method: 'PUT', body: JSON.stringify(newStatus) });
-      loadAdminUsersTable();
-      loadAdminStats();
-    }
-
-    async function deleteUserAccount(key) {
-      if (!confirm('هل أنت متأكد من حذف هذا الحساب نهائياً؟')) return;
-      await fetch(`${FIREBASE_DB}/users/${key}.json`, { method: 'DELETE' });
-      loadAdminUsersTable();
-      loadAdminStats();
-    }
-
-    async function logVisitor() {
-      try {
-        const fp = getVisitorFingerprint();
-        const visitorData = {
-          fingerprint: fp,
-          time: new Date().toLocaleString('ar-EG'),
-          agent: navigator.userAgent.substring(0, 32),
-          user: currentUser ? currentUser.email : "Guest"
-        };
-        await fetch(`${FIREBASE_DB}/visitors.json`, { method: 'POST', body: JSON.stringify(visitorData) });
-      } catch(e) {}
-    }
-
-    async function loadAdminVisitors() {
-      try {
-        const res = await fetch(`${FIREBASE_DB}/visitors.json`);
-        const data = await res.json();
-        const tbody = document.getElementById('visitorsTableBody');
-        tbody.innerHTML = "";
-        if (data) {
-          Object.keys(data).slice(-20).reverse().forEach(k => {
-            const v = data[k];
-            const row = document.createElement('tr');
-            row.innerHTML = `
-              <td><span class="fingerprint-badge">${v.fingerprint || 'OLD-VISITOR'}</span></td>
-              <td>${v.time}</td>
-              <td>${v.agent}</td>
-              <td><strong>${v.user}</strong></td>
-            `;
-            tbody.appendChild(row);
-          });
-        }
-      } catch(e) {}
-    }
-
-    async function saveCustomMedia() {
-      const title = document.getElementById('customTitle').value.trim();
-      const poster = document.getElementById('customPoster').value.trim();
-      const url = document.getElementById('customStreamUrl').value.trim();
-      if (!title || !url) return alert('يرجى ملء الحقول المطلوبة');
-
-      const id = title.replace(/[^a-zA-Z0-9_\u0600-\u06FF]/g, '_').toLowerCase();
-      await fetch(`${FIREBASE_DB}/series/${id}.json`, {
-        method: 'PUT',
-        body: JSON.stringify({ id, title, poster: poster || "https://image.tmdb.org/t/p/w500/mXk9kEw9u5dF72Tsk4O9Jt0rGgG.jpg", url })
-      });
-      alert('تم نشر العمل!');
-      loadCustomMediaFromFirebase();
-      loadAdminMediaTable();
-      loadAdminStats();
-    }
-
-    async function loadAdminMediaTable() {
-      try {
-        const res = await fetch(`${FIREBASE_DB}/series.json`);
-        const data = await res.json();
-        const tbody = document.getElementById('adminMediaTableBody');
-        tbody.innerHTML = "";
-        if (data) {
-          Object.keys(data).forEach(k => {
-            const item = data[k];
-            const row = document.createElement('tr');
-            row.innerHTML = `
-              <td>${item.title}</td>
-              <td style="max-width:140px; overflow:hidden; text-overflow:ellipsis;">${item.url}</td>
-              <td><button class="btn-table-del" onclick="deleteCustomMedia('${k}')">حذف</button></td>
-            `;
-            tbody.appendChild(row);
-          });
-        }
-      } catch(e) {}
-    }
-
-    async function deleteCustomMedia(key) {
-      if (!confirm('هل أنت متأكد من حذف هذا العمل؟')) return;
-      await fetch(`${FIREBASE_DB}/series/${key}.json`, { method: 'DELETE' });
-      loadCustomMediaFromFirebase();
-      loadAdminMediaTable();
-      loadAdminStats();
-    }
-
-    async function loadCustomMediaFromFirebase() {
-      try {
-        const res = await fetch(`${FIREBASE_DB}/series.json`);
-        const data = await res.json();
-        const deck = document.getElementById('deckCustom');
-        if (data && Object.keys(data).length > 0) {
-          deck.innerHTML = "";
-          document.getElementById('customShelfBox').style.display = 'block';
-          Object.keys(data).forEach(key => {
-            const item = data[key];
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.onclick = () => playDirectMedia(item.title, item.url, item.poster);
-            card.innerHTML = `
-              <img src="${item.poster}" loading="lazy">
-              <div class="card-body"><div class="card-title">${item.title}</div><div class="card-meta"><span>Direct</span><span class="rating">⭐ VIP</span></div></div>
-            `;
-            deck.appendChild(card);
-          });
-        } else {
-          document.getElementById('customShelfBox').style.display = 'none';
-        }
-      } catch (e) {}
-    }
-
-    async function checkUserBanned(email) {
-      try {
-        const key = email.replace(/[^a-zA-Z0-9]/g, '_');
-        const res = await fetch(`${FIREBASE_DB}/banned_users/${key}.json`);
-        return await res.json();
-      } catch(e) { return false; }
-    }
-
-    async function banUserAction() {
-      const email = document.getElementById('banUserEmail').value.trim().toLowerCase();
-      if (!email) return alert('أدخل بريد المستخدم');
-      const key = email.replace(/[^a-zA-Z0-9]/g, '_');
-      await fetch(`${FIREBASE_DB}/banned_users/${key}.json`, { method: 'PUT', body: JSON.stringify({ email, time: new Date().toLocaleString('ar-EG') }) });
-      alert('تم حظر المستخدم بنجاح!');
-      document.getElementById('banUserEmail').value = '';
-      loadBannedUsersTable();
-      loadAdminStats();
-    }
-
-    async function loadBannedUsersTable() {
-      try {
-        const res = await fetch(`${FIREBASE_DB}/banned_users.json`);
-        const data = await res.json();
-        const tbody = document.getElementById('bannedUsersTableBody');
-        tbody.innerHTML = "";
-        if (data) {
-          Object.keys(data).forEach(k => {
-            const row = document.createElement('tr');
-            row.innerHTML = `<td>${data[k].email}</td><td><button class="btn-table-del" onclick="unbanUser('${k}')">فك الحظر</button></td>`;
-            tbody.appendChild(row);
-          });
-        }
-      } catch(e) {}
-    }
-
-    async function unbanUser(key) {
-      await fetch(`${FIREBASE_DB}/banned_users/${key}.json`, { method: 'DELETE' });
-      loadBannedUsersTable();
-      loadAdminStats();
-    }
-
-    async function loadBannerAnnouncement() {
-      try {
-        const res = await fetch(`${FIREBASE_DB}/settings/banner.json`);
-        const text = await res.json();
-        const banner = document.getElementById('announcementBanner');
-        if (text) { banner.innerText = text; banner.style.display = 'block'; }
-      } catch (e) {}
-    }
-
-    async function saveBannerAnnouncement() {
-      const text = document.getElementById('adminBannerText').value.trim();
-      if (!text) return;
-      await fetch(`${FIREBASE_DB}/settings/banner.json`, { method: 'PUT', body: JSON.stringify(text) });
-      loadBannerAnnouncement();
-    }
-
-    async function removeBannerAnnouncement() {
-      await fetch(`${FIREBASE_DB}/settings/banner.json`, { method: 'DELETE' });
-      document.getElementById('announcementBanner').style.display = 'none';
-    }
+    function switchAdminTab(tab, btn) { document.querySelectorAll('.admin-nav-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); document.getElementById('tabUsersManage').style.display = tab === 'usersManage' ? 'block' : 'none'; document.getElementById('tabVipRequests').style.display = tab === 'vipRequests' ? 'block' : 'none'; document.getElementById('tabVisitors').style.display = tab === 'visitors' ? 'block' : 'none'; document.getElementById('tabMediaManage').style.display = tab === 'mediaManage' ? 'block' : 'none'; document.getElementById('tabAddMedia').style.display = tab === 'addMedia' ? 'block' : 'none'; document.getElementById('tabBanManage').style.display = tab === 'banManage' ? 'block' : 'none'; document.getElementById('tabBanner').style.display = tab === 'banner' ? 'block' : 'none'; if (tab === 'usersManage') loadAdminUsersTable(); if (tab === 'vipRequests') loadAdminVipRequestsTable(); if (tab === 'visitors') loadAdminVisitors(); if (tab === 'mediaManage') loadAdminMediaTable(); if (tab === 'banManage') loadBannedUsersTable(); }
+    async function loadAdminDashboard() { loadAdminStats(); loadAdminUsersTable(); }
+    async function loadAdminStats() { try { const [visRes, usersRes, mediaRes, banRes, reqRes] = await Promise.all([ fetch(`${FIREBASE_DB}/visitors.json`), fetch(`${FIREBASE_DB}/users.json`), fetch(`${FIREBASE_DB}/series.json`), fetch(`${FIREBASE_DB}/banned_users.json`), fetch(`${FIREBASE_DB}/vip_requests.json`) ]); const visData = await visRes.json(); const usersData = await usersRes.json(); const mediaData = await mediaRes.json(); const banData = await banRes.json(); const reqData = await reqRes.json(); document.getElementById('statVisitorsCount').innerText = visData ? Object.keys(visData).length : '0'; document.getElementById('statUsersCount').innerText = usersData ? Object.keys(usersData).length : '0'; document.getElementById('statMediaCount').innerText = mediaData ? Object.keys(mediaData).length : '0'; document.getElementById('statBannedCount').innerText = banData ? Object.keys(banData).length : '0'; document.getElementById('statRequestsCount').innerText = reqData ? Object.keys(reqData).length : '0'; } catch(e) {} }
+    async function loadAdminUsersTable() { try { const res = await fetch(`${FIREBASE_DB}/users.json`); const data = await res.json(); const tbody = document.getElementById('adminUsersTableBody'); tbody.innerHTML = ""; if (data) { Object.keys(data).forEach(k => { const u = data[k]; const av = getAvatarUrl(u.email); const adsDisabled = !!u.adsDisabled; const isVip = !!u.isVip; const row = document.createElement('tr'); row.innerHTML = `<td><img class="user-table-avatar" src="${av}"></td><td><strong>${u.email}</strong></td><td><span style="color:${isVip ? 'var(--gold)' : 'var(--text-muted)'}; font-weight:800;">${isVip ? 'VIP 👑' : 'عادي'}</span></td><td><span style="color:${adsDisabled ? '#10b981' : '#f59e0b'}; font-weight:700;">${adsDisabled ? '🚫 معطلة' : '📢 مفعلة'}</span></td><td><div style="display:flex; gap:4px; flex-wrap:wrap;"><button class="btn-table-vip" onclick="toggleVipStatus('${k}', ${!isVip})">${isVip ? 'إلغاء VIP' : 'ترقية VIP'}</button><button class="btn-table-ads" onclick="toggleUserAdsExemption('${k}', ${!adsDisabled})">${adsDisabled ? 'تفعيل الإعلانات' : 'إلغاء الإعلانات'}</button><button class="btn-table-del" onclick="deleteUserAccount('${k}')">حذف</button></div></td>`; tbody.appendChild(row); }); } } catch(e) {} }
+    async function loadAdminVipRequestsTable() { try { const res = await fetch(`${FIREBASE_DB}/vip_requests.json`); const data = await res.json(); const tbody = document.getElementById('adminVipRequestsTableBody'); tbody.innerHTML = ""; if (data) { Object.keys(data).reverse().forEach(k => { const req = data[k]; const row = document.createElement('tr'); row.innerHTML = `<td><strong>${req.title}</strong></td><td>${req.notes}</td><td>${req.user}</td><td><button class="btn-table-del" onclick="deleteVipRequest('${k}')">تم الإنجاز / حذف</button></td>`; tbody.appendChild(row); }); } } catch(e) {} }
+    async function deleteVipRequest(key) { await fetch(`${FIREBASE_DB}/vip_requests/${key}.json`, { method: 'DELETE' }); loadAdminVipRequestsTable(); loadAdminStats(); }
+    async function toggleUserAdsExemption(key, disableState) { await fetch(`${FIREBASE_DB}/users/${key}/adsDisabled.json`, { method: 'PUT', body: JSON.stringify(disableState) }); loadAdminUsersTable(); }
+    async function toggleVipStatus(key, newStatus) { await fetch(`${FIREBASE_DB}/users/${key}/isVip.json`, { method: 'PUT', body: JSON.stringify(newStatus) }); loadAdminUsersTable(); loadAdminStats(); }
+    async function deleteUserAccount(key) { if (!confirm('هل أنت متأكد من حذف هذا الحساب نهائياً؟')) return; await fetch(`${FIREBASE_DB}/users/${key}.json`, { method: 'DELETE' }); loadAdminUsersTable(); loadAdminStats(); }
+    async function logVisitor() { try { const fp = getVisitorFingerprint(); const visitorData = { fingerprint: fp, time: new Date().toLocaleString('ar-EG'), agent: navigator.userAgent.substring(0, 32), user: currentUser ? currentUser.email : "Guest" }; await fetch(`${FIREBASE_DB}/visitors.json`, { method: 'POST', body: JSON.stringify(visitorData) }); } catch(e) {} }
+    async function loadAdminVisitors() { try { const res = await fetch(`${FIREBASE_DB}/visitors.json`); const data = await res.json(); const tbody = document.getElementById('visitorsTableBody'); tbody.innerHTML = ""; if (data) { Object.keys(data).slice(-20).reverse().forEach(k => { const v = data[k]; const row = document.createElement('tr'); row.innerHTML = `<td><span class="fingerprint-badge">${v.fingerprint || 'OLD-VISITOR'}</span></td><td>${v.time}</td><td>${v.agent}</td><td><strong>${v.user}</strong></td>`; tbody.appendChild(row); }); } } catch(e) {} }
+    async function saveCustomMedia() { const title = document.getElementById('customTitle').value.trim(); const poster = document.getElementById('customPoster').value.trim(); const url = document.getElementById('customStreamUrl').value.trim(); if (!title || !url) return alert('يرجى ملء الحقول المطلوبة'); const id = title.replace(/[^a-zA-Z0-9_\u0600-\u06FF]/g, '_').toLowerCase(); await fetch(`${FIREBASE_DB}/series/${id}.json`, { method: 'PUT', body: JSON.stringify({ id, title, poster: poster || "https://image.tmdb.org/t/p/w500/mXk9kEw9u5dF72Tsk4O9Jt0rGgG.jpg", url }) }); alert('تم نشر العمل!'); loadCustomMediaFromFirebase(); loadAdminMediaTable(); loadAdminStats(); }
+    async function loadAdminMediaTable() { try { const res = await fetch(`${FIREBASE_DB}/series.json`); const data = await res.json(); const tbody = document.getElementById('adminMediaTableBody'); tbody.innerHTML = ""; if (data) { Object.keys(data).forEach(k => { const item = data[k]; const row = document.createElement('tr'); row.innerHTML = `<td>${item.title}</td><td style="max-width:140px; overflow:hidden; text-overflow:ellipsis;">${item.url}</td><td><button class="btn-table-del" onclick="deleteCustomMedia('${k}')">حذف</button></td>`; tbody.appendChild(row); }); } } catch(e) {} }
+    async function deleteCustomMedia(key) { if (!confirm('هل أنت متأكد من حذف هذا العمل؟')) return; await fetch(`${FIREBASE_DB}/series/${key}.json`, { method: 'DELETE' }); loadCustomMediaFromFirebase(); loadAdminMediaTable(); loadAdminStats(); }
+    async function loadCustomMediaFromFirebase() { try { const res = await fetch(`${FIREBASE_DB}/series.json`); const data = await res.json(); const deck = document.getElementById('deckCustom'); if (data && Object.keys(data).length > 0) { deck.innerHTML = ""; document.getElementById('customShelfBox').style.display = 'block'; Object.keys(data).forEach(key => { const item = data[key]; const card = document.createElement('div'); card.className = 'card'; card.onclick = () => playDirectMedia(item.title, item.url, item.poster); card.innerHTML = `<img src="${item.poster}" loading="lazy"><div class="card-body"><div class="card-title">${item.title}</div><div class="card-meta"><span>Direct</span><span class="rating">⭐ VIP</span></div></div>`; deck.appendChild(card); }); } else { document.getElementById('customShelfBox').style.display = 'none'; } } catch (e) {} }
+    async function checkUserBanned(email) { try { const key = email.replace(/[^a-zA-Z0-9]/g, '_'); const res = await fetch(`${FIREBASE_DB}/banned_users/${key}.json`); return await res.json(); } catch(e) { return false; } }
+    async function banUserAction() { const email = document.getElementById('banUserEmail').value.trim().toLowerCase(); if (!email) return alert('أدخل بريد المستخدم'); const key = email.replace(/[^a-zA-Z0-9]/g, '_'); await fetch(`${FIREBASE_DB}/banned_users/${key}.json`, { method: 'PUT', body: JSON.stringify({ email, time: new Date().toLocaleString('ar-EG') }) }); alert('تم حظر المستخدم بنجاح!'); document.getElementById('banUserEmail').value = ''; loadBannedUsersTable(); loadAdminStats(); }
+    async function loadBannedUsersTable() { try { const res = await fetch(`${FIREBASE_DB}/banned_users.json`); const data = await res.json(); const tbody = document.getElementById('bannedUsersTableBody'); tbody.innerHTML = ""; if (data) { Object.keys(data).forEach(k => { const row = document.createElement('tr'); row.innerHTML = `<td>${data[k].email}</td><td><button class="btn-table-del" onclick="unbanUser('${k}')">فك الحظر</button></td>`; tbody.appendChild(row); }); } } catch(e) {} }
+    async function unbanUser(key) { await fetch(`${FIREBASE_DB}/banned_users/${key}.json`, { method: 'DELETE' }); loadBannedUsersTable(); loadAdminStats(); }
+    async function loadBannerAnnouncement() { try { const res = await fetch(`${FIREBASE_DB}/settings/banner.json`); const text = await res.json(); const banner = document.getElementById('announcementBanner'); if (text) { banner.innerText = text; banner.style.display = 'block'; } } catch (e) {} }
+    async function saveBannerAnnouncement() { const text = document.getElementById('adminBannerText').value.trim(); if (!text) return; await fetch(`${FIREBASE_DB}/settings/banner.json`, { method: 'PUT', body: JSON.stringify(text) }); loadBannerAnnouncement(); }
+    async function removeBannerAnnouncement() { await fetch(`${FIREBASE_DB}/settings/banner.json`, { method: 'DELETE' }); document.getElementById('announcementBanner').style.display = 'none'; }
 
     initSite();
   </script>
