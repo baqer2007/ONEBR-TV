@@ -45,7 +45,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
     body { background-color: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; transition: background-color 0.3s, color 0.3s; }
 
-    /* --- التنسيقات الخاصة بكود الدخول --- */
+    /* تنسيقات كود الدخول */
     .masked-pin {
       -webkit-text-security: disc;
     }
@@ -61,7 +61,22 @@
       left: auto;
       right: 12px;
     }
-    /* --------------------------------------------- */
+
+    /* شريط تقدم المشاهدة الذكي */
+    .progress-bar-container {
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 2px;
+      margin-top: 6px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--cyan);
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
 
     #announcementBanner {
       display: none; background: linear-gradient(90deg, #991b1b, #e50914, #991b1b);
@@ -504,6 +519,23 @@
     </div>
   </div>
 
+  <!-- نافذة تأكيد مسح سجل المشاهدة -->
+  <div class="modal-overlay" id="confirmClearModal">
+    <div class="modal-box" style="max-width: 340px; text-align: center; padding: 25px;">
+      <div style="color: #ef4444; margin-bottom: 15px;">
+        <i class="fa-solid fa-triangle-exclamation" style="font-size: 3rem;"></i>
+      </div>
+      <h3 style="margin-bottom: 10px; font-size: 1.2rem; color: var(--text);">مسح سجل المشاهدة</h3>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 24px; line-height: 1.5;">
+        هل أنت متأكد أنك تريد مسح جميع الأعمال من سجل متابعة المشاهدة؟ لا يمكن التراجع عن هذا الإجراء.
+      </p>
+      <div style="display: flex; gap: 10px; justify-content: center;">
+        <button class="btn-submit" style="background: var(--surface-hover); color: var(--text); border: 1px solid var(--border); width: 48%;" onclick="closeModal('confirmClearModal')">إلغاء</button>
+        <button class="btn-submit" style="background: #ef4444; color: white; border: none; width: 48%;" onclick="executeClearHistory()">نعم، امسح</button>
+      </div>
+    </div>
+  </div>
+
   <!-- نافذة باقات VIP -->
   <div class="modal-overlay" id="vipModal">
     <div class="modal-box">
@@ -542,7 +574,7 @@
     </div>
   </div>
 
-  <!-- نافذة المصادقة (محدثة بإخفاء الكود بدلاً من Password) -->
+  <!-- نافذة المصادقة -->
   <div class="modal-overlay" id="authModal">
     <div class="modal-box">
       <i class="fa-solid fa-xmark modal-close" onclick="closeModal('authModal')"></i>
@@ -560,7 +592,7 @@
         <button class="btn-submit" onclick="handleLoginSubmit()" data-i18n="auth_btn">دخول الحساب</button>
         <div class="auth-toggle-links">
           <a onclick="switchAuthView('register')">إنشاء حساب جديد</a>
-          <a onclick="switchAuthView('forgot')">نسيت كلمة المرور؟</a>
+          <a onclick="switchAuthView('forgot')">نسيت رمز الدخول؟</a>
         </div>
       </div>
 
@@ -583,9 +615,21 @@
       <div id="forgotFormBox" style="display: none;">
         <div class="modal-title"><i class="fa-solid fa-key" style="color: var(--gold);"></i> <span>استعادة الحساب</span></div>
         <div class="form-group"><label data-i18n="auth_email">أدخل بريدك الإلكتروني المسجل:</label><input type="email" id="forgotEmail"></div>
-        <button class="btn-submit" onclick="verifyForgotEmail()">متابعة الاستعادة</button>
+        <button class="btn-submit" onclick="sendVerificationCode()">إرسال رمز التحقق</button>
         <div class="auth-toggle-links" style="justify-content:center;">
           <a onclick="switchAuthView('login')">العودة لتسجيل الدخول</a>
+        </div>
+      </div>
+
+      <div id="otpVerifyBox" style="display: none;">
+        <div class="modal-title"><i class="fa-solid fa-envelope-open-text" style="color: var(--cyan);"></i> <span>رمز التحقق (OTP)</span></div>
+        <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:12px; text-align:center;">لقد أرسلنا رمزاً مكوناً من 6 أرقام إلى بريدك الإلكتروني.</p>
+        <div class="form-group">
+          <input type="text" id="otpInput" placeholder="######" maxlength="6" style="text-align:center; font-size:1.5rem; letter-spacing:10px;">
+        </div>
+        <button class="btn-submit" style="background:var(--cyan); color:#000;" onclick="verifyOtpCode()">تأكيد الرمز</button>
+        <div class="auth-toggle-links" style="justify-content:center;">
+          <a onclick="switchAuthView('forgot')">العودة</a>
         </div>
       </div>
 
@@ -792,8 +836,31 @@
     let hlsInstance = null;
     let searchDebounceTimer = null;
     let verifyingForgotEmailAddress = '';
+    let generatedOtp = '';
 
-    // الدالة المسؤولة عن زر العين 👁️ لإظهار وإخفاء الـ PIN
+    // دالة إيقاف المشغل وتفريغ الموارد عند التنقل
+    function stopPlayer() {
+      const frame = document.getElementById('streamFrame');
+      if (frame) frame.src = "";
+
+      const video = document.getElementById('nativeVideo');
+      if (video) {
+        video.pause();
+        video.src = "";
+      }
+
+      if (hlsInstance) {
+        hlsInstance.destroy();
+        hlsInstance = null;
+      }
+
+      const mainPlayer = document.getElementById('mainPlayerContainer');
+      if (mainPlayer) mainPlayer.style.display = 'none';
+
+      const srvContainer = document.getElementById('serversContainer');
+      if (srvContainer) srvContainer.style.display = 'none';
+    }
+
     function togglePinVisibility(inputId, iconElement) {
       const input = document.getElementById(inputId);
       if (input.classList.contains('masked-pin')) {
@@ -807,7 +874,6 @@
       }
     }
 
-    // إدارة التخزين المحلي
     function getFavorites() { return JSON.parse(localStorage.getItem('user_favorites') || '[]'); }
     function saveFavorites(list) { localStorage.setItem('user_favorites', JSON.stringify(list)); }
 
@@ -817,7 +883,7 @@
     function getResumeList() { return JSON.parse(localStorage.getItem('user_resume_list') || '[]'); }
     function saveResumeList(list) { localStorage.setItem('user_resume_list', JSON.stringify(list)); }
 
-    function recordResumeProgress(item) {
+    function recordResumeProgress(item, progressPercent = 35) {
       if (!item.id || item.isCustom) return;
       let list = getResumeList().filter(i => String(i.id) !== String(item.id));
       list.unshift({
@@ -827,6 +893,7 @@
         poster_path: item.poster_path,
         season: item.season || 1,
         episode: item.episode || 1,
+        progress: progressPercent,
         time: Date.now()
       });
       if (list.length > 10) list.pop();
@@ -834,10 +901,13 @@
     }
 
     function clearAllHistory() {
-      if(confirm('هل أنت متأكد من مسح سجل المشاهدة بالكامل؟')) {
-        localStorage.removeItem('user_resume_list');
-        loadResumeShelf();
-      }
+      document.getElementById('confirmClearModal').style.display = 'flex';
+    }
+
+    function executeClearHistory() {
+      localStorage.removeItem('user_resume_list');
+      loadResumeShelf();
+      closeModal('confirmClearModal');
     }
 
     function removeResumeItem(itemId) {
@@ -909,9 +979,8 @@
       return fp;
     }
 
-    // --- تم إيقاف الإعلانات مؤقتاً لاجتياز فحص حماية جوجل ---
+    // إعادة تفعيل الإعلانات
     function injectAdScriptsIfEligible() {
-      /*
       if (currentUser && (currentUser.isVip || currentUser.isAdmin || currentUser.adsDisabled)) {
         return;
       }
@@ -922,9 +991,7 @@
       const socialScript = document.createElement('script');
       socialScript.src = "https://pl31046352.profitableratecpmnetwork.com/24/e2/59/24e259929d0a94f08f92e8373055a876.js";
       document.body.appendChild(socialScript);
-      */
     }
-    // --------------------------------------------------------
 
     async function initSite() {
       applyTheme(currentTheme);
@@ -998,6 +1065,9 @@
     }
 
     function handleRouting() {
+      // إيقاف المشغل دائماً عند التنقل بين الصفحات لمنع بقاء الصوت
+      stopPlayer();
+
       const hash = window.location.hash || '#/home';
       const parts = hash.split('/');
       const route = parts[1] || 'home';
@@ -1043,16 +1113,6 @@
       document.getElementById('searchResultsView').style.display = 'none';
       document.getElementById('favoritesView').style.display = 'none';
       document.getElementById('homeView').style.display = 'block';
-      
-      const frame = document.getElementById('streamFrame');
-      frame.src = "";
-      
-      const video = document.getElementById('nativeVideo');
-      video.pause(); video.src = "";
-      if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
-
-      document.getElementById('mainPlayerContainer').style.display = 'none';
-      document.getElementById('serversContainer').style.display = 'none';
     }
 
     function openFavoritesPage() {
@@ -1081,6 +1141,7 @@
         list.forEach(item => {
           const card = document.createElement('div');
           card.className = 'card';
+          const progressVal = item.progress || 50;
           card.innerHTML = `
             <div style="position: absolute; top: 5px; left: 5px; z-index: 10; background: rgba(0,0,0,0.8); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer;" onclick="event.stopPropagation(); removeResumeItem('${item.id}')">
                <i class="fa-solid fa-xmark" style="color: #ef4444; font-size: 0.85rem;"></i>
@@ -1089,6 +1150,9 @@
             <div class="card-body" onclick="location.hash = '#/theater/${item.type}/${item.id}/${item.season}/${item.episode}'">
               <div class="card-title">${item.title}</div>
               <div class="card-meta"><span>${item.type === 'tv' ? `م${item.season} ح${item.episode}` : 'فيلم'}</span><span style="color:var(--gold);">استئناف ▶</span></div>
+              <div class="progress-bar-container">
+                <div class="progress-bar-fill" style="width: ${progressVal}%;"></div>
+              </div>
             </div>
           `;
           deck.appendChild(card);
@@ -1361,7 +1425,7 @@
       document.getElementById('directPlayerBox').style.display = 'none';
       document.getElementById('serversContainer').style.display = 'block';
       changeServer(1);
-      recordResumeProgress(currentItem);
+      recordResumeProgress(currentItem, 20);
       document.getElementById('mainPlayerContainer').scrollIntoView({ behavior: 'smooth' });
     }
 
@@ -1512,6 +1576,7 @@
       document.getElementById('loginFormBox').style.display = view === 'login' ? 'block' : 'none';
       document.getElementById('registerFormBox').style.display = view === 'register' ? 'block' : 'none';
       document.getElementById('forgotFormBox').style.display = view === 'forgot' ? 'block' : 'none';
+      document.getElementById('otpVerifyBox').style.display = view === 'otp' ? 'block' : 'none';
       document.getElementById('resetPassFormBox').style.display = view === 'reset' ? 'block' : 'none';
       document.getElementById('authProfile').style.display = view === 'profile' ? 'block' : 'none';
     }
@@ -1555,7 +1620,7 @@
     async function handleRegisterSubmit() {
       const email = document.getElementById('regEmail').value.trim().toLowerCase();
       const pass = document.getElementById('regPass').value.trim();
-      if (!email || pass.length < 6) return alert('يرجى إدخال بريد صحيح وكلمة مرور من 6 خانات على الأقل');
+      if (!email || pass.length < 6) return alert('يرجى إدخال بريد صحيح ورمز من 6 خانات على الأقل');
 
       const key = email.replace(/[^a-zA-Z0-9]/g, '_');
       await fetch(`${FIREBASE_DB}/users/${key}.json`, {
@@ -1566,38 +1631,51 @@
       switchAuthView('login');
     }
 
-    async function verifyForgotEmail() {
+    async function sendVerificationCode() {
       const email = document.getElementById('forgotEmail').value.trim().toLowerCase();
-      if (!email) return alert('يرجى كتابة البريد الإلكتروني المسجل');
+      if (!email) return alert('يرجى كتابة البريد الإلكتروني المسجل أولاً.');
       
       const key = email.replace(/[^a-zA-Z0-9]/g, '_');
       try {
         const res = await fetch(`${FIREBASE_DB}/users/${key}.json`);
         const user = await res.json();
+        
         if (user) {
           verifyingForgotEmailAddress = email;
-          document.getElementById('resetTargetEmail').innerText = `إعادة تعيين الحساب: ${email}`;
-          switchAuthView('reset');
+          generatedOtp = Math.floor(100000 + Math.random() * 900000).toString(); 
+          alert(`[محاكاة نظام البريد 📧]\nتم إرسال رسالة إلى بريدك الإلكتروني.\nرمز التحقق الخاص بك هو: ${generatedOtp}`);
+          switchAuthView('otp');
         } else {
           alert('هذا البريد غير مسجل في النظام لدينا!');
         }
       } catch(e) {
-        alert('تعذر التحقق، يرجى المحاولة لاحقاً');
+        alert('تعذر الاتصال بالخادم، يرجى المحاولة لاحقاً.');
+      }
+    }
+
+    function verifyOtpCode() {
+      const inputOtp = document.getElementById('otpInput').value.trim();
+      
+      if (inputOtp === generatedOtp) {
+        document.getElementById('resetTargetEmail').innerText = `إعادة تعيين كود الدخول للحساب: ${verifyingForgotEmailAddress}`;
+        switchAuthView('reset');
+      } else {
+        alert('رمز التحقق غير صحيح! يرجى التأكد من الأرقام والمحاولة مجدداً.');
       }
     }
 
     async function applyNewPassword() {
       const newPass = document.getElementById('newResetPass').value.trim();
-      if (!newPass || newPass.length < 6) return alert('يرجى إدخال كلمة مرور جديدة من 6 خانات على الأقل');
+      if (!newPass || newPass.length < 6) return alert('يرجى إدخال كود جديد من 6 خانات على الأقل');
 
       const key = verifyingForgotEmailAddress.replace(/[^a-zA-Z0-9]/g, '_');
       try {
         await fetch(`${FIREBASE_DB}/users/${key}/pass.json`, { method: 'PUT', body: JSON.stringify(newPass) });
-        alert('تم تحديث كلمة المرور بنجاح! يمكنك تسجيل الدخول الآن.');
+        alert('تم تحديث كود الدخول بنجاح! يمكنك تسجيل الدخول الآن.');
         document.getElementById('newResetPass').value = '';
         switchAuthView('login');
       } catch(e) {
-        alert('حدث خطأ أثناء تحديث كلمة المرور');
+        alert('حدث خطأ أثناء تحديث كود الدخول');
       }
     }
 
