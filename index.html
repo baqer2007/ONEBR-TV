@@ -250,7 +250,6 @@
 
   <div id="announcementBanner"></div>
 
-  <!-- القائمة الجانبية -->
   <div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
   <div class="drawer" id="drawer">
     <div class="drawer-header">
@@ -369,7 +368,6 @@
     </div>
   </div>
 
-  <!-- شاشة المشغل وتفاصيل العمل -->
   <div id="theaterView">
     <button class="back-btn" onclick="history.back()"><i class="fa-solid fa-arrow-right"></i> <span>العودة</span></button>
     
@@ -397,11 +395,10 @@
     <!-- صندوق الفحص السحابي -->
     <div class="radar-loading-box" id="radarLoadingBox">
       <div class="radar-spinner"></div>
-      <div style="font-size:0.9rem; font-weight:800; color:var(--cyan);">جاري تجهيز السيرفرات المناسبة وتخطي الحماية تلقائياً...</div>
-      <div style="font-size:0.75rem; color:var(--text-muted);">يتم الاتصال بمحرك التضمين السحابي العالمي</div>
+      <div style="font-size:0.9rem; font-weight:800; color:var(--cyan);">جاري ترتيب السيرفرات الذكية وتشغيل الأفضل تلقائياً...</div>
+      <div style="font-size:0.75rem; color:var(--text-muted);">يتم التوجيه حسب لغة وتصنيف العمل</div>
     </div>
 
-    <!-- المشغل -->
     <div class="player-container" id="mainPlayerContainer">
       <div id="directPlayerBox">
         <video id="nativeVideo" controls playsinline crossorigin="anonymous"></video>
@@ -412,15 +409,13 @@
       </div>
     </div>
 
-    <!-- شريط السيرفرات الكامل (26 سيرفر) -->
     <div id="serversContainer" style="display:none; flex-direction:column; margin-bottom:14px;">
       <div style="font-size:0.75rem; color:var(--text-muted); font-weight:800; margin-bottom:6px;">
-        📺 السيرفرات المتاحة للمشاهدة:
+        📺 السيرفرات المرتبة تلقائياً (اضغط للتبديل في حال توقف أي سيرفر):
       </div>
       <div class="servers-bar-deck" id="serversDeckList"></div>
     </div>
 
-    <!-- الحلقات والمواسم -->
     <div class="episodes-bar" id="episodesContainer">
       <div style="font-size: 0.8rem; font-weight: 800;">المواسم والحلقات:</div>
       <div class="seasons-scroll" id="seasonsList"></div>
@@ -433,7 +428,7 @@
     </div>
   </div>
 
-  <!-- النوافذ المنبثقة -->
+  <!-- النوافذ المنبثقة كاملة -->
   <div class="modal-overlay" id="confirmClearModal">
     <div class="modal-box" style="max-width: 340px; text-align: center; padding: 25px;">
       <div style="color: #ef4444; margin-bottom: 15px;"><i class="fa-solid fa-triangle-exclamation" style="font-size: 3rem;"></i></div>
@@ -604,7 +599,7 @@
     const BACKDROP_BASE = "https://image.tmdb.org/t/p/original";
     const FIREBASE_DB = "https://cinemavip-a9a21-default-rtdb.firebaseio.com";
     
-    // ربط الواجهة مباشرة مع خادم Vercel
+    // رابط خادم Vercel
     const CLOUDFLARE_WORKER_BASE = "https://onebrtv-api.vercel.app";
 
     const SUPER_ADMIN_EMAIL = "altrfybaqer0@gmail.com";
@@ -688,7 +683,7 @@
       activeServerList.forEach((srv, idx) => {
         const btn = document.createElement('button');
         btn.className = `server-tab-btn ${idx === currentServerIndex ? 'active' : ''}`;
-        btn.innerHTML = `<i class="fa-solid fa-server" style="font-size:0.65rem;"></i> ${srv.name}`;
+        btn.innerHTML = `<i class="fa-solid fa-play" style="font-size:0.65rem;"></i> ${srv.name}`;
         btn.onclick = () => selectServerByIndex(idx);
         deck.appendChild(btn);
       });
@@ -701,13 +696,15 @@
       document.querySelectorAll('.server-tab-btn').forEach((b, i) => b.classList.toggle('active', i === idx));
     }
 
-    // بدء التشغيل وجلب السيرفرات الـ 26 تلقائياً من خادم Vercel
+    // الدالة الذكية لبدء البث وتمرير المعطيات
     async function startStreamingNow() {
       const id = currentItem.id;
       const type = currentItem.type || 'movie';
       const season = currentItem.season || 1;
       const episode = currentItem.episode || 1;
       const imdb = currentItem.imdb_id || '';
+      const lang = currentItem.origLang || '';
+      const isAnime = currentItem.isAnime ? '1' : '0';
 
       const mainContainer = document.getElementById('mainPlayerContainer');
       const directBox = document.getElementById('directPlayerBox');
@@ -727,7 +724,7 @@
       if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
 
       try {
-        const res = await fetch(`${CLOUDFLARE_WORKER_BASE}/api/resolve?tmdb=${id}&type=${type}&s=${season}&e=${episode}&imdb=${imdb}`);
+        const res = await fetch(`${CLOUDFLARE_WORKER_BASE}/api/resolve?tmdb=${id}&type=${type}&s=${season}&e=${episode}&imdb=${imdb}&lang=${lang}&isAnime=${isAnime}`);
         const data = await res.json();
 
         radarBox.style.display = 'none';
@@ -750,11 +747,10 @@
       } catch (err) {}
 
       radarBox.style.display = 'none';
-      // خيار احتياطي في حال انقطاع الاتصال بالسيرفر
       activeServerList = [
-        { id: 1, name: "MultiEmbed", url: type === 'movie' ? `https://multiembed.mov/?video_id=${id}&tmdb=1` : `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${season}&e=${episode}` },
-        { id: 2, name: "AutoEmbed", url: type === 'movie' ? `https://player.autoembed.cc/embed/movie/${id}` : `https://player.autoembed.cc/embed/tv/${id}/${season}/${episode}` },
-        { id: 3, name: "Embed.su", url: type === 'movie' ? `https://embed.su/embed/movie/${id}` : `https://embed.su/embed/tv/${id}/${season}/${episode}` }
+        { id: 1, name: "VidLink Pro", url: type === 'movie' ? `https://vidlink.pro/movie/${id}` : `https://vidlink.pro/tv/${id}/${season}/${episode}` },
+        { id: 2, name: "MultiEmbed", url: type === 'movie' ? `https://multiembed.mov/?video_id=${id}&tmdb=1` : `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${season}&e=${episode}` },
+        { id: 3, name: "AutoEmbed", url: type === 'movie' ? `https://player.autoembed.cc/embed/movie/${id}` : `https://player.autoembed.cc/embed/tv/${id}/${season}/${episode}` }
       ];
       renderServersDeck();
       mainContainer.style.display = 'block';
