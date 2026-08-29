@@ -48,14 +48,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
     body { background-color: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; transition: background-color 0.3s, color 0.3s; }
 
-    :focus-visible, .tv-active-focus {
-      outline: 3px solid var(--cyan) !important;
-      box-shadow: 0 0 16px rgba(0, 240, 255, 0.8) !important;
-      transform: scale(1.04) !important;
-      transition: transform 0.15s ease, box-shadow 0.15s ease !important;
-      z-index: 99 !important;
-    }
-
+    :focus-visible, .tv-active-focus { outline: 3px solid var(--cyan) !important; box-shadow: 0 0 16px rgba(0, 240, 255, 0.8) !important; transform: scale(1.04) !important; z-index: 99 !important; }
     .masked-pin { -webkit-text-security: disc; }
     .toggle-eye { position: absolute; left: 12px; top: 36px; color: var(--text-muted); cursor: pointer; font-size: 1.1rem; }
     html[dir="ltr"] .toggle-eye { left: auto; right: 12px; }
@@ -389,7 +382,7 @@
     <!-- شريط السيرفرات السريع المباشر -->
     <div id="serversContainer" style="display:none; flex-direction:column; margin-bottom:10px;">
       <div style="font-size:0.75rem; color:var(--text-muted); font-weight:800; margin-bottom:6px;">
-        📺 إذا ظهرت شاشة خطأ أو توقف البث، اختر سيرفراً آخر من هنا مباشرة:
+        📺 قائمة السيرفرات (تم تحديد السيرفر الشغال تلقائياً، يمكنك التبديل يدوياً):
       </div>
       <div class="servers-bar-deck" id="serversDeckList"></div>
     </div>
@@ -680,11 +673,11 @@
       const isMov = (type === 'movie');
       return [
         { name: "سيرفر 1 (VidLink Pro)", url: isMov ? `https://vidlink.pro/movie/${id}?primaryColor=e50914` : `https://vidlink.pro/tv/${id}/${s}/${e}?primaryColor=e50914` },
-        { name: "سيرفر 2 (Embed.su)", url: isMov ? `https://embed.su/embed/movie/${id}` : `https://embed.su/embed/tv/${id}/${s}/${e}` },
-        { name: "سيرفر 3 (MultiEmbed)", url: isMov ? `https://multiembed.mov/?video_id=${id}&tmdb=1` : `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}` },
+        { name: "سيرفر 2 (MultiEmbed - تركي وآسيوي)", url: isMov ? `https://multiembed.mov/?video_id=${id}&tmdb=1` : `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}` },
+        { name: "سيرفر 3 (Embed.su)", url: isMov ? `https://embed.su/embed/movie/${id}` : `https://embed.su/embed/tv/${id}/${s}/${e}` },
         { name: "سيرفر 4 (VidSrc.cc)", url: isMov ? `https://vidsrc.cc/v2/embed/movie/${id}` : `https://vidsrc.cc/v2/embed/tv/${id}/${s}/${e}` },
-        { name: "سيرفر 5 (NontonGo)", url: isMov ? `https://www.nontongo.win/embed/movie/${id}` : `https://www.nontongo.win/embed/tv/${id}/${s}/${e}` },
-        { name: "سيرفر 6 (2Embed)", url: isMov ? `https://www.2embed.cc/embed/${id}` : `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}` },
+        { name: "سيرفر 5 (2Embed VIP)", url: isMov ? `https://www.2embed.cc/embed/${id}` : `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}` },
+        { name: "سيرفر 6 (NontonGo)", url: isMov ? `https://www.nontongo.win/embed/movie/${id}` : `https://www.nontongo.win/embed/tv/${id}/${s}/${e}` },
         { name: "سيرفر 7 (SmashyStream)", url: isMov ? `https://embed.smashystream.com/playere.php?tmdb=${id}` : `https://embed.smashystream.com/playere.php?tmdb=${id}&season=${s}&episode=${e}` }
       ];
     }
@@ -708,56 +701,89 @@
       document.querySelectorAll('.server-tab-btn').forEach((b, i) => b.classList.toggle('active', i === idx));
     }
 
+    // محرك الفحص الذكي والاختيار التلقائي الحقيقي
     async function startStreamingNow() {
       const { id, type, season = 1, episode = 1 } = currentItem;
       const mainContainer = document.getElementById('mainPlayerContainer');
       const directBox = document.getElementById('directPlayerBox');
       const iframeBox = document.getElementById('iframeBox');
       const srvContainer = document.getElementById('serversContainer');
+      const frame = document.getElementById('streamFrame');
       const video = document.getElementById('nativeVideo');
 
       mainContainer.style.display = 'block';
       mainContainer.scrollIntoView({ behavior: 'smooth' });
 
+      // تنظيف المشغل
+      stopPlayer();
+
+      // تجهيز قائمة السيرفرات البديلة
+      activeServerList = buildServersList(id, type, season, episode);
+      renderServersDeck();
+
       try {
+        // 1. استدعاء الفاحص السحابي الذكي لفحص المحتوى الحقيقي
         const res = await fetch(`${CLOUDFLARE_WORKER_BASE}/api/resolve?tmdb=${id}&type=${type}&s=${season}&e=${episode}`);
         const data = await res.json();
 
-        // 1. إذا توفر البث المباشر (HLS)
-        if (data && data.success && data.directStreamUrl) {
-          iframeBox.style.display = 'none';
-          srvContainer.style.display = 'none';
-          directBox.style.display = 'block';
+        if (data && data.success) {
+          // أ. إذا وجد بثاً مباشراً خاماً (HLS)
+          if (data.directStreamUrl) {
+            iframeBox.style.display = 'none';
+            if (srvContainer) srvContainer.style.display = 'none';
+            directBox.style.display = 'block';
 
-          const proxiedUrl = `${CLOUDFLARE_WORKER_BASE}/api/proxy?url=${encodeURIComponent(data.directStreamUrl)}`;
+            const proxiedUrl = `${CLOUDFLARE_WORKER_BASE}/api/proxy?url=${encodeURIComponent(data.directStreamUrl)}&referer=${encodeURIComponent(data.referer || 'https://vidlink.pro/')}`;
 
-          if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
+            if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
 
-          if (Hls.isSupported()) {
-            hlsInstance = new Hls({ enableWorker: true, lowLatencyMode: true });
-            hlsInstance.loadSource(proxiedUrl);
-            hlsInstance.attachMedia(video);
-            
-            // خطة الطوارئ: التبديل في حال وجود أخطاء في التشفير
-            hlsInstance.on(Hls.Events.ERROR, function(event, data) {
-              if (data.fatal) {
-                fallbackToEmbedServers(id, type, season, episode);
-              }
-            });
+            if (Hls.isSupported()) {
+              hlsInstance = new Hls({ enableWorker: true, lowLatencyMode: true });
+              hlsInstance.loadSource(proxiedUrl);
+              hlsInstance.attachMedia(video);
 
-            hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => { video.play().catch(() => {}); });
-          } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-            video.src = proxiedUrl;
-            video.play().catch(() => {});
+              // خطة الطوارئ ضد التشفير الشديد
+              hlsInstance.on(Hls.Events.ERROR, function(event, errData) {
+                if (errData.fatal) {
+                  fallbackToEmbedServers(id, type, season, episode);
+                }
+              });
+
+              hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => {
+                video.play().catch(() => {});
+              });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+              video.src = proxiedUrl;
+              video.play().catch(() => {});
+            }
+
+            loadAutoSubtitles(id, type, season, episode);
+            recordResumeProgress(currentItem, 25);
+            return;
           }
 
-          loadAutoSubtitles(id, type, season, episode);
-          recordResumeProgress(currentItem, 25);
-          return;
+          // ب. إذا وجد سيرفر Embed يعمل ومؤكد خالٍ من الأخطاء
+          if (data.workingServerUrl) {
+            directBox.style.display = 'none';
+            iframeBox.style.display = 'block';
+            if (srvContainer) srvContainer.style.display = 'flex';
+
+            frame.src = data.workingServerUrl;
+
+            // تحديد السيرفر النشط تلقائياً في الشريط
+            const matchingIdx = activeServerList.findIndex(s => data.workingServerUrl.includes(s.url.split('?')[0]));
+            if (matchingIdx !== -1) {
+              currentServerIndex = matchingIdx;
+              document.querySelectorAll('.server-tab-btn').forEach((b, i) => b.classList.toggle('active', i === matchingIdx));
+            }
+
+            recordResumeProgress(currentItem, 20);
+            return;
+          }
         }
       } catch (err) {}
 
-      // 2. إذا فشل البث المباشر، ينتقل للسيرفرات المدمجة مباشرة
+      // 2. خطة الطوارئ العامة في حال تعذر الفحص
       fallbackToEmbedServers(id, type, season, episode);
     }
 
@@ -768,9 +794,6 @@
       
       if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
 
-      activeServerList = buildServersList(id, type, season, episode);
-      currentServerIndex = 0;
-      renderServersDeck();
       selectServerByIndex(0);
       recordResumeProgress(currentItem, 20);
     }
