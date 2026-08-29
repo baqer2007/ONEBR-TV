@@ -7,6 +7,11 @@
 
   <title>ONEBR TV | مشاهدة وتحميل أحدث الأفلام والمسلسلات والأنمي</title>
   <meta name="description" content="منصة ONEBR TV لمشاهدة أحدث الأفلام، المسلسلات، الأنمي، والدراما الآسيوية والتركية بجودة عالية وسيرفرات سريعة.">
+  <meta name="keywords" content="أفلام, مسلسلات, أنمي, دراما كورية, دراما تركية, سينما, ONEBR TV">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#e50914">
+
+  <!-- دعم تطبيق الويب التقدمي (PWA) -->
   <link rel="manifest" href="/manifest.json">
   <link rel="icon" type="image/png" href="https://img.icons8.com/color/96/movie-projector.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -104,15 +109,6 @@
     .btn-detail-action.active-fav { color: var(--gold); border-color: var(--gold); }
     .btn-detail-action.active-watched { color: var(--watched); border-color: var(--watched); }
 
-    /* رادار الفحص السحابي السحري */
-    .radar-container {
-      width: 100%; background: #000; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 14px; position: relative; height: 350px; display: none; align-items: center; justify-content: center; flex-direction: column;
-    }
-    .radar-spinner { width: 50px; height: 50px; border: 4px solid rgba(0, 240, 255, 0.2); border-top-color: var(--cyan); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 16px; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .radar-text { font-size: 0.9rem; font-weight: 800; color: var(--cyan); letter-spacing: 0.5px; animation: pulse 1.5s infinite alternate; }
-    .radar-subtext { font-size: 0.7rem; color: var(--text-muted); margin-top: 8px; }
-
     .player-container { width: 100%; background: #000; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 14px; position: relative; display: none; }
     #directPlayerBox { display: none; width: 100%; position: relative; }
     #nativeVideo { width: 100%; max-height: 70vh; display: block; background: #000; }
@@ -139,10 +135,7 @@
     .ep-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 7px 4px; border-radius: 6px; text-align: center; font-size: 0.75rem; cursor: pointer; position: relative; }
     .ep-btn.active { background: var(--primary); color: #fff; box-shadow: 0 0 10px rgba(229,9,20,0.5); }
     .ep-btn.is-watched::after { content: '✓'; position: absolute; top: 2px; right: 4px; font-size: 0.65rem; color: var(--watched); font-weight: 900; }
-    
-    /* تحديد الحلقة الذكي */
     .ep-btn.suggested-next { border-color: var(--gold); color: var(--gold); font-weight: 900; }
-    .ep-btn.suggested-next::before { content: '▶'; position: absolute; left: 4px; top: 5px; font-size: 0.6rem; animation: pulse 1s infinite alternate; }
 
     .vip-pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin: 14px 0; }
     .vip-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
@@ -335,7 +328,7 @@
       </div>
     </div>
 
-    <!-- قائمة السيرفرات المنسدلة الذكية مع زر التبديل -->
+    <!-- قائمة السيرفرات المنسدلة الذكية -->
     <div class="server-dropdown-container" id="serversContainer" style="display:none; gap:8px; align-items:center; flex-wrap:wrap;">
       <button id="serverToggleBtn" class="server-toggle-btn" onclick="toggleServerMenu()">
         📺 <span data-i18n="select_server">قائمة السيرفرات</span>
@@ -348,11 +341,14 @@
       <div id="serverDropdown" class="server-menu-list"></div>
     </div>
 
-    <!-- شاشة رادار الفحص السحابي -->
-    <div class="radar-container" id="radarLoader">
-      <div class="radar-spinner"></div>
-      <div class="radar-text">السحابة تفحص السيرفرات...</div>
-      <div class="radar-subtext">يتم إيجاد أفضل سيرفر يعمل حالياً</div>
+    <!-- كاشف السيرفرات الميتة (الجديد) -->
+    <div id="deadServerWarning" style="display:none; background:#991b1b; border:1px solid #ef4444; color:#fff; padding:12px; border-radius:8px; margin-bottom:12px; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; box-shadow:0 0 15px rgba(239, 68, 68, 0.4);">
+      <div style="font-size:0.85rem; font-weight:800;">
+        <i class="fa-solid fa-triangle-exclamation"></i> يبدو أن هذا السيرفر لا يحتوي على العمل حالياً أو لا يستجيب.
+      </div>
+      <button onclick="manualSkipServer()" style="background:#f59e0b; color:#000; border:none; padding:6px 14px; border-radius:6px; font-weight:900; font-size:0.8rem; cursor:pointer; box-shadow:0 0 8px rgba(245, 158, 11, 0.6);">
+        انتقل للسيرفر التالي ⏭️
+      </button>
     </div>
 
     <div class="player-container" id="mainPlayerContainer">
@@ -573,6 +569,8 @@
     let searchDebounceTimer = null;
     let verifyingForgotEmailAddress = '';
     let generatedOtp = '';
+    let deadServerTimer = null;
+    let isProbeResolved = false;
 
     // ==========================================
     // محرك التحكم بالريموت كنترول لشاشات Smart TV
@@ -632,7 +630,7 @@
     };
 
     // ==========================================
-    // محرك البث الذكي مع واجهة الرادار والذاكرة
+    // محرك البث الذكي ورادار كشف السيرفرات الميتة
     // ==========================================
     function buildFallbackServers(id, type, s, e) {
       const isMov = (type === 'movie');
@@ -645,6 +643,96 @@
       ];
     }
 
+    function initServerResponseWatcher() {
+      window.addEventListener('blur', () => {
+        setTimeout(() => {
+          if (document.activeElement && document.activeElement.tagName === 'IFRAME') {
+            confirmServerSuccess();
+          }
+        }, 100);
+      });
+
+      window.addEventListener('message', (event) => {
+        if (!event.data) return;
+        try {
+          const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+          if (data.type === 'PLAYER_READY' || data.event === 'playing' || data.event === 'play' || data.status === 'playing' || data.event === 'timeupdate') {
+            confirmServerSuccess();
+          }
+        } catch(e) {}
+      });
+    }
+
+    function startSmartAutoProbe() {
+      generateServerEndpoints();
+      renderDynamicServersDeck();
+
+      const mediaKey = `winning_srv_${currentItem.type}_${currentItem.id}_s${currentItem.season}_e${currentItem.episode}`;
+      const savedWinningServer = parseInt(localStorage.getItem(mediaKey) || '1');
+
+      currentServer = (savedWinningServer <= activeServerList.length) ? savedWinningServer : 1;
+      executeServerLaunch(currentServer);
+    }
+
+    function executeServerLaunch(serverIdx) {
+      if (serverIdx > activeServerList.length) {
+        currentServer = 1;
+        serverIdx = 1;
+      }
+
+      currentServer = serverIdx;
+      isProbeResolved = false; 
+      
+      const target = activeServerList[serverIdx - 1];
+      const frame = document.getElementById('streamFrame');
+      const toggleBtn = document.getElementById('serverToggleBtn');
+      const warningBox = document.getElementById('deadServerWarning');
+
+      if (warningBox) warningBox.style.display = 'none';
+
+      toggleBtn.innerHTML = `📺 <span>سيرفر ${serverIdx} (محدد)</span>`;
+      document.querySelectorAll('.server-menu-btn').forEach((b, i) => b.classList.toggle('active', i + 1 === serverIdx));
+
+      frame.src = target.url;
+
+      clearTimeout(deadServerTimer);
+      deadServerTimer = setTimeout(() => {
+        if (!isProbeResolved && warningBox) {
+          warningBox.style.display = 'flex';
+        }
+      }, 6500);
+    }
+
+    function confirmServerSuccess() {
+      isProbeResolved = true; 
+      clearTimeout(deadServerTimer); 
+
+      const toggleBtn = document.getElementById('serverToggleBtn');
+      const warningBox = document.getElementById('deadServerWarning');
+
+      if (warningBox) warningBox.style.display = 'none';
+      if (toggleBtn) toggleBtn.innerHTML = `📺 <span>سيرفر ${currentServer} (يعمل بنجاح 🟢)</span>`;
+
+      const mediaKey = `winning_srv_${currentItem.type}_${currentItem.id}_s${currentItem.season}_e${currentItem.episode}`;
+      localStorage.setItem(mediaKey, currentServer);
+    }
+
+    function manualSkipServer() {
+      const warningBox = document.getElementById('deadServerWarning');
+      if (warningBox) warningBox.style.display = 'none';
+
+      if (currentServer < activeServerList.length) {
+        currentServer++;
+      } else {
+        currentServer = 1;
+      }
+      executeServerLaunch(currentServer);
+    }
+
+    function generateServerEndpoints() {
+       activeServerList = buildFallbackServers(currentItem.id, currentItem.type, currentItem.season, currentItem.episode);
+    }
+
     async function startStreamingNow() {
       const { id, type, season = 1, episode = 1 } = currentItem;
       const mainContainer = document.getElementById('mainPlayerContainer');
@@ -653,24 +741,20 @@
       const srvContainer = document.getElementById('serversContainer');
       const frame = document.getElementById('streamFrame');
       const video = document.getElementById('nativeVideo');
-      const radar = document.getElementById('radarLoader');
+      const warningBox = document.getElementById('deadServerWarning');
       const toggleBtn = document.getElementById('serverToggleBtn');
 
       mainContainer.style.display = 'block';
       mainContainer.scrollIntoView({ behavior: 'smooth' });
 
-      // إظهار شاشة الرادار السحابي وإخفاء المشغلات القديمة
-      radar.style.display = 'flex';
       directBox.style.display = 'none';
       iframeBox.style.display = 'none';
       srvContainer.style.display = 'none';
+      if (warningBox) warningBox.style.display = 'none';
 
       try {
-        // إرسال الطلب للفحص السحابي المتوازي (سباق السيرفرات)
         const res = await fetch(`${CLOUDFLARE_WORKER_BASE}/api/resolve?tmdb=${id}&type=${type}&s=${season}&e=${episode}`);
         const data = await res.json();
-
-        radar.style.display = 'none';
 
         if (data && data.success) {
           if (data.directStreamUrl) {
@@ -707,15 +791,9 @@
         }
       } catch (err) {}
 
-      // خطة الطوارئ القصوى إذا فشل الاتصال بالسحابة نهائياً
-      radar.style.display = 'none';
       iframeBox.style.display = 'block';
       srvContainer.style.display = 'flex';
-      activeServerList = buildFallbackServers(id, type, season, episode);
-      renderDynamicServersDeck();
-      
-      frame.src = activeServerList[0].url;
-      toggleBtn.innerHTML = `📺 <span>${activeServerList[0].name}</span>`;
+      startSmartAutoProbe();
       recordResumeProgress(currentItem, 20);
     }
 
@@ -736,23 +814,16 @@
         btn.className = `server-menu-btn ${index === 0 ? 'active' : ''}`;
         btn.innerText = srv.name;
         btn.onclick = () => { 
-          document.getElementById('streamFrame').src = srv.url;
-          document.getElementById('serverToggleBtn').innerHTML = `📺 <span>${srv.name}</span>`;
-          document.querySelectorAll('.server-menu-btn').forEach((b, i) => b.classList.toggle('active', i === index));
-          toggleServerMenu(); 
+           changeServer(srvIndex);
+           toggleServerMenu();
         };
         container.appendChild(btn);
       });
     }
 
-    function manualSkipServer() {
-      const frame = document.getElementById('streamFrame');
-      const currentIndex = activeServerList.findIndex(s => s.url === frame.src);
-      const nextIndex = (currentIndex + 1) % activeServerList.length;
-      const target = activeServerList[nextIndex];
-      frame.src = target.url;
-      document.getElementById('serverToggleBtn').innerHTML = `📺 <span>${target.name}</span>`;
-      document.querySelectorAll('.server-menu-btn').forEach((b, i) => b.classList.toggle('active', i === nextIndex));
+    function changeServer(idx) {
+      currentServer = idx;
+      executeServerLaunch(idx);
     }
 
     function toggleServerMenu() {
@@ -761,6 +832,11 @@
     }
 
     function stopPlayer() {
+      clearTimeout(deadServerTimer);
+      isProbeResolved = false;
+      const warningBox = document.getElementById('deadServerWarning');
+      if (warningBox) warningBox.style.display = 'none';
+
       const frame = document.getElementById('streamFrame');
       if (frame) frame.src = "";
       const video = document.getElementById('nativeVideo');
@@ -770,7 +846,6 @@
       if (mainPlayer) mainPlayer.style.display = 'none';
       const srvContainer = document.getElementById('serversContainer');
       if (srvContainer) srvContainer.style.display = 'none';
-      document.getElementById('radarLoader').style.display = 'none';
     }
 
     // ==========================================
@@ -824,7 +899,6 @@
       else { watched.push(key); btn.classList.add('active-watched'); }
       saveWatchedItems(watched);
       
-      // حفظ الحلقة القادمة كحلقة مقترحة
       if (currentItem.type === 'tv' && currentItem.episode < (currentItem.totalEpisodes || 99)) {
         localStorage.setItem(`next_ep_${currentItem.id}_s${currentItem.season}`, currentItem.episode + 1);
       }
@@ -846,7 +920,7 @@
     }
 
     async function initSite() {
-      applyTheme(currentTheme); applyLanguage(currentLang); TVController.init(); await verifyUserStatus(); injectAdScriptsIfEligible(); logVisitor();
+      applyTheme(currentTheme); applyLanguage(currentLang); initServerResponseWatcher(); TVController.init(); await verifyUserStatus(); injectAdScriptsIfEligible(); logVisitor();
       loadCustomMediaFromFirebase(); loadBannerAnnouncement(); loadResumeShelf(); initHeroRotation(); initSearchAutocomplete(); initInfiniteScroll(); initPlayerSkipTimer();
       window.addEventListener('hashchange', handleRouting); handleRouting();
     }
@@ -1007,13 +1081,12 @@
 
     async function fetchMediaAndOpenTheater(id, type, season = null, episode = null) {
       document.getElementById('homeView').style.display = 'none'; document.getElementById('searchResultsView').style.display = 'none'; document.getElementById('favoritesView').style.display = 'none'; document.getElementById('theaterView').style.display = 'block';
-      document.getElementById('mainPlayerContainer').style.display = 'none'; document.getElementById('serversContainer').style.display = 'none'; document.getElementById('radarLoader').style.display = 'none'; window.scrollTo(0, 0);
+      document.getElementById('mainPlayerContainer').style.display = 'none'; document.getElementById('serversContainer').style.display = 'none'; window.scrollTo(0, 0);
 
       try {
         const res = await fetch(`${API_BASE}/${type}/${id}?api_key=${API_KEY}&language=${currentLang}&append_to_response=external_ids`);
         const data = await res.json();
         
-        // استرجاع الذاكرة الذكية إذا لم يتم تمرير حلقة معينة في الرابط
         let s = season || 1;
         let e = episode || 1;
         if (!season && type === 'tv') {
@@ -1079,7 +1152,7 @@
 
     function playDirectMedia(title, streamUrl, poster) {
       currentItem = { id: 'custom', type: 'custom', title, poster_path: poster, isCustom: true, directUrl: streamUrl };
-      document.getElementById('homeView').style.display = 'none'; document.getElementById('searchResultsView').style.display = 'none'; document.getElementById('favoritesView').style.display = 'none'; document.getElementById('theaterView').style.display = 'block'; document.getElementById('detailHeroBox').style.display = 'none'; document.getElementById('mainPlayerContainer').style.display = 'block'; document.getElementById('iframeBox').style.display = 'none'; document.getElementById('serversContainer').style.display = 'none'; document.getElementById('episodesContainer').style.display = 'none'; document.getElementById('directPlayerBox').style.display = 'block'; document.getElementById('radarLoader').style.display = 'none'; window.scrollTo(0, 0);
+      document.getElementById('homeView').style.display = 'none'; document.getElementById('searchResultsView').style.display = 'none'; document.getElementById('favoritesView').style.display = 'none'; document.getElementById('theaterView').style.display = 'block'; document.getElementById('detailHeroBox').style.display = 'none'; document.getElementById('mainPlayerContainer').style.display = 'block'; document.getElementById('iframeBox').style.display = 'none'; document.getElementById('serversContainer').style.display = 'none'; document.getElementById('episodesContainer').style.display = 'none'; document.getElementById('directPlayerBox').style.display = 'block'; window.scrollTo(0, 0);
       const video = document.getElementById('nativeVideo'); const proxiedUrl = `${CLOUDFLARE_WORKER_BASE}/api/proxy?url=${encodeURIComponent(streamUrl)}`;
       if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
       if (streamUrl.includes('.m3u8')) { if (Hls.isSupported()) { hlsInstance = new Hls(); hlsInstance.loadSource(proxiedUrl); hlsInstance.attachMedia(video); hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => video.play().catch(()=>{})); } else if (video.canPlayType('application/vnd.apple.mpegurl')) { video.src = proxiedUrl; video.play().catch(()=>{}); } } else { video.src = proxiedUrl; video.play().catch(()=>{}); }
