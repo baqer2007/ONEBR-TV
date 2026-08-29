@@ -150,19 +150,29 @@
     .btn-detail-action.active-fav { color: var(--gold); border-color: var(--gold); }
     .btn-detail-action.active-watched { color: var(--watched); border-color: var(--watched); }
 
+    /* شريط حالة الفحص الآلي الذكي */
+    .smart-status-banner {
+      background: rgba(15, 20, 34, 0.9);
+      border: 1px solid var(--cyan);
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 12px;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
+    }
+    .status-pulse { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 8px var(--cyan); animation: pulseAnim 1.2s infinite; }
+    @keyframes pulseAnim { 0% { transform: scale(0.9); opacity: 0.7; } 50% { transform: scale(1.3); opacity: 1; } 100% { transform: scale(0.9); opacity: 0.7; } }
+
     .player-container { width: 100%; background: #000; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 14px; position: relative; display: none; }
     #directPlayerBox { display: none; width: 100%; position: relative; }
     #nativeVideo { width: 100%; max-height: 70vh; display: block; background: #000; }
     
-    /* تنسيقات شريط الترجمة */
-    ::cue {
-      background-color: rgba(0, 0, 0, 0.8);
-      color: #ffffff;
-      font-size: 1.1rem;
-      font-weight: bold;
-      text-shadow: 0 0 4px #000;
-    }
-
+    ::cue { background-color: rgba(0, 0, 0, 0.8); color: #ffffff; font-size: 1.1rem; font-weight: bold; text-shadow: 0 0 4px #000; }
     .skip-intro-btn { position: absolute; bottom: 65px; left: 20px; z-index: 30; background: rgba(15, 20, 34, 0.85); border: 1px solid var(--gold); color: #fff; padding: 8px 14px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; cursor: pointer; display: none; backdrop-filter: blur(6px); box-shadow: 0 0 10px rgba(245, 158, 11, 0.4); }
     .skip-intro-btn:hover { background: var(--gold); color: #000; }
     
@@ -172,7 +182,7 @@
     .server-dropdown-container { position: relative; margin-top: 15px; z-index: 50; display: none; }
     .server-toggle-btn { background: var(--primary); color: #fff; border: none; padding: 10px 16px; border-radius: 6px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-family: inherit; }
     .server-toggle-btn:hover { background: #b80710; }
-    .server-menu-list { position: absolute; top: 45px; right: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px; display: none; flex-direction: column; gap: 6px; box-shadow: 0 8px 20px rgba(0,0,0,0.6); min-width: 220px; max-height: 260px; overflow-y: auto; }
+    .server-menu-list { position: absolute; top: 45px; right: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px; display: none; flex-direction: column; gap: 6px; box-shadow: 0 8px 20px rgba(0,0,0,0.6); min-width: 250px; max-height: 280px; overflow-y: auto; }
     html[dir="ltr"] .server-menu-list { right: auto; left: 0; }
     .server-menu-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 10px 12px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; font-weight: 700; transition: all 0.2s; text-align: right; }
     .server-menu-btn:hover, .server-menu-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
@@ -381,14 +391,23 @@
       </div>
     </div>
 
+    <!-- شريط الرقابة والفحص الذكي اللحظي -->
+    <div class="smart-status-banner" id="smartStatusBanner">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span class="status-pulse"></span>
+        <span id="smartStatusText">جاري فحص وتحديد أفضل سيرفر متاح تلقائياً...</span>
+      </div>
+      <span style="color:var(--cyan); font-size:0.75rem;" id="smartServerCounter">0 / 0</span>
+    </div>
+
     <!-- قائمة السيرفرات المنسدلة الذكية مع زر التخطي السريع -->
     <div class="server-dropdown-container" id="serversContainer" style="display:none; gap:8px; align-items:center; flex-wrap:wrap;">
       <button id="serverToggleBtn" class="server-toggle-btn" onclick="toggleServerMenu()">
         📺 <span data-i18n="select_server">قائمة السيرفرات</span>
       </button>
 
-      <button class="server-toggle-btn" style="background: var(--surface-hover); border: 1px solid var(--border); color: var(--gold);" onclick="nextServerAction()" title="تبديل السيرفر في حال توقفه">
-        ⏭️ السيرفر لا يعمل؟ انتقل للتالي
+      <button class="server-toggle-btn" style="background: var(--surface-hover); border: 1px solid var(--border); color: var(--gold);" onclick="manualSkipServer()" title="تخطي فوري للسيرفر التالي">
+        ⏭️ تخطي للسيرفر التالي
       </button>
 
       <div id="serverDropdown" class="server-menu-list"></div>
@@ -711,12 +730,402 @@
     let searchDebounceTimer = null;
     let verifyingForgotEmailAddress = '';
     let generatedOtp = '';
-    let serverWatchdogTimer = null;
-    let isCurrentStreamWorking = false;
-    let isManualServerSelect = false;
 
     // ==========================================
-    // محرك التحكم بالريموت كنترول لشاشات Smart TV
+    // محرك الفحص والتدوير الذكي 2.0 (Smart Stream Engine)
+    // ==========================================
+    let autoProbeTimer = null;
+    let isProbeResolved = false;
+
+    // أسطول موسّع يضم أفضل 16 سيرفر عالمي متوافق
+    function generateServerEndpoints() {
+      const { id, type, season: s, episode: e } = currentItem;
+      const isMov = (type === 'movie');
+
+      const allProviders = [
+        {
+          id: 'multiembed',
+          name: 'سيرفر 1 (MultiEmbed - شامل دراما كورية وتركي 🇹🇷 🇰🇷)',
+          url: isMov ? `https://multiembed.mov/?video_id=${id}&tmdb=1` : `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}`,
+          priority: (currentItem.isTurkish || currentItem.isAsian) ? 1 : 4
+        },
+        {
+          id: 'nontongo',
+          name: 'سيرفر 2 (NontonGo - خبير الدراما الآسيوية 🎎)',
+          url: isMov ? `https://www.nontongo.win/embed/movie/${id}` : `https://www.nontongo.win/embed/tv/${id}/${s}/${e}`,
+          priority: (currentItem.isAsian || currentItem.isTurkish) ? 2 : 7
+        },
+        {
+          id: 'smashy',
+          name: 'سيرفر 3 (SmashyStream - آسيا وأنمي متعدد 🎌)',
+          url: isMov ? `https://embed.smashystream.com/playere.php?tmdb=${id}` : `https://embed.smashystream.com/playere.php?tmdb=${id}&season=${s}&episode=${e}`,
+          priority: (currentItem.isAnime || currentItem.isAsian) ? 1 : 5
+        },
+        {
+          id: 'vidlink',
+          name: 'سيرفر 4 (VidLink - فائق السرعة بترجمة عربية)',
+          url: isMov ? `https://vidlink.pro/movie/${id}?primaryColor=e50914&sub=ar` : `https://vidlink.pro/tv/${id}/${s}/${e}?primaryColor=e50914&sub=ar`,
+          priority: currentItem.isAnime ? 4 : 1
+        },
+        {
+          id: 'embedsu',
+          name: 'سيرفر 5 (Embed.su - جودات متعددة وترجمة تلقائية)',
+          url: isMov ? `https://embed.su/embed/movie/${id}` : `https://embed.su/embed/tv/${id}/${s}/${e}`,
+          priority: 2
+        },
+        {
+          id: 'autoembed',
+          name: 'سيرفر 6 (AutoEmbed Server)',
+          url: isMov ? `https://player.autoembed.cc/embed/movie/${id}` : `https://player.autoembed.cc/embed/tv/${id}/${s}/${e}`,
+          priority: currentItem.isAnime ? 2 : 6
+        },
+        {
+          id: 'twoembed',
+          name: 'سيرفر 7 (2Embed VIP)',
+          url: isMov ? `https://www.2embed.cc/embed/${id}` : `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}`,
+          priority: 3
+        },
+        {
+          id: 'vidsrccc',
+          name: 'سيرفر 8 (VidSrc.cc Pro)',
+          url: isMov ? `https://vidsrc.cc/v2/embed/movie/${id}?autoPlay=true` : `https://vidsrc.cc/v2/embed/tv/${id}/${s}/${e}?autoPlay=true`,
+          priority: 5
+        },
+        {
+          id: 'vidsrcto',
+          name: 'سيرفر 9 (VidSrc.to)',
+          url: isMov ? `https://vidsrc.to/embed/movie/${id}` : `https://vidsrc.to/embed/tv/${id}/${s}/${e}`,
+          priority: 6
+        },
+        {
+          id: 'vidsrcme',
+          name: 'سيرفر 10 (VidSrc.me)',
+          url: isMov ? `https://vidsrc.me/embed/movie?tmdb=${id}` : `https://vidsrc.me/embed/tv?tmdb=${id}&season=${s}&episode=${e}`,
+          priority: 8
+        },
+        {
+          id: 'rive',
+          name: 'سيرفر 11 (Rive Stream Fast)',
+          url: isMov ? `https://rive.stream/embed/movie/${id}` : `https://rive.stream/embed/tv/${id}/${s}/${e}`,
+          priority: 9
+        },
+        {
+          id: 'moviesapi',
+          name: 'سيرفر 12 (MoviesAPI Club)',
+          url: isMov ? `https://moviesapi.club/movie/${id}` : `https://moviesapi.club/tv/${id}-${s}-${e}`,
+          priority: 10
+        },
+        {
+          id: 'superembed',
+          name: 'سيرفر 13 (SuperEmbed Net)',
+          url: isMov ? `https://multiembed.mov/directstream.php?video_id=${id}&tmdb=1` : `https://multiembed.mov/directstream.php?video_id=${id}&tmdb=1&s=${s}&e=${e}`,
+          priority: 11
+        },
+        {
+          id: 'vidsrcvip',
+          name: 'سيرفر 14 (VidSrc VIP)',
+          url: isMov ? `https://vidsrc.vip/embed/movie/${id}` : `https://vidsrc.vip/embed/tv/${id}/${s}/${e}`,
+          priority: 12
+        },
+        {
+          id: 'frembed',
+          name: 'سيرفر 15 (Frembed Stream)',
+          url: isMov ? `https://frembed.top/api/film.php?id=${id}` : `https://frembed.top/api/serie.php?id=${id}&s=${s}&e=${e}`,
+          priority: 13
+        },
+        {
+          id: '111movies',
+          name: 'سيرفر 16 (111Movies Direct)',
+          url: isMov ? `https://111movies.com/movie/${id}` : `https://111movies.com/tv/${id}/${s}/${e}`,
+          priority: 14
+        }
+      ];
+
+      // فرز القائمة بالكامل بحسب الأولوية الذكية للتصنيف
+      allProviders.sort((a, b) => a.priority - b.priority);
+      activeServerList = allProviders;
+    }
+
+    // مستمع إشارات المشغلات العالمية
+    function initServerResponseWatcher() {
+      window.addEventListener('message', (event) => {
+        if (!event.data) return;
+        try {
+          const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+
+          // إشارات النجاح والتشغيل
+          if (
+            data.type === 'PLAYER_READY' || 
+            data.event === 'playing' || 
+            data.event === 'play' || 
+            data.status === 'playing' ||
+            data.event === 'timeupdate'
+          ) {
+            confirmServerSuccess();
+          }
+
+          // إشارات الفشل الواضحة من مشغلات الـ Embed
+          if (
+            data.event === 'error' || 
+            data.event === 'no_source' || 
+            data.type === 'MEDIA_NOT_FOUND' || 
+            data.status === 'error' ||
+            data.error === true
+          ) {
+            autoAdvanceToNextServer();
+          }
+        } catch(e) {}
+      });
+    }
+
+    // بدء محرك الفحص والتشغيل التلقائي الذكي
+    function startSmartAutoProbe() {
+      const mediaKey = `winning_srv_${currentItem.type}_${currentItem.id}_s${currentItem.season}_e${currentItem.episode}`;
+      const savedWinningServer = parseInt(localStorage.getItem(mediaKey) || '1');
+
+      generateServerEndpoints();
+      renderDynamicServersDeck();
+
+      // إظهار شريط الفحص
+      const banner = document.getElementById('smartStatusBanner');
+      banner.style.display = 'flex';
+
+      isProbeResolved = false;
+      currentServer = (savedWinningServer <= activeServerList.length) ? savedWinningServer : 1;
+      executeAutoProbe(currentServer);
+    }
+
+    function executeAutoProbe(serverIdx) {
+      if (serverIdx > activeServerList.length) {
+        // انتهت كل السيرفرات دون استجابة
+        const banner = document.getElementById('smartStatusBanner');
+        document.getElementById('smartStatusText').innerText = "⚠️ تم فحص جميع السيرفرات الـ 16، يرجى اختيار سيرفر يدوياً أو تجربة سيرفر آخر.";
+        document.getElementById('serverToggleBtn').innerHTML = `📺 <span>قائمة السيرفرات (${activeServerList.length})</span>`;
+        clearTimeout(autoProbeTimer);
+        return;
+      }
+
+      currentServer = serverIdx;
+      clearTimeout(autoProbeTimer);
+
+      const target = activeServerList[serverIdx - 1];
+      const frame = document.getElementById('streamFrame');
+      const bannerText = document.getElementById('smartStatusText');
+      const counterText = document.getElementById('smartServerCounter');
+      const toggleBtn = document.getElementById('serverToggleBtn');
+
+      bannerText.innerText = `جاري فحص: ${target.name}...`;
+      counterText.innerText = `${serverIdx} / ${activeServerList.length}`;
+      toggleBtn.innerHTML = `⏳ <span>سيرفر ${serverIdx} (فحص آلي...)</span>`;
+      
+      document.querySelectorAll('.server-menu-btn').forEach((b, i) => b.classList.toggle('active', i + 1 === serverIdx));
+
+      frame.src = target.url;
+
+      // ضبط مؤقت التدوير الذكي (3.5 ثوانٍ لكل سيرفر)
+      autoProbeTimer = setTimeout(() => {
+        if (!isProbeResolved) {
+          autoAdvanceToNextServer();
+        }
+      }, 3500);
+    }
+
+    function autoAdvanceToNextServer() {
+      clearTimeout(autoProbeTimer);
+      if (currentServer < activeServerList.length && !isProbeResolved) {
+        currentServer++;
+        executeAutoProbe(currentServer);
+      }
+    }
+
+    function confirmServerSuccess() {
+      isProbeResolved = true;
+      clearTimeout(autoProbeTimer);
+
+      const target = activeServerList[currentServer - 1];
+      const banner = document.getElementById('smartStatusBanner');
+      const bannerText = document.getElementById('smartStatusText');
+      const toggleBtn = document.getElementById('serverToggleBtn');
+
+      bannerText.innerText = `✅ تم العثور على العمل وتثبيت [${target.name}] بنجاح!`;
+      toggleBtn.innerHTML = `📺 <span>سيرفر ${currentServer} (يعمل بنجاح 🟢)</span>`;
+
+      // حفظ السيرفر الناجح في الذاكرة لتشغيله مباشرة في المرات القادمة
+      const mediaKey = `winning_srv_${currentItem.type}_${currentItem.id}_s${currentItem.season}_e${currentItem.episode}`;
+      localStorage.setItem(mediaKey, currentServer);
+
+      // إخفاء شريط الفحص بعد ثانيتين
+      setTimeout(() => { banner.style.display = 'none'; }, 2200);
+    }
+
+    function manualSkipServer() {
+      isProbeResolved = false;
+      if (currentServer < activeServerList.length) {
+        currentServer++;
+        executeAutoProbe(currentServer);
+      } else {
+        currentServer = 1;
+        executeAutoProbe(1);
+      }
+    }
+
+    function changeServer(idx) {
+      isProbeResolved = true; // إيقاف الفحص التلقائي عند اختيار المستخدم
+      clearTimeout(autoProbeTimer);
+      currentServer = idx;
+      
+      const target = activeServerList[idx - 1];
+      document.getElementById('streamFrame').src = target.url;
+      document.getElementById('serverToggleBtn').innerHTML = `📺 <span>سيرفر ${idx} (يدوي)</span>`;
+      document.querySelectorAll('.server-menu-btn').forEach((b, i) => b.classList.toggle('active', i + 1 === idx));
+      document.getElementById('smartStatusBanner').style.display = 'none';
+    }
+
+    function renderDynamicServersDeck() {
+      const container = document.getElementById('serverDropdown');
+      container.innerHTML = '';
+
+      activeServerList.forEach((srv, index) => {
+        const srvIndex = index + 1;
+        const btn = document.createElement('button');
+        btn.className = `server-menu-btn ${srvIndex === currentServer ? 'active' : ''}`;
+        btn.innerText = srv.name;
+        btn.onclick = () => { 
+          changeServer(srvIndex); 
+          toggleServerMenu(); 
+        };
+        container.appendChild(btn);
+      });
+    }
+
+    function toggleServerMenu() {
+      const menu = document.getElementById("serverDropdown");
+      menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+    }
+
+    document.addEventListener("click", function(event) {
+      const menu = document.getElementById("serverDropdown");
+      const btn = document.getElementById("serverToggleBtn");
+      if (menu && btn && !btn.contains(event.target) && !menu.contains(event.target)) {
+        menu.style.display = "none";
+      }
+    });
+
+    // ==========================================
+    // تشغيل البث المباشر والكاش السحابي
+    // ==========================================
+    async function startStreamingNow() {
+      const { id, type, season = 1, episode = 1 } = currentItem;
+      const mainContainer = document.getElementById('mainPlayerContainer');
+      const directBox = document.getElementById('directPlayerBox');
+      const iframeBox = document.getElementById('iframeBox');
+      const srvContainer = document.getElementById('serversContainer');
+      const video = document.getElementById('nativeVideo');
+
+      mainContainer.style.display = 'block';
+      mainContainer.scrollIntoView({ behavior: 'smooth' });
+
+      // 1. محاولة استخراج البث المباشر عبر Cloudflare Function
+      try {
+        const res = await fetch(`${CLOUDFLARE_WORKER_BASE}/api/resolve?tmdb=${id}&type=${type}&s=${season}&e=${episode}`);
+        const data = await res.json();
+
+        if (data.success && data.streams && data.streams.length > 0) {
+          const streamUrl = data.streams[0].url;
+          const referer = data.streams[0].referer || "https://vidlink.pro/";
+          const proxiedStreamUrl = `${CLOUDFLARE_WORKER_BASE}/api/proxy?url=${encodeURIComponent(streamUrl)}&referer=${encodeURIComponent(referer)}`;
+
+          iframeBox.style.display = 'none';
+          directBox.style.display = 'block';
+          srvContainer.style.display = 'none';
+          document.getElementById('smartStatusBanner').style.display = 'none';
+
+          if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
+
+          if (Hls.isSupported()) {
+            hlsInstance = new Hls({ enableWorker: true, lowLatencyMode: true, backBufferLength: 90 });
+            hlsInstance.loadSource(proxiedStreamUrl);
+            hlsInstance.attachMedia(video);
+            hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => { video.play().catch(() => {}); });
+          } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = proxiedStreamUrl;
+            video.play().catch(() => {});
+          }
+
+          loadAutoSubtitles(id, type, season, episode);
+          recordResumeProgress(currentItem, 25);
+          return;
+        }
+      } catch (err) {}
+
+      // 2. تفعيل نظام الفحص التلقائي المطور للسيرفرات الـ 16
+      directBox.style.display = 'none';
+      iframeBox.style.display = 'block';
+      srvContainer.style.display = 'flex';
+
+      startSmartAutoProbe();
+      recordResumeProgress(currentItem, 20);
+    }
+
+    async function loadAutoSubtitles(tmdb, type, s, e) {
+      try {
+        const res = await fetch(`${CLOUDFLARE_WORKER_BASE}/api/subtitles?tmdb=${tmdb}&type=${type}&s=${s}&e=${e}`);
+        const subs = await res.json();
+        if (subs && subs.length > 0) {
+          SubtitleManager.injectTrack(subs[0].url, subs[0].label);
+        }
+      } catch (e) {}
+    }
+
+    const SubtitleManager = {
+      injectTrack(vttUrl, label = "العربية") {
+        const video = document.getElementById('nativeVideo');
+        Array.from(video.querySelectorAll('track')).forEach(t => t.remove());
+
+        const track = document.createElement('track');
+        track.kind = 'subtitles';
+        track.label = label;
+        track.srclang = 'ar';
+        track.src = vttUrl;
+        track.default = true;
+        video.appendChild(track);
+
+        if (video.textTracks && video.textTracks[0]) {
+          video.textTracks[0].mode = 'showing';
+        }
+      }
+    };
+
+    function stopPlayer() {
+      clearTimeout(autoProbeTimer);
+      isProbeResolved = false;
+
+      const frame = document.getElementById('streamFrame');
+      if (frame) frame.src = "";
+
+      const video = document.getElementById('nativeVideo');
+      if (video) {
+        video.pause();
+        video.src = "";
+      }
+
+      if (hlsInstance) {
+        hlsInstance.destroy();
+        hlsInstance = null;
+      }
+
+      const mainPlayer = document.getElementById('mainPlayerContainer');
+      if (mainPlayer) mainPlayer.style.display = 'none';
+
+      const srvContainer = document.getElementById('serversContainer');
+      if (srvContainer) srvContainer.style.display = 'none';
+
+      const banner = document.getElementById('smartStatusBanner');
+      if (banner) banner.style.display = 'none';
+    }
+
+    // ==========================================
+    // التحكم بالريموت والتنقل لشاشات التلفزيون
     // ==========================================
     const TVController = {
       focusables: 'a, button, input, .card, .genre-box, .season-btn, .ep-btn, [tabindex="0"]',
@@ -776,296 +1185,6 @@
         }
       }
     };
-
-    // ==========================================
-    // مدير الترجمات التلقائية (Subtitles Engine)
-    // ==========================================
-    const SubtitleManager = {
-      injectTrack(vttUrl, label = "العربية") {
-        const video = document.getElementById('nativeVideo');
-        Array.from(video.querySelectorAll('track')).forEach(t => t.remove());
-
-        const track = document.createElement('track');
-        track.kind = 'subtitles';
-        track.label = label;
-        track.srclang = 'ar';
-        track.src = vttUrl;
-        track.default = true;
-        video.appendChild(track);
-
-        if (video.textTracks && video.textTracks[0]) {
-          video.textTracks[0].mode = 'showing';
-        }
-      }
-    };
-
-    // ==========================================
-    // محرك السيرفرات المطور (دعم الترجمة ومنع التخطي الكاذب)
-    // ==========================================
-    function generateServerEndpoints() {
-      const { id, type, season: s, episode: e } = currentItem;
-      const isMov = (type === 'movie');
-
-      const allProviders = [
-        { 
-          id: 'multiembed', 
-          name: 'سيرفر 1 (MultiEmbed - الأفضل للدراما والآسيوي 🇹🇷 🇰🇷)', 
-          url: isMov ? `https://multiembed.mov/?video_id=${id}&tmdb=1` : `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}`, 
-          priority: (currentItem.isTurkish || currentItem.isAsian) ? 1 : 3 
-        },
-        { 
-          id: 'vidlink', 
-          name: 'سيرفر 2 (VidLink - فائق السرعة بترجمة عربية)', 
-          url: isMov ? `https://vidlink.pro/movie/${id}?primaryColor=e50914&secondaryColor=00f0ff` : `https://vidlink.pro/tv/${id}/${s}/${e}?primaryColor=e50914&secondaryColor=00f0ff`, 
-          priority: currentItem.isAnime ? 3 : 1 
-        },
-        { 
-          id: 'embedsu', 
-          name: 'سيرفر 3 (Embed.su - ترجمة تلقائية متعددة)', 
-          url: isMov ? `https://embed.su/embed/movie/${id}` : `https://embed.su/embed/tv/${id}/${s}/${e}`, 
-          priority: 2 
-        },
-        { 
-          id: 'smashy', 
-          name: 'سيرفر 4 (Smashy - خوادم آسيوية بديلة)', 
-          url: isMov ? `https://embed.smashystream.com/playere.php?tmdb=${id}` : `https://embed.smashystream.com/playere.php?tmdb=${id}&season=${s}&episode=${e}`, 
-          priority: (currentItem.isTurkish || currentItem.isAsian) ? 2 : 4 
-        },
-        { 
-          id: 'autoembed', 
-          name: 'سيرفر 5 (AutoEmbed VIP)', 
-          url: isMov ? `https://player.autoembed.cc/embed/movie/${id}` : `https://player.autoembed.cc/embed/tv/${id}/${s}/${e}`, 
-          priority: currentItem.isAnime ? 1 : 5 
-        },
-        { 
-          id: 'twoembed', 
-          name: 'سيرفر 6 (2Embed Pro)', 
-          url: isMov ? `https://www.2embed.cc/embed/${id}` : `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}`, 
-          priority: 6 
-        },
-        { 
-          id: 'vidsrccc', 
-          name: 'سيرفر 7 (VidSrc.cc)', 
-          url: isMov ? `https://vidsrc.cc/v2/embed/movie/${id}` : `https://vidsrc.cc/v2/embed/tv/${id}/${s}/${e}`, 
-          priority: 7 
-        },
-        { 
-          id: 'vidsrcme', 
-          name: 'سيرفر 8 (VidSrc.me)', 
-          url: isMov ? `https://vidsrc.me/embed/movie?tmdb=${id}` : `https://vidsrc.me/embed/tv?tmdb=${id}&season=${s}&episode=${e}`, 
-          priority: 8 
-        },
-        { 
-          id: 'rive', 
-          name: 'سيرفر 9 (Rive Stream)', 
-          url: isMov ? `https://rive.stream/embed/movie/${id}` : `https://rive.stream/embed/tv/${id}/${s}/${e}`, 
-          priority: 9 
-        },
-        { 
-          id: 'nontongo', 
-          name: 'سيرفر 10 (NontonGo - دراما ومسلسلات)', 
-          url: isMov ? `https://www.nontongo.win/embed/movie/${id}` : `https://www.nontongo.win/embed/tv/${id}/${s}/${e}`, 
-          priority: 10 
-        }
-      ];
-
-      allProviders.sort((a, b) => a.priority - b.priority);
-      activeServerList = allProviders;
-    }
-
-    function initServerResponseWatcher() {
-      window.addEventListener('message', (event) => {
-        if (!event.data || typeof event.data !== 'object') return;
-        const data = event.data;
-
-        if (data.type === 'PLAYER_READY' || data.event === 'playing' || data.status === 'playing') {
-          markCurrentServerSuccess();
-        }
-
-        if (
-          data.event === 'error' || 
-          data.event === 'no_source' || 
-          data.type === 'MEDIA_NOT_FOUND' || 
-          data.status === 'error'
-        ) {
-          triggerAutoFallback();
-        }
-      });
-    }
-
-    function toggleServerMenu() {
-      const menu = document.getElementById("serverDropdown");
-      menu.style.display = menu.style.display === "flex" ? "none" : "flex";
-    }
-
-    document.addEventListener("click", function(event) {
-      const menu = document.getElementById("serverDropdown");
-      const btn = document.getElementById("serverToggleBtn");
-      if (menu && btn && !btn.contains(event.target) && !menu.contains(event.target)) {
-        menu.style.display = "none";
-      }
-    });
-
-    function renderDynamicServersDeck() {
-      const container = document.getElementById('serverDropdown');
-      container.innerHTML = '';
-
-      activeServerList.forEach((srv, index) => {
-        const srvIndex = index + 1;
-        const btn = document.createElement('button');
-        btn.className = `server-menu-btn ${srvIndex === currentServer ? 'active' : ''}`;
-        btn.innerText = srv.name;
-        btn.onclick = () => { 
-          changeServer(srvIndex); 
-          toggleServerMenu(); 
-        };
-        container.appendChild(btn);
-      });
-    }
-
-    function changeServer(idx) {
-      currentServer = idx;
-      loadAndWatchServer(idx, true);
-    }
-
-    function loadAndWatchServer(serverIdx, isManual = false) {
-      if (!activeServerList[serverIdx - 1]) return;
-
-      isManualServerSelect = isManual;
-      isCurrentStreamWorking = false;
-      clearTimeout(serverWatchdogTimer);
-
-      const target = activeServerList[serverIdx - 1];
-      const frame = document.getElementById('streamFrame');
-      const toggleBtn = document.getElementById('serverToggleBtn');
-
-      toggleBtn.innerHTML = `📺 <span>سيرفر ${serverIdx} (قيد العرض ⏳)</span>`;
-      document.querySelectorAll('.server-menu-btn').forEach((b, i) => b.classList.toggle('active', i + 1 === serverIdx));
-
-      frame.src = target.url;
-      frame.onerror = () => {
-        if (!isManualServerSelect) {
-          triggerAutoFallback();
-        }
-      };
-    }
-
-    function markCurrentServerSuccess() {
-      isCurrentStreamWorking = true;
-      clearTimeout(serverWatchdogTimer);
-      const toggleBtn = document.getElementById('serverToggleBtn');
-      toggleBtn.innerHTML = `📺 <span>سيرفر ${currentServer} (يعمل بنجاح 🟢)</span>`;
-    }
-
-    function nextServerAction() {
-      if (currentServer < activeServerList.length) {
-        currentServer++;
-        loadAndWatchServer(currentServer, true);
-      } else {
-        alert('تم تجربة جميع السيرفرات المتاحة لهذا العمل.');
-      }
-    }
-
-    function triggerAutoFallback() {
-      clearTimeout(serverWatchdogTimer);
-      if (currentServer < activeServerList.length) {
-        currentServer++;
-        loadAndWatchServer(currentServer, false);
-      }
-    }
-
-    // ==========================================
-    // تشغيل البث الذكي مع الكاش السحابي
-    // ==========================================
-    async function startStreamingNow() {
-      const { id, type, season = 1, episode = 1 } = currentItem;
-      const mainContainer = document.getElementById('mainPlayerContainer');
-      const directBox = document.getElementById('directPlayerBox');
-      const iframeBox = document.getElementById('iframeBox');
-      const srvContainer = document.getElementById('serversContainer');
-      const video = document.getElementById('nativeVideo');
-
-      mainContainer.style.display = 'block';
-      mainContainer.scrollIntoView({ behavior: 'smooth' });
-
-      // 1. محاولة استخراج البث المباشر عبر Cloudflare Function
-      try {
-        const res = await fetch(`${CLOUDFLARE_WORKER_BASE}/api/resolve?tmdb=${id}&type=${type}&s=${season}&e=${episode}`);
-        const data = await res.json();
-
-        if (data.success && data.streams && data.streams.length > 0) {
-          const streamUrl = data.streams[0].url;
-          const referer = data.streams[0].referer || "https://vidlink.pro/";
-          const proxiedStreamUrl = `${CLOUDFLARE_WORKER_BASE}/api/proxy?url=${encodeURIComponent(streamUrl)}&referer=${encodeURIComponent(referer)}`;
-
-          iframeBox.style.display = 'none';
-          directBox.style.display = 'block';
-          srvContainer.style.display = 'none';
-
-          if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
-
-          if (Hls.isSupported()) {
-            hlsInstance = new Hls({ enableWorker: true, lowLatencyMode: true, backBufferLength: 90 });
-            hlsInstance.loadSource(proxiedStreamUrl);
-            hlsInstance.attachMedia(video);
-            hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => { video.play().catch(() => {}); });
-          } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-            video.src = proxiedStreamUrl;
-            video.play().catch(() => {});
-          }
-
-          loadAutoSubtitles(id, type, season, episode);
-          recordResumeProgress(currentItem, 25);
-          return;
-        }
-      } catch (err) {}
-
-      // 2. خطة الطوارئ البديلة (Embeds)
-      directBox.style.display = 'none';
-      iframeBox.style.display = 'block';
-      srvContainer.style.display = 'flex';
-
-      generateServerEndpoints();
-      renderDynamicServersDeck();
-      currentServer = 1;
-      loadAndWatchServer(currentServer, false);
-      recordResumeProgress(currentItem, 20);
-    }
-
-    async function loadAutoSubtitles(tmdb, type, s, e) {
-      try {
-        const res = await fetch(`${CLOUDFLARE_WORKER_BASE}/api/subtitles?tmdb=${tmdb}&type=${type}&s=${s}&e=${e}`);
-        const subs = await res.json();
-        if (subs && subs.length > 0) {
-          SubtitleManager.injectTrack(subs[0].url, subs[0].label);
-        }
-      } catch (e) {}
-    }
-
-    function stopPlayer() {
-      clearTimeout(serverWatchdogTimer);
-      isCurrentStreamWorking = false;
-
-      const frame = document.getElementById('streamFrame');
-      if (frame) frame.src = "";
-
-      const video = document.getElementById('nativeVideo');
-      if (video) {
-        video.pause();
-        video.src = "";
-      }
-
-      if (hlsInstance) {
-        hlsInstance.destroy();
-        hlsInstance = null;
-      }
-
-      const mainPlayer = document.getElementById('mainPlayerContainer');
-      if (mainPlayer) mainPlayer.style.display = 'none';
-
-      const srvContainer = document.getElementById('serversContainer');
-      if (srvContainer) srvContainer.style.display = 'none';
-    }
 
     function togglePinVisibility(inputId, iconElement) {
       const input = document.getElementById(inputId);
@@ -1545,6 +1664,7 @@
       document.getElementById('theaterView').style.display = 'block';
       document.getElementById('mainPlayerContainer').style.display = 'none';
       document.getElementById('serversContainer').style.display = 'none';
+      document.getElementById('smartStatusBanner').style.display = 'none';
       window.scrollTo(0, 0);
 
       currentItem = { id, imdb_id: '', title: '', origTitle: '', slug: '', origLang: '', isAnime: false, isAsian: false, isTurkish: false, type, poster_path: '', season, episode, isCustom: false, directUrl: '' };
@@ -1683,6 +1803,7 @@
       document.getElementById('serversContainer').style.display = 'none';
       document.getElementById('episodesContainer').style.display = 'none';
       document.getElementById('directPlayerBox').style.display = 'block';
+      document.getElementById('smartStatusBanner').style.display = 'none';
       window.scrollTo(0, 0);
 
       const video = document.getElementById('nativeVideo');
