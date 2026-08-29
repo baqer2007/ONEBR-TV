@@ -10,7 +10,6 @@
   <meta name="description" content="منصة ONEBR TV لمشاهدة أحدث الأفلام والمسلسلات بجودة عالية وسيرفرات سريعة. تصفح مكتبة الترفيه الشاملة الآن مجاناً.">
   <meta name="keywords" content="أفلام, مسلسلات, مشاهدة اونلاين, سينما, ONEBR TV">
   <meta name="robots" content="index, follow">
-  
   <meta name="theme-color" content="#e50914">
 
   <link rel="icon" type="image/png" href="https://img.icons8.com/color/96/movie-projector.png">
@@ -337,7 +336,7 @@
     </div>
   </div>
 
-  <!-- شاشة المشغل وتفاصيل العمل 🎬 -->
+  <!-- شاشة المشغل وتفاصيل العمل -->
   <div id="theaterView">
     <button class="back-btn" onclick="history.back()"><i class="fa-solid fa-arrow-right"></i> <span data-i18n="btn_back">العودة</span></button>
     
@@ -362,13 +361,13 @@
       </div>
     </div>
 
-    <!-- قائمة السيرفرات المنسدلة الجديدة -->
+    <!-- قائمة السيرفرات المنسدلة -->
     <div class="server-dropdown-container" id="serversContainer">
       <button id="serverToggleBtn" class="server-toggle-btn" onclick="toggleServerMenu()">
         📺 <span data-i18n="select_server">قائمة السيرفرات</span>
       </button>
       <div id="serverDropdown" class="server-menu-list">
-        <!-- سيتم توليد أزرار السيرفرات هنا -->
+        <!-- توليد أزرار السيرفرات -->
       </div>
     </div>
 
@@ -377,9 +376,9 @@
         <video id="nativeVideo" controls playsinline></video>
         <button class="skip-intro-btn" id="skipIntroBtn" onclick="skipIntro()">⏭️ تخطي المقدمة (+85s)</button>
       </div>
-      <!-- تحديث خصائص الإطار iframe -->
+      <!-- تم ضبط المشغل وإزالة sandbox لضمان عمل كافة السيرفرات -->
       <div class="player-box" id="iframeBox">
-        <iframe id="streamFrame" src="" width="100%" height="450" frameborder="0" allowfullscreen="true" sandbox="allow-scripts allow-same-origin allow-presentation allow-pointer-lock"></iframe>
+        <iframe id="streamFrame" src="" width="100%" height="450" frameborder="0" allowfullscreen="true" allow="autoplay; fullscreen; encrypted-media; picture-in-picture"></iframe>
       </div>
     </div>
 
