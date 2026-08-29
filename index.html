@@ -5,8 +5,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-  <title>ONEBR TV | ون بر تي في</title>
-  <meta name="description" content="منصة ONEBR TV لمشاهدة الأفلام والمسلسلات العالمية والعربية بجودة عالية.">
+  <!-- وسوم تهيئة محركات البحث (SEO) -->
+  <title>ONEBR TV | مشاهدة وتحميل أحدث الأفلام والمسلسلات</title>
+  <meta name="description" content="منصة ONEBR TV لمشاهدة أحدث الأفلام والمسلسلات بجودة عالية وسيرفرات سريعة. تصفح مكتبة الترفيه الشاملة الآن مجاناً.">
+  <meta name="keywords" content="أفلام, مسلسلات, مشاهدة اونلاين, سينما, ONEBR TV">
+  <meta name="robots" content="index, follow">
+  
   <meta name="theme-color" content="#e50914">
 
   <link rel="icon" type="image/png" href="https://img.icons8.com/color/96/movie-projector.png">
@@ -45,162 +49,61 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
     body { background-color: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; transition: background-color 0.3s, color 0.3s; }
 
-    /* تنسيقات كود الدخول */
-    .masked-pin {
-      -webkit-text-security: disc;
-    }
-    .toggle-eye {
-      position: absolute;
-      left: 12px;
-      top: 36px;
-      color: var(--text-muted);
-      cursor: pointer;
-      font-size: 1.1rem;
-    }
-    html[dir="ltr"] .toggle-eye {
-      left: auto;
-      right: 12px;
-    }
+    .masked-pin { -webkit-text-security: disc; }
+    .toggle-eye { position: absolute; left: 12px; top: 36px; color: var(--text-muted); cursor: pointer; font-size: 1.1rem; }
+    html[dir="ltr"] .toggle-eye { left: auto; right: 12px; }
 
-    /* شريط تقدم المشاهدة الذكي */
-    .progress-bar-container {
-      width: 100%;
-      height: 4px;
-      background: rgba(255, 255, 255, 0.15);
-      border-radius: 2px;
-      margin-top: 6px;
-      overflow: hidden;
-    }
-    .progress-bar-fill {
-      height: 100%;
-      background: var(--cyan);
-      border-radius: 2px;
-      transition: width 0.3s ease;
-    }
+    .progress-bar-container { width: 100%; height: 4px; background: rgba(255, 255, 255, 0.15); border-radius: 2px; margin-top: 6px; overflow: hidden; }
+    .progress-bar-fill { height: 100%; background: var(--cyan); border-radius: 2px; transition: width 0.3s ease; }
 
-    #announcementBanner {
-      display: none; background: linear-gradient(90deg, #991b1b, #e50914, #991b1b);
-      color: #fff; padding: 8px 14px; font-size: 0.8rem; font-weight: 700;
-      text-align: center; position: sticky; top: 0; z-index: 1200;
-    }
+    #announcementBanner { display: none; background: linear-gradient(90deg, #991b1b, #e50914, #991b1b); color: #fff; padding: 8px 14px; font-size: 0.8rem; font-weight: 700; text-align: center; position: sticky; top: 0; z-index: 1200; }
 
-    header {
-      position: sticky; top: 0; height: 64px; padding: 0 clamp(10px, 3vw, 20px);
-      display: flex; justify-content: space-between; align-items: center;
-      background: var(--surface); backdrop-filter: blur(16px);
-      z-index: 1000; border-bottom: 1px solid var(--border); gap: 10px;
-    }
+    header { position: sticky; top: 0; height: 64px; padding: 0 clamp(10px, 3vw, 20px); display: flex; justify-content: space-between; align-items: center; background: var(--surface); backdrop-filter: blur(16px); z-index: 1000; border-bottom: 1px solid var(--border); gap: 10px; }
     .header-left { display: flex; align-items: center; gap: 10px; }
     .menu-btn { background: none; border: none; color: var(--text); font-size: 1.25rem; cursor: pointer; padding: 6px; }
     .brand { display: flex; align-items: center; gap: 8px; text-decoration: none; }
-    .brand-icon {
-      width: 36px; height: 36px; background: linear-gradient(135deg, #e50914, #831843);
-      border-radius: 8px; display: flex; align-items: center; justify-content: center;
-      color: #fff; font-size: 1rem;
-    }
-    .brand-name {
-      font-size: 1.15rem; font-weight: 900;
-      background: linear-gradient(90deg, var(--text), var(--cyan));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
+    .brand-icon { width: 36px; height: 36px; background: linear-gradient(135deg, #e50914, #831843); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1rem; }
+    .brand-name { font-size: 1.15rem; font-weight: 900; background: linear-gradient(90deg, var(--text), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
     .header-center { flex: 1; max-width: 440px; position: relative; }
     .search-wrapper { position: relative; width: 100%; display: flex; align-items: center; }
-    .search-wrapper input {
-      width: 100%; padding: 8px 36px 8px 12px; border-radius: 20px;
-      border: 1px solid var(--border); background: var(--bg);
-      color: var(--text); font-size: 0.8rem; outline: none;
-    }
+    .search-wrapper input { width: 100%; padding: 8px 36px 8px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 0.8rem; outline: none; }
     html[dir="ltr"] .search-wrapper input { padding: 8px 12px 8px 36px; }
     .search-icon { position: absolute; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.8rem; cursor: pointer; }
     html[dir="rtl"] .search-icon { right: 12px; }
     html[dir="ltr"] .search-icon { left: 12px; }
 
-    .search-dropdown {
-      position: absolute; top: calc(100% + 6px); left: 0; width: 100%;
-      background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5); z-index: 1500; max-height: 340px; overflow-y: auto;
-      display: none; flex-direction: column;
-    }
+    .search-dropdown { position: absolute; top: calc(100% + 6px); left: 0; width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); z-index: 1500; max-height: 340px; overflow-y: auto; display: none; flex-direction: column; }
     .search-item { display: flex; align-items: center; gap: 10px; padding: 8px; border-bottom: 1px solid var(--border); cursor: pointer; }
     .search-item:hover { background: var(--surface-hover); }
     .search-item img { width: 36px; height: 50px; object-fit: cover; border-radius: 4px; }
     .search-item-title { font-size: 0.8rem; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
     .header-actions { display: flex; align-items: center; gap: 8px; }
-    .btn-header {
-      background: var(--bg); border: 1px solid var(--border); color: var(--text);
-      padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700;
-      cursor: pointer; display: flex; align-items: center; gap: 5px; white-space: nowrap;
-    }
+    .btn-header { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px; white-space: nowrap; }
     .btn-vip-gold { background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; font-weight: 800; border: none; }
 
-    .user-avatar-btn {
-      width: 38px; height: 38px; border-radius: 50%; overflow: hidden;
-      border: 2px solid var(--cyan); box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
-      cursor: pointer; display: none; align-items: center; justify-content: center;
-      background: var(--surface); padding: 0; position: relative;
-    }
-    .user-avatar-btn.vip-active {
-      border: 2px solid var(--gold);
-      box-shadow: 0 0 14px rgba(245, 158, 11, 0.8);
-      animation: vipGlow 2s infinite alternate;
-    }
-    @keyframes vipGlow {
-      from { box-shadow: 0 0 8px rgba(245, 158, 11, 0.5); }
-      to { box-shadow: 0 0 18px rgba(245, 158, 11, 1); }
-    }
+    .user-avatar-btn { width: 38px; height: 38px; border-radius: 50%; overflow: hidden; border: 2px solid var(--cyan); box-shadow: 0 0 10px rgba(0, 240, 255, 0.3); cursor: pointer; display: none; align-items: center; justify-content: center; background: var(--surface); padding: 0; position: relative; }
+    .user-avatar-btn.vip-active { border: 2px solid var(--gold); box-shadow: 0 0 14px rgba(245, 158, 11, 0.8); animation: vipGlow 2s infinite alternate; }
+    @keyframes vipGlow { from { box-shadow: 0 0 8px rgba(245, 158, 11, 0.5); } to { box-shadow: 0 0 18px rgba(245, 158, 11, 1); } }
     .user-avatar-btn img { width: 100%; height: 100%; object-fit: cover; }
+    .vip-badge-glow { display: inline-flex; align-items: center; gap: 4px; background: linear-gradient(135deg, #f59e0b, #b45309); color: #000 !important; font-weight: 900; font-size: 0.68rem; padding: 3px 8px; border-radius: 12px; box-shadow: 0 0 10px rgba(245, 158, 11, 0.7); border: 1px solid #fde68a; letter-spacing: 0.5px; }
 
-    .vip-badge-glow {
-      display: inline-flex; align-items: center; gap: 4px;
-      background: linear-gradient(135deg, #f59e0b, #b45309);
-      color: #000 !important; font-weight: 900; font-size: 0.68rem;
-      padding: 3px 8px; border-radius: 12px;
-      box-shadow: 0 0 10px rgba(245, 158, 11, 0.7);
-      border: 1px solid #fde68a;
-      letter-spacing: 0.5px;
-    }
-
-    .drawer-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
-      z-index: 2500; display: none;
-    }
-    .drawer {
-      position: fixed; top: 0; bottom: 0; width: min(320px, 85vw);
-      background: var(--drawer-bg); border-inline-end: 1px solid var(--border);
-      z-index: 2600; inset-inline-start: 0;
-      transform: translateX(100%); transition: transform 0.3s ease;
-      display: flex; flex-direction: column; padding: 18px 16px; overflow-y: auto;
-    }
+    .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 2500; display: none; }
+    .drawer { position: fixed; top: 0; bottom: 0; width: min(320px, 85vw); background: var(--drawer-bg); border-inline-end: 1px solid var(--border); z-index: 2600; inset-inline-start: 0; transform: translateX(100%); transition: transform 0.3s ease; display: flex; flex-direction: column; padding: 18px 16px; overflow-y: auto; }
     html[dir="ltr"] .drawer { transform: translateX(-100%); }
     .drawer.open, html[dir="ltr"] .drawer.open { transform: translateX(0) !important; }
-
     .drawer-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
     .drawer-section-title { font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin: 14px 0 8px; }
-    .drawer-link {
-      display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px;
-      color: var(--text); text-decoration: none; font-size: 0.85rem; font-weight: 700; cursor: pointer; margin-bottom: 4px;
-    }
+    .drawer-link { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px; color: var(--text); text-decoration: none; font-size: 0.85rem; font-weight: 700; cursor: pointer; margin-bottom: 4px; }
     .drawer-link:hover, .drawer-link.active { background: var(--surface-hover); color: var(--primary); }
 
     .genre-boxes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
-    .genre-box {
-      background: var(--surface); border: 1px solid var(--border); padding: 8px 10px;
-      border-radius: 6px; text-align: center; font-size: 0.72rem; font-weight: 700;
-      color: var(--text); cursor: pointer; transition: all 0.2s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    }
+    .genre-box { background: var(--surface); border: 1px solid var(--border); padding: 8px 10px; border-radius: 6px; text-align: center; font-size: 0.72rem; font-weight: 700; color: var(--text); cursor: pointer; transition: all 0.2s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .genre-box:hover { border-color: var(--cyan); color: var(--cyan); background: var(--surface-hover); }
 
-    .hero {
-      position: relative; height: clamp(260px, 42vh, 440px); display: flex; align-items: flex-end;
-      padding: clamp(14px, 4vw, 24px); background-size: cover; background-position: center;
-      transition: background-image 0.8s ease-in-out;
-    }
-    .hero-overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(0deg, var(--bg) 15%, rgba(0,0,0,0.5) 65%, transparent 100%);
-    }
+    .hero { position: relative; height: clamp(260px, 42vh, 440px); display: flex; align-items: flex-end; padding: clamp(14px, 4vw, 24px); background-size: cover; background-position: center; transition: background-image 0.8s ease-in-out; }
+    .hero-overlay { position: absolute; inset: 0; background: linear-gradient(0deg, var(--bg) 15%, rgba(0,0,0,0.5) 65%, transparent 100%); }
     .hero-content { position: relative; z-index: 2; max-width: 600px; }
     .hero-title { font-size: clamp(1.2rem, 3.5vw, 1.8rem); font-weight: 900; margin-bottom: 6px; }
     .hero-desc { font-size: 0.82rem; color: #cbd5e1; margin-bottom: 12px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
@@ -209,20 +112,12 @@
     .catalog { padding: clamp(12px, 3vw, 20px); display: flex; flex-direction: column; gap: 20px; }
     .shelf-title { font-size: 1.05rem; font-weight: 800; margin-bottom: 10px; }
     .shelf-grid { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; }
-    .card {
-      min-width: clamp(125px, 28vw, 150px); max-width: clamp(125px, 28vw, 150px);
-      background: var(--surface); border-radius: 10px; overflow: hidden;
-      cursor: pointer; border: 1px solid var(--border); flex-shrink: 0; position: relative;
-    }
+    .card { min-width: clamp(125px, 28vw, 150px); max-width: clamp(125px, 28vw, 150px); background: var(--surface); border-radius: 10px; overflow: hidden; cursor: pointer; border: 1px solid var(--border); flex-shrink: 0; position: relative; }
     .card img { width: 100%; height: clamp(170px, 40vw, 210px); object-fit: cover; background: #1a2234; }
     .card-body { padding: 8px; }
     .card-title { font-size: 0.75rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text); }
     .card-meta { display: flex; justify-content: space-between; font-size: 0.65rem; color: var(--text-muted); margin-top: 4px; }
-
-    .card-watched-badge {
-      position: absolute; top: 6px; right: 6px; background: rgba(16, 185, 129, 0.9);
-      color: #fff; font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; font-weight: 800;
-    }
+    .card-watched-badge { position: absolute; top: 6px; right: 6px; background: rgba(16, 185, 129, 0.9); color: #fff; font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; font-weight: 800; }
 
     .explore-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(clamp(110px, 28vw, 145px), 1fr)); gap: 10px; }
     .scroll-loader { text-align: center; padding: 20px; font-size: 0.85rem; color: var(--text-muted); font-weight: 700; display: none; }
@@ -230,68 +125,47 @@
     #theaterView, #searchResultsView, #favoritesView { display: none; padding: clamp(10px, 3vw, 18px); max-width: 1000px; margin: 0 auto; }
     .back-btn { background: var(--surface); color: var(--text); border: 1px solid var(--border); padding: 7px 14px; border-radius: 6px; cursor: pointer; font-size: 0.78rem; margin-bottom: 12px; font-weight: 800; display: inline-flex; align-items: center; gap: 6px; }
     
-    .media-details-hero {
-      position: relative; border-radius: 12px; overflow: hidden; border: 1px solid var(--border);
-      background-size: cover; background-position: center; margin-bottom: 16px;
-      padding: clamp(16px, 4vw, 30px); min-height: 280px; display: flex; align-items: flex-end;
-    }
-    .media-details-overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(0deg, var(--surface) 20%, rgba(15, 20, 34, 0.7) 70%, rgba(15, 20, 34, 0.4) 100%);
-    }
+    .media-details-hero { position: relative; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); background-size: cover; background-position: center; margin-bottom: 16px; padding: clamp(16px, 4vw, 30px); min-height: 280px; display: flex; align-items: flex-end; }
+    .media-details-overlay { position: absolute; inset: 0; background: linear-gradient(0deg, var(--surface) 20%, rgba(15, 20, 34, 0.7) 70%, rgba(15, 20, 34, 0.4) 100%); }
     .media-details-content { position: relative; z-index: 2; display: flex; flex-direction: column; gap: 10px; width: 100%; }
     .media-badges { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
     .badge-tag { background: rgba(255,255,255,0.1); border: 1px solid var(--border); padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; }
     .badge-score { background: var(--gold); color: #000; font-weight: 800; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; }
     
     .action-buttons-row { display: flex; align-items: center; gap: 10px; margin-top: 6px; }
-    .play-circle-btn {
-      width: 54px; height: 54px; background: var(--primary); border-radius: 50%;
-      display: flex; align-items: center; justify-content: center; cursor: pointer;
-      box-shadow: 0 0 20px rgba(229, 9, 20, 0.6); transition: transform 0.2s, background-color 0.2s;
-      border: none;
-    }
+    .play-circle-btn { width: 54px; height: 54px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 0 20px rgba(229, 9, 20, 0.6); transition: transform 0.2s, background-color 0.2s; border: none; }
     .play-circle-btn:hover { transform: scale(1.08); background: #ff1e27; }
     .play-circle-btn i { color: #ffffff; font-size: 1.2rem; margin-inline-start: 2px; }
 
-    .btn-detail-action {
-      background: var(--surface); border: 1px solid var(--border); color: var(--text);
-      padding: 10px 16px; border-radius: 25px; font-size: 0.8rem; font-weight: 700;
-      cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
-    }
+    .btn-detail-action { background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 10px 16px; border-radius: 25px; font-size: 0.8rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
     .btn-detail-action.active-fav { color: var(--gold); border-color: var(--gold); }
     .btn-detail-action.active-watched { color: var(--watched); border-color: var(--watched); }
 
     .player-container { width: 100%; background: #000; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 14px; position: relative; display: none; }
     #directPlayerBox { display: none; width: 100%; position: relative; }
     #nativeVideo { width: 100%; max-height: 70vh; display: block; }
-    
-    .skip-intro-btn {
-      position: absolute; bottom: 65px; left: 20px; z-index: 30;
-      background: rgba(15, 20, 34, 0.85); border: 1px solid var(--gold); color: #fff;
-      padding: 8px 14px; border-radius: 6px; font-size: 0.75rem; font-weight: 800;
-      cursor: pointer; display: none; backdrop-filter: blur(6px);
-      box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
-    }
+    .skip-intro-btn { position: absolute; bottom: 65px; left: 20px; z-index: 30; background: rgba(15, 20, 34, 0.85); border: 1px solid var(--gold); color: #fff; padding: 8px 14px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; cursor: pointer; display: none; backdrop-filter: blur(6px); box-shadow: 0 0 10px rgba(245, 158, 11, 0.4); }
     .skip-intro-btn:hover { background: var(--gold); color: #000; }
-
     .player-box { position: relative; width: 100%; padding-top: 56.25%; }
     .player-box iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
 
-    .servers-bar, .episodes-bar { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px; margin-top: 10px; display: none; }
-    .servers-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-    .srv-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text-muted); padding: 7px 14px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer; }
-    .srv-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    /* تنسيقات قائمة السيرفرات المنسدلة */
+    .server-dropdown-container { position: relative; margin-top: 15px; z-index: 50; display: none; }
+    .server-toggle-btn { background: var(--primary); color: #fff; border: none; padding: 10px 16px; border-radius: 6px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-family: inherit; }
+    .server-toggle-btn:hover { background: #b80710; }
+    .server-menu-list { position: absolute; top: 45px; right: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px; display: none; flex-direction: column; gap: 6px; box-shadow: 0 8px 20px rgba(0,0,0,0.6); min-width: 160px; max-height: 250px; overflow-y: auto; }
+    html[dir="ltr"] .server-menu-list { right: auto; left: 0; }
+    .server-menu-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 10px 12px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; font-weight: 700; transition: all 0.2s; text-align: right; }
+    .server-menu-btn:hover, .server-menu-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
+    .episodes-bar { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px; margin-top: 10px; display: none; }
     .seasons-scroll { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin-top: 8px; }
     .season-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; }
     .season-btn.active { background: var(--cyan); color: #000; font-weight: 800; }
     .episodes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(75px, 1fr)); gap: 6px; max-height: 220px; overflow-y: auto; margin-top: 8px; }
     .ep-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 7px 4px; border-radius: 6px; text-align: center; font-size: 0.75rem; cursor: pointer; position: relative; }
     .ep-btn.active { background: var(--primary); color: #fff; }
-    .ep-btn.is-watched::after {
-      content: '✓'; position: absolute; top: 2px; right: 4px; font-size: 0.65rem; color: var(--watched); font-weight: 900;
-    }
+    .ep-btn.is-watched::after { content: '✓'; position: absolute; top: 2px; right: 4px; font-size: 0.65rem; color: var(--watched); font-weight: 900; }
 
     .vip-pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin: 14px 0; }
     .vip-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
@@ -351,7 +225,6 @@
       </div>
       <i class="fa-solid fa-xmark" style="cursor:pointer; font-size:1.1rem;" onclick="toggleDrawer()"></i>
     </div>
-
     <div class="drawer-section-title" data-i18n="nav_sections">الأقسام الرئيسية</div>
     <div class="drawer-link" onclick="toggleDrawer(); location.hash='#/home';"><i class="fa-solid fa-house"></i> <span data-i18n="nav_home">الرئيسية</span></div>
     <div class="drawer-link" onclick="toggleDrawer(); location.hash='#/movies';"><i class="fa-solid fa-clapperboard"></i> <span data-i18n="nav_movies">الأفلام</span></div>
@@ -390,9 +263,7 @@
     <div class="header-actions">
       <button class="btn-header" onclick="location.hash='#/favorites'" title="المفضلة"><i class="fa-solid fa-bookmark" style="color:var(--gold);"></i></button>
       <button class="btn-header btn-vip-gold" onclick="openVipModal()"><i class="fa-solid fa-crown"></i> VIP</button>
-      
       <button class="btn-header" id="guestAuthBtn" onclick="openAuthModal()"><i class="fa-solid fa-user"></i> <span id="authBtnText">دخول</span></button>
-      
       <button class="user-avatar-btn" id="userAvatarBtn" onclick="openAuthModal()" title="الحساب الشخصي">
         <img id="userAvatarImg" src="" alt="Avatar">
       </button>
@@ -449,7 +320,7 @@
     </div>
   </div>
 
-  <!-- واجهة المفضلة -->
+  <!-- واجهة المفضلة ونتائج البحث -->
   <div id="favoritesView">
     <button class="back-btn" onclick="history.back()"><i class="fa-solid fa-arrow-right"></i> <span data-i18n="btn_back">العودة</span></button>
     <div class="shelf">
@@ -458,7 +329,6 @@
     </div>
   </div>
 
-  <!-- واجهة نتائج البحث -->
   <div id="searchResultsView">
     <button class="back-btn" onclick="history.back()"><i class="fa-solid fa-arrow-right"></i> <span data-i18n="btn_back">العودة</span></button>
     <div class="shelf">
@@ -467,7 +337,7 @@
     </div>
   </div>
 
-  <!-- شاشة المشغل وتفاصيل العمل -->
+  <!-- شاشة المشغل وتفاصيل العمل 🎬 -->
   <div id="theaterView">
     <button class="back-btn" onclick="history.back()"><i class="fa-solid fa-arrow-right"></i> <span data-i18n="btn_back">العودة</span></button>
     
@@ -492,19 +362,25 @@
       </div>
     </div>
 
+    <!-- قائمة السيرفرات المنسدلة الجديدة -->
+    <div class="server-dropdown-container" id="serversContainer">
+      <button id="serverToggleBtn" class="server-toggle-btn" onclick="toggleServerMenu()">
+        📺 <span data-i18n="select_server">قائمة السيرفرات</span>
+      </button>
+      <div id="serverDropdown" class="server-menu-list">
+        <!-- سيتم توليد أزرار السيرفرات هنا -->
+      </div>
+    </div>
+
     <div class="player-container" id="mainPlayerContainer">
       <div id="directPlayerBox">
         <video id="nativeVideo" controls playsinline></video>
         <button class="skip-intro-btn" id="skipIntroBtn" onclick="skipIntro()">⏭️ تخطي المقدمة (+85s)</button>
       </div>
+      <!-- تحديث خصائص الإطار iframe -->
       <div class="player-box" id="iframeBox">
-        <iframe id="streamFrame" src="" allowfullscreen allow="autoplay; fullscreen; encrypted-media; picture-in-picture"></iframe>
+        <iframe id="streamFrame" src="" width="100%" height="450" frameborder="0" allowfullscreen="true" sandbox="allow-scripts allow-same-origin allow-presentation allow-pointer-lock"></iframe>
       </div>
-    </div>
-
-    <div class="servers-bar" id="serversContainer">
-      <div style="font-size: 0.8rem; font-weight: 800;" data-i18n="select_server">اختر سيرفر المشاهدة:</div>
-      <div class="servers-list" id="serversButtonsDeck"></div>
     </div>
 
     <div class="episodes-bar" id="episodesContainer">
@@ -519,16 +395,12 @@
     </div>
   </div>
 
-  <!-- نافذة تأكيد مسح سجل المشاهدة -->
+  <!-- النوافذ المنبثقة (Modals) -->
   <div class="modal-overlay" id="confirmClearModal">
     <div class="modal-box" style="max-width: 340px; text-align: center; padding: 25px;">
-      <div style="color: #ef4444; margin-bottom: 15px;">
-        <i class="fa-solid fa-triangle-exclamation" style="font-size: 3rem;"></i>
-      </div>
+      <div style="color: #ef4444; margin-bottom: 15px;"><i class="fa-solid fa-triangle-exclamation" style="font-size: 3rem;"></i></div>
       <h3 style="margin-bottom: 10px; font-size: 1.2rem; color: var(--text);">مسح سجل المشاهدة</h3>
-      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 24px; line-height: 1.5;">
-        هل أنت متأكد أنك تريد مسح جميع الأعمال من سجل متابعة المشاهدة؟ لا يمكن التراجع عن هذا الإجراء.
-      </p>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 24px; line-height: 1.5;">هل أنت متأكد أنك تريد مسح جميع الأعمال من سجل متابعة المشاهدة؟ لا يمكن التراجع عن هذا الإجراء.</p>
       <div style="display: flex; gap: 10px; justify-content: center;">
         <button class="btn-submit" style="background: var(--surface-hover); color: var(--text); border: 1px solid var(--border); width: 48%;" onclick="closeModal('confirmClearModal')">إلغاء</button>
         <button class="btn-submit" style="background: #ef4444; color: white; border: none; width: 48%;" onclick="executeClearHistory()">نعم، امسح</button>
@@ -536,15 +408,11 @@
     </div>
   </div>
 
-  <!-- نافذة باقات VIP -->
   <div class="modal-overlay" id="vipModal">
     <div class="modal-box">
       <i class="fa-solid fa-xmark modal-close" onclick="closeModal('vipModal')"></i>
       <div class="modal-title"><i class="fa-solid fa-crown" style="color: var(--gold);"></i> <span data-i18n="vip_title">اشتراكات وباقات VIP</span></div>
-      <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;" data-i18n="vip_desc">
-        استمتع بتجربة خالية تماماً من الإعلانات مع شارات توهج ذهبية لحسابك وأولوية قصوى لطلبات الأفلام والمسلسلات.
-      </p>
-
+      <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;" data-i18n="vip_desc">استمتع بتجربة خالية تماماً من الإعلانات مع شارات توهج ذهبية لحسابك وأولوية قصوى لطلبات الأفلام والمسلسلات.</p>
       <div class="vip-pricing-grid">
         <div class="vip-card">
           <div class="vip-card-title">الباقة الشهرية</div>
@@ -562,7 +430,6 @@
     </div>
   </div>
 
-  <!-- نافذة طلب عمل جديد للأعضاء المميزين -->
   <div class="modal-overlay" id="requestMediaModal">
     <div class="modal-box">
       <i class="fa-solid fa-xmark modal-close" onclick="closeModal('requestMediaModal')"></i>
@@ -574,7 +441,6 @@
     </div>
   </div>
 
-  <!-- نافذة المصادقة -->
   <div class="modal-overlay" id="authModal">
     <div class="modal-box">
       <i class="fa-solid fa-xmark modal-close" onclick="closeModal('authModal')"></i>
@@ -582,13 +448,11 @@
       <div id="loginFormBox">
         <div class="modal-title"><i class="fa-solid fa-user-shield" style="color: var(--cyan);"></i> <span data-i18n="auth_title">تسجيل الدخول</span></div>
         <div class="form-group"><label data-i18n="auth_email">البريد الإلكتروني:</label><input type="text" id="loginEmail"></div>
-        
         <div class="form-group" style="position: relative;">
           <label data-i18n="auth_pass">كود الدخول (PIN):</label>
           <input type="text" id="loginPass" class="masked-pin" placeholder="أدخل الكود...">
           <i class="fa-solid fa-eye-slash toggle-eye" onclick="togglePinVisibility('loginPass', this)"></i>
         </div>
-        
         <button class="btn-submit" onclick="handleLoginSubmit()" data-i18n="auth_btn">دخول الحساب</button>
         <div class="auth-toggle-links">
           <a onclick="switchAuthView('register')">إنشاء حساب جديد</a>
@@ -599,38 +463,28 @@
       <div id="registerFormBox" style="display: none;">
         <div class="modal-title"><i class="fa-solid fa-user-plus" style="color: var(--cyan);"></i> <span>إنشاء حساب جديد</span></div>
         <div class="form-group"><label data-i18n="auth_email">البريد الإلكتروني:</label><input type="email" id="regEmail"></div>
-        
         <div class="form-group" style="position: relative;">
           <label data-i18n="auth_pass">كود الدخول الجديد (PIN):</label>
           <input type="text" id="regPass" class="masked-pin" placeholder="6 خانات على الأقل...">
           <i class="fa-solid fa-eye-slash toggle-eye" onclick="togglePinVisibility('regPass', this)"></i>
         </div>
-        
         <button class="btn-submit" style="background:var(--cyan); color:#000;" onclick="handleRegisterSubmit()">إنشاء الحساب الآن</button>
-        <div class="auth-toggle-links" style="justify-content:center;">
-          <a onclick="switchAuthView('login')">لديك حساب بالفعل؟ تسجيل الدخول</a>
-        </div>
+        <div class="auth-toggle-links" style="justify-content:center;"><a onclick="switchAuthView('login')">لديك حساب بالفعل؟ تسجيل الدخول</a></div>
       </div>
 
       <div id="forgotFormBox" style="display: none;">
         <div class="modal-title"><i class="fa-solid fa-key" style="color: var(--gold);"></i> <span>استعادة الحساب</span></div>
         <div class="form-group"><label data-i18n="auth_email">أدخل بريدك الإلكتروني المسجل:</label><input type="email" id="forgotEmail"></div>
         <button class="btn-submit" onclick="sendVerificationCode()">إرسال رمز التحقق</button>
-        <div class="auth-toggle-links" style="justify-content:center;">
-          <a onclick="switchAuthView('login')">العودة لتسجيل الدخول</a>
-        </div>
+        <div class="auth-toggle-links" style="justify-content:center;"><a onclick="switchAuthView('login')">العودة لتسجيل الدخول</a></div>
       </div>
 
       <div id="otpVerifyBox" style="display: none;">
         <div class="modal-title"><i class="fa-solid fa-envelope-open-text" style="color: var(--cyan);"></i> <span>رمز التحقق (OTP)</span></div>
         <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:12px; text-align:center;">لقد أرسلنا رمزاً مكوناً من 6 أرقام إلى بريدك الإلكتروني.</p>
-        <div class="form-group">
-          <input type="text" id="otpInput" placeholder="######" maxlength="6" style="text-align:center; font-size:1.5rem; letter-spacing:10px;">
-        </div>
+        <div class="form-group"><input type="text" id="otpInput" placeholder="######" maxlength="6" style="text-align:center; font-size:1.5rem; letter-spacing:10px;"></div>
         <button class="btn-submit" style="background:var(--cyan); color:#000;" onclick="verifyOtpCode()">تأكيد الرمز</button>
-        <div class="auth-toggle-links" style="justify-content:center;">
-          <a onclick="switchAuthView('forgot')">العودة</a>
-        </div>
+        <div class="auth-toggle-links" style="justify-content:center;"><a onclick="switchAuthView('forgot')">العودة</a></div>
       </div>
 
       <div id="resetPassFormBox" style="display: none;">
@@ -649,15 +503,12 @@
         <div style="width: 76px; height: 76px; border-radius: 50%; overflow: hidden; margin: 0 auto 10px; border: 2px solid var(--cyan); box-shadow: 0 0 12px rgba(0,240,255,0.4);" id="profileAvatarBigBox">
           <img id="profileAvatarBig" src="" style="width: 100%; height: 100%; object-fit: cover;">
         </div>
-        
         <div style="display:flex; align-items:center; justify-content:center; gap:6px; margin-bottom:6px;">
           <span id="profileEmail" style="font-size: 0.85rem; font-weight: 700; color: var(--text);"></span>
           <span id="profileGlowBadge" class="vip-badge-glow" style="display:none;"><i class="fa-solid fa-crown"></i> VIP</span>
         </div>
-
         <p id="profileRoleBadge" style="font-size: 0.7rem; color: var(--gold); font-weight: 800; margin-bottom: 4px;"></p>
         <p id="profileAdsStatusBadge" style="font-size: 0.68rem; color: var(--cyan); font-weight: 700; margin-bottom: 14px;"></p>
-        
         <div style="display:flex; gap:6px; justify-content:center;">
           <button class="btn-submit" id="profileVipReqBtn" style="background: var(--surface-hover); color: var(--cyan); border: 1px solid var(--border); display:none;" onclick="closeModal('authModal'); openRequestMediaModal();">طلب فيلم أو مسلسل</button>
           <button class="btn-submit" style="background: #ef4444;" onclick="logoutUser()" data-i18n="auth_logout">تسجيل الخروج</button>
@@ -666,7 +517,6 @@
     </div>
   </div>
 
-  <!-- لوحة تحكم الأدمن -->
   <div class="modal-overlay" id="adminModal">
     <div class="modal-box admin-modal">
       <i class="fa-solid fa-xmark modal-close" onclick="closeModal('adminModal'); location.hash='#/home';"></i>
@@ -838,7 +688,78 @@
     let verifyingForgotEmailAddress = '';
     let generatedOtp = '';
 
-    // دالة إيقاف المشغل وتفريغ الموارد عند التنقل
+    function toggleServerMenu() {
+      const menu = document.getElementById("serverDropdown");
+      menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+    }
+
+    document.addEventListener("click", function(event) {
+      const menu = document.getElementById("serverDropdown");
+      const btn = document.getElementById("serverToggleBtn");
+      if (menu && btn && !btn.contains(event.target) && !menu.contains(event.target)) {
+        menu.style.display = "none";
+      }
+    });
+
+    function renderDynamicServersDeck() {
+      const container = document.getElementById('serverDropdown');
+      container.innerHTML = '';
+      for (let i = 1; i <= 12; i++) {
+        const btn = document.createElement('button');
+        btn.className = `server-menu-btn ${i === currentServer ? 'active' : ''}`;
+        btn.innerText = `سيرفر ${i}`;
+        btn.onclick = () => { 
+          changeServer(i); 
+          toggleServerMenu(); 
+        };
+        container.appendChild(btn);
+      }
+    }
+
+    function changeServer(idx) {
+      currentServer = idx;
+      document.querySelectorAll('.server-menu-btn').forEach((b, i) => b.classList.toggle('active', i + 1 === idx));
+      if (!currentItem.id || currentItem.isCustom) return;
+
+      const { id, type, season: s, episode: e } = currentItem;
+      const srvs = type === "movie" 
+        ? { 
+            1: `https://vidlink.pro/movie/${id}`,
+            2: `https://www.2embed.cc/embed/${id}`,
+            3: `https://embed.smashystream.com/playere.php?tmdb=${id}`,
+            4: `https://player.smashy.stream/movie/${id}`,
+            5: `https://vidsrc.to/embed/movie/${id}`,
+            6: `https://vidsrc.cc/v2/embed/movie/${id}`,
+            7: `https://vidsrc.sbs/embed/movie/${id}`,
+            8: `https://multiembed.mov/?video_id=${id}&tmdb=1`,
+            9: `https://streamtape.com/e/${id}`,
+            10: `https://vidmoly.to/embed-${id}.html`,
+            11: `https://doodstream.com/e/${id}`,
+            12: `https://vidoza.net/embed-${id}.html`
+          }
+        : { 
+            1: `https://vidlink.pro/tv/${id}/${s}/${e}`,
+            2: `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}`,
+            3: `https://embed.smashystream.com/playere.php?tmdb=${id}&season=${s}&episode=${e}`,
+            4: `https://player.smashy.stream/tv/${id}?s=${s}&e=${e}`,
+            5: `https://vidsrc.to/embed/tv/${id}/${s}/${e}`,
+            6: `https://vidsrc.cc/v2/embed/tv/${id}/${s}/${e}`,
+            7: `https://vidsrc.sbs/embed/tv/${id}/${s}/${e}`,
+            8: `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}`,
+            9: `https://streamtape.com/e/${id}-${s}-${e}`,
+            10: `https://vidmoly.to/embed-${id}-${s}-${e}.html`,
+            11: `https://doodstream.com/e/${id}-${s}-${e}`,
+            12: `https://vidoza.net/embed-${id}-${s}-${e}.html`
+          };
+
+      const frame = document.getElementById('streamFrame');
+      frame.src = srvs[currentServer] || srvs[1];
+
+      frame.onerror = () => {
+        if (currentServer < 12) changeServer(currentServer + 1);
+      };
+    }
+
     function stopPlayer() {
       const frame = document.getElementById('streamFrame');
       if (frame) frame.src = "";
@@ -917,13 +838,8 @@
       loadResumeShelf();
     }
 
-    function isItemFavorited(id) {
-      return getFavorites().some(i => String(i.id) === String(id));
-    }
-
-    function isItemWatched(key) {
-      return getWatchedItems().includes(String(key));
-    }
+    function isItemFavorited(id) { return getFavorites().some(i => String(i.id) === String(id)); }
+    function isItemWatched(key) { return getWatchedItems().includes(String(key)); }
 
     function toggleCurrentFavorite() {
       if (!currentItem.id) return;
@@ -935,12 +851,7 @@
         favs.splice(idx, 1);
         btn.classList.remove('active-fav');
       } else {
-        favs.unshift({
-          id: currentItem.id,
-          type: currentItem.type,
-          title: currentItem.title,
-          poster_path: currentItem.poster_path
-        });
+        favs.unshift({ id: currentItem.id, type: currentItem.type, title: currentItem.title, poster_path: currentItem.poster_path });
         btn.classList.add('active-fav');
       }
       saveFavorites(favs);
@@ -979,7 +890,6 @@
       return fp;
     }
 
-    // إعادة تفعيل الإعلانات
     function injectAdScriptsIfEligible() {
       if (currentUser && (currentUser.isVip || currentUser.isAdmin || currentUser.adsDisabled)) {
         return;
@@ -1060,14 +970,11 @@
         const key = el.getAttribute('data-i18n');
         if (translations[lang][key]) el.innerText = translations[lang][key];
       });
-
       renderGenreBoxes();
     }
 
     function handleRouting() {
-      // إيقاف المشغل دائماً عند التنقل بين الصفحات لمنع بقاء الصوت
       stopPlayer();
-
       const hash = window.location.hash || '#/home';
       const parts = hash.split('/');
       const route = parts[1] || 'home';
@@ -1150,9 +1057,7 @@
             <div class="card-body" onclick="location.hash = '#/theater/${item.type}/${item.id}/${item.season}/${item.episode}'">
               <div class="card-title">${item.title}</div>
               <div class="card-meta"><span>${item.type === 'tv' ? `م${item.season} ح${item.episode}` : 'فيلم'}</span><span style="color:var(--gold);">استئناف ▶</span></div>
-              <div class="progress-bar-container">
-                <div class="progress-bar-fill" style="width: ${progressVal}%;"></div>
-              </div>
+              <div class="progress-bar-container"><div class="progress-bar-fill" style="width: ${progressVal}%;"></div></div>
             </div>
           `;
           deck.appendChild(card);
@@ -1279,12 +1184,6 @@
           } catch(e) {}
         }, 220);
       });
-
-      document.addEventListener('click', (e) => {
-        if (!searchInput.contains(e.target) && !searchDropdown.contains(e.target)) {
-          searchDropdown.style.display = 'none';
-        }
-      });
     }
 
     async function initHeroRotation() {
@@ -1406,19 +1305,6 @@
       } catch(e) {}
     }
 
-    function renderDynamicServersDeck() {
-      const container = document.getElementById('serversButtonsDeck');
-      container.innerHTML = '';
-
-      for (let i = 1; i <= 8; i++) {
-        const btn = document.createElement('button');
-        btn.className = `srv-btn ${i === currentServer ? 'active' : ''}`;
-        btn.innerHTML = `<span>${translations[currentLang].srv_prefix}</span> ${i}`;
-        btn.onclick = () => changeServer(i);
-        container.appendChild(btn);
-      }
-    }
-
     function startStreamingNow() {
       document.getElementById('mainPlayerContainer').style.display = 'block';
       document.getElementById('iframeBox').style.display = 'block';
@@ -1482,42 +1368,6 @@
         };
         epList.appendChild(btn);
       }
-    }
-
-    function changeServer(idx) {
-      currentServer = idx;
-      document.querySelectorAll('.srv-btn').forEach((b, i) => b.classList.toggle('active', i + 1 === idx));
-      if (!currentItem.id || currentItem.isCustom) return;
-
-      const { id, type, season: s, episode: e } = currentItem;
-      const srvs = type === "movie" 
-        ? { 
-            1: `https://vidlink.pro/movie/${id}`,
-            2: `https://www.2embed.cc/embed/${id}`,
-            3: `https://embed.smashystream.com/playere.php?tmdb=${id}`,
-            4: `https://player.smashy.stream/movie/${id}`,
-            5: `https://vidsrc.to/embed/movie/${id}`,
-            6: `https://vidsrc.cc/v2/embed/movie/${id}`,
-            7: `https://vidsrc.sbs/embed/movie/${id}`,
-            8: `https://multiembed.mov/?video_id=${id}&tmdb=1`
-          }
-        : { 
-            1: `https://vidlink.pro/tv/${id}/${s}/${e}`,
-            2: `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}`,
-            3: `https://embed.smashystream.com/playere.php?tmdb=${id}&season=${s}&episode=${e}`,
-            4: `https://player.smashy.stream/tv/${id}?s=${s}&e=${e}`,
-            5: `https://vidsrc.to/embed/tv/${id}/${s}/${e}`,
-            6: `https://vidsrc.cc/v2/embed/tv/${id}/${s}/${e}`,
-            7: `https://vidsrc.sbs/embed/tv/${id}/${s}/${e}`,
-            8: `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}`
-          };
-
-      const frame = document.getElementById('streamFrame');
-      frame.src = srvs[currentServer] || srvs[1];
-
-      frame.onerror = () => {
-        if (currentServer < 8) changeServer(currentServer + 1);
-      };
     }
 
     function initPlayerSkipTimer() {
