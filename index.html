@@ -397,7 +397,7 @@
       </div>
     </div>
 
-    <!-- صندوق الفحص السحابي التلقائي (يظهر أثناء إيجاد السيرفر) -->
+    <!-- صندوق الفحص السحابي التلقائي -->
     <div class="radar-loading-box" id="radarLoadingBox">
       <div class="radar-spinner"></div>
       <div style="font-size:0.9rem; font-weight:800; color:var(--cyan);">جاري استخراج السيرفر الشغال وتجاوز التشفير تلقائياً...</div>
@@ -972,7 +972,7 @@
         deck.innerHTML = ''; document.getElementById('resumeShelfBox').style.display = 'block';
         list.forEach(item => {
           const card = document.createElement('div'); card.className = 'card'; const progressVal = item.progress || 50;
-          card.innerHTML = `<div style="position: absolute; top: 5px; left: 5px; z-index: 10; background: rgba(0,0,0,0.8); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer;" onclick="event.stopPropagation(); removeResumeItem('${item.id}')"><i class="fa-solid fa-xmark" style="color: #ef4444; font-size: 0.85rem;"></i></div><img src="${item.poster_path ? POSTER_BASE + item.poster_path : 'https://image.tmdb.org/t/p/w500/mXk9kEw9u5dF72Tsk4O9Jt0rGgG.jpg'}" loading="lazy" onclick="location.hash = '#/theater/${item.type}/${item.id}/${item.season}/${item.episode}'"><div class="card-body" onclick="location.hash = '#/theater/${item.type}/${item.id}/${item.season}/${item.episode}'"><div class="card-title">${item.title}</div><div class="card-meta"><span>${item.type === 'tv' ? `م${item.season} ح${item.episode}` : 'فيلم'}</span><span style="color:var(--gold);">استئناف ▶</span></div></div>`;
+          card.innerHTML = `<div style="position: absolute; top: 5px; left: 5px; z-index: 10; background: rgba(0,0,0,0.8); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer;" onclick="event.stopPropagation(); removeResumeItem('${item.id}')"><i class="fa-solid fa-xmark" style="color: #ef4444; font-size: 0.85rem;"></i></div><img src="${item.poster_path ? POSTER_BASE + item.poster_path : 'https://image.tmdb.org/t/p/w500/mXk9kEw9u5dF72Tsk4O9Jt0rGgG.jpg'}" loading="lazy" onclick="location.hash = '#/theater/${item.type}/${item.id}/${item.season}/${item.episode}'"><div class="card-body" onclick="location.hash = '#/theater/${item.type}/${item.id}/${item.season}/${item.episode}'"><div class="card-title">${item.title}</div><div class="card-meta"><span>${item.type === 'tv' ? `م${item.season} ح${item.episode}` : 'فيلم'}</span><span style="color:var(--gold);">استئناف ▶</span></div><div class="progress-bar-container"><div class="progress-bar-fill" style="width: ${progressVal}%;"></div></div></div>`;
           deck.appendChild(card);
         });
       } else { document.getElementById('resumeShelfBox').style.display = 'none'; }
@@ -1057,8 +1057,7 @@
     }
 
     async function loadShelfList(path, elemId, fixedType = null) {
-      try { const res = await fetch(`${API_BASE}${path}${path.includes('?') ? '&' : '?'}api_key=${API_KEY}&language=${currentLang}`); const json = await res.json(); renderCards(json.results || [], document.getElementById(elemId), fixedType); } catch (e) {}
-    }
+      try { const res = await fetch(`${API_BASE}${path}${path.includes('?') ? '&' : '?'}api_key=${API_KEY}&language=${currentLang}`); const json = await res.json(); renderCards(json.results || [], document.getElementById(elemId), fixedType); } catch (e) {} }
 
     function renderCards(list, container, fixedType) {
       if (!container) return;
