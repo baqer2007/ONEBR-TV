@@ -142,24 +142,23 @@
     .btn-detail-action.active-watched { color: var(--watched); border-color: var(--watched); }
 
     /* صندوق المشغل الأساسي */
-    .player-container { width: 100%; background: #000; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 14px; position: relative; display: none; }
+    .player-container { width: 100%; background: #000; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); margin: 16px 0; position: relative; display: none; }
     #directPlayerBox { display: none; width: 100%; position: relative; }
     #nativeVideo { width: 100%; max-height: 70vh; display: block; background: #000; }
     ::cue { background-color: rgba(0, 0, 0, 0.8); color: #ffffff; font-size: 1.1rem; font-weight: bold; text-shadow: 0 0 4px #000; }
     .skip-intro-btn { position: absolute; bottom: 65px; left: 20px; z-index: 30; background: rgba(15, 20, 34, 0.85); border: 1px solid var(--gold); color: #fff; padding: 8px 14px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; cursor: pointer; display: none; backdrop-filter: blur(6px); box-shadow: 0 0 10px rgba(245, 158, 11, 0.4); }
     .skip-intro-btn:hover { background: var(--gold); color: #000; }
     
-    .player-box { position: relative; width: 100%; padding-top: 56.25%; }
+    .player-box { position: relative; width: 100%; padding-top: 56.25%; min-height: 280px; }
     .player-box iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
 
-    /* شريط السيرفرات السريع المباشر أسفل المشغل */
+    /* شريط السيرفرات السريع المباشر */
     .servers-bar-deck {
       display: flex;
       gap: 6px;
       overflow-x: auto;
-      padding: 10px 0;
+      padding: 6px 0 12px 0;
       scrollbar-width: none;
-      margin-bottom: 10px;
     }
     .server-tab-btn {
       background: var(--surface);
@@ -380,7 +379,7 @@
       </div>
     </div>
 
-    <!-- صندوق المشغل الأساسي (فوق السيرفرات) -->
+    <!-- 1. صندوق المشغل الأساسي (فوق السيرفرات مباشرة) -->
     <div class="player-container" id="mainPlayerContainer">
       <div id="directPlayerBox">
         <video id="nativeVideo" controls playsinline crossorigin="anonymous"></video>
@@ -391,14 +390,15 @@
       </div>
     </div>
 
-    <!-- شريط السيرفرات السريع المباشر (أسفل المشغل) -->
-    <div id="serversContainer" style="display:none; flex-direction:column; margin-bottom:10px;">
+    <!-- 2. شريط السيرفرات السريع المباشر (أسفل المشغل) -->
+    <div id="serversContainer" style="display:none; flex-direction:column; margin-bottom:14px;">
       <div style="font-size:0.75rem; color:var(--text-muted); font-weight:800; margin-bottom:6px;">
-        📺 قائمة السيرفرات (تم تحديد السيرفر الشغال تلقائياً، يمكنك التبديل يدوياً):
+        📺 السيرفرات البديلة (اختر أي سيرفر في حال عدم عمل الحالي):
       </div>
       <div class="servers-bar-deck" id="serversDeckList"></div>
     </div>
 
+    <!-- 3. قائمة الحلقات والمواسم -->
     <div class="episodes-bar" id="episodesContainer">
       <div style="font-size: 0.8rem; font-weight: 800;">المواسم والحلقات:</div>
       <div class="seasons-scroll" id="seasonsList"></div>
@@ -717,14 +717,17 @@
       const srvContainer = document.getElementById('serversContainer');
       const video = document.getElementById('nativeVideo');
 
-      // إظهار المشغل فوراً والتمرير السلس نحوه
+      // 1. إظهار المشغل فوراً في الصفحة والتمرير إليه
       mainContainer.style.display = 'block';
       mainContainer.scrollIntoView({ behavior: 'smooth' });
 
-      // تنظيف المشغل
-      stopPlayer();
+      // تنظيف محتوى المشغلات السابقة
+      const frame = document.getElementById('streamFrame');
+      frame.src = "";
+      if (video) { video.pause(); video.src = ""; }
+      if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
 
-      // تجهيز قائمة السيرفرات
+      // تجهيز قائمة السيرفرات البديلة
       activeServerList = buildServersList(id, type, season, episode);
       renderServersDeck();
 
@@ -732,15 +735,13 @@
         const res = await fetch(`${CLOUDFLARE_WORKER_BASE}/api/resolve?tmdb=${id}&type=${type}&s=${season}&e=${episode}`);
         const data = await res.json();
 
-        // 1. تشغيل البث المباشر (HLS)
+        // 2. تشغيل البث المباشر (HLS) إذا كان متاحاً
         if (data && data.success && data.directStreamUrl) {
           iframeBox.style.display = 'none';
-          if (srvContainer) srvContainer.style.display = 'none';
+          srvContainer.style.display = 'none';
           directBox.style.display = 'block';
 
           const proxiedUrl = `${CLOUDFLARE_WORKER_BASE}/api/proxy?url=${encodeURIComponent(data.directStreamUrl)}&referer=${encodeURIComponent(data.referer || 'https://vidlink.pro/')}`;
-
-          if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
 
           if (Hls.isSupported()) {
             hlsInstance = new Hls({ enableWorker: true, lowLatencyMode: true });
@@ -762,13 +763,13 @@
           return;
         }
 
-        // 2. تشغيل السيرفر المعتمد المستخرج
+        // 3. تشغيل السيرفر المعتمد المستخرج من السحابة
         if (data && data.success && data.workingServerUrl) {
           directBox.style.display = 'none';
           iframeBox.style.display = 'block';
-          if (srvContainer) srvContainer.style.display = 'flex';
+          srvContainer.style.display = 'flex';
 
-          document.getElementById('streamFrame').src = data.workingServerUrl;
+          frame.src = data.workingServerUrl;
 
           const matchingIdx = activeServerList.findIndex(s => data.workingServerUrl.includes(s.url.split('?')[0]));
           if (matchingIdx !== -1) {
@@ -781,7 +782,7 @@
         }
       } catch (err) {}
 
-      // 3. الانتقال للسيرفرات المدمجة مباشرة
+      // 4. الانتقال للسيرفرات المدمجة مباشرة في حال فشل الاستخراج
       fallbackToEmbedServers(id, type, season, episode);
     }
 
