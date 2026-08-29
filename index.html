@@ -141,23 +141,6 @@
     .btn-detail-action.active-fav { color: var(--gold); border-color: var(--gold); }
     .btn-detail-action.active-watched { color: var(--watched); border-color: var(--watched); }
 
-    .radar-loading-box {
-      width: 100%;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      margin: 16px 0;
-      padding: 30px 15px;
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      box-shadow: 0 0 20px rgba(0, 240, 255, 0.1);
-    }
-    .radar-spinner { width: 44px; height: 44px; border: 3px solid rgba(0, 240, 255, 0.2); border-top-color: var(--cyan); border-radius: 50%; animation: spin 0.8s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
     .player-container { width: 100%; background: #000; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); margin: 16px 0; position: relative; display: none; }
     #directPlayerBox { display: none; width: 100%; position: relative; }
     #nativeVideo { width: 100%; max-height: 70vh; display: block; background: #000; }
@@ -392,13 +375,6 @@
       </div>
     </div>
 
-    <!-- صندوق الفحص السحابي -->
-    <div class="radar-loading-box" id="radarLoadingBox">
-      <div class="radar-spinner"></div>
-      <div style="font-size:0.9rem; font-weight:800; color:var(--cyan);">جاري ترتيب السيرفرات الذكية وتشغيل الأفضل تلقائياً...</div>
-      <div style="font-size:0.75rem; color:var(--text-muted);">يتم التوجيه حسب لغة وتصنيف العمل</div>
-    </div>
-
     <div class="player-container" id="mainPlayerContainer">
       <div id="directPlayerBox">
         <video id="nativeVideo" controls playsinline crossorigin="anonymous"></video>
@@ -411,7 +387,7 @@
 
     <div id="serversContainer" style="display:none; flex-direction:column; margin-bottom:14px;">
       <div style="font-size:0.75rem; color:var(--text-muted); font-weight:800; margin-bottom:6px;">
-        📺 السيرفرات المرتبة تلقائياً (اضغط للتبديل في حال توقف أي سيرفر):
+        📺 السيرفرات المتاحة (اضغط للتبديل في حال توقف أي سيرفر):
       </div>
       <div class="servers-bar-deck" id="serversDeckList"></div>
     </div>
@@ -599,11 +575,28 @@
     const BACKDROP_BASE = "https://image.tmdb.org/t/p/original";
     const FIREBASE_DB = "https://cinemavip-a9a21-default-rtdb.firebaseio.com";
     
-    // رابط خادم Vercel
-    const CLOUDFLARE_WORKER_BASE = "https://onebrtv-api.vercel.app";
-
     const SUPER_ADMIN_EMAIL = "altrfybaqer0@gmail.com";
     const SUPER_ADMIN_PASS = "Aann22@@55";
+
+    // 📋 مصفوفة السيرفرات المتعددة والشاملة
+    const serverTemplates = [
+      { name: 'VidSrc PRO', movie: id => `https://vidsrc.to/embed/movie/${id}`, tv: (id,s,e) => `https://vidsrc.to/embed/tv/${id}/${s}/${e}` },
+      { name: 'VidSrc ME', movie: id => `https://vidsrc.me/embed/movie?tmdb=${id}`, tv: (id,s,e) => `https://vidsrc.me/embed/tv?tmdb=${id}&sea=${s}&epi=${e}` },
+      { name: 'VidSrc CC', movie: id => `https://vidsrc.cc/v2/embed/movie/${id}`, tv: (id,s,e) => `https://vidsrc.cc/v2/embed/tv/${id}/${s}/${e}` },
+      { name: 'VidSrc XYZ', movie: id => `https://vidsrc.xyz/embed/movie/${id}`, tv: (id,s,e) => `https://vidsrc.xyz/embed/tv/${id}/${s}/${e}` },
+      { name: 'AutoEmbed CC', movie: id => `https://player.autoembed.cc/embed/movie/${id}`, tv: (id,s,e) => `https://player.autoembed.cc/embed/tv/${id}/${s}/${e}` },
+      { name: 'AutoEmbed TO', movie: id => `https://autoembed.to/movie/tmdb/${id}`, tv: (id,s,e) => `https://autoembed.to/tv/tmdb/${id}-${s}-${e}` },
+      { name: 'EmbedSu', movie: id => `https://embed.su/embed/movie/${id}`, tv: (id,s,e) => `https://embed.su/embed/tv/${id}/${s}/${e}` },
+      { name: 'SmashyStream', movie: id => `https://embed.smashystream.com/playere.php?tmdb=${id}`, tv: (id,s,e) => `https://embed.smashystream.com/playere.php?tmdb=${id}&season=${s}&episode=${e}` },
+      { name: 'VidLink PRO', movie: id => `https://vidlink.pro/movie/${id}`, tv: (id,s,e) => `https://vidlink.pro/tv/${id}/${s}/${e}` },
+      { name: 'MultiEmbed', movie: id => `https://multiembed.mov/?video_id=${id}&tmdb=1`, tv: (id,s,e) => `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}` },
+      { name: '2Embed CC', movie: id => `https://www.2embed.cc/embed/${id}`, tv: (id,s,e) => `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}` },
+      { name: '2Embed Skin', movie: id => `https://www.2embed.skin/embed/${id}`, tv: (id,s,e) => `https://www.2embed.skin/embedtv/${id}&s=${s}&e=${e}` },
+      { name: 'MoviesAPI', movie: id => `https://moviesapi.club/movie/${id}`, tv: (id,s,e) => `https://moviesapi.club/tv/${id}-${s}-${e}` },
+      { name: 'Noverse', movie: id => `https://www.Noverse.stream/embed/movie/${id}`, tv: (id,s,e) => `https://www.Noverse.stream/embed/tv/${id}/${s}/${e}` },
+      { name: 'PrimeWire', movie: id => `https://www.primewire.tf/embed/movie?tmdb=${id}`, tv: (id,s,e) => `https://www.primewire.tf/embed/tv?tmdb=${id}&season=${s}&episode=${e}` },
+      { name: 'VidJoy', movie: id => `https://vidjoy.pro/embed/movie/${id}`, tv: (id,s,e) => `https://vidjoy.pro/embed/tv/${id}/${s}/${e}` }
+    ];
 
     const ALL_GENRES = [
       { id: "28", ar: "أكشن", en: "Action" }, { id: "12", ar: "مغامرة", en: "Adventure" },
@@ -696,67 +689,42 @@
       document.querySelectorAll('.server-tab-btn').forEach((b, i) => b.classList.toggle('active', i === idx));
     }
 
-    // الدالة الذكية لبدء البث وتمرير المعطيات
-    async function startStreamingNow() {
+    // تجهيز السيرفرات وتشغيل الأول تلقائياً
+    function startStreamingNow() {
       const id = currentItem.id;
       const type = currentItem.type || 'movie';
       const season = currentItem.season || 1;
       const episode = currentItem.episode || 1;
-      const imdb = currentItem.imdb_id || '';
-      const lang = currentItem.origLang || '';
-      const isAnime = currentItem.isAnime ? '1' : '0';
 
       const mainContainer = document.getElementById('mainPlayerContainer');
       const directBox = document.getElementById('directPlayerBox');
       const iframeBox = document.getElementById('iframeBox');
       const srvContainer = document.getElementById('serversContainer');
       const video = document.getElementById('nativeVideo');
-      const radarBox = document.getElementById('radarLoadingBox');
       const frame = document.getElementById('streamFrame');
-
-      radarBox.style.display = 'flex';
-      mainContainer.style.display = 'none';
-      srvContainer.style.display = 'none';
-      radarBox.scrollIntoView({ behavior: 'smooth' });
 
       frame.src = "";
       if (video) { video.pause(); video.src = ""; }
       if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
 
-      try {
-        const res = await fetch(`${CLOUDFLARE_WORKER_BASE}/api/resolve?tmdb=${id}&type=${type}&s=${season}&e=${episode}&imdb=${imdb}&lang=${lang}&isAnime=${isAnime}`);
-        const data = await res.json();
+      // توليد روابط جميع السيرفرات المتاحة
+      activeServerList = serverTemplates.map((srv, idx) => ({
+        id: idx + 1,
+        name: srv.name,
+        url: type === 'tv' ? srv.tv(id, season, episode) : srv.movie(id)
+      }));
 
-        radarBox.style.display = 'none';
-
-        if (data && data.success && data.servers && data.servers.length > 0) {
-          activeServerList = data.servers;
-          currentServerIndex = 0;
-          renderServersDeck();
-
-          mainContainer.style.display = 'block';
-          directBox.style.display = 'none';
-          iframeBox.style.display = 'block';
-          srvContainer.style.display = 'flex';
-          mainContainer.scrollIntoView({ behavior: 'smooth' });
-
-          selectServerByIndex(0);
-          recordResumeProgress(currentItem, 20);
-          return;
-        }
-      } catch (err) {}
-
-      radarBox.style.display = 'none';
-      activeServerList = [
-        { id: 1, name: "VidLink Pro", url: type === 'movie' ? `https://vidlink.pro/movie/${id}` : `https://vidlink.pro/tv/${id}/${season}/${episode}` },
-        { id: 2, name: "MultiEmbed", url: type === 'movie' ? `https://multiembed.mov/?video_id=${id}&tmdb=1` : `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${season}&e=${episode}` },
-        { id: 3, name: "AutoEmbed", url: type === 'movie' ? `https://player.autoembed.cc/embed/movie/${id}` : `https://player.autoembed.cc/embed/tv/${id}/${season}/${episode}` }
-      ];
+      currentServerIndex = 0;
       renderServersDeck();
+
       mainContainer.style.display = 'block';
+      directBox.style.display = 'none';
       iframeBox.style.display = 'block';
       srvContainer.style.display = 'flex';
+      mainContainer.scrollIntoView({ behavior: 'smooth' });
+
       selectServerByIndex(0);
+      recordResumeProgress(currentItem, 20);
     }
 
     function stopPlayer() {
@@ -767,7 +735,6 @@
       if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
       document.getElementById('mainPlayerContainer').style.display = 'none';
       document.getElementById('serversContainer').style.display = 'none';
-      document.getElementById('radarLoadingBox').style.display = 'none';
     }
 
     function togglePinVisibility(inputId, iconElement) {
@@ -988,7 +955,6 @@
       document.getElementById('theaterView').style.display = 'block';
       document.getElementById('mainPlayerContainer').style.display = 'none';
       document.getElementById('serversContainer').style.display = 'none';
-      document.getElementById('radarLoadingBox').style.display = 'none';
       window.scrollTo(0, 0);
 
       const sNum = parseInt(season) || 1;
@@ -1102,9 +1068,9 @@
     function playDirectMedia(title, streamUrl, poster) {
       currentItem = { id: 'custom', type: 'custom', title, poster_path: poster, isCustom: true, directUrl: streamUrl };
       document.getElementById('homeView').style.display = 'none'; document.getElementById('searchResultsView').style.display = 'none'; document.getElementById('favoritesView').style.display = 'none'; document.getElementById('theaterView').style.display = 'block'; document.getElementById('detailHeroBox').style.display = 'none'; document.getElementById('mainPlayerContainer').style.display = 'block'; document.getElementById('iframeBox').style.display = 'none'; document.getElementById('serversContainer').style.display = 'none'; document.getElementById('episodesContainer').style.display = 'none'; document.getElementById('directPlayerBox').style.display = 'block'; window.scrollTo(0, 0);
-      const video = document.getElementById('nativeVideo'); const proxiedUrl = `${CLOUDFLARE_WORKER_BASE}/api/proxy?url=${encodeURIComponent(streamUrl)}`;
+      const video = document.getElementById('nativeVideo');
       if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
-      if (streamUrl.includes('.m3u8')) { if (Hls.isSupported()) { hlsInstance = new Hls(); hlsInstance.loadSource(proxiedUrl); hlsInstance.attachMedia(video); hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => video.play().catch(()=>{})); } else if (video.canPlayType('application/vnd.apple.mpegurl')) { video.src = proxiedUrl; video.play().catch(()=>{}); } } else { video.src = proxiedUrl; video.play().catch(()=>{}); }
+      if (streamUrl.includes('.m3u8')) { if (Hls.isSupported()) { hlsInstance = new Hls(); hlsInstance.loadSource(streamUrl); hlsInstance.attachMedia(video); hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => video.play().catch(()=>{})); } else if (video.canPlayType('application/vnd.apple.mpegurl')) { video.src = streamUrl; video.play().catch(()=>{}); } } else { video.src = streamUrl; video.play().catch(()=>{}); }
     }
 
     function switchAuthView(view) { document.getElementById('loginFormBox').style.display = view === 'login' ? 'block' : 'none'; document.getElementById('registerFormBox').style.display = view === 'register' ? 'block' : 'none'; document.getElementById('forgotFormBox').style.display = view === 'forgot' ? 'block' : 'none'; document.getElementById('otpVerifyBox').style.display = view === 'otp' ? 'block' : 'none'; document.getElementById('resetPassFormBox').style.display = view === 'reset' ? 'block' : 'none'; document.getElementById('authProfile').style.display = view === 'profile' ? 'block' : 'none'; }
