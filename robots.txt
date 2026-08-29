@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://tv.onebr.workers.dev/sitemap.xml
