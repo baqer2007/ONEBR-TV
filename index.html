@@ -400,7 +400,7 @@
       <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 24px; line-height: 1.5;">هل أنت متأكد أنك تريد مسح جميع الأعمال من سجل متابعة المشاهدة؟ لا يمكن التراجع عن هذا الإجراء.</p>
       <div style="display: flex; gap: 10px; justify-content: center;">
         <button class="btn-submit" style="background: var(--surface-hover); color: var(--text); border: 1px solid var(--border); width: 48%;" onclick="closeModal('confirmClearModal')">إلغاء</button>
-        <button class="btn-submit" style="background: #ef4444; color white; border: none; width: 48%;" onclick="executeClearHistory()">نعم، امسح</button>
+        <button class="btn-submit" style="background: #ef4444; color: white; border: none; width: 48%;" onclick="executeClearHistory()">نعم، امسح</button>
       </div>
     </div>
   </div>
@@ -699,12 +699,33 @@
       }
     });
 
-    // بناء قائمة السيرفرات الذكية وترتيبها حسب طبيعة العمل 🧠
+    // 🔍 1. دالة جلب رابط الترجمة العربية تلقائياً
+    async function getArabicSubtitleUrl(tmdbId, type, season = 1, episode = 1) {
+      try {
+        const query = type === 'tv' ? `id=${tmdbId}&s=${season}&e=${episode}` : `id=${tmdbId}`;
+        const res = await fetch(`https://sub.wyzie.ru/search?${query}&lang=ar`);
+        const data = await res.json();
+        if (data && data.length > 0 && data[0].url) {
+          return data[0].url;
+        }
+      } catch (err) {
+        console.warn("لم يتم العثور على ملف ترجمة خارجي:", err);
+      }
+      return null;
+    }
+
+    // 🔗 2. دالة دمج رابط الترجمة داخل رابط السيرفر
+    function appendSubtitleToUrl(serverUrl, subtitleUrl) {
+      if (!subtitleUrl) return serverUrl;
+      const separator = serverUrl.includes('?') ? '&' : '?';
+      return `${serverUrl}${separator}sub_url=${encodeURIComponent(subtitleUrl)}&sub_lang=ara`;
+    }
+
+    // 🧠 3. بناء قائمة السيرفرات الذكية وترتيبها حسب طبيعة العمل
     function buildSmartServerList() {
       const { id, type, season: s, episode: e } = currentItem;
       const isMov = (type === 'movie');
 
-      // مستودع السيرفرات التلقائية المتاحة
       const providers = {
         multiembed: {
           name: "سيرفر 1 (شامل متعدد المصادر)",
@@ -756,60 +777,31 @@
         }
       };
 
-      // خوارزمية الفرز الذكي حسب اللغة والتصنيف
       if (currentItem.isTurkish || currentItem.isAsian) {
-        // للأعمال التركية والكورية: وضع السيرفرات التجميعية في المقدمة
         activeServerList = [
-          providers.multiembed,
-          providers.autoembed,
-          providers.smashy,
-          providers.twoembed,
-          providers.embedsu,
-          providers.vidsrccc,
-          providers.vidsrcto,
-          providers.vidlink,
-          providers.vidsrcme,
-          providers.moviesapi,
-          providers.rive,
-          providers.nontongo
+          providers.multiembed, providers.autoembed, providers.smashy,
+          providers.twoembed, providers.embedsu, providers.vidsrccc,
+          providers.vidsrcto, providers.vidlink, providers.vidsrcme,
+          providers.moviesapi, providers.rive, providers.nontongo
         ];
       } else if (currentItem.isAnime) {
-        // للأنمي والرسوم المتحركة
         activeServerList = [
-          providers.autoembed,
-          providers.embedsu,
-          providers.multiembed,
-          providers.vidlink,
-          providers.smashy,
-          providers.vidsrccc,
-          providers.twoembed,
-          providers.vidsrcto,
-          providers.vidsrcme,
-          providers.moviesapi,
-          providers.rive,
-          providers.nontongo
+          providers.autoembed, providers.embedsu, providers.multiembed,
+          providers.vidlink, providers.smashy, providers.vidsrccc,
+          providers.twoembed, providers.vidsrcto, providers.vidsrcme,
+          providers.moviesapi, providers.rive, providers.nontongo
         ];
       } else {
-        // للأفلام العالمية وهوليوود
         activeServerList = [
-          providers.vidlink,
-          providers.embedsu,
-          providers.autoembed,
-          providers.multiembed,
-          providers.vidsrccc,
-          providers.vidsrcto,
-          providers.smashy,
-          providers.twoembed,
-          providers.vidsrcme,
-          providers.moviesapi,
-          providers.rive,
-          providers.nontongo
+          providers.vidlink, providers.embedsu, providers.autoembed,
+          providers.multiembed, providers.vidsrccc, providers.vidsrcto,
+          providers.smashy, providers.twoembed, providers.vidsrcme,
+          providers.moviesapi, providers.rive, providers.nontongo
         ];
       }
     }
 
     function renderDynamicServersDeck() {
-      buildSmartServerList();
       const container = document.getElementById('serverDropdown');
       container.innerHTML = '';
 
@@ -835,10 +827,44 @@
       const frame = document.getElementById('streamFrame');
       frame.src = targetUrl;
 
-      // الانتقال التلقائي للسيرفر التالي في حال حدوث خطأ
       frame.onerror = () => {
         if (currentServer < activeServerList.length) changeServer(currentServer + 1);
       };
+    }
+
+    // 🚀 4. بدء التشغيل وجلب الترجمة ودمجها بالسيرفرات فوراً
+    async function startStreamingNow() {
+      const mainContainer = document.getElementById('mainPlayerContainer');
+      const directBox = document.getElementById('directPlayerBox');
+      const iframeBox = document.getElementById('iframeBox');
+      const srvContainer = document.getElementById('serversContainer');
+
+      mainContainer.style.display = 'block';
+      iframeBox.style.display = 'block';
+      directBox.style.display = 'none';
+      srvContainer.style.display = 'block';
+
+      buildSmartServerList();
+
+      const subUrl = await getArabicSubtitleUrl(
+        currentItem.id,
+        currentItem.type,
+        currentItem.season,
+        currentItem.episode
+      );
+
+      if (subUrl) {
+        activeServerList = activeServerList.map(srv => ({
+          ...srv,
+          url: appendSubtitleToUrl(srv.url, subUrl)
+        }));
+      }
+
+      currentServer = 1;
+      renderDynamicServersDeck();
+      changeServer(1);
+      recordResumeProgress(currentItem, 20);
+      mainContainer.scrollIntoView({ behavior: 'smooth' });
     }
 
     function stopPlayer() {
@@ -1352,7 +1378,6 @@
         currentItem.poster_path = data.poster_path;
         currentItem.origLang = data.original_language || '';
         
-        // التحليل الذكي لنوع ولغة العمل 🧠
         const genreIds = (data.genres || []).map(g => g.id);
         currentItem.isAnime = genreIds.includes(16) || currentItem.origLang === 'ja';
         currentItem.isTurkish = currentItem.origLang === 'tr';
@@ -1389,22 +1414,11 @@
           document.getElementById('episodesContainer').style.display = 'none';
         }
 
-        // بناء القائمة الذكية واختيار السيرفر الأنسب في الترتيب رقم 1
         currentServer = 1;
         renderDynamicServersDeck();
         loadSimilarMedia(id, type);
 
       } catch(e) {}
-    }
-
-    function startStreamingNow() {
-      document.getElementById('mainPlayerContainer').style.display = 'block';
-      document.getElementById('iframeBox').style.display = 'block';
-      document.getElementById('directPlayerBox').style.display = 'none';
-      document.getElementById('serversContainer').style.display = 'block';
-      changeServer(1);
-      recordResumeProgress(currentItem, 20);
-      document.getElementById('mainPlayerContainer').scrollIntoView({ behavior: 'smooth' });
     }
 
     async function loadSimilarMedia(id, type) {
