@@ -14,7 +14,7 @@ export async function onRequest(context) {
   }
 
   try {
-    // 1. مسار الكاش السحابي واستخراج الروابط: /api/resolve
+    // 1. مسار الفحص الذكي للروابط: /api/resolve
     if (path === "/api/resolve") {
       const tmdbId = url.searchParams.get("tmdb");
       const type = url.searchParams.get("type") || "movie";
@@ -30,6 +30,7 @@ export async function onRequest(context) {
 
       const cacheKey = `stream_${type}_${tmdbId}_${season}_${episode}`;
 
+      // فحص الكاش السحابي
       if (env.STREAM_KV) {
         const cachedData = await env.STREAM_KV.get(cacheKey, { type: "json" });
         if (cachedData) {
@@ -39,23 +40,40 @@ export async function onRequest(context) {
         }
       }
 
-      const streamData = await extractDirectStreams(tmdbId, type, season, episode);
+      // فحص سريع مباشر
+      const isMov = (type === "movie");
+      const apiUrl = isMov 
+        ? `https://vidlink.pro/api/b/movie/${tmdbId}`
+        : `https://vidlink.pro/api/b/tv/${tmdbId}/${season}/${episode}`;
 
-      if (streamData && streamData.streams && streamData.streams.length > 0) {
-        if (env.STREAM_KV) {
-          await env.STREAM_KV.put(cacheKey, JSON.stringify(streamData), { expirationTtl: 21600 });
-        }
-        return new Response(JSON.stringify({ success: true, source: "live-resolver", ...streamData }), {
-          headers: { ...corsHeaders, "Content-Type": "application/json" }
+      try {
+        const res = await fetch(apiUrl, {
+          headers: { "User-Agent": "Mozilla/5.0", "Referer": "https://vidlink.pro/" }
         });
-      }
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.stream && data.stream.playlist) {
+            const resultData = {
+              streams: [{ quality: "Auto 1080p", url: data.stream.playlist, referer: "https://vidlink.pro/" }],
+              subtitles: data.stream.captions || []
+            };
+            if (env.STREAM_KV) {
+              await env.STREAM_KV.put(cacheKey, JSON.stringify(resultData), { expirationTtl: 21600 });
+            }
+            return new Response(JSON.stringify({ success: true, source: "direct-engine", ...resultData }), {
+              headers: { ...corsHeaders, "Content-Type": "application/json" }
+            });
+          }
+        }
+      } catch (e) {}
 
       return new Response(JSON.stringify({ success: false, fallbackToEmbed: true }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" }
       });
     }
 
-    // 2. مسار البروكسي وتجاوز حظر CORS: /api/proxy
+    // 2. مسار البروكسي: /api/proxy
     if (path === "/api/proxy") {
       const targetUrl = decodeURIComponent(url.searchParams.get("url") || "");
       const customReferer = url.searchParams.get("referer") || "https://vidlink.pro/";
@@ -64,7 +82,7 @@ export async function onRequest(context) {
 
       const response = await fetch(targetUrl, {
         headers: {
-          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
           "Referer": customReferer,
           "Origin": new URL(customReferer).origin
         }
@@ -82,76 +100,33 @@ export async function onRequest(context) {
         });
 
         return new Response(text, {
-          headers: {
-            ...corsHeaders,
-            "Content-Type": "application/vnd.apple.mpegurl",
-            "Cache-Control": "public, max-age=60"
-          }
+          headers: { ...corsHeaders, "Content-Type": "application/vnd.apple.mpegurl", "Cache-Control": "public, max-age=60" }
         });
       }
 
       return new Response(response.body, {
         status: response.status,
-        headers: {
-          ...corsHeaders,
-          "Content-Type": contentType,
-          "Cache-Control": "public, max-age=86400"
-        }
+        headers: { ...corsHeaders, "Content-Type": contentType, "Cache-Control": "public, max-age=86400" }
       });
     }
 
-    // 3. مسار الترجمة التلقائية: /api/subtitles
+    // 3. مسار الترجمة: /api/subtitles
     if (path === "/api/subtitles") {
       const tmdbId = url.searchParams.get("tmdb");
       const type = url.searchParams.get("type") || "movie";
       const season = url.searchParams.get("s") || "1";
       const episode = url.searchParams.get("e") || "1";
 
-      const subs = [
-        {
-          lang: "Arabic",
-          code: "ar",
-          label: "العربية (تلقائي)",
-          url: `https://sub.wyzie.ru/subtitles/${tmdbId}/${type === 'tv' ? `${season}-${episode}` : '0'}?lang=ar`
-        }
-      ];
+      const subs = [{
+        lang: "Arabic", code: "ar", label: "العربية (تلقائي)",
+        url: `https://sub.wyzie.ru/subtitles/${tmdbId}/${type === 'tv' ? `${season}-${episode}` : '0'}?lang=ar`
+      }];
 
-      return new Response(JSON.stringify(subs), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" }
-      });
+      return new Response(JSON.stringify(subs), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    return new Response(JSON.stringify({ status: "API Online" }), { headers: corsHeaders });
+    return new Response(JSON.stringify({ status: "Engine Ready" }), { headers: corsHeaders });
   } catch (err) {
-    return new Response(JSON.stringify({ error: err.message }), {
-      status: 500,
-      headers: { ...corsHeaders, "Content-Type": "application/json" }
-    });
+    return new Response(JSON.stringify({ error: err.message }), { status: 500, headers: corsHeaders });
   }
-}
-
-async function extractDirectStreams(tmdb, type, s, e) {
-  try {
-    const isMov = (type === "movie");
-    const apiUrl = isMov 
-      ? `https://vidlink.pro/api/b/movie/${tmdb}`
-      : `https://vidlink.pro/api/b/tv/${tmdb}/${s}/${e}`;
-
-    const res = await fetch(apiUrl, {
-      headers: { "User-Agent": "Mozilla/5.0", "Referer": "https://vidlink.pro/" }
-    });
-
-    if (!res.ok) return null;
-    const data = await res.json();
-
-    if (data && data.stream && data.stream.playlist) {
-      return {
-        streams: [
-          { quality: "Auto 1080p/720p", url: data.stream.playlist, referer: "https://vidlink.pro/" }
-        ],
-        subtitles: data.stream.captions || []
-      };
-    }
-  } catch (err) {}
-  return null;
 }
