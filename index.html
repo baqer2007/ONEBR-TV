@@ -141,6 +141,24 @@
     .btn-detail-action.active-fav { color: var(--gold); border-color: var(--gold); }
     .btn-detail-action.active-watched { color: var(--watched); border-color: var(--watched); }
 
+    /* رادار الفحص السحابي التلقائي */
+    .radar-loading-box {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin: 16px 0;
+      padding: 30px 15px;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.1);
+    }
+    .radar-spinner { width: 44px; height: 44px; border: 3px solid rgba(0, 240, 255, 0.2); border-top-color: var(--cyan); border-radius: 50%; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
     /* صندوق المشغل الأساسي */
     .player-container { width: 100%; background: #000; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); margin: 16px 0; position: relative; display: none; }
     #directPlayerBox { display: none; width: 100%; position: relative; }
@@ -152,7 +170,7 @@
     .player-box { position: relative; width: 100%; padding-top: 56.25%; min-height: 280px; }
     .player-box iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
 
-    /* شريط السيرفرات السريع المباشر */
+    /* شريط السيرفرات التفاعلي */
     .servers-bar-deck {
       display: flex;
       gap: 6px;
@@ -187,14 +205,6 @@
     .ep-btn.active { background: var(--primary); color: #fff; }
     .ep-btn.is-watched::after { content: '✓'; position: absolute; top: 2px; right: 4px; font-size: 0.65rem; color: var(--watched); font-weight: 900; }
 
-    .vip-pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin: 14px 0; }
-    .vip-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
-    .vip-card.featured { border-color: var(--gold); }
-    .vip-card-title { font-size: 0.95rem; font-weight: 800; color: var(--gold); margin-bottom: 6px; }
-    .vip-card-price { font-size: 1.25rem; font-weight: 900; color: var(--text); margin-bottom: 8px; }
-    .vip-features { font-size: 0.72rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 12px; text-align: start; }
-    .vip-btn-plan { background: var(--primary); color: #fff; text-decoration: none; padding: 8px; border-radius: 6px; font-size: 0.78rem; font-weight: 800; display: block; }
-
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; z-index: 3000; padding: 12px; }
     .modal-box { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; padding: 18px; position: relative; }
     .modal-close { position: absolute; top: 14px; color: var(--text-muted); cursor: pointer; font-size: 1.1rem; z-index: 10; }
@@ -208,25 +218,6 @@
     .btn-submit { width: 100%; background: var(--primary); color: #fff; border: none; padding: 10px; border-radius: 6px; font-weight: 800; font-size: 0.82rem; cursor: pointer; }
     .auth-toggle-links { display: flex; justify-content: space-between; margin-top: 10px; font-size: 0.75rem; }
     .auth-toggle-links a { color: var(--cyan); text-decoration: none; cursor: pointer; }
-
-    .admin-modal { max-width: 860px; }
-    .admin-nav { display: flex; gap: 6px; margin-bottom: 14px; border-bottom: 1px solid var(--border); padding-bottom: 6px; overflow-x: auto; scrollbar-width: none; }
-    .admin-nav-btn { background: none; border: none; color: var(--text-muted); font-weight: 700; font-size: 0.78rem; cursor: pointer; padding: 6px 10px; border-radius: 6px; white-space: nowrap; }
-    .admin-nav-btn.active { background: var(--surface-hover); color: var(--cyan); }
-    
-    .admin-stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; margin-bottom: 14px; }
-    .admin-stat-card { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px; text-align: center; }
-    .stat-number { font-size: 1.3rem; font-weight: 900; color: var(--cyan); margin-top: 4px; }
-    .stat-label { font-size: 0.7rem; color: var(--text-muted); font-weight: 700; }
-
-    .admin-table { width: 100%; border-collapse: collapse; font-size: 0.72rem; text-align: start; }
-    .admin-table th, .admin-table td { padding: 8px 6px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-    .btn-table-del { background: #ef4444; color: #fff; border: none; padding: 4px 8px; border-radius: 4px; font-size: 0.68rem; cursor: pointer; }
-    .btn-table-vip { background: var(--gold); color: #000; border: none; padding: 4px 8px; border-radius: 4px; font-size: 0.68rem; cursor: pointer; font-weight: 800; }
-    .btn-table-ads { background: var(--surface-hover); color: var(--cyan); border: 1px solid var(--border); padding: 4px 8px; border-radius: 4px; font-size: 0.68rem; cursor: pointer; font-weight: 800; }
-
-    .user-table-avatar { width: 28px; height: 28px; border-radius: 50%; vertical-align: middle; background: #1a2234; border: 1px solid var(--border); }
-    .fingerprint-badge { font-family: monospace; font-size: 0.65rem; background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 4px; color: var(--cyan); }
 
     footer { background: var(--surface); border-top: 1px solid var(--border); padding: 20px 14px; text-align: center; font-size: 0.72rem; color: var(--text-muted); margin-top: 30px; }
   </style>
@@ -250,8 +241,6 @@
     <div class="drawer-link" onclick="toggleDrawer(); location.hash='#/movies';"><i class="fa-solid fa-clapperboard"></i> <span>الأفلام</span></div>
     <div class="drawer-link" onclick="toggleDrawer(); location.hash='#/tv';"><i class="fa-solid fa-tv"></i> <span>المسلسلات</span></div>
     <div class="drawer-link" onclick="toggleDrawer(); location.hash='#/favorites';"><i class="fa-solid fa-bookmark" style="color:var(--gold);"></i> <span>قائمة المفضلة</span></div>
-    <div class="drawer-link" onclick="toggleDrawer(); openVipModal();"><i class="fa-solid fa-crown" style="color:var(--gold);"></i> <span>اشتراكات VIP</span></div>
-    <div class="drawer-link" id="drawerVipReqLink" style="display:none;" onclick="toggleDrawer(); openRequestMediaModal();"><i class="fa-solid fa-paper-plane" style="color:var(--cyan);"></i> <span>طلب عمل حصري (VIP)</span></div>
 
     <div class="drawer-section-title">جميع التصنيفات</div>
     <div class="genre-boxes-grid" id="genreBoxesContainer"></div>
@@ -259,7 +248,6 @@
     <div class="drawer-section-title">إعدادات المنصة</div>
     <div class="drawer-link" onclick="toggleTheme()"><i class="fa-solid fa-circle-half-stroke"></i> <span id="themeToggleText">الوضع النهاري</span></div>
     <div class="drawer-link" onclick="toggleLanguage()"><i class="fa-solid fa-globe"></i> <span id="langToggleText">English</span></div>
-    <div class="drawer-link" id="adminDrawerLink" style="display:none;" onclick="toggleDrawer(); location.hash='#/admin';"><i class="fa-solid fa-shield-halved" style="color:var(--cyan);"></i> <span>لوحة الأدمن</span></div>
   </div>
 
   <header>
@@ -281,7 +269,6 @@
 
     <div class="header-actions">
       <button class="btn-header" onclick="location.hash='#/favorites'" title="المفضلة"><i class="fa-solid fa-bookmark" style="color:var(--gold);"></i></button>
-      <button class="btn-header btn-vip-gold" onclick="openVipModal()"><i class="fa-solid fa-crown"></i> VIP</button>
       <button class="btn-header" id="guestAuthBtn" onclick="openAuthModal()"><i class="fa-solid fa-user"></i> <span id="authBtnText">دخول</span></button>
       <button class="user-avatar-btn" id="userAvatarBtn" onclick="openAuthModal()" title="الحساب الشخصي">
         <img id="userAvatarImg" src="" alt="Avatar">
@@ -308,11 +295,6 @@
           </button>
         </div>
         <div class="shelf-grid" id="deckResume"></div>
-      </div>
-
-      <div class="shelf" id="customShelfBox" style="display: none;">
-        <div class="shelf-title">⭐ <span>أعمال مضافة بواسطة الإدارة</span></div>
-        <div class="shelf-grid" id="deckCustom"></div>
       </div>
 
       <div id="defaultShelves">
@@ -379,7 +361,14 @@
       </div>
     </div>
 
-    <!-- 1. صندوق المشغل الأساسي (فوق السيرفرات مباشرة) -->
+    <!-- صندوق الفحص السحابي التلقائي (يظهر أثناء إيجاد السيرفر) -->
+    <div class="radar-loading-box" id="radarLoadingBox">
+      <div class="radar-spinner"></div>
+      <div style="font-size:0.9rem; font-weight:800; color:var(--cyan);">جاري البحث التلقائي عن السيرفر الشغال...</div>
+      <div style="font-size:0.75rem; color:var(--text-muted);">السحابة تختبر السيرفرات بالتوازي لاستبعاد الروابط الفارغة</div>
+    </div>
+
+    <!-- 1. صندوق المشغل الأساسي -->
     <div class="player-container" id="mainPlayerContainer">
       <div id="directPlayerBox">
         <video id="nativeVideo" controls playsinline crossorigin="anonymous"></video>
@@ -393,7 +382,7 @@
     <!-- 2. شريط السيرفرات السريع المباشر (أسفل المشغل) -->
     <div id="serversContainer" style="display:none; flex-direction:column; margin-bottom:14px;">
       <div style="font-size:0.75rem; color:var(--text-muted); font-weight:800; margin-bottom:6px;">
-        📺 السيرفرات البديلة (اختر أي سيرفر في حال عدم عمل الحالي):
+        📺 السيرفرات البديلة (تم تحديد السيرفر الشغال تلقائياً):
       </div>
       <div class="servers-bar-deck" id="serversDeckList"></div>
     </div>
@@ -411,7 +400,7 @@
     </div>
   </div>
 
-  <!-- النوافذ المنبثقة كاملة -->
+  <!-- النوافذ المنبثقة -->
   <div class="modal-overlay" id="confirmClearModal">
     <div class="modal-box" style="max-width: 340px; text-align: center; padding: 25px;">
       <div style="color: #ef4444; margin-bottom: 15px;"><i class="fa-solid fa-triangle-exclamation" style="font-size: 3rem;"></i></div>
@@ -421,39 +410,6 @@
         <button class="btn-submit" style="background: var(--surface-hover); color: var(--text); border: 1px solid var(--border); width: 48%;" onclick="closeModal('confirmClearModal')">إلغاء</button>
         <button class="btn-submit" style="background: #ef4444; color: white; border: none; width: 48%;" onclick="executeClearHistory()">نعم، امسح</button>
       </div>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="vipModal">
-    <div class="modal-box">
-      <i class="fa-solid fa-xmark modal-close" onclick="closeModal('vipModal')"></i>
-      <div class="modal-title"><i class="fa-solid fa-crown" style="color: var(--gold);"></i> <span>اشتراكات وباقات VIP</span></div>
-      <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">استمتع بتجربة خالية تماماً من الإعلانات مع شارات توهج ذهبية لحسابك وأولوية قصوى لطلبات الأفلام والمسلسلات.</p>
-      <div class="vip-pricing-grid">
-        <div class="vip-card">
-          <div class="vip-card-title">الباقة الشهرية</div>
-          <div class="vip-card-price">$1.00 <span style="font-size:0.7rem; color:var(--text-muted);">/ شهر</span></div>
-          <div class="vip-features">✓ منع الإعلانات نهائياً<br>✓ شارة VIP مذهبة<br>✓ طلب الأعمال الحصرية فوراً</div>
-          <a href="https://t.me/ONEBR?text=ارغب+بالاشتراك+في+باقة+VIP+الشهرية+(1$)" target="_blank" class="vip-btn-plan">تفعيل عبر تليكرام ($1)</a>
-        </div>
-        <div class="vip-card featured">
-          <div class="vip-card-title">الباقة السنوية (الأفضل)</div>
-          <div class="vip-card-price">$10.00 <span style="font-size:0.7rem; color:var(--text-muted);">/ سنة</span></div>
-          <div class="vip-features">✓ جميع ميزات VIP<br>✓ شارة ذهبية متوهجة دائمة<br>✓ أولوية تنفيذ الطلبات المباشرة</div>
-          <a href="https://t.me/ONEBR?text=ارغب+بالاشتراك+في+باقة+VIP+السنوية+(10$)" target="_blank" class="vip-btn-plan" style="background:var(--gold); color:#000;">تفعيل عبر تليكرام ($10)</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="requestMediaModal">
-    <div class="modal-box">
-      <i class="fa-solid fa-xmark modal-close" onclick="closeModal('requestMediaModal')"></i>
-      <div class="modal-title"><i class="fa-solid fa-paper-plane" style="color: var(--cyan);"></i> <span>طلب عمل جديد (VIP)</span></div>
-      <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 12px;">اكتب اسم الفيلم أو المسلسل وسيقوم فريق العمل بتوفيره سريعاً.</p>
-      <div class="form-group"><label>اسم العمل المطلوب:</label><input type="text" id="reqMediaTitle" placeholder="مثال: اسم العمل وسنة الإنتاج"></div>
-      <div class="form-group"><label>ملاحظات إضافية (اختياري):</label><textarea id="reqMediaNotes" rows="3" placeholder="حدد الموسم أو الجودة المطلوبة..."></textarea></div>
-      <button class="btn-submit" style="background: var(--cyan); color:#000;" onclick="submitVipMediaRequest()">إرسال الطلب للإدارة</button>
     </div>
   </div>
 
@@ -469,106 +425,14 @@
           <i class="fa-solid fa-eye-slash toggle-eye" onclick="togglePinVisibility('loginPass', this)"></i>
         </div>
         <button class="btn-submit" onclick="handleLoginSubmit()">دخول الحساب</button>
-        <div class="auth-toggle-links">
-          <a onclick="switchAuthView('register')">إنشاء حساب جديد</a>
-          <a onclick="switchAuthView('forgot')">نسيت رمز الدخول؟</a>
-        </div>
       </div>
-
-      <div id="registerFormBox" style="display: none;">
-        <div class="modal-title"><i class="fa-solid fa-user-plus" style="color: var(--cyan);"></i> <span>إنشاء حساب جديد</span></div>
-        <div class="form-group"><label>البريد الإلكتروني:</label><input type="email" id="regEmail"></div>
-        <div class="form-group" style="position: relative;">
-          <label>كود الدخول الجديد (PIN):</label>
-          <input type="text" id="regPass" class="masked-pin" placeholder="6 خانات على الأقل...">
-          <i class="fa-solid fa-eye-slash toggle-eye" onclick="togglePinVisibility('regPass', this)"></i>
-        </div>
-        <button class="btn-submit" style="background:var(--cyan); color:#000;" onclick="handleRegisterSubmit()">إنشاء الحساب الآن</button>
-        <div class="auth-toggle-links" style="justify-content:center;"><a onclick="switchAuthView('login')">لديك حساب بالفعل؟ تسجيل الدخول</a></div>
-      </div>
-
-      <div id="forgotFormBox" style="display: none;">
-        <div class="modal-title"><i class="fa-solid fa-key" style="color: var(--gold);"></i> <span>استعادة الحساب</span></div>
-        <div class="form-group"><label>أدخل بريدك الإلكتروني المسجل:</label><input type="email" id="forgotEmail"></div>
-        <button class="btn-submit" onclick="sendVerificationCode()">إرسال رمز التحقق</button>
-        <div class="auth-toggle-links" style="justify-content:center;"><a onclick="switchAuthView('login')">العودة لتسجيل الدخول</a></div>
-      </div>
-
-      <div id="otpVerifyBox" style="display: none;">
-        <div class="modal-title"><i class="fa-solid fa-envelope-open-text" style="color: var(--cyan);"></i> <span>رمز التحقق (OTP)</span></div>
-        <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:12px; text-align:center;">لقد أرسلنا رمزاً مكوناً من 6 أرقام إلى بريدك الإلكتروني.</p>
-        <div class="form-group"><input type="text" id="otpInput" placeholder="######" maxlength="6" style="text-align:center; font-size:1.5rem; letter-spacing:10px;"></div>
-        <button class="btn-submit" style="background:var(--cyan); color:#000;" onclick="verifyOtpCode()">تأكيد الرمز</button>
-        <div class="auth-toggle-links" style="justify-content:center;"><a onclick="switchAuthView('forgot')">العودة</a></div>
-      </div>
-
-      <div id="resetPassFormBox" style="display: none;">
-        <div class="modal-title"><i class="fa-solid fa-lock-open" style="color: var(--cyan);"></i> <span>تعيين كود دخول جديد</span></div>
-        <p id="resetTargetEmail" style="font-size:0.75rem; color:var(--text-muted); margin-bottom:8px;"></p>
-        <div class="form-group" style="position: relative;">
-          <label>الكود الجديد:</label>
-          <input type="text" id="newResetPass" class="masked-pin" placeholder="6 خانات على الأقل">
-          <i class="fa-solid fa-eye-slash toggle-eye" onclick="togglePinVisibility('newResetPass', this)"></i>
-        </div>
-        <button class="btn-submit" style="background:var(--cyan); color:#000;" onclick="applyNewPassword()">حفظ وتحديث الكود</button>
-      </div>
-
       <div id="authProfile" style="display: none; text-align: center;">
         <div class="modal-title" style="justify-content: center;"><i class="fa-solid fa-circle-user" style="color: var(--cyan);"></i> <span>الحساب الشخصي</span></div>
         <div style="width: 76px; height: 76px; border-radius: 50%; overflow: hidden; margin: 0 auto 10px; border: 2px solid var(--cyan); box-shadow: 0 0 12px rgba(0,240,255,0.4);" id="profileAvatarBigBox"><img id="profileAvatarBig" src="" style="width: 100%; height: 100%; object-fit: cover;"></div>
-        <div style="display:flex; align-items:center; justify-content:center; gap:6px; margin-bottom:6px;"><span id="profileEmail" style="font-size: 0.85rem; font-weight: 700; color: var(--text);"></span><span id="profileGlowBadge" class="vip-badge-glow" style="display:none;"><i class="fa-solid fa-crown"></i> VIP</span></div>
-        <p id="profileRoleBadge" style="font-size: 0.7rem; color: var(--gold); font-weight: 800; margin-bottom: 4px;"></p>
-        <p id="profileAdsStatusBadge" style="font-size: 0.68rem; color: var(--cyan); font-weight: 700; margin-bottom: 14px;"></p>
+        <div style="display:flex; align-items:center; justify-content:center; gap:6px; margin-bottom:6px;"><span id="profileEmail" style="font-size: 0.85rem; font-weight: 700; color: var(--text);"></span></div>
         <div style="display:flex; gap:6px; justify-content:center;">
-          <button class="btn-submit" id="profileVipReqBtn" style="background: var(--surface-hover); color: var(--cyan); border: 1px solid var(--border); display:none;" onclick="closeModal('authModal'); openRequestMediaModal();">طلب فيلم أو مسلسل</button>
           <button class="btn-submit" style="background: #ef4444;" onclick="logoutUser()">تسجيل الخروج</button>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="adminModal">
-    <div class="modal-box admin-modal">
-      <i class="fa-solid fa-xmark modal-close" onclick="closeModal('adminModal'); location.hash='#/home';"></i>
-      <div class="modal-title"><i class="fa-solid fa-shield-halved" style="color: var(--gold);"></i> <span>لوحة تحكم المشرفين (ONEBR TV)</span></div>
-      
-      <div class="admin-stats-grid">
-        <div class="admin-stat-card"><div class="stat-label">👥 إجمالي الزيارات</div><div class="stat-number" id="statVisitorsCount">0</div></div>
-        <div class="admin-stat-card"><div class="stat-label">👤 المسجلين</div><div class="stat-number" id="statUsersCount">0</div></div>
-        <div class="admin-stat-card"><div class="stat-label">📩 طلبات VIP</div><div class="stat-number" id="statRequestsCount" style="color:var(--gold);">0</div></div>
-        <div class="admin-stat-card"><div class="stat-label">🎬 الأعمال المباشرة</div><div class="stat-number" id="statMediaCount">0</div></div>
-        <div class="admin-stat-card"><div class="stat-label">🚫 المحظورين</div><div class="stat-number" id="statBannedCount" style="color:#ef4444;">0</div></div>
-      </div>
-
-      <div class="admin-nav">
-        <button class="admin-nav-btn active" onclick="switchAdminTab('usersManage', this)">👥 المستخدمين المسجلين</button>
-        <button class="admin-nav-btn" onclick="switchAdminTab('vipRequests', this)">📩 طلبات الأعضاء</button>
-        <button class="admin-nav-btn" onclick="switchAdminTab('visitors', this)">🌐 سجل الزوار</button>
-        <button class="admin-nav-btn" onclick="switchAdminTab('mediaManage', this)">🎬 الأعمال المباشرة</button>
-        <button class="admin-nav-btn" onclick="switchAdminTab('addMedia', this)">➕ إضافة عمل</button>
-        <button class="admin-nav-btn" onclick="switchAdminTab('banManage', this)">🚫 إدارة الحظر</button>
-        <button class="admin-nav-btn" onclick="switchAdminTab('banner', this)">📢 التنبيهات</button>
-      </div>
-
-      <div id="tabUsersManage"><div style="max-height: 280px; overflow-y: auto;"><table class="admin-table"><thead><tr><th>المستخدم</th><th>البريد</th><th>الرتبة</th><th>الإعلانات</th><th>الإجراءات</th></tr></thead><tbody id="adminUsersTableBody"></tbody></table></div></div>
-      <div id="tabVipRequests" style="display: none;"><div style="max-height: 280px; overflow-y: auto;"><table class="admin-table"><thead><tr><th>العمل المطلوب</th><th>الملاحظات</th><th>المرسل</th><th>الإجراء</th></tr></thead><tbody id="adminVipRequestsTableBody"></tbody></table></div></div>
-      <div id="tabVisitors" style="display: none;"><div style="max-height: 280px; overflow-y: auto;"><table class="admin-table"><thead><tr><th>البصمة الفريدة</th><th>الوقت</th><th>المتصفح والجهاز</th><th>الحساب</th></tr></thead><tbody id="visitorsTableBody"></tbody></table></div></div>
-      <div id="tabMediaManage" style="display: none;"><div style="max-height: 280px; overflow-y: auto;"><table class="admin-table"><thead><tr><th>اسم العمل</th><th>الرابط</th><th>الإجراء</th></tr></thead><tbody id="adminMediaTableBody"></tbody></table></div></div>
-      <div id="tabAddMedia" style="display: none;">
-        <div class="form-group"><label>اسم العمل:</label><input type="text" id="customTitle" placeholder="مثال: اسم المسلسل أو الفيلم"></div>
-        <div class="form-group"><label>رابط البوستر:</label><input type="text" id="customPoster" placeholder="https://image.tmdb.org/..."></div>
-        <div class="form-group"><label>رابط الفيديو المباشر (.m3u8 أو .mp4):</label><input type="text" id="customStreamUrl" placeholder="https://.../video.m3u8"></div>
-        <button class="btn-submit" style="background: var(--cyan); color: #000;" onclick="saveCustomMedia()">نشر العمل فوراً</button>
-      </div>
-      <div id="tabBanManage" style="display: none;">
-        <div class="form-group"><label>البريد الإلكتروني المراد حظره:</label><input type="text" id="banUserEmail" placeholder="user@example.com"></div>
-        <button class="btn-submit" style="background: #ef4444;" onclick="banUserAction()">حظر المستخدم الآن</button>
-        <div style="margin-top: 14px; max-height: 160px; overflow-y: auto;"><div style="font-size: 0.75rem; font-weight: 800; margin-bottom: 6px;">قائمة المحظورين:</div><table class="admin-table"><tbody id="bannedUsersTableBody"></tbody></table></div>
-      </div>
-      <div id="tabBanner" style="display: none;">
-        <div class="form-group"><label>نص الشريط الإعلاني:</label><input type="text" id="adminBannerText" placeholder="اكتب نص الإعلان..."></div>
-        <button class="btn-submit" onclick="saveBannerAnnouncement()">تحديث التنبيه</button>
-        <button class="btn-submit" style="background: rgba(255,255,255,0.1); margin-top: 6px;" onclick="removeBannerAnnouncement()">إخفاء التنبيه</button>
       </div>
     </div>
   </div>
@@ -580,11 +444,7 @@
     const API_BASE = "https://api.themoviedb.org/3";
     const POSTER_BASE = "https://image.tmdb.org/t/p/w500";
     const BACKDROP_BASE = "https://image.tmdb.org/t/p/original";
-    const FIREBASE_DB = "https://cinemavip-a9a21-default-rtdb.firebaseio.com";
     const CLOUDFLARE_WORKER_BASE = window.location.origin;
-
-    const SUPER_ADMIN_EMAIL = "altrfybaqer0@gmail.com";
-    const SUPER_ADMIN_PASS = "Aann22@@55";
 
     const ALL_GENRES = [
       { id: "28", ar: "أكشن", en: "Action" }, { id: "12", ar: "مغامرة", en: "Adventure" },
@@ -603,20 +463,15 @@
     let currentTheme = localStorage.getItem('site_theme') || 'dark';
 
     let currentUser = JSON.parse(localStorage.getItem('cinema_user') || 'null');
-    let currentItem = { id: null, imdb_id: '', title: '', origTitle: '', slug: '', origLang: '', isAnime: false, isAsian: false, isTurkish: false, type: 'movie', poster_path: '', season: 1, episode: 1, isCustom: false, directUrl: '' };
+    let currentItem = { id: null, title: '', type: 'movie', poster_path: '', season: 1, episode: 1 };
     let activeServerList = [];
     let currentServerIndex = 0;
     let hlsInstance = null;
-    let heroRotationItems = [];
-    let heroRotationIndex = 0;
-    let heroInterval = null;
     let explorePage = 1;
     let currentExploreEndpoint = '/trending/all/day';
     let isFetchingMore = false;
     let hasMoreExploreMedia = true;
     let searchDebounceTimer = null;
-    let verifyingForgotEmailAddress = '';
-    let generatedOtp = '';
 
     // محرك التحكم بالريموت والتنقل لشاشات التلفزيون
     const TVController = {
@@ -670,18 +525,14 @@
       }
     };
 
-    // القائمة العالمية للسيرفرات المعتمدة
     function buildServersList(id, type, s, e) {
       const isMov = (type === 'movie');
       return [
-        { name: "سيرفر 1 (VidLink Pro)", url: isMov ? `https://vidlink.pro/movie/${id}?primaryColor=e50914` : `https://vidlink.pro/tv/${id}/${s}/${e}?primaryColor=e50914` },
-        { name: "سيرفر 2 (MultiEmbed - تركي وآسيوي)", url: isMov ? `https://multiembed.mov/?video_id=${id}&tmdb=1` : `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}` },
-        { name: "سيرفر 3 (Embed.su)", url: isMov ? `https://embed.su/embed/movie/${id}` : `https://embed.su/embed/tv/${id}/${s}/${e}` },
-        { name: "سيرفر 4 (VidSrc.cc)", url: isMov ? `https://vidsrc.cc/v2/embed/movie/${id}` : `https://vidsrc.cc/v2/embed/tv/${id}/${s}/${e}` },
-        { name: "سيرفر 5 (2Embed VIP)", url: isMov ? `https://www.2embed.cc/embed/${id}` : `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}` },
-        { name: "سيرفر 6 (NontonGo)", url: isMov ? `https://www.nontongo.win/embed/movie/${id}` : `https://www.nontongo.win/embed/tv/${id}/${s}/${e}` },
-        { name: "سيرفر 7 (SmashyStream)", url: isMov ? `https://embed.smashystream.com/playere.php?tmdb=${id}` : `https://embed.smashystream.com/playere.php?tmdb=${id}&season=${s}&episode=${e}` },
-        { name: "سيرفر 8 (VidSrc.to)", url: isMov ? `https://vidsrc.to/embed/movie/${id}` : `https://vidsrc.to/embed/tv/${id}/${s}/${e}` }
+        { name: "MultiEmbed (شامل القديم والتركي)", url: isMov ? `https://multiembed.mov/?video_id=${id}&tmdb=1` : `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}` },
+        { name: "VidLink Pro (سريع)", url: isMov ? `https://vidlink.pro/movie/${id}?primaryColor=e50914` : `https://vidlink.pro/tv/${id}/${s}/${e}?primaryColor=e50914` },
+        { name: "Embed.su", url: isMov ? `https://embed.su/embed/movie/${id}` : `https://embed.su/embed/tv/${id}/${s}/${e}` },
+        { name: "VidSrc.cc", url: isMov ? `https://vidsrc.cc/v2/embed/movie/${id}` : `https://vidsrc.cc/v2/embed/tv/${id}/${s}/${e}` },
+        { name: "NontonGo", url: isMov ? `https://www.nontongo.win/embed/movie/${id}` : `https://www.nontongo.win/embed/tv/${id}/${s}/${e}` }
       ];
     }
 
@@ -716,13 +567,16 @@
       const iframeBox = document.getElementById('iframeBox');
       const srvContainer = document.getElementById('serversContainer');
       const video = document.getElementById('nativeVideo');
-
-      // 1. إظهار المشغل فوراً في الصفحة والتمرير إليه
-      mainContainer.style.display = 'block';
-      mainContainer.scrollIntoView({ behavior: 'smooth' });
-
-      // تنظيف محتوى المشغلات السابقة
+      const radarBox = document.getElementById('radarLoadingBox');
       const frame = document.getElementById('streamFrame');
+
+      // 1. إظهار صندوق الفحص التلقائي وإخفاء المشغلات مؤقتاً لمنع عرض أي شاشة خطأ
+      radarBox.style.display = 'flex';
+      mainContainer.style.display = 'none';
+      srvContainer.style.display = 'none';
+      radarBox.scrollIntoView({ behavior: 'smooth' });
+
+      // تفريغ المشغلات السابقة
       frame.src = "";
       if (video) { video.pause(); video.src = ""; }
       if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
@@ -732,14 +586,19 @@
       renderServersDeck();
 
       try {
+        // 2. طلب الفحص السحابي الحقيقي
         const res = await fetch(`${CLOUDFLARE_WORKER_BASE}/api/resolve?tmdb=${id}&type=${type}&s=${season}&e=${episode}`);
         const data = await res.json();
 
-        // 2. تشغيل البث المباشر (HLS) إذا كان متاحاً
+        radarBox.style.display = 'none';
+
+        // أ. إذا وجد بثاً مباشراً خاماً (HLS)
         if (data && data.success && data.directStreamUrl) {
+          mainContainer.style.display = 'block';
           iframeBox.style.display = 'none';
           srvContainer.style.display = 'none';
           directBox.style.display = 'block';
+          mainContainer.scrollIntoView({ behavior: 'smooth' });
 
           const proxiedUrl = `${CLOUDFLARE_WORKER_BASE}/api/proxy?url=${encodeURIComponent(data.directStreamUrl)}&referer=${encodeURIComponent(data.referer || 'https://vidlink.pro/')}`;
 
@@ -747,11 +606,9 @@
             hlsInstance = new Hls({ enableWorker: true, lowLatencyMode: true });
             hlsInstance.loadSource(proxiedUrl);
             hlsInstance.attachMedia(video);
-
             hlsInstance.on(Hls.Events.ERROR, (event, errData) => {
               if (errData.fatal) fallbackToEmbedServers(id, type, season, episode);
             });
-
             hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => { video.play().catch(() => {}); });
           } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
             video.src = proxiedUrl;
@@ -763,11 +620,13 @@
           return;
         }
 
-        // 3. تشغيل السيرفر المعتمد المستخرج من السحابة
+        // ب. إذا وجد سيرفر Embed يعمل ومؤكد خالٍ من الأخطاء
         if (data && data.success && data.workingServerUrl) {
+          mainContainer.style.display = 'block';
           directBox.style.display = 'none';
           iframeBox.style.display = 'block';
           srvContainer.style.display = 'flex';
+          mainContainer.scrollIntoView({ behavior: 'smooth' });
 
           frame.src = data.workingServerUrl;
 
@@ -782,19 +641,23 @@
         }
       } catch (err) {}
 
-      // 4. الانتقال للسيرفرات المدمجة مباشرة في حال فشل الاستخراج
+      // 3. في حال فشل الفحص، فتح المشغل بالسيرفر الشامل
+      radarBox.style.display = 'none';
       fallbackToEmbedServers(id, type, season, episode);
     }
 
     function fallbackToEmbedServers(id, type, season, episode) {
+      const mainContainer = document.getElementById('mainPlayerContainer');
       const directBox = document.getElementById('directPlayerBox');
       const iframeBox = document.getElementById('iframeBox');
       const srvContainer = document.getElementById('serversContainer');
 
+      mainContainer.style.display = 'block';
       directBox.style.display = 'none';
       iframeBox.style.display = 'block';
       srvContainer.style.display = 'flex';
-      
+      mainContainer.scrollIntoView({ behavior: 'smooth' });
+
       if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
 
       activeServerList = buildServersList(id, type, season, episode);
@@ -821,6 +684,7 @@
       if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
       document.getElementById('mainPlayerContainer').style.display = 'none';
       document.getElementById('serversContainer').style.display = 'none';
+      document.getElementById('radarLoadingBox').style.display = 'none';
     }
 
     function togglePinVisibility(inputId, iconElement) {
@@ -837,7 +701,7 @@
     function saveResumeList(list) { localStorage.setItem('user_resume_list', JSON.stringify(list)); }
 
     function recordResumeProgress(item, progressPercent = 35) {
-      if (!item.id || item.isCustom) return;
+      if (!item.id) return;
       let list = getResumeList().filter(i => String(i.id) !== String(item.id));
       list.unshift({ id: item.id, type: item.type, title: item.title, poster_path: item.poster_path, season: item.season || 1, episode: item.episode || 1, progress: progressPercent, time: Date.now() });
       if (list.length > 10) list.pop();
@@ -879,15 +743,9 @@
       return fp;
     }
 
-    function injectAdScriptsIfEligible() {
-      if (currentUser && (currentUser.isVip || currentUser.isAdmin || currentUser.adsDisabled)) return;
-      const popScript = document.createElement('script'); popScript.src = "https://pl31046353.profitableratecpmnetwork.com/61/4f/72/614f728ad484f449400870c3be110111.js"; document.head.appendChild(popScript);
-      const socialScript = document.createElement('script'); socialScript.src = "https://pl31046352.profitableratecpmnetwork.com/24/e2/59/24e259929d0a94f08f92e8373055a876.js"; document.body.appendChild(socialScript);
-    }
-
     async function initSite() {
-      applyTheme(currentTheme); applyLanguage(currentLang); await verifyUserStatus(); injectAdScriptsIfEligible(); logVisitor();
-      loadCustomMediaFromFirebase(); loadBannerAnnouncement(); loadResumeShelf(); initHeroRotation(); initSearchAutocomplete(); initInfiniteScroll(); initPlayerSkipTimer();
+      applyTheme(currentTheme); applyLanguage(currentLang); await verifyUserStatus();
+      loadResumeShelf(); initSearchAutocomplete(); initInfiniteScroll(); initPlayerSkipTimer();
       loadShelves(); TVController.init();
       window.addEventListener('hashchange', handleRouting); handleRouting();
     }
@@ -916,7 +774,6 @@
       else if (route === 'category') { showHomeView(); const cat = parts[2]; document.getElementById('defaultShelves').style.display = 'none'; if (cat === 'turkish') currentExploreEndpoint = '/discover/tv?with_original_language=tr&sort_by=popularity.desc'; else if (cat === 'korean') currentExploreEndpoint = '/discover/tv?with_original_language=ko&sort_by=popularity.desc'; else currentExploreEndpoint = `/discover/movie?with_genres=${cat}&sort_by=popularity.desc`; loadMoreExploreMedia(true); }
       else if (route === 'search') { const q = decodeURIComponent(parts[2] || ''); openSearchResultsPage(q); }
       else if (route === 'theater') { fetchMediaAndOpenTheater(parts[3], parts[2], parseInt(parts[4] || 1), parseInt(parts[5] || 1)); }
-      else if (route === 'admin') { openAdminModal(); }
     }
 
     function showHomeView() { document.getElementById('theaterView').style.display = 'none'; document.getElementById('searchResultsView').style.display = 'none'; document.getElementById('favoritesView').style.display = 'none'; document.getElementById('homeView').style.display = 'block'; }
@@ -992,25 +849,6 @@
       });
     }
 
-    async function initHeroRotation() {
-      try {
-        const res = await fetch(`${API_BASE}/trending/all/day?api_key=${API_KEY}&language=${currentLang}`);
-        const data = await res.json(); heroRotationItems = (data.results || []).filter(i => i.backdrop_path);
-        if (heroRotationItems.length > 0) {
-          renderHeroItem(heroRotationItems[0]); if (heroInterval) clearInterval(heroInterval);
-          heroInterval = setInterval(() => { heroRotationIndex = (heroRotationIndex + 1) % heroRotationItems.length; renderHeroItem(heroRotationItems[heroRotationIndex]); }, 8000);
-        }
-      } catch(e) {}
-    }
-
-    function renderHeroItem(item) {
-      const isMovie = (item.media_type === 'movie' || item.title);
-      document.getElementById('heroTitle').innerText = item.title || item.name;
-      document.getElementById('heroDesc').innerText = item.overview || "ONEBR TV";
-      document.getElementById('heroBanner').style.backgroundImage = `url('${BACKDROP_BASE + item.backdrop_path}')`;
-      document.getElementById('heroBtn').onclick = () => { location.hash = `#/theater/${isMovie ? 'movie' : 'tv'}/${item.id}`; };
-    }
-
     async function loadShelves() {
       loadShelfList('/trending/all/day', 'deckTrending');
       loadShelfList('/discover/tv?with_original_language=tr&sort_by=popularity.desc', 'deckTurkish', 'tv');
@@ -1018,8 +856,7 @@
     }
 
     async function loadShelfList(path, elemId, fixedType = null) {
-      try { const res = await fetch(`${API_BASE}${path}${path.includes('?') ? '&' : '?'}api_key=${API_KEY}&language=${currentLang}`); const json = await res.json(); renderCards(json.results || [], document.getElementById(elemId), fixedType); } catch (e) {}
-    }
+      try { const res = await fetch(`${API_BASE}${path}${path.includes('?') ? '&' : '?'}api_key=${API_KEY}&language=${currentLang}`); const json = await res.json(); renderCards(json.results || [], document.getElementById(elemId), fixedType); } catch (e) {} }
 
     function renderCards(list, container, fixedType) {
       if (!container) return;
@@ -1042,6 +879,7 @@
       document.getElementById('theaterView').style.display = 'block';
       document.getElementById('mainPlayerContainer').style.display = 'none';
       document.getElementById('serversContainer').style.display = 'none';
+      document.getElementById('radarLoadingBox').style.display = 'none';
       window.scrollTo(0, 0);
 
       const sNum = parseInt(season) || 1;
@@ -1066,55 +904,28 @@
       };
 
       try {
-        const res = await fetch(`${API_BASE}/${type}/${id}?api_key=${API_KEY}&language=${currentLang}&append_to_response=external_ids`);
+        const res = await fetch(`${API_BASE}/${type}/${id}?api_key=${API_KEY}&language=${currentLang}`);
         const data = await res.json();
-        
-        currentItem.title = data.title || data.name;
-        currentItem.origTitle = data.original_title || data.original_name || currentItem.title;
-        currentItem.poster_path = data.poster_path;
-        currentItem.origLang = data.original_language || '';
-        
-        const genreIds = (data.genres || []).map(g => g.id);
-        currentItem.isAnime = genreIds.includes(16) || currentItem.origLang === 'ja';
-        currentItem.isTurkish = currentItem.origLang === 'tr';
-        currentItem.isAsian = ['ko', 'zh'].includes(currentItem.origLang);
 
+        currentItem.title = data.title || data.name;
+        currentItem.poster_path = data.poster_path;
+        
         document.getElementById('detailTitle').innerText = currentItem.title;
         document.getElementById('detailOverview').innerText = data.overview || "مشاهدة ممتعة بأعلى جودة.";
         document.getElementById('detailScore').innerText = `⭐ ${data.vote_average ? data.vote_average.toFixed(1) : '8.0'}`;
         document.getElementById('detailYear').innerText = (data.release_date || data.first_air_date || '2026').substring(0, 4);
+        if (data.backdrop_path) document.getElementById('detailHeroBox').style.backgroundImage = `url('${BACKDROP_BASE + data.backdrop_path}')`;
 
-        if (data.backdrop_path) {
-          document.getElementById('detailHeroBox').style.backgroundImage = `url('${BACKDROP_BASE + data.backdrop_path}')`;
-        }
+        const genresBox = document.getElementById('detailGenres'); genresBox.innerHTML = '';
+        (data.genres || []).forEach(g => { const badge = document.createElement('span'); badge.className = 'badge-tag'; badge.innerText = g.name; genresBox.appendChild(badge); });
 
-        const genresBox = document.getElementById('detailGenres');
-        genresBox.innerHTML = '';
-        (data.genres || []).forEach(g => {
-          const badge = document.createElement('span');
-          badge.className = 'badge-tag';
-          badge.innerText = g.name;
-          genresBox.appendChild(badge);
-        });
+        const isFav = isItemFavorited(id); document.getElementById('btnToggleFav').classList.toggle('active-fav', isFav);
+        const watchedKey = type === 'movie' ? `movie_${id}` : `tv_${id}_s${sNum}_e${eNum}`; document.getElementById('btnToggleWatched').classList.toggle('active-watched', isItemWatched(watchedKey));
 
-        const isFav = isItemFavorited(id);
-        document.getElementById('btnToggleFav').classList.toggle('active-fav', isFav);
-
-        const watchedKey = type === 'movie' ? `movie_${id}` : `tv_${id}_s${sNum}_e${eNum}`;
-        document.getElementById('btnToggleWatched').classList.toggle('active-watched', isItemWatched(watchedKey));
-
-        if (type === 'tv') {
-          document.getElementById('episodesContainer').style.display = 'block';
-          renderTvSeasons(data.seasons || [], id);
-        } else {
-          document.getElementById('episodesContainer').style.display = 'none';
-        }
-
-        loadSimilarMedia(id, type);
+        if (type === 'tv') { document.getElementById('episodesContainer').style.display = 'block'; renderTvSeasons(data.seasons || [], id); }
+        else { document.getElementById('episodesContainer').style.display = 'none'; }
       } catch(e) {}
     }
-
-    async function loadSimilarMedia(id, type) { try { const res = await fetch(`${API_BASE}/${type}/${id}/similar?api_key=${API_KEY}&language=${currentLang}`); const data = await res.json(); const deck = document.getElementById('deckSimilar'); deck.innerHTML = ''; renderCards(data.results || [], deck, type); } catch(e) {} }
 
     function renderTvSeasons(seasons, tvId) {
       const seasonsList = document.getElementById('seasonsList'); seasonsList.innerHTML = '';
@@ -1151,50 +962,37 @@
     function initPlayerSkipTimer() { const video = document.getElementById('nativeVideo'); const skipBtn = document.getElementById('skipIntroBtn'); video.addEventListener('timeupdate', () => { if (video.currentTime > 2 && video.currentTime < 120) { skipBtn.style.display = 'block'; } else { skipBtn.style.display = 'none'; } }); }
     function skipIntro() { const video = document.getElementById('nativeVideo'); if (video) video.currentTime += 85; }
 
-    function playDirectMedia(title, streamUrl, poster) {
-      currentItem = { id: 'custom', type: 'custom', title, poster_path: poster, isCustom: true, directUrl: streamUrl };
-      document.getElementById('homeView').style.display = 'none'; document.getElementById('searchResultsView').style.display = 'none'; document.getElementById('favoritesView').style.display = 'none'; document.getElementById('theaterView').style.display = 'block'; document.getElementById('detailHeroBox').style.display = 'none'; document.getElementById('mainPlayerContainer').style.display = 'block'; document.getElementById('iframeBox').style.display = 'none'; document.getElementById('serversContainer').style.display = 'none'; document.getElementById('episodesContainer').style.display = 'none'; document.getElementById('directPlayerBox').style.display = 'block'; window.scrollTo(0, 0);
-      const video = document.getElementById('nativeVideo'); const proxiedUrl = `${CLOUDFLARE_WORKER_BASE}/api/proxy?url=${encodeURIComponent(streamUrl)}`;
-      if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
-      if (streamUrl.includes('.m3u8')) { if (Hls.isSupported()) { hlsInstance = new Hls(); hlsInstance.loadSource(proxiedUrl); hlsInstance.attachMedia(video); hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => video.play().catch(()=>{})); } else if (video.canPlayType('application/vnd.apple.mpegurl')) { video.src = proxiedUrl; video.play().catch(()=>{}); } } else { video.src = proxiedUrl; video.play().catch(()=>{}); }
+    function openAuthModal() {
+      if (currentUser) {
+        document.getElementById('loginFormBox').style.display = 'none';
+        document.getElementById('authProfile').style.display = 'block';
+        document.getElementById('profileEmail').innerText = currentUser.email;
+      } else {
+        document.getElementById('loginFormBox').style.display = 'block';
+        document.getElementById('authProfile').style.display = 'none';
+      }
+      document.getElementById('authModal').style.display = 'flex';
     }
 
-    function switchAuthView(view) { document.getElementById('loginFormBox').style.display = view === 'login' ? 'block' : 'none'; document.getElementById('registerFormBox').style.display = view === 'register' ? 'block' : 'none'; document.getElementById('forgotFormBox').style.display = view === 'forgot' ? 'block' : 'none'; document.getElementById('otpVerifyBox').style.display = view === 'otp' ? 'block' : 'none'; document.getElementById('resetPassFormBox').style.display = view === 'reset' ? 'block' : 'none'; document.getElementById('authProfile').style.display = view === 'profile' ? 'block' : 'none'; }
-    async function handleLoginSubmit() { const email = document.getElementById('loginEmail').value.trim().toLowerCase(); const pass = document.getElementById('loginPass').value.trim(); const isBanned = await checkUserBanned(email); if (isBanned) return alert('هذا الحساب محظور من استخدام المنصة!'); if (email === SUPER_ADMIN_EMAIL.toLowerCase() && pass === SUPER_ADMIN_PASS) { currentUser = { email, isAdmin: true, isVip: true, adsDisabled: true }; localStorage.setItem('cinema_user', JSON.stringify(currentUser)); closeModal('authModal'); verifyUserStatus(); return; } const key = email.replace(/[^a-zA-Z0-9]/g, '_'); try { const res = await fetch(`${FIREBASE_DB}/users/${key}.json`); const user = await res.json(); if (user && user.pass === pass) { currentUser = { email, isAdmin: false, isVip: user.isVip || false, adsDisabled: user.adsDisabled || false }; localStorage.setItem('cinema_user', JSON.stringify(currentUser)); closeModal('authModal'); verifyUserStatus(); location.reload(); } else { alert('بيانات الدخول غير صحيحة!'); } } catch(e) { alert('تعذر تسجيل الدخول، يرجى المحاولة لاحقاً'); } }
-    async function handleRegisterSubmit() { const email = document.getElementById('regEmail').value.trim().toLowerCase(); const pass = document.getElementById('regPass').value.trim(); if (!email || pass.length < 6) return alert('يرجى إدخال بريد صحيح ورمز من 6 خانات على الأقل'); const key = email.replace(/[^a-zA-Z0-9]/g, '_'); await fetch(`${FIREBASE_DB}/users/${key}.json`, { method: 'PUT', body: JSON.stringify({ email, pass, created: new Date().toLocaleString('ar-EG'), isVip: false, adsDisabled: false }) }); alert('تم إنشاء الحساب بنجاح! يمكنك الآن تسجيل الدخول.'); switchAuthView('login'); }
-    async function sendVerificationCode() { const email = document.getElementById('forgotEmail').value.trim().toLowerCase(); if (!email) return alert('يرجى كتابة البريد الإلكتروني المسجل أولاً.'); const key = email.replace(/[^a-zA-Z0-9]/g, '_'); try { const res = await fetch(`${FIREBASE_DB}/users/${key}.json`); const user = await res.json(); if (user) { verifyingForgotEmailAddress = email; generatedOtp = Math.floor(100000 + Math.random() * 900000).toString(); alert(`[محاكاة نظام البريد 📧]\nتم إرسال رسالة إلى بريدك الإلكتروني.\nرمز التحقق الخاص بك هو: ${generatedOtp}`); switchAuthView('otp'); } else { alert('هذا البريد غير مسجل في النظام لدينا!'); } } catch(e) { alert('تعذر الاتصال بالخادم، يرجى المحاولة لاحقاً.'); } }
-    function verifyOtpCode() { const inputOtp = document.getElementById('otpInput').value.trim(); if (inputOtp === generatedOtp) { document.getElementById('resetTargetEmail').innerText = `إعادة تعيين كود الدخول للحساب: ${verifyingForgotEmailAddress}`; switchAuthView('reset'); } else { alert('رمز التحقق غير صحيح! يرجى التأكد من الأرقام والمحاولة مجدداً.'); } }
-    async function applyNewPassword() { const newPass = document.getElementById('newResetPass').value.trim(); if (!newPass || newPass.length < 6) return alert('يرجى إدخال كود جديد من 6 خانات على الأقل'); const key = verifyingForgotEmailAddress.replace(/[^a-zA-Z0-9]/g, '_'); try { await fetch(`${FIREBASE_DB}/users/${key}/pass.json`, { method: 'PUT', body: JSON.stringify(newPass) }); alert('تم تحديث كود الدخول بنجاح! يمكنك تسجيل الدخول الآن.'); document.getElementById('newResetPass').value = ''; switchAuthView('login'); } catch(e) { alert('حدث خطأ أثناء تحديث كود الدخول'); } }
-    async function verifyUserStatus() { const guestBtn = document.getElementById('guestAuthBtn'); const avatarBtn = document.getElementById('userAvatarBtn'); const avatarImg = document.getElementById('userAvatarImg'); if (!currentUser) { guestBtn.style.display = 'flex'; avatarBtn.style.display = 'none'; return; } guestBtn.style.display = 'none'; avatarBtn.style.display = 'flex'; const avatarSrc = getAvatarUrl(currentUser.email); avatarImg.src = avatarSrc; document.getElementById('profileAvatarBig').src = avatarSrc; let isAdmin = (currentUser.email.toLowerCase() === SUPER_ADMIN_EMAIL.toLowerCase()); currentUser.isAdmin = isAdmin; if (isAdmin) document.getElementById('adminDrawerLink').style.display = 'flex'; const isVip = (currentUser.isVip || currentUser.isAdmin); if (isVip) { avatarBtn.classList.add('vip-active'); document.getElementById('drawerVipReqLink').style.display = 'flex'; document.getElementById('profileGlowBadge').style.display = 'inline-flex'; document.getElementById('profileVipReqBtn').style.display = 'block'; } else { avatarBtn.classList.remove('vip-active'); document.getElementById('drawerVipReqLink').style.display = 'none'; document.getElementById('profileGlowBadge').style.display = 'none'; document.getElementById('profileVipReqBtn').style.display = 'none'; } }
-    function logoutUser() { currentUser = null; localStorage.removeItem('cinema_user'); closeModal('authModal'); location.reload(); }
-    function openVipModal() { document.getElementById('vipModal').style.display = 'flex'; }
-    function openRequestMediaModal() { if (!currentUser || (!currentUser.isVip && !currentUser.isAdmin)) { openVipModal(); return; } document.getElementById('requestMediaModal').style.display = 'flex'; }
-    async function submitVipMediaRequest() { const title = document.getElementById('reqMediaTitle').value.trim(); const notes = document.getElementById('reqMediaNotes').value.trim(); if (!title) return alert('يرجى كتابة اسم العمل المطلوب'); const reqData = { title, notes: notes || '-', user: currentUser.email, time: new Date().toLocaleString('ar-EG') }; try { await fetch(`${FIREBASE_DB}/vip_requests.json`, { method: 'POST', body: JSON.stringify(reqData) }); alert('تم إرسال طلبك للإدارة بنجاح! سيتم توفير العمل في أقرب وقت.'); document.getElementById('reqMediaTitle').value = ''; document.getElementById('reqMediaNotes').value = ''; closeModal('requestMediaModal'); } catch(e) { alert('تعذر إرسال الطلب، يرجى المحاولة لاحقاً'); } }
-    function openAuthModal() { if (currentUser) { switchAuthView('profile'); document.getElementById('profileEmail').innerText = currentUser.email; document.getElementById('profileRoleBadge').innerText = currentUser.isAdmin ? '⭐ مشرف النظام (Super Admin)' : (currentUser.isVip ? '👑 عضو مميز (VIP)' : 'عضو مسجل (Free Member)'); document.getElementById('profileAdsStatusBadge').innerText = (currentUser.isVip || currentUser.isAdmin || currentUser.adsDisabled) ? '🛡️ حالة الإعلانات: معطلة بالكامل' : '📢 حالة الإعلانات: مفعّلة'; } else { switchAuthView('login'); } document.getElementById('authModal').style.display = 'flex'; }
-    function openAdminModal() { if (!currentUser || !currentUser.isAdmin) { alert('غير مصرح لك بالدخول!'); location.hash = '#/home'; return; } document.getElementById('adminModal').style.display = 'flex'; loadAdminDashboard(); }
     function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-    function switchAdminTab(tab, btn) { document.querySelectorAll('.admin-nav-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); document.getElementById('tabUsersManage').style.display = tab === 'usersManage' ? 'block' : 'none'; document.getElementById('tabVipRequests').style.display = tab === 'vipRequests' ? 'block' : 'none'; document.getElementById('tabVisitors').style.display = tab === 'visitors' ? 'block' : 'none'; document.getElementById('tabMediaManage').style.display = tab === 'mediaManage' ? 'block' : 'none'; document.getElementById('tabAddMedia').style.display = tab === 'addMedia' ? 'block' : 'none'; document.getElementById('tabBanManage').style.display = tab === 'banManage' ? 'block' : 'none'; document.getElementById('tabBanner').style.display = tab === 'banner' ? 'block' : 'none'; if (tab === 'usersManage') loadAdminUsersTable(); if (tab === 'vipRequests') loadAdminVipRequestsTable(); if (tab === 'visitors') loadAdminVisitors(); if (tab === 'mediaManage') loadAdminMediaTable(); if (tab === 'banManage') loadBannedUsersTable(); }
-    async function loadAdminDashboard() { loadAdminStats(); loadAdminUsersTable(); }
-    async function loadAdminStats() { try { const [visRes, usersRes, mediaRes, banRes, reqRes] = await Promise.all([ fetch(`${FIREBASE_DB}/visitors.json`), fetch(`${FIREBASE_DB}/users.json`), fetch(`${FIREBASE_DB}/series.json`), fetch(`${FIREBASE_DB}/banned_users.json`), fetch(`${FIREBASE_DB}/vip_requests.json`) ]); const visData = await visRes.json(); const usersData = await usersRes.json(); const mediaData = await mediaRes.json(); const banData = await banRes.json(); const reqData = await reqRes.json(); document.getElementById('statVisitorsCount').innerText = visData ? Object.keys(visData).length : '0'; document.getElementById('statUsersCount').innerText = usersData ? Object.keys(usersData).length : '0'; document.getElementById('statMediaCount').innerText = mediaData ? Object.keys(mediaData).length : '0'; document.getElementById('statBannedCount').innerText = banData ? Object.keys(banData).length : '0'; document.getElementById('statRequestsCount').innerText = reqData ? Object.keys(reqData).length : '0'; } catch(e) {} }
-    async function loadAdminUsersTable() { try { const res = await fetch(`${FIREBASE_DB}/users.json`); const data = await res.json(); const tbody = document.getElementById('adminUsersTableBody'); tbody.innerHTML = ""; if (data) { Object.keys(data).forEach(k => { const u = data[k]; const av = getAvatarUrl(u.email); const adsDisabled = !!u.adsDisabled; const isVip = !!u.isVip; const row = document.createElement('tr'); row.innerHTML = `<td><img class="user-table-avatar" src="${av}"></td><td><strong>${u.email}</strong></td><td><span style="color:${isVip ? 'var(--gold)' : 'var(--text-muted)'}; font-weight:800;">${isVip ? 'VIP 👑' : 'عادي'}</span></td><td><span style="color:${adsDisabled ? '#10b981' : '#f59e0b'}; font-weight:700;">${adsDisabled ? '🚫 معطلة' : '📢 مفعلة'}</span></td><td><div style="display:flex; gap:4px; flex-wrap:wrap;"><button class="btn-table-vip" onclick="toggleVipStatus('${k}', ${!isVip})">${isVip ? 'إلغاء VIP' : 'ترقية VIP'}</button><button class="btn-table-ads" onclick="toggleUserAdsExemption('${k}', ${!adsDisabled})">${adsDisabled ? 'تفعيل الإعلانات' : 'إلغاء الإعلانات'}</button><button class="btn-table-del" onclick="deleteUserAccount('${k}')">حذف</button></div></td>`; tbody.appendChild(row); }); } } catch(e) {} }
-    async function loadAdminVipRequestsTable() { try { const res = await fetch(`${FIREBASE_DB}/vip_requests.json`); const data = await res.json(); const tbody = document.getElementById('adminVipRequestsTableBody'); tbody.innerHTML = ""; if (data) { Object.keys(data).reverse().forEach(k => { const req = data[k]; const row = document.createElement('tr'); row.innerHTML = `<td><strong>${req.title}</strong></td><td>${req.notes}</td><td>${req.user}</td><td><button class="btn-table-del" onclick="deleteVipRequest('${k}')">تم الإنجاز / حذف</button></td>`; tbody.appendChild(row); }); } } catch(e) {} }
-    async function deleteVipRequest(key) { await fetch(`${FIREBASE_DB}/vip_requests/${key}.json`, { method: 'DELETE' }); loadAdminVipRequestsTable(); loadAdminStats(); }
-    async function toggleUserAdsExemption(key, disableState) { await fetch(`${FIREBASE_DB}/users/${key}/adsDisabled.json`, { method: 'PUT', body: JSON.stringify(disableState) }); loadAdminUsersTable(); }
-    async function toggleVipStatus(key, newStatus) { await fetch(`${FIREBASE_DB}/users/${key}/isVip.json`, { method: 'PUT', body: JSON.stringify(newStatus) }); loadAdminUsersTable(); loadAdminStats(); }
-    async function deleteUserAccount(key) { if (!confirm('هل أنت متأكد من حذف هذا الحساب نهائياً؟')) return; await fetch(`${FIREBASE_DB}/users/${key}.json`, { method: 'DELETE' }); loadAdminUsersTable(); loadAdminStats(); }
-    async function logVisitor() { try { const fp = getVisitorFingerprint(); const visitorData = { fingerprint: fp, time: new Date().toLocaleString('ar-EG'), agent: navigator.userAgent.substring(0, 32), user: currentUser ? currentUser.email : "Guest" }; await fetch(`${FIREBASE_DB}/visitors.json`, { method: 'POST', body: JSON.stringify(visitorData) }); } catch(e) {} }
-    async function loadAdminVisitors() { try { const res = await fetch(`${FIREBASE_DB}/visitors.json`); const data = await res.json(); const tbody = document.getElementById('visitorsTableBody'); tbody.innerHTML = ""; if (data) { Object.keys(data).slice(-20).reverse().forEach(k => { const v = data[k]; const row = document.createElement('tr'); row.innerHTML = `<td><span class="fingerprint-badge">${v.fingerprint || 'OLD-VISITOR'}</span></td><td>${v.time}</td><td>${v.agent}</td><td><strong>${v.user}</strong></td>`; tbody.appendChild(row); }); } } catch(e) {} }
-    async function saveCustomMedia() { const title = document.getElementById('customTitle').value.trim(); const poster = document.getElementById('customPoster').value.trim(); const url = document.getElementById('customStreamUrl').value.trim(); if (!title || !url) return alert('يرجى ملء الحقول المطلوبة'); const id = title.replace(/[^a-zA-Z0-9_\u0600-\u06FF]/g, '_').toLowerCase(); await fetch(`${FIREBASE_DB}/series/${id}.json`, { method: 'PUT', body: JSON.stringify({ id, title, poster: poster || "https://image.tmdb.org/t/p/w500/mXk9kEw9u5dF72Tsk4O9Jt0rGgG.jpg", url }) }); alert('تم نشر العمل!'); loadCustomMediaFromFirebase(); loadAdminMediaTable(); loadAdminStats(); }
-    async function loadAdminMediaTable() { try { const res = await fetch(`${FIREBASE_DB}/series.json`); const data = await res.json(); const tbody = document.getElementById('adminMediaTableBody'); tbody.innerHTML = ""; if (data) { Object.keys(data).forEach(k => { const item = data[k]; const row = document.createElement('tr'); row.innerHTML = `<td>${item.title}</td><td style="max-width:140px; overflow:hidden; text-overflow:ellipsis;">${item.url}</td><td><button class="btn-table-del" onclick="deleteCustomMedia('${k}')">حذف</button></td>`; tbody.appendChild(row); }); } } catch(e) {} }
-    async function deleteCustomMedia(key) { if (!confirm('هل أنت متأكد من حذف هذا العمل؟')) return; await fetch(`${FIREBASE_DB}/series/${key}.json`, { method: 'DELETE' }); loadCustomMediaFromFirebase(); loadAdminMediaTable(); loadAdminStats(); }
-    async function loadCustomMediaFromFirebase() { try { const res = await fetch(`${FIREBASE_DB}/series.json`); const data = await res.json(); const deck = document.getElementById('deckCustom'); if (data && Object.keys(data).length > 0) { deck.innerHTML = ""; document.getElementById('customShelfBox').style.display = 'block'; Object.keys(data).forEach(key => { const item = data[key]; const card = document.createElement('div'); card.className = 'card'; card.onclick = () => playDirectMedia(item.title, item.url, item.poster); card.innerHTML = `<img src="${item.poster}" loading="lazy"><div class="card-body"><div class="card-title">${item.title}</div><div class="card-meta"><span>Direct</span><span class="rating">⭐ VIP</span></div></div>`; deck.appendChild(card); }); } else { document.getElementById('customShelfBox').style.display = 'none'; } } catch (e) {} }
-    async function checkUserBanned(email) { try { const key = email.replace(/[^a-zA-Z0-9]/g, '_'); const res = await fetch(`${FIREBASE_DB}/banned_users/${key}.json`); return await res.json(); } catch(e) { return false; } }
-    async function banUserAction() { const email = document.getElementById('banUserEmail').value.trim().toLowerCase(); if (!email) return alert('أدخل بريد المستخدم'); const key = email.replace(/[^a-zA-Z0-9]/g, '_'); await fetch(`${FIREBASE_DB}/banned_users/${key}.json`, { method: 'PUT', body: JSON.stringify({ email, time: new Date().toLocaleString('ar-EG') }) }); alert('تم حظر المستخدم بنجاح!'); document.getElementById('banUserEmail').value = ''; loadBannedUsersTable(); loadAdminStats(); }
-    async function loadBannedUsersTable() { try { const res = await fetch(`${FIREBASE_DB}/banned_users.json`); const data = await res.json(); const tbody = document.getElementById('bannedUsersTableBody'); tbody.innerHTML = ""; if (data) { Object.keys(data).forEach(k => { const row = document.createElement('tr'); row.innerHTML = `<td>${data[k].email}</td><td><button class="btn-table-del" onclick="unbanUser('${k}')">فك الحظر</button></td>`; tbody.appendChild(row); }); } } catch(e) {} }
-    async function unbanUser(key) { await fetch(`${FIREBASE_DB}/banned_users/${key}.json`, { method: 'DELETE' }); loadBannedUsersTable(); loadAdminStats(); }
-    async function loadBannerAnnouncement() { try { const res = await fetch(`${FIREBASE_DB}/settings/banner.json`); const text = await res.json(); const banner = document.getElementById('announcementBanner'); if (text) { banner.innerText = text; banner.style.display = 'block'; } } catch (e) {} }
-    async function saveBannerAnnouncement() { const text = document.getElementById('adminBannerText').value.trim(); if (!text) return; await fetch(`${FIREBASE_DB}/settings/banner.json`, { method: 'PUT', body: JSON.stringify(text) }); loadBannerAnnouncement(); }
-    async function removeBannerAnnouncement() { await fetch(`${FIREBASE_DB}/settings/banner.json`, { method: 'DELETE' }); document.getElementById('announcementBanner').style.display = 'none'; }
+    function handleLoginSubmit() {
+      const email = document.getElementById('loginEmail').value.trim();
+      if (!email) return alert('أدخل البريد');
+      currentUser = { email };
+      localStorage.setItem('cinema_user', JSON.stringify(currentUser));
+      closeModal('authModal');
+      location.reload();
+    }
+    function logoutUser() { currentUser = null; localStorage.removeItem('cinema_user'); location.reload(); }
+    async function verifyUserStatus() {
+      if (currentUser) {
+        document.getElementById('guestAuthBtn').style.display = 'none';
+        document.getElementById('userAvatarBtn').style.display = 'flex';
+        const av = `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(currentUser.email)}`;
+        document.getElementById('userAvatarImg').src = av;
+        document.getElementById('profileAvatarBig').src = av;
+      }
+    }
 
     initSite();
   </script>
