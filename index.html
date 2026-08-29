@@ -48,7 +48,14 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
     body { background-color: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; transition: background-color 0.3s, color 0.3s; }
 
-    :focus-visible, .tv-active-focus { outline: 3px solid var(--cyan) !important; box-shadow: 0 0 16px rgba(0, 240, 255, 0.8) !important; transform: scale(1.04) !important; z-index: 99 !important; }
+    :focus-visible, .tv-active-focus {
+      outline: 3px solid var(--cyan) !important;
+      box-shadow: 0 0 16px rgba(0, 240, 255, 0.8) !important;
+      transform: scale(1.04) !important;
+      transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+      z-index: 99 !important;
+    }
+
     .masked-pin { -webkit-text-security: disc; }
     .toggle-eye { position: absolute; left: 12px; top: 36px; color: var(--text-muted); cursor: pointer; font-size: 1.1rem; }
     html[dir="ltr"] .toggle-eye { left: auto; right: 12px; }
@@ -354,6 +361,7 @@
     </div>
   </div>
 
+  <!-- شاشة المشغل وتفاصيل العمل -->
   <div id="theaterView">
     <button class="back-btn" onclick="history.back()"><i class="fa-solid fa-arrow-right"></i> <span>العودة</span></button>
     
@@ -378,7 +386,7 @@
       </div>
     </div>
 
-    <!-- شريط السيرفرات السريع المباشر (بنقرة واحدة) -->
+    <!-- شريط السيرفرات السريع المباشر -->
     <div id="serversContainer" style="display:none; flex-direction:column; margin-bottom:10px;">
       <div style="font-size:0.75rem; color:var(--text-muted); font-weight:800; margin-bottom:6px;">
         📺 إذا ظهرت شاشة خطأ أو توقف البث، اختر سيرفراً آخر من هنا مباشرة:
@@ -615,18 +623,69 @@
     let verifyingForgotEmailAddress = '';
     let generatedOtp = '';
 
-    // قائمة السيرفرات الكاملة والشاملة
+    // محرك التحكم بالريموت والتنقل لشاشات التلفزيون
+    const TVController = {
+      focusables: 'a, button, input, .card, .genre-box, .season-btn, .ep-btn, [tabindex="0"]',
+      init() { document.addEventListener('keydown', this.handleKey.bind(this)); },
+      handleKey(e) {
+        const key = e.key;
+        const focusable = Array.from(document.querySelectorAll(this.focusables)).filter(el => el.offsetParent !== null && !el.disabled);
+        let activeIndex = focusable.indexOf(document.activeElement);
+
+        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(key)) {
+          e.preventDefault();
+          if (activeIndex === -1) { if (focusable.length > 0) focusable[0].focus(); return; }
+          const rect = focusable[activeIndex].getBoundingClientRect();
+          let bestIndex = -1;
+          let minDistance = Infinity;
+
+          focusable.forEach((target, i) => {
+            if (i === activeIndex) return;
+            const targetRect = target.getBoundingClientRect();
+            const dx = (targetRect.left + targetRect.width / 2) - (rect.left + rect.width / 2);
+            const dy = (targetRect.top + targetRect.height / 2) - (rect.top + rect.height / 2);
+            let isValid = false;
+            if (key === 'ArrowRight' && dx > 10 && Math.abs(dy) < Math.abs(dx)) isValid = true;
+            if (key === 'ArrowLeft' && dx < -10 && Math.abs(dy) < Math.abs(dx)) isValid = true;
+            if (key === 'ArrowDown' && dy > 10 && Math.abs(dx) < Math.abs(dy)) isValid = true;
+            if (key === 'ArrowUp' && dy < -10 && Math.abs(dx) < Math.abs(dy)) isValid = true;
+
+            if (isValid) {
+              const distance = Math.hypot(dx, dy);
+              if (distance < minDistance) { minDistance = distance; bestIndex = i; }
+            }
+          });
+          if (bestIndex !== -1) { focusable[bestIndex].focus(); focusable[bestIndex].scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' }); }
+        } else if (key === 'Enter') {
+          if (document.activeElement && typeof document.activeElement.click === 'function') document.activeElement.click();
+        } else if (key === 'Escape' || key === 'Back' || key === 'GoBack') {
+          if (window.location.hash !== '#/home') window.history.back();
+        }
+      }
+    };
+
+    const SubtitleManager = {
+      injectTrack(vttUrl, label = "العربية") {
+        const video = document.getElementById('nativeVideo');
+        Array.from(video.querySelectorAll('track')).forEach(t => t.remove());
+        const track = document.createElement('track');
+        track.kind = 'subtitles'; track.label = label; track.srclang = 'ar'; track.src = vttUrl; track.default = true;
+        video.appendChild(track);
+        if (video.textTracks && video.textTracks[0]) video.textTracks[0].mode = 'showing';
+      }
+    };
+
+    // القائمة العالمية للسيرفرات المعتمدة
     function buildServersList(id, type, s, e) {
       const isMov = (type === 'movie');
       return [
         { name: "سيرفر 1 (VidLink Pro)", url: isMov ? `https://vidlink.pro/movie/${id}?primaryColor=e50914` : `https://vidlink.pro/tv/${id}/${s}/${e}?primaryColor=e50914` },
-        { name: "سيرفر 2 (MultiEmbed - تركي وآسيوي)", url: isMov ? `https://multiembed.mov/?video_id=${id}&tmdb=1` : `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}` },
-        { name: "سيرفر 3 (Embed.su)", url: isMov ? `https://embed.su/embed/movie/${id}` : `https://embed.su/embed/tv/${id}/${s}/${e}` },
+        { name: "سيرفر 2 (Embed.su)", url: isMov ? `https://embed.su/embed/movie/${id}` : `https://embed.su/embed/tv/${id}/${s}/${e}` },
+        { name: "سيرفر 3 (MultiEmbed)", url: isMov ? `https://multiembed.mov/?video_id=${id}&tmdb=1` : `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}` },
         { name: "سيرفر 4 (VidSrc.cc)", url: isMov ? `https://vidsrc.cc/v2/embed/movie/${id}` : `https://vidsrc.cc/v2/embed/tv/${id}/${s}/${e}` },
-        { name: "سيرفر 5 (2Embed VIP)", url: isMov ? `https://www.2embed.cc/embed/${id}` : `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}` },
-        { name: "سيرفر 6 (NontonGo)", url: isMov ? `https://www.nontongo.win/embed/movie/${id}` : `https://www.nontongo.win/embed/tv/${id}/${s}/${e}` },
-        { name: "سيرفر 7 (SmashyStream)", url: isMov ? `https://embed.smashystream.com/playere.php?tmdb=${id}` : `https://embed.smashystream.com/playere.php?tmdb=${id}&season=${s}&episode=${e}` },
-        { name: "سيرفر 8 (VidSrc.to)", url: isMov ? `https://vidsrc.to/embed/movie/${id}` : `https://vidsrc.to/embed/tv/${id}/${s}/${e}` }
+        { name: "سيرفر 5 (NontonGo)", url: isMov ? `https://www.nontongo.win/embed/movie/${id}` : `https://www.nontongo.win/embed/tv/${id}/${s}/${e}` },
+        { name: "سيرفر 6 (2Embed)", url: isMov ? `https://www.2embed.cc/embed/${id}` : `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}` },
+        { name: "سيرفر 7 (SmashyStream)", url: isMov ? `https://embed.smashystream.com/playere.php?tmdb=${id}` : `https://embed.smashystream.com/playere.php?tmdb=${id}&season=${s}&episode=${e}` }
       ];
     }
 
@@ -660,11 +719,11 @@
       mainContainer.style.display = 'block';
       mainContainer.scrollIntoView({ behavior: 'smooth' });
 
-      // محاولة استخراج البث المباشر أولاً
       try {
         const res = await fetch(`${CLOUDFLARE_WORKER_BASE}/api/resolve?tmdb=${id}&type=${type}&s=${season}&e=${episode}`);
         const data = await res.json();
 
+        // 1. إذا توفر البث المباشر (HLS)
         if (data && data.success && data.directStreamUrl) {
           iframeBox.style.display = 'none';
           srvContainer.style.display = 'none';
@@ -673,32 +732,55 @@
           const proxiedUrl = `${CLOUDFLARE_WORKER_BASE}/api/proxy?url=${encodeURIComponent(data.directStreamUrl)}`;
 
           if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
+
           if (Hls.isSupported()) {
             hlsInstance = new Hls({ enableWorker: true, lowLatencyMode: true });
             hlsInstance.loadSource(proxiedUrl);
             hlsInstance.attachMedia(video);
+            
+            // خطة الطوارئ: التبديل في حال وجود أخطاء في التشفير
+            hlsInstance.on(Hls.Events.ERROR, function(event, data) {
+              if (data.fatal) {
+                fallbackToEmbedServers(id, type, season, episode);
+              }
+            });
+
             hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => { video.play().catch(() => {}); });
           } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
             video.src = proxiedUrl;
             video.play().catch(() => {});
           }
 
+          loadAutoSubtitles(id, type, season, episode);
           recordResumeProgress(currentItem, 25);
           return;
         }
       } catch (err) {}
 
-      // المشغل المباشر مع شريط التبديل السريع
-      directBox.style.display = 'none';
-      iframeBox.style.display = 'block';
-      srvContainer.style.display = 'flex';
+      // 2. إذا فشل البث المباشر، ينتقل للسيرفرات المدمجة مباشرة
+      fallbackToEmbedServers(id, type, season, episode);
+    }
+
+    function fallbackToEmbedServers(id, type, season, episode) {
+      document.getElementById('directPlayerBox').style.display = 'none';
+      document.getElementById('iframeBox').style.display = 'block';
+      document.getElementById('serversContainer').style.display = 'flex';
+      
+      if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
 
       activeServerList = buildServersList(id, type, season, episode);
       currentServerIndex = 0;
       renderServersDeck();
       selectServerByIndex(0);
-
       recordResumeProgress(currentItem, 20);
+    }
+
+    async function loadAutoSubtitles(tmdb, type, s, e) {
+      try {
+        const res = await fetch(`${CLOUDFLARE_WORKER_BASE}/api/subtitles?tmdb=${tmdb}&type=${type}&s=${s}&e=${e}`);
+        const subs = await res.json();
+        if (subs && subs.length > 0) SubtitleManager.injectTrack(subs[0].url, subs[0].label);
+      } catch (e) {}
     }
 
     function stopPlayer() {
@@ -711,7 +793,6 @@
       document.getElementById('serversContainer').style.display = 'none';
     }
 
-    // إدارة الحسابات، النوافذ، ولوحة الأدمن
     function togglePinVisibility(inputId, iconElement) {
       const input = document.getElementById(inputId);
       if (input.classList.contains('masked-pin')) { input.classList.remove('masked-pin'); iconElement.classList.remove('fa-eye-slash'); iconElement.classList.add('fa-eye'); }
@@ -726,7 +807,7 @@
     function saveResumeList(list) { localStorage.setItem('user_resume_list', JSON.stringify(list)); }
 
     function recordResumeProgress(item, progressPercent = 35) {
-      if (!item.id) return;
+      if (!item.id || item.isCustom) return;
       let list = getResumeList().filter(i => String(i.id) !== String(item.id));
       list.unshift({ id: item.id, type: item.type, title: item.title, poster_path: item.poster_path, season: item.season || 1, episode: item.episode || 1, progress: progressPercent, time: Date.now() });
       if (list.length > 10) list.pop();
@@ -777,7 +858,7 @@
     async function initSite() {
       applyTheme(currentTheme); applyLanguage(currentLang); await verifyUserStatus(); injectAdScriptsIfEligible(); logVisitor();
       loadCustomMediaFromFirebase(); loadBannerAnnouncement(); loadResumeShelf(); initHeroRotation(); initSearchAutocomplete(); initInfiniteScroll(); initPlayerSkipTimer();
-      loadShelves();
+      loadShelves(); TVController.init();
       window.addEventListener('hashchange', handleRouting); handleRouting();
     }
 
@@ -928,12 +1009,22 @@
       document.getElementById('homeView').style.display = 'none'; document.getElementById('searchResultsView').style.display = 'none'; document.getElementById('favoritesView').style.display = 'none'; document.getElementById('theaterView').style.display = 'block';
       document.getElementById('mainPlayerContainer').style.display = 'none'; document.getElementById('serversContainer').style.display = 'none'; window.scrollTo(0, 0);
 
-      try {
-        const res = await fetch(`${API_BASE}/${type}/${id}?api_key=${API_KEY}&language=${currentLang}`);
-        const data = await res.json();
+      currentItem = { id, imdb_id: '', title: '', origTitle: '', slug: '', origLang: '', isAnime: false, isAsian: false, isTurkish: false, type, poster_path: '', season, episode, isCustom: false, directUrl: '' };
 
-        currentItem = { id, title: data.title || data.name, type, poster_path: data.poster_path, season, episode };
+      try {
+        const res = await fetch(`${API_BASE}/${type}/${id}?api_key=${API_KEY}&language=${currentLang}&append_to_response=external_ids`);
+        const data = await res.json();
         
+        currentItem.title = data.title || data.name;
+        currentItem.origTitle = data.original_title || data.original_name || currentItem.title;
+        currentItem.poster_path = data.poster_path;
+        currentItem.origLang = data.original_language || '';
+        
+        const genreIds = (data.genres || []).map(g => g.id);
+        currentItem.isAnime = genreIds.includes(16) || currentItem.origLang === 'ja';
+        currentItem.isTurkish = currentItem.origLang === 'tr';
+        currentItem.isAsian = ['ko', 'zh'].includes(currentItem.origLang);
+
         document.getElementById('detailTitle').innerText = currentItem.title;
         document.getElementById('detailOverview').innerText = data.overview || "مشاهدة ممتعة بأعلى جودة.";
         document.getElementById('detailScore').innerText = `⭐ ${data.vote_average ? data.vote_average.toFixed(1) : '8.0'}`;
