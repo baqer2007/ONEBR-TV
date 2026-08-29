@@ -5,10 +5,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-  <!-- وسوم تهيئة محركات البحث (SEO) -->
-  <title>ONEBR TV | مشاهدة وتحميل أحدث الأفلام والمسلسلات</title>
-  <meta name="description" content="منصة ONEBR TV لمشاهدة أحدث الأفلام والمسلسلات بجودة عالية وسيرفرات سريعة. تصفح مكتبة الترفيه الشاملة الآن مجاناً.">
-  <meta name="keywords" content="أفلام, مسلسلات, مشاهدة اونلاين, سينما, ONEBR TV">
+  <!-- وسوم تهيئة محركات البحث (SEO) 🔍 -->
+  <title>ONEBR TV | مشاهدة وتحميل أحدث الأفلام والمسلسلات والأنمي</title>
+  <meta name="description" content="منصة ONEBR TV لمشاهدة أحدث الأفلام، المسلسلات، الأنمي، والدراما الآسيوية بجودة عالية وبدون إعلانات مزعجة.">
+  <meta name="keywords" content="أفلام, مسلسلات, أنمي, دراما كورية, دراما تركية, سينما, ONEBR TV">
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#e50914">
 
@@ -145,14 +145,15 @@
     #nativeVideo { width: 100%; max-height: 70vh; display: block; }
     .skip-intro-btn { position: absolute; bottom: 65px; left: 20px; z-index: 30; background: rgba(15, 20, 34, 0.85); border: 1px solid var(--gold); color: #fff; padding: 8px 14px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; cursor: pointer; display: none; backdrop-filter: blur(6px); box-shadow: 0 0 10px rgba(245, 158, 11, 0.4); }
     .skip-intro-btn:hover { background: var(--gold); color: #000; }
+    
     .player-box { position: relative; width: 100%; padding-top: 56.25%; }
     .player-box iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
 
-    /* تنسيقات قائمة السيرفرات المنسدلة */
+    /* قائمة السيرفرات */
     .server-dropdown-container { position: relative; margin-top: 15px; z-index: 50; display: none; }
     .server-toggle-btn { background: var(--primary); color: #fff; border: none; padding: 10px 16px; border-radius: 6px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-family: inherit; }
     .server-toggle-btn:hover { background: #b80710; }
-    .server-menu-list { position: absolute; top: 45px; right: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px; display: none; flex-direction: column; gap: 6px; box-shadow: 0 8px 20px rgba(0,0,0,0.6); min-width: 160px; max-height: 250px; overflow-y: auto; }
+    .server-menu-list { position: absolute; top: 45px; right: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px; display: none; flex-direction: column; gap: 6px; box-shadow: 0 8px 20px rgba(0,0,0,0.6); min-width: 170px; max-height: 260px; overflow-y: auto; }
     html[dir="ltr"] .server-menu-list { right: auto; left: 0; }
     .server-menu-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 10px 12px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; font-weight: 700; transition: all 0.2s; text-align: right; }
     .server-menu-btn:hover, .server-menu-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
@@ -319,7 +320,7 @@
     </div>
   </div>
 
-  <!-- واجهة المفضلة ونتائج البحث -->
+  <!-- واجهات المفضلة والبحث -->
   <div id="favoritesView">
     <button class="back-btn" onclick="history.back()"><i class="fa-solid fa-arrow-right"></i> <span data-i18n="btn_back">العودة</span></button>
     <div class="shelf">
@@ -336,7 +337,7 @@
     </div>
   </div>
 
-  <!-- شاشة المشغل وتفاصيل العمل -->
+  <!-- شاشة المشغل وتفاصيل العمل 🎬 -->
   <div id="theaterView">
     <button class="back-btn" onclick="history.back()"><i class="fa-solid fa-arrow-right"></i> <span data-i18n="btn_back">العودة</span></button>
     
@@ -361,14 +362,12 @@
       </div>
     </div>
 
-    <!-- قائمة السيرفرات المنسدلة -->
+    <!-- قائمة السيرفرات المنسدلة التلقائية -->
     <div class="server-dropdown-container" id="serversContainer">
       <button id="serverToggleBtn" class="server-toggle-btn" onclick="toggleServerMenu()">
         📺 <span data-i18n="select_server">قائمة السيرفرات</span>
       </button>
-      <div id="serverDropdown" class="server-menu-list">
-        <!-- توليد أزرار السيرفرات -->
-      </div>
+      <div id="serverDropdown" class="server-menu-list"></div>
     </div>
 
     <div class="player-container" id="mainPlayerContainer">
@@ -376,7 +375,6 @@
         <video id="nativeVideo" controls playsinline></video>
         <button class="skip-intro-btn" id="skipIntroBtn" onclick="skipIntro()">⏭️ تخطي المقدمة (+85s)</button>
       </div>
-      <!-- تم ضبط المشغل وإزالة sandbox لضمان عمل كافة السيرفرات -->
       <div class="player-box" id="iframeBox">
         <iframe id="streamFrame" src="" width="100%" height="450" frameborder="0" allowfullscreen="true" allow="autoplay; fullscreen; encrypted-media; picture-in-picture"></iframe>
       </div>
@@ -394,7 +392,7 @@
     </div>
   </div>
 
-  <!-- النوافذ المنبثقة (Modals) -->
+  <!-- النوافذ المنبثقة -->
   <div class="modal-overlay" id="confirmClearModal">
     <div class="modal-box" style="max-width: 340px; text-align: center; padding: 25px;">
       <div style="color: #ef4444; margin-bottom: 15px;"><i class="fa-solid fa-triangle-exclamation" style="font-size: 3rem;"></i></div>
@@ -673,7 +671,7 @@
     };
 
     let currentUser = JSON.parse(localStorage.getItem('cinema_user') || 'null');
-    let currentItem = { id: null, title: '', type: 'movie', poster_path: '', season: 1, episode: 1, isCustom: false, directUrl: '' };
+    let currentItem = { id: null, imdb_id: '', title: '', origTitle: '', slug: '', origLang: '', isAnime: false, isAsian: false, type: 'movie', poster_path: '', season: 1, episode: 1, isCustom: false, directUrl: '' };
     let currentServer = 1;
     let heroRotationItems = [];
     let heroRotationIndex = 0;
@@ -686,6 +684,11 @@
     let searchDebounceTimer = null;
     let verifyingForgotEmailAddress = '';
     let generatedOtp = '';
+
+    function createSlug(text) {
+      if (!text) return "";
+      return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+    }
 
     function toggleServerMenu() {
       const menu = document.getElementById("serverDropdown");
@@ -700,13 +703,25 @@
       }
     });
 
+    // توليد أزرار السيرفرات تلقائياً مع إضافة سيرفرات الأنمي والدراما إذا كان العمل مصنفاً كذلك 📋
     function renderDynamicServersDeck() {
       const container = document.getElementById('serverDropdown');
       container.innerHTML = '';
-      for (let i = 1; i <= 12; i++) {
+      
+      let totalServers = 16;
+      if (currentItem.isAnime) totalServers = 18;
+      else if (currentItem.isAsian) totalServers = 17;
+
+      for (let i = 1; i <= totalServers; i++) {
         const btn = document.createElement('button');
         btn.className = `server-menu-btn ${i === currentServer ? 'active' : ''}`;
-        btn.innerText = `سيرفر ${i}`;
+        
+        let label = `سيرفر ${i}`;
+        if (i === 17 && currentItem.isAnime) label = `سيرفر أنمي 1`;
+        else if (i === 18 && currentItem.isAnime) label = `سيرفر أنمي 2`;
+        else if (i === 17 && currentItem.isAsian) label = `سيرفر دراما آسيوية`;
+
+        btn.innerText = label;
         btn.onclick = () => { 
           changeServer(i); 
           toggleServerMenu(); 
@@ -720,42 +735,57 @@
       document.querySelectorAll('.server-menu-btn').forEach((b, i) => b.classList.toggle('active', i + 1 === idx));
       if (!currentItem.id || currentItem.isCustom) return;
 
-      const { id, type, season: s, episode: e } = currentItem;
+      const { id, slug, type, season: s, episode: e } = currentItem;
+      const slugName = slug || "media";
+
       const srvs = type === "movie" 
         ? { 
             1: `https://vidlink.pro/movie/${id}`,
-            2: `https://www.2embed.cc/embed/${id}`,
-            3: `https://embed.smashystream.com/playere.php?tmdb=${id}`,
-            4: `https://player.smashy.stream/movie/${id}`,
+            2: `https://embed.su/embed/movie/${id}`,
+            3: `https://player.autoembed.cc/embed/movie/${id}`,
+            4: `https://vidsrc.cc/v2/embed/movie/${id}`,
             5: `https://vidsrc.to/embed/movie/${id}`,
-            6: `https://vidsrc.cc/v2/embed/movie/${id}`,
-            7: `https://vidsrc.sbs/embed/movie/${id}`,
+            6: `https://vidsrc.me/embed/movie?tmdb=${id}`,
+            7: `https://vidsrc.xyz/embed/movie/${id}`,
             8: `https://multiembed.mov/?video_id=${id}&tmdb=1`,
-            9: `https://streamtape.com/e/${id}`,
-            10: `https://vidmoly.to/embed-${id}.html`,
-            11: `https://doodstream.com/e/${id}`,
-            12: `https://vidoza.net/embed-${id}.html`
+            9: `https://embed.smashystream.com/playere.php?tmdb=${id}`,
+            10: `https://player.smashy.stream/movie/${id}`,
+            11: `https://www.2embed.cc/embed/${id}`,
+            12: `https://moviesapi.club/movie/${id}`,
+            13: `https://rive.stream/embed/movie/${id}`,
+            14: `https://vidsrc.pm/embed/movie/${id}`,
+            15: `https://moviee.tv/embed/movie/${id}`,
+            16: `https://www.nontongo.win/embed/movie/${id}`,
+            17: `https://vidsrc.icu/embed/anime/${id}`,
+            18: `https://2anime.xyz/embed/${slugName}-episode-1`
           }
         : { 
             1: `https://vidlink.pro/tv/${id}/${s}/${e}`,
-            2: `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}`,
-            3: `https://embed.smashystream.com/playere.php?tmdb=${id}&season=${s}&episode=${e}`,
-            4: `https://player.smashy.stream/tv/${id}?s=${s}&e=${e}`,
+            2: `https://embed.su/embed/tv/${id}/${s}/${e}`,
+            3: `https://player.autoembed.cc/embed/tv/${id}/${s}/${e}`,
+            4: `https://vidsrc.cc/v2/embed/tv/${id}/${s}/${e}`,
             5: `https://vidsrc.to/embed/tv/${id}/${s}/${e}`,
-            6: `https://vidsrc.cc/v2/embed/tv/${id}/${s}/${e}`,
-            7: `https://vidsrc.sbs/embed/tv/${id}/${s}/${e}`,
+            6: `https://vidsrc.me/embed/tv?tmdb=${id}&season=${s}&episode=${e}`,
+            7: `https://vidsrc.xyz/embed/tv/${id}/${s}/${e}`,
             8: `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}`,
-            9: `https://streamtape.com/e/${id}-${s}-${e}`,
-            10: `https://vidmoly.to/embed-${id}-${s}-${e}.html`,
-            11: `https://doodstream.com/e/${id}-${s}-${e}`,
-            12: `https://vidoza.net/embed-${id}-${s}-${e}.html`
+            9: `https://embed.smashystream.com/playere.php?tmdb=${id}&season=${s}&episode=${e}`,
+            10: `https://player.smashy.stream/tv/${id}?s=${s}&e=${e}`,
+            11: `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}`,
+            12: `https://moviesapi.club/tv/${id}-${s}-${e}`,
+            13: `https://rive.stream/embed/tv/${id}/${s}/${e}`,
+            14: `https://vidsrc.pm/embed/tv/${id}/${s}/${e}`,
+            15: `https://moviee.tv/embed/tv/${id}/${s}/${e}`,
+            16: `https://www.nontongo.win/embed/tv/${id}/${s}/${e}`,
+            17: currentItem.isAnime ? `https://vidsrc.icu/embed/anime/${id}/${s}/${e}` : `https://asianembed.io/streaming.php?id=${slugName}-episode-${e}`,
+            18: `https://2anime.xyz/embed/${slugName}-episode-${e}`
           };
 
       const frame = document.getElementById('streamFrame');
       frame.src = srvs[currentServer] || srvs[1];
 
       frame.onerror = () => {
-        if (currentServer < 12) changeServer(currentServer + 1);
+        let maxSrv = currentItem.isAnime ? 18 : (currentItem.isAsian ? 17 : 16);
+        if (currentServer < maxSrv) changeServer(currentServer + 1);
       };
     }
 
@@ -1259,13 +1289,22 @@
       document.getElementById('serversContainer').style.display = 'none';
       window.scrollTo(0, 0);
 
-      currentItem = { id, type, title: '', poster_path: '', season, episode, isCustom: false, directUrl: '' };
+      currentItem = { id, imdb_id: '', title: '', origTitle: '', slug: '', origLang: '', isAnime: false, isAsian: false, type, poster_path: '', season, episode, isCustom: false, directUrl: '' };
 
       try {
-        const res = await fetch(`${API_BASE}/${type}/${id}?api_key=${API_KEY}&language=${currentLang}`);
+        const res = await fetch(`${API_BASE}/${type}/${id}?api_key=${API_KEY}&language=${currentLang}&append_to_response=external_ids`);
         const data = await res.json();
+        
         currentItem.title = data.title || data.name;
+        currentItem.origTitle = data.original_title || data.original_name || currentItem.title;
+        currentItem.slug = createSlug(currentItem.origTitle);
         currentItem.poster_path = data.poster_path;
+        currentItem.origLang = data.original_language || '';
+        
+        // التحقق مما إذا كان العمل أنمي أو دراما آسيوية
+        const genreIds = (data.genres || []).map(g => g.id);
+        currentItem.isAnime = genreIds.includes(16) || currentItem.origLang === 'ja';
+        currentItem.isAsian = ['ko', 'zh', 'ja'].includes(currentItem.origLang);
 
         document.getElementById('detailTitle').innerText = currentItem.title;
         document.getElementById('detailOverview').innerText = data.overview || "Enjoy high quality streaming.";
