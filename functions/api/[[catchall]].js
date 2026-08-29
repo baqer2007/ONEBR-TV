@@ -12,7 +12,7 @@ export async function onRequest(context) {
   if (request.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    // 1. محرك الفحص السحابي (نظام السباق)
+    // 1. مسار الفحص الذكي واستخراج روابط البث المؤكدة
     if (path === "/api/resolve") {
       const tmdbId = url.searchParams.get("tmdb");
       const type = url.searchParams.get("type") || "movie";
@@ -21,96 +21,134 @@ export async function onRequest(context) {
 
       if (!tmdbId) return new Response(JSON.stringify({ error: "Missing ID" }), { status: 400, headers: corsHeaders });
 
-      const cacheKey = `verified_v2_${type}_${tmdbId}_${season}_${episode}`;
+      const cacheKey = `stream_verified_v3_${type}_${tmdbId}_${season}_${episode}`;
 
-      // أ. فحص الكاش السريع
+      // فحص الكاش السحابي (المدة قصيرة: 30 دقيقة فقط لمنع انتهاء التوكنات)
       if (env.STREAM_KV) {
-        const cachedData = await env.STREAM_KV.get(cacheKey, { type: "json" });
-        if (cachedData) return new Response(JSON.stringify({ success: true, source: "kv-cache", ...cachedData }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+        const cached = await env.STREAM_KV.get(cacheKey, { type: "json" });
+        if (cached) return new Response(JSON.stringify({ success: true, source: "kv-cache", ...cached }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
 
-      // ب. سباق السيرفرات (إيجاد الأسرع والأصح)
-      const verifiedResult = await raceServersForContent(tmdbId, type, season, episode);
+      // استخراج وفحص المصادر الحقيقية المتوفرة
+      const activeStream = await extractAndVerifyStream(tmdbId, type, season, episode);
 
-      if (verifiedResult) {
-        if (env.STREAM_KV) await env.STREAM_KV.put(cacheKey, JSON.stringify(verifiedResult), { expirationTtl: 21600 });
-        return new Response(JSON.stringify({ success: true, ...verifiedResult }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      if (activeStream) {
+        if (env.STREAM_KV) {
+          // تخزين لمدة 1800 ثانية (نصف ساعة) لتفادي التوكنات الموقوتة
+          await env.STREAM_KV.put(cacheKey, JSON.stringify(activeStream), { expirationTtl: 1800 });
+        }
+        return new Response(JSON.stringify({ success: true, ...activeStream }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" }
+        });
       }
 
-      return new Response(JSON.stringify({ success: false, message: "No active sources found right now." }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      return new Response(JSON.stringify({ success: false, message: "No playable stream found" }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" }
+      });
     }
 
-    // 2. بروكسي تجاوز الحجب
+    // 2. مسار البروكسي لتجاوز حظر CORS وتمرير مفاتيح التشفير AES-128
     if (path === "/api/proxy") {
       const targetUrl = decodeURIComponent(url.searchParams.get("url") || "");
       const customReferer = url.searchParams.get("referer") || "https://vidlink.pro/";
+
       if (!targetUrl) return new Response("Missing URL", { status: 400 });
 
       const response = await fetch(targetUrl, {
-        headers: { "User-Agent": "Mozilla/5.0", "Referer": customReferer, "Origin": new URL(customReferer).origin }
+        headers: {
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+          "Referer": customReferer,
+          "Origin": new URL(customReferer).origin
+        }
       });
 
       const contentType = response.headers.get("content-type") || "";
+
       if (contentType.includes("application/vnd.apple.mpegurl") || targetUrl.includes(".m3u8")) {
         let text = await response.text();
         const baseUrl = targetUrl.substring(0, targetUrl.lastIndexOf("/") + 1);
-        text = text.replace(/^(?!#)(?!\s*$)(.+)$/gm, match => {
+
+        // 1. إعادة كتابة مسارات أجزاء الفيديو (.ts)
+        text = text.replace(/^(?!#)(?!\s*$)(.+)$/gm, (match) => {
           const fullUrl = match.startsWith("http") ? match : baseUrl + match.trim();
           return `${url.origin}/api/proxy?url=${encodeURIComponent(fullUrl)}&referer=${encodeURIComponent(customReferer)}`;
         });
-        return new Response(text, { headers: { ...corsHeaders, "Content-Type": "application/vnd.apple.mpegurl", "Cache-Control": "public, max-age=60" } });
+
+        // 2. إعادة كتابة روابط مفاتيح التشفير (AES-128 Key URI Proxy)
+        text = text.replace(/URI="([^"]+)"/g, (match, keyUrl) => {
+          const fullKeyUrl = keyUrl.startsWith("http") ? keyUrl : baseUrl + keyUrl;
+          return `URI="${url.origin}/api/proxy?url=${encodeURIComponent(fullKeyUrl)}&referer=${encodeURIComponent(customReferer)}"`;
+        });
+
+        return new Response(text, {
+          headers: { ...corsHeaders, "Content-Type": "application/vnd.apple.mpegurl", "Cache-Control": "public, max-age=60" }
+        });
       }
-      return new Response(response.body, { status: response.status, headers: { ...corsHeaders, "Content-Type": contentType } });
+
+      return new Response(response.body, {
+        status: response.status,
+        headers: { ...corsHeaders, "Content-Type": contentType, "Cache-Control": "public, max-age=86400" }
+      });
     }
 
-    // 3. جلب الترجمات
+    // 3. مسار الترجمة التلقائية
     if (path === "/api/subtitles") {
       const tmdbId = url.searchParams.get("tmdb");
       const type = url.searchParams.get("type") || "movie";
       const season = url.searchParams.get("s") || "1";
       const episode = url.searchParams.get("e") || "1";
-      return new Response(JSON.stringify([{ lang: "Arabic", code: "ar", label: "العربية", url: `https://sub.wyzie.ru/subtitles/${tmdbId}/${type === 'tv' ? `${season}-${episode}` : '0'}?lang=ar` }]), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+
+      const subs = [{
+        lang: "Arabic", code: "ar", label: "العربية",
+        url: `https://sub.wyzie.ru/subtitles/${tmdbId}/${type === 'tv' ? `${season}-${episode}` : '0'}?lang=ar`
+      }];
+
+      return new Response(JSON.stringify(subs), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    return new Response(JSON.stringify({ status: "Prober Engine Active 🚀" }), { headers: corsHeaders });
+    return new Response(JSON.stringify({ status: "Prober Engine Active" }), { headers: corsHeaders });
   } catch (err) {
     return new Response(JSON.stringify({ error: err.message }), { status: 500, headers: corsHeaders });
   }
 }
 
-// خوارزمية السباق: من يرسل بيانات حقيقية أولاً يفوز
-async function raceServersForContent(id, type, s, e) {
+// محرك الفحص المباشر
+async function extractAndVerifyStream(tmdb, type, s, e) {
   const isMov = (type === "movie");
 
-  const candidates = [
-    { name: "VidLink PRO", url: isMov ? `https://vidlink.pro/api/b/movie/${id}` : `https://vidlink.pro/api/b/tv/${id}/${s}/${e}`, embed: isMov ? `https://vidlink.pro/movie/${id}` : `https://vidlink.pro/tv/${id}/${s}/${e}`, isJson: true },
-    { name: "MultiEmbed VIP", url: isMov ? `https://multiembed.mov/?video_id=${id}&tmdb=1` : `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}`, embed: isMov ? `https://multiembed.mov/?video_id=${id}&tmdb=1` : `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}`, isJson: false },
-    { name: "Embed.su", url: isMov ? `https://embed.su/embed/movie/${id}` : `https://embed.su/embed/tv/${id}/${s}/${e}`, embed: isMov ? `https://embed.su/embed/movie/${id}` : `https://embed.su/embed/tv/${id}/${s}/${e}`, isJson: false },
-    { name: "VidSrc.cc", url: isMov ? `https://vidsrc.cc/v2/embed/movie/${id}` : `https://vidsrc.cc/v2/embed/tv/${id}/${s}/${e}`, embed: isMov ? `https://vidsrc.cc/v2/embed/movie/${id}` : `https://vidsrc.cc/v2/embed/tv/${id}/${s}/${e}`, isJson: false },
-    { name: "NontonGo", url: isMov ? `https://www.nontongo.win/embed/movie/${id}` : `https://www.nontongo.win/embed/tv/${id}/${s}/${e}`, embed: isMov ? `https://www.nontongo.win/embed/movie/${id}` : `https://www.nontongo.win/embed/tv/${id}/${s}/${e}`, isJson: false }
+  const providers = [
+    async () => {
+      const apiUrl = isMov ? `https://vidlink.pro/api/b/movie/${tmdb}` : `https://vidlink.pro/api/b/tv/${tmdb}/${s}/${e}`;
+      const res = await fetch(apiUrl, { headers: { "User-Agent": "Mozilla/5.0", "Referer": "https://vidlink.pro/" } });
+      if (!res.ok) return null;
+      const json = await res.json();
+      if (json && json.stream && json.stream.playlist) {
+        return { directStreamUrl: json.stream.playlist, referer: "https://vidlink.pro/", provider: "VidLink Core" };
+      }
+      return null;
+    },
+    async () => {
+      const target = isMov ? `https://embed.su/api/e/movie/${tmdb}` : `https://embed.su/api/e/tv/${tmdb}/${s}/${e}`;
+      const res = await fetch(target, { headers: { "User-Agent": "Mozilla/5.0", "Referer": "https://embed.su/" } });
+      if (!res.ok) return null;
+      const json = await res.json();
+      if (json && json.source) {
+        return { directStreamUrl: json.source, referer: "https://embed.su/", provider: "EmbedSu Ultra" };
+      }
+      return null;
+    }
   ];
 
-  return new Promise((resolve) => {
-    let failedCount = 0;
-    for (let c of candidates) {
-      fetch(c.url, { headers: { "User-Agent": "Mozilla/5.0" }, signal: AbortSignal.timeout(4500) })
-        .then(async res => {
-          if (!res.ok) throw new Error("Bad status");
-          if (c.isJson) {
-            const json = await res.json();
-            if (json && json.stream && json.stream.playlist) resolve({ directStreamUrl: json.stream.playlist, serverName: c.name, workingServerUrl: c.embed });
-            else throw new Error("No playlist");
-          } else {
-            const html = await res.text();
-            if (!html.includes("There are no sources yet") && !html.includes("404 Not Found") && html.length > 500) {
-              resolve({ workingServerUrl: c.embed, serverName: c.name });
-            } else throw new Error("Fake load");
-          }
-        })
-        .catch(() => {
-          failedCount++;
-          if (failedCount === candidates.length) resolve(null);
-        });
-    }
-  });
+  for (const getStream of providers) {
+    try {
+      const result = await getStream();
+      if (result && result.directStreamUrl) {
+        // فحص سريع لصلاحية البث
+        const check = await fetch(result.directStreamUrl, { method: "HEAD", headers: { "Referer": result.referer } });
+        if (check.ok) return result;
+      }
+    } catch (err) {}
+  }
+
+  return null;
 }
