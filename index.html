@@ -678,7 +678,8 @@
         { name: "سيرفر 4 (VidSrc.cc)", url: isMov ? `https://vidsrc.cc/v2/embed/movie/${id}` : `https://vidsrc.cc/v2/embed/tv/${id}/${s}/${e}` },
         { name: "سيرفر 5 (2Embed VIP)", url: isMov ? `https://www.2embed.cc/embed/${id}` : `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}` },
         { name: "سيرفر 6 (NontonGo)", url: isMov ? `https://www.nontongo.win/embed/movie/${id}` : `https://www.nontongo.win/embed/tv/${id}/${s}/${e}` },
-        { name: "سيرفر 7 (SmashyStream)", url: isMov ? `https://embed.smashystream.com/playere.php?tmdb=${id}` : `https://embed.smashystream.com/playere.php?tmdb=${id}&season=${s}&episode=${e}` }
+        { name: "سيرفر 7 (SmashyStream)", url: isMov ? `https://embed.smashystream.com/playere.php?tmdb=${id}` : `https://embed.smashystream.com/playere.php?tmdb=${id}&season=${s}&episode=${e}` },
+        { name: "سيرفر 8 (VidSrc.to)", url: isMov ? `https://vidsrc.to/embed/movie/${id}` : `https://vidsrc.to/embed/tv/${id}/${s}/${e}` }
       ];
     }
 
@@ -703,18 +704,22 @@
 
     // محرك الفحص الذكي والاختيار التلقائي الحقيقي
     async function startStreamingNow() {
-      const { id, type, season = 1, episode = 1 } = currentItem;
+      const id = currentItem.id;
+      const type = currentItem.type || 'movie';
+      const season = currentItem.season || 1;
+      const episode = currentItem.episode || 1;
+
       const mainContainer = document.getElementById('mainPlayerContainer');
       const directBox = document.getElementById('directPlayerBox');
       const iframeBox = document.getElementById('iframeBox');
       const srvContainer = document.getElementById('serversContainer');
-      const frame = document.getElementById('streamFrame');
       const video = document.getElementById('nativeVideo');
 
+      // إظهار حاوية المشغل والتمرير السلس إليها
       mainContainer.style.display = 'block';
       mainContainer.scrollIntoView({ behavior: 'smooth' });
 
-      // تنظيف المشغل
+      // تنظيف المشغل الحالي
       stopPlayer();
 
       // تجهيز قائمة السيرفرات البديلة
@@ -743,15 +748,11 @@
               hlsInstance.attachMedia(video);
 
               // خطة الطوارئ ضد التشفير الشديد
-              hlsInstance.on(Hls.Events.ERROR, function(event, errData) {
-                if (errData.fatal) {
-                  fallbackToEmbedServers(id, type, season, episode);
-                }
+              hlsInstance.on(Hls.Events.ERROR, (event, errData) => {
+                if (errData.fatal) fallbackToEmbedServers(id, type, season, episode);
               });
 
-              hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => {
-                video.play().catch(() => {});
-              });
+              hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => { video.play().catch(() => {}); });
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
               video.src = proxiedUrl;
               video.play().catch(() => {});
@@ -768,7 +769,7 @@
             iframeBox.style.display = 'block';
             if (srvContainer) srvContainer.style.display = 'flex';
 
-            frame.src = data.workingServerUrl;
+            document.getElementById('streamFrame').src = data.workingServerUrl;
 
             // تحديد السيرفر النشط تلقائياً في الشريط
             const matchingIdx = activeServerList.findIndex(s => data.workingServerUrl.includes(s.url.split('?')[0]));
@@ -788,13 +789,21 @@
     }
 
     function fallbackToEmbedServers(id, type, season, episode) {
-      document.getElementById('directPlayerBox').style.display = 'none';
-      document.getElementById('iframeBox').style.display = 'block';
-      document.getElementById('serversContainer').style.display = 'flex';
+      const directBox = document.getElementById('directPlayerBox');
+      const iframeBox = document.getElementById('iframeBox');
+      const srvContainer = document.getElementById('serversContainer');
+
+      directBox.style.display = 'none';
+      iframeBox.style.display = 'block';
+      srvContainer.style.display = 'flex';
       
       if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
 
+      activeServerList = buildServersList(id, type, season, episode);
+      currentServerIndex = 0;
+      renderServersDeck();
       selectServerByIndex(0);
+
       recordResumeProgress(currentItem, 20);
     }
 
@@ -1029,10 +1038,34 @@
     }
 
     async function fetchMediaAndOpenTheater(id, type, season = 1, episode = 1) {
-      document.getElementById('homeView').style.display = 'none'; document.getElementById('searchResultsView').style.display = 'none'; document.getElementById('favoritesView').style.display = 'none'; document.getElementById('theaterView').style.display = 'block';
-      document.getElementById('mainPlayerContainer').style.display = 'none'; document.getElementById('serversContainer').style.display = 'none'; window.scrollTo(0, 0);
+      document.getElementById('homeView').style.display = 'none';
+      document.getElementById('searchResultsView').style.display = 'none';
+      document.getElementById('favoritesView').style.display = 'none';
+      document.getElementById('theaterView').style.display = 'block';
+      document.getElementById('mainPlayerContainer').style.display = 'none';
+      document.getElementById('serversContainer').style.display = 'none';
+      window.scrollTo(0, 0);
 
-      currentItem = { id, imdb_id: '', title: '', origTitle: '', slug: '', origLang: '', isAnime: false, isAsian: false, isTurkish: false, type, poster_path: '', season, episode, isCustom: false, directUrl: '' };
+      const sNum = parseInt(season) || 1;
+      const eNum = parseInt(episode) || 1;
+
+      currentItem = { 
+        id, 
+        imdb_id: '', 
+        title: '', 
+        origTitle: '', 
+        slug: '', 
+        origLang: '', 
+        isAnime: false, 
+        isAsian: false, 
+        isTurkish: false, 
+        type, 
+        poster_path: '', 
+        season: sNum, 
+        episode: eNum, 
+        isCustom: false, 
+        directUrl: '' 
+      };
 
       try {
         const res = await fetch(`${API_BASE}/${type}/${id}?api_key=${API_KEY}&language=${currentLang}&append_to_response=external_ids`);
@@ -1052,16 +1085,33 @@
         document.getElementById('detailOverview').innerText = data.overview || "مشاهدة ممتعة بأعلى جودة.";
         document.getElementById('detailScore').innerText = `⭐ ${data.vote_average ? data.vote_average.toFixed(1) : '8.0'}`;
         document.getElementById('detailYear').innerText = (data.release_date || data.first_air_date || '2026').substring(0, 4);
-        if (data.backdrop_path) document.getElementById('detailHeroBox').style.backgroundImage = `url('${BACKDROP_BASE + data.backdrop_path}')`;
 
-        const genresBox = document.getElementById('detailGenres'); genresBox.innerHTML = '';
-        (data.genres || []).forEach(g => { const badge = document.createElement('span'); badge.className = 'badge-tag'; badge.innerText = g.name; genresBox.appendChild(badge); });
+        if (data.backdrop_path) {
+          document.getElementById('detailHeroBox').style.backgroundImage = `url('${BACKDROP_BASE + data.backdrop_path}')`;
+        }
 
-        const isFav = isItemFavorited(id); document.getElementById('btnToggleFav').classList.toggle('active-fav', isFav);
-        const watchedKey = type === 'movie' ? `movie_${id}` : `tv_${id}_s${season}_e${episode}`; document.getElementById('btnToggleWatched').classList.toggle('active-watched', isItemWatched(watchedKey));
+        const genresBox = document.getElementById('detailGenres');
+        genresBox.innerHTML = '';
+        (data.genres || []).forEach(g => {
+          const badge = document.createElement('span');
+          badge.className = 'badge-tag';
+          badge.innerText = g.name;
+          genresBox.appendChild(badge);
+        });
 
-        if (type === 'tv') { document.getElementById('episodesContainer').style.display = 'block'; renderTvSeasons(data.seasons || [], id); }
-        else { document.getElementById('episodesContainer').style.display = 'none'; }
+        const isFav = isItemFavorited(id);
+        document.getElementById('btnToggleFav').classList.toggle('active-fav', isFav);
+
+        const watchedKey = type === 'movie' ? `movie_${id}` : `tv_${id}_s${sNum}_e${eNum}`;
+        document.getElementById('btnToggleWatched').classList.toggle('active-watched', isItemWatched(watchedKey));
+
+        if (type === 'tv') {
+          document.getElementById('episodesContainer').style.display = 'block';
+          renderTvSeasons(data.seasons || [], id);
+        } else {
+          document.getElementById('episodesContainer').style.display = 'none';
+        }
+
         loadSimilarMedia(id, type);
       } catch(e) {}
     }
@@ -1081,13 +1131,21 @@
     }
 
     function renderTvEpisodes(tvId, seasonNum, count) {
-      const epList = document.getElementById('episodesList'); epList.innerHTML = '';
+      const epList = document.getElementById('episodesList');
+      epList.innerHTML = '';
       for (let i = 1; i <= count; i++) {
         const isWatched = isItemWatched(`tv_${tvId}_s${seasonNum}_e${i}`);
         const btn = document.createElement('button');
         btn.className = `ep-btn ${i === currentItem.episode ? 'active' : ''} ${isWatched ? 'is-watched' : ''}`;
         btn.innerText = `حلقة ${i}`;
-        btn.onclick = () => { document.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); currentItem.episode = i; location.hash = `#/theater/tv/${tvId}/${seasonNum}/${i}`; startStreamingNow(); };
+        btn.onclick = () => {
+          document.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentItem.season = seasonNum;
+          currentItem.episode = i;
+          location.hash = `#/theater/tv/${tvId}/${seasonNum}/${i}`;
+          startStreamingNow();
+        };
         epList.appendChild(btn);
       }
     }
