@@ -150,9 +150,9 @@
     .btn-detail-action.active-fav { color: var(--gold); border-color: var(--gold); }
     .btn-detail-action.active-watched { color: var(--watched); border-color: var(--watched); }
 
-    /* شريط حالة الفحص الآلي الذكي */
+    /* شريط الرقابة والمساعدة الذكي */
     .smart-status-banner {
-      background: rgba(15, 20, 34, 0.9);
+      background: rgba(15, 20, 34, 0.95);
       border: 1px solid var(--cyan);
       border-radius: 8px;
       padding: 10px 14px;
@@ -391,13 +391,16 @@
       </div>
     </div>
 
-    <!-- شريط الرقابة والفحص الذكي اللحظي -->
+    <!-- شريط الرقابة والمساعدة الذكي -->
     <div class="smart-status-banner" id="smartStatusBanner">
       <div style="display:flex; align-items:center; gap:8px;">
         <span class="status-pulse"></span>
-        <span id="smartStatusText">جاري فحص وتحديد أفضل سيرفر متاح تلقائياً...</span>
+        <span id="smartStatusText">تم اختيار أفضل سيرفر مناسب للعمل تلقائياً.</span>
       </div>
-      <span style="color:var(--cyan); font-size:0.75rem;" id="smartServerCounter">0 / 0</span>
+      <div style="display:flex; gap:6px;">
+        <button style="background:var(--cyan); color:#000; border:none; padding:4px 8px; border-radius:4px; font-weight:800; font-size:0.75rem; cursor:pointer;" onclick="confirmServerSuccess()">✅ تثبيت</button>
+        <button style="background:rgba(255,255,255,0.1); color:#fff; border:1px solid var(--border); padding:4px 8px; border-radius:4px; font-weight:700; font-size:0.75rem; cursor:pointer;" onclick="manualSkipServer()">⏭️ التالي</button>
+      </div>
     </div>
 
     <!-- قائمة السيرفرات المنسدلة الذكية مع زر التخطي السريع -->
@@ -732,12 +735,8 @@
     let generatedOtp = '';
 
     // ==========================================
-    // محرك الفحص والتدوير الذكي 2.0 (Smart Stream Engine)
+    // محرك الفحص الذكي وتتبع تفاعل المستخدم 2.0
     // ==========================================
-    let autoProbeTimer = null;
-    let isProbeResolved = false;
-
-    // أسطول موسّع يضم أفضل 16 سيرفر عالمي متوافق
     function generateServerEndpoints() {
       const { id, type, season: s, episode: e } = currentItem;
       const isMov = (type === 'movie');
@@ -751,7 +750,7 @@
         },
         {
           id: 'nontongo',
-          name: 'سيرفر 2 (NontonGo - خبير الدراما الآسيوية 🎎)',
+          name: 'سيرفر 2 (NontonGo - متخصص آسيوي 🎎)',
           url: isMov ? `https://www.nontongo.win/embed/movie/${id}` : `https://www.nontongo.win/embed/tv/${id}/${s}/${e}`,
           priority: (currentItem.isAsian || currentItem.isTurkish) ? 2 : 7
         },
@@ -841,19 +840,26 @@
         }
       ];
 
-      // فرز القائمة بالكامل بحسب الأولوية الذكية للتصنيف
       allProviders.sort((a, b) => a.priority - b.priority);
       activeServerList = allProviders;
     }
 
-    // مستمع إشارات المشغلات العالمية
     function initServerResponseWatcher() {
+      // 1. كاشف التفاعل اللحظي مع المشغل (Iframe Focus Tracker)
+      window.addEventListener('blur', () => {
+        setTimeout(() => {
+          if (document.activeElement && document.activeElement.tagName === 'IFRAME') {
+            confirmServerSuccess();
+          }
+        }, 100);
+      });
+
+      // 2. مستمع رسائل المشغلات الدولية
       window.addEventListener('message', (event) => {
         if (!event.data) return;
         try {
           const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
 
-          // إشارات النجاح والتشغيل
           if (
             data.type === 'PLAYER_READY' || 
             data.event === 'playing' || 
@@ -864,7 +870,6 @@
             confirmServerSuccess();
           }
 
-          // إشارات الفشل الواضحة من مشغلات الـ Embed
           if (
             data.event === 'error' || 
             data.event === 'no_source' || 
@@ -872,112 +877,74 @@
             data.status === 'error' ||
             data.error === true
           ) {
-            autoAdvanceToNextServer();
+            manualSkipServer();
           }
         } catch(e) {}
       });
     }
 
-    // بدء محرك الفحص والتشغيل التلقائي الذكي
     function startSmartAutoProbe() {
-      const mediaKey = `winning_srv_${currentItem.type}_${currentItem.id}_s${currentItem.season}_e${currentItem.episode}`;
-      const savedWinningServer = parseInt(localStorage.getItem(mediaKey) || '1');
-
       generateServerEndpoints();
       renderDynamicServersDeck();
 
-      // إظهار شريط الفحص
       const banner = document.getElementById('smartStatusBanner');
       banner.style.display = 'flex';
 
-      isProbeResolved = false;
+      const mediaKey = `winning_srv_${currentItem.type}_${currentItem.id}_s${currentItem.season}_e${currentItem.episode}`;
+      const savedWinningServer = parseInt(localStorage.getItem(mediaKey) || '1');
+
       currentServer = (savedWinningServer <= activeServerList.length) ? savedWinningServer : 1;
-      executeAutoProbe(currentServer);
+      executeServerLaunch(currentServer);
     }
 
-    function executeAutoProbe(serverIdx) {
+    function executeServerLaunch(serverIdx) {
       if (serverIdx > activeServerList.length) {
-        // انتهت كل السيرفرات دون استجابة
-        const banner = document.getElementById('smartStatusBanner');
-        document.getElementById('smartStatusText').innerText = "⚠️ تم فحص جميع السيرفرات الـ 16، يرجى اختيار سيرفر يدوياً أو تجربة سيرفر آخر.";
-        document.getElementById('serverToggleBtn').innerHTML = `📺 <span>قائمة السيرفرات (${activeServerList.length})</span>`;
-        clearTimeout(autoProbeTimer);
-        return;
+        currentServer = 1;
+        serverIdx = 1;
       }
 
       currentServer = serverIdx;
-      clearTimeout(autoProbeTimer);
-
       const target = activeServerList[serverIdx - 1];
       const frame = document.getElementById('streamFrame');
       const bannerText = document.getElementById('smartStatusText');
-      const counterText = document.getElementById('smartServerCounter');
       const toggleBtn = document.getElementById('serverToggleBtn');
 
-      bannerText.innerText = `جاري فحص: ${target.name}...`;
-      counterText.innerText = `${serverIdx} / ${activeServerList.length}`;
-      toggleBtn.innerHTML = `⏳ <span>سيرفر ${serverIdx} (فحص آلي...)</span>`;
+      bannerText.innerText = `جاري تشغيل: [${target.name}]`;
+      toggleBtn.innerHTML = `📺 <span>سيرفر ${serverIdx} (محدد)</span>`;
       
       document.querySelectorAll('.server-menu-btn').forEach((b, i) => b.classList.toggle('active', i + 1 === serverIdx));
 
+      // تعيين الرابط دون تشغيل أي مؤقت تخطي أعمى يقطع الفيديو
       frame.src = target.url;
-
-      // ضبط مؤقت التدوير الذكي (3.5 ثوانٍ لكل سيرفر)
-      autoProbeTimer = setTimeout(() => {
-        if (!isProbeResolved) {
-          autoAdvanceToNextServer();
-        }
-      }, 3500);
-    }
-
-    function autoAdvanceToNextServer() {
-      clearTimeout(autoProbeTimer);
-      if (currentServer < activeServerList.length && !isProbeResolved) {
-        currentServer++;
-        executeAutoProbe(currentServer);
-      }
     }
 
     function confirmServerSuccess() {
-      isProbeResolved = true;
-      clearTimeout(autoProbeTimer);
-
       const target = activeServerList[currentServer - 1];
       const banner = document.getElementById('smartStatusBanner');
       const bannerText = document.getElementById('smartStatusText');
       const toggleBtn = document.getElementById('serverToggleBtn');
 
-      bannerText.innerText = `✅ تم العثور على العمل وتثبيت [${target.name}] بنجاح!`;
-      toggleBtn.innerHTML = `📺 <span>سيرفر ${currentServer} (يعمل بنجاح 🟢)</span>`;
+      if (bannerText) bannerText.innerText = `✅ مثبت: [${target ? target.name : 'سيرفر نشط'}]`;
+      if (toggleBtn) toggleBtn.innerHTML = `📺 <span>سيرفر ${currentServer} (يعمل بنجاح 🟢)</span>`;
 
-      // حفظ السيرفر الناجح في الذاكرة لتشغيله مباشرة في المرات القادمة
       const mediaKey = `winning_srv_${currentItem.type}_${currentItem.id}_s${currentItem.season}_e${currentItem.episode}`;
       localStorage.setItem(mediaKey, currentServer);
 
-      // إخفاء شريط الفحص بعد ثانيتين
-      setTimeout(() => { banner.style.display = 'none'; }, 2200);
+      setTimeout(() => { if (banner) banner.style.display = 'none'; }, 2000);
     }
 
     function manualSkipServer() {
-      isProbeResolved = false;
       if (currentServer < activeServerList.length) {
         currentServer++;
-        executeAutoProbe(currentServer);
       } else {
         currentServer = 1;
-        executeAutoProbe(1);
       }
+      executeServerLaunch(currentServer);
     }
 
     function changeServer(idx) {
-      isProbeResolved = true; // إيقاف الفحص التلقائي عند اختيار المستخدم
-      clearTimeout(autoProbeTimer);
       currentServer = idx;
-      
-      const target = activeServerList[idx - 1];
-      document.getElementById('streamFrame').src = target.url;
-      document.getElementById('serverToggleBtn').innerHTML = `📺 <span>سيرفر ${idx} (يدوي)</span>`;
-      document.querySelectorAll('.server-menu-btn').forEach((b, i) => b.classList.toggle('active', i + 1 === idx));
+      executeServerLaunch(idx);
       document.getElementById('smartStatusBanner').style.display = 'none';
     }
 
@@ -1058,7 +1025,7 @@
         }
       } catch (err) {}
 
-      // 2. تفعيل نظام الفحص التلقائي المطور للسيرفرات الـ 16
+      // 2. تفعيل نظام السيرفرات الذكي
       directBox.style.display = 'none';
       iframeBox.style.display = 'block';
       srvContainer.style.display = 'flex';
@@ -1097,9 +1064,6 @@
     };
 
     function stopPlayer() {
-      clearTimeout(autoProbeTimer);
-      isProbeResolved = false;
-
       const frame = document.getElementById('streamFrame');
       if (frame) frame.src = "";
 
