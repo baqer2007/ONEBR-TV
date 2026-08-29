@@ -708,6 +708,7 @@
     let generatedOtp = '';
     let serverWatchdogTimer = null;
     let isCurrentStreamWorking = false;
+    let isManualServerSelect = false;
 
     // ==========================================
     // محرك التحكم بالريموت كنترول لشاشات Smart TV
@@ -794,32 +795,18 @@
     };
 
     // ==========================================
-    // محرك فحص السيرفرات الذكي والتنقل السريع
+    // محرك السيرفرات المحدث والمعالج ضد التخطي الوهمي
     // ==========================================
     function initServerResponseWatcher() {
       window.addEventListener('message', (event) => {
+        // تجاهل أي رسائل نصية أو قادمة من الإعلانات
+        if (!event.data || typeof event.data !== 'object') return;
+        
         const data = event.data;
-        if (!data) return;
-        try {
-          const parsed = typeof data === 'string' ? JSON.parse(data) : data;
-          if (
-            parsed.event === 'error' || 
-            parsed.type === 'MEDIA_NOT_FOUND' || 
-            parsed.status === 'error' || 
-            parsed.error === true ||
-            (parsed.event && String(parsed.event).includes('error'))
-          ) {
-            triggerAutoFallback();
-          }
-          if (
-            parsed.event === 'play' || 
-            parsed.event === 'playing' || 
-            parsed.type === 'PLAYER_READY' ||
-            parsed.status === 'playing'
-          ) {
-            markCurrentServerSuccess();
-          }
-        } catch(e) {}
+        // التقاط إشارات المشغلات الحقيقية فقط
+        if (data.type === 'PLAYER_READY' || data.event === 'playing' || data.status === 'playing') {
+          markCurrentServerSuccess();
+        }
       });
     }
 
@@ -876,12 +863,13 @@
 
     function changeServer(idx) {
       currentServer = idx;
-      loadAndWatchServer(idx);
+      loadAndWatchServer(idx, true); // إيقاف التخطي التلقائي عند التحديد اليدوي
     }
 
-    function loadAndWatchServer(serverIdx) {
+    function loadAndWatchServer(serverIdx, isManual = false) {
       if (!activeServerList[serverIdx - 1]) return;
 
+      isManualServerSelect = isManual;
       isCurrentStreamWorking = false;
       clearTimeout(serverWatchdogTimer);
 
@@ -889,17 +877,32 @@
       const frame = document.getElementById('streamFrame');
       const toggleBtn = document.getElementById('serverToggleBtn');
 
-      toggleBtn.innerHTML = `⏳ <span>جاري فحص سيرفر ${serverIdx}...</span>`;
+      toggleBtn.innerHTML = `⏳ <span>جاري تشغيل سيرفر ${serverIdx}...</span>`;
       document.querySelectorAll('.server-menu-btn').forEach((b, i) => b.classList.toggle('active', i + 1 === serverIdx));
 
       frame.src = target.url;
-      frame.onerror = () => triggerAutoFallback();
 
-      serverWatchdogTimer = setTimeout(() => {
-        if (!isCurrentStreamWorking) {
+      // عند استجابة السيرفر وتحميل الإطار بنجاح
+      frame.onload = () => {
+        isCurrentStreamWorking = true;
+        clearTimeout(serverWatchdogTimer);
+        toggleBtn.innerHTML = `📺 <span>سيرفر ${serverIdx} (نشط 🟢)</span>`;
+      };
+
+      frame.onerror = () => {
+        if (!isManualServerSelect) {
           triggerAutoFallback();
         }
-      }, 3200);
+      };
+
+      // مهلة كافية 5.5 ثوانٍ عند التشغيل التلقائي
+      if (!isManual) {
+        serverWatchdogTimer = setTimeout(() => {
+          if (!isCurrentStreamWorking) {
+            triggerAutoFallback();
+          }
+        }, 5500);
+      }
     }
 
     function markCurrentServerSuccess() {
@@ -911,14 +914,17 @@
 
     function triggerAutoFallback() {
       clearTimeout(serverWatchdogTimer);
-      if (currentServer < activeServerList.length) {
-        currentServer++;
-        loadAndWatchServer(currentServer);
-      } else {
+      
+      // التوقف عند آخر سيرفر وعدم إعطاء حالة نشط كاذبة
+      if (currentServer >= activeServerList.length) {
         const toggleBtn = document.getElementById('serverToggleBtn');
-        toggleBtn.innerHTML = `📺 <span>قائمة السيرفرات (${activeServerList.length})</span>`;
-        markCurrentServerSuccess();
+        toggleBtn.innerHTML = `⚠️ <span>يرجى اختيار سيرفر يدوياً</span>`;
+        isCurrentStreamWorking = false;
+        return;
       }
+
+      currentServer++;
+      loadAndWatchServer(currentServer, false);
     }
 
     // ==========================================
@@ -935,7 +941,7 @@
       mainContainer.style.display = 'block';
       mainContainer.scrollIntoView({ behavior: 'smooth' });
 
-      // 1. محاولة استخراج البث المباشر عبر الـ Cloudflare Function والكاش السحابي
+      // 1. محاولة استخراج البث المباشر عبر الـ Cloudflare Function
       try {
         const res = await fetch(`${CLOUDFLARE_WORKER_BASE}/api/resolve?tmdb=${id}&type=${type}&s=${season}&e=${episode}`);
         const data = await res.json();
@@ -967,7 +973,7 @@
         }
       } catch (err) {}
 
-      // 2. خطة الطوارئ السريعة (Fast Failover Embeds) في حال تعذر البث المباشر
+      // 2. خطة الطوارئ البديلة (Embeds)
       directBox.style.display = 'none';
       iframeBox.style.display = 'block';
       srvContainer.style.display = 'block';
@@ -975,7 +981,7 @@
       generateServerEndpoints();
       renderDynamicServersDeck();
       currentServer = 1;
-      loadAndWatchServer(currentServer);
+      loadAndWatchServer(currentServer, false);
       recordResumeProgress(currentItem, 20);
     }
 
