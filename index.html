@@ -606,7 +606,9 @@
     const POSTER_BASE = "https://image.tmdb.org/t/p/w500";
     const BACKDROP_BASE = "https://image.tmdb.org/t/p/original";
     const FIREBASE_DB = "https://cinemavip-a9a21-default-rtdb.firebaseio.com";
-    const CLOUDFLARE_WORKER_BASE = window.location.origin;
+    
+    // ربط الواجهة مباشرة بخادم Vercel الجديد
+    const CLOUDFLARE_WORKER_BASE = "https://onebrtv-api.vercel.app";
 
     const SUPER_ADMIN_EMAIL = "altrfybaqer0@gmail.com";
     const SUPER_ADMIN_PASS = "Aann22@@55";
@@ -699,14 +701,13 @@
     function buildServersList(id, type, s, e) {
       const isMov = (type === 'movie');
       return [
-        { name: "سيرفر 1 (VidSrc.cc - سريع ومستقر)", url: isMov ? `https://vidsrc.cc/v2/embed/movie/${id}` : `https://vidsrc.cc/v2/embed/tv/${id}/${s}/${e}` },
+        { name: "سيرفر 1 (VidSrc.cc - مستقر)", url: isMov ? `https://vidsrc.cc/v2/embed/movie/${id}` : `https://vidsrc.cc/v2/embed/tv/${id}/${s}/${e}` },
         { name: "سيرفر 2 (AutoEmbed Pro)", url: isMov ? `https://player.autoembed.cc/embed/movie/${id}` : `https://player.autoembed.cc/embed/tv/${id}/${s}/${e}` },
         { name: "سيرفر 3 (MultiEmbed - تركي وآسيوي)", url: isMov ? `https://multiembed.mov/?video_id=${id}&tmdb=1` : `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}` },
-        { name: "سيرفر 4 (VidLink Pro)", url: isMov ? `https://vidlink.pro/movie/${id}?primaryColor=e50914` : `https://vidlink.pro/tv/${id}/${s}/${e}?primaryColor=e50914` },
-        { name: "سيرفر 5 (2Embed VIP)", url: isMov ? `https://www.2embed.cc/embed/${id}` : `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}` },
-        { name: "سيرفر 6 (Embed.su)", url: isMov ? `https://embed.su/embed/movie/${id}` : `https://embed.su/embed/tv/${id}/${s}/${e}` },
-        { name: "سيرفر 7 (NontonGo)", url: isMov ? `https://www.nontongo.win/embed/movie/${id}` : `https://www.nontongo.win/embed/tv/${id}/${s}/${e}` },
-        { name: "سيرفر 8 (SmashyStream)", url: isMov ? `https://embed.smashystream.com/playere.php?tmdb=${id}` : `https://embed.smashystream.com/playere.php?tmdb=${id}&season=${s}&episode=${e}` }
+        { name: "سيرفر 4 (2Embed VIP)", url: isMov ? `https://www.2embed.cc/embed/${id}` : `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}` },
+        { name: "سيرفر 5 (Embed.su)", url: isMov ? `https://embed.su/embed/movie/${id}` : `https://embed.su/embed/tv/${id}/${s}/${e}` },
+        { name: "سيرفر 6 (NontonGo)", url: isMov ? `https://www.nontongo.win/embed/movie/${id}` : `https://www.nontongo.win/embed/tv/${id}/${s}/${e}` },
+        { name: "سيرفر 7 (SmashyStream)", url: isMov ? `https://embed.smashystream.com/playere.php?tmdb=${id}` : `https://embed.smashystream.com/playere.php?tmdb=${id}&season=${s}&episode=${e}` }
       ];
     }
 
