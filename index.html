@@ -11,7 +11,6 @@
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#e50914">
 
-  <!-- دعم تطبيق الويب التقدمي (PWA) -->
   <link rel="manifest" href="/manifest.json">
   <link rel="icon" type="image/png" href="https://img.icons8.com/color/96/movie-projector.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -49,7 +48,6 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
     body { background-color: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; transition: background-color 0.3s, color 0.3s; }
 
-    /* تركيز خاص بشاشات التلفزيون الذكية والريموت كنترول */
     :focus-visible, .tv-active-focus {
       outline: 3px solid var(--cyan) !important;
       box-shadow: 0 0 16px rgba(0, 240, 255, 0.8) !important;
@@ -150,23 +148,13 @@
     .btn-detail-action.active-fav { color: var(--gold); border-color: var(--gold); }
     .btn-detail-action.active-watched { color: var(--watched); border-color: var(--watched); }
 
-    /* شريط الرقابة والمساعدة الذكي */
-    .smart-status-banner {
-      background: rgba(15, 20, 34, 0.95);
-      border: 1px solid var(--cyan);
-      border-radius: 8px;
-      padding: 10px 14px;
-      margin-bottom: 12px;
-      display: none;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
-    }
-    .status-pulse { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 8px var(--cyan); animation: pulseAnim 1.2s infinite; }
-    @keyframes pulseAnim { 0% { transform: scale(0.9); opacity: 0.7; } 50% { transform: scale(1.3); opacity: 1; } 100% { transform: scale(0.9); opacity: 0.7; } }
+    .server-dropdown-container { position: relative; margin-top: 15px; z-index: 50; display: none; }
+    .server-toggle-btn { background: var(--primary); color: #fff; border: none; padding: 10px 16px; border-radius: 6px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-family: inherit; }
+    .server-toggle-btn:hover { background: #b80710; }
+    .server-menu-list { position: absolute; top: 45px; right: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px; display: none; flex-direction: column; gap: 6px; box-shadow: 0 8px 20px rgba(0,0,0,0.6); min-width: 250px; max-height: 280px; overflow-y: auto; }
+    html[dir="ltr"] .server-menu-list { right: auto; left: 0; }
+    .server-menu-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 10px 12px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; font-weight: 700; transition: all 0.2s; text-align: right; }
+    .server-menu-btn:hover, .server-menu-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
     .player-container { width: 100%; background: #000; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 14px; position: relative; display: none; }
     #directPlayerBox { display: none; width: 100%; position: relative; }
@@ -178,14 +166,6 @@
     
     .player-box { position: relative; width: 100%; padding-top: 56.25%; }
     .player-box iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
-
-    .server-dropdown-container { position: relative; margin-top: 15px; z-index: 50; display: none; }
-    .server-toggle-btn { background: var(--primary); color: #fff; border: none; padding: 10px 16px; border-radius: 6px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-family: inherit; }
-    .server-toggle-btn:hover { background: #b80710; }
-    .server-menu-list { position: absolute; top: 45px; right: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px; display: none; flex-direction: column; gap: 6px; box-shadow: 0 8px 20px rgba(0,0,0,0.6); min-width: 250px; max-height: 280px; overflow-y: auto; }
-    html[dir="ltr"] .server-menu-list { right: auto; left: 0; }
-    .server-menu-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 10px 12px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; font-weight: 700; transition: all 0.2s; text-align: right; }
-    .server-menu-btn:hover, .server-menu-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
     .episodes-bar { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px; margin-top: 10px; display: none; }
     .seasons-scroll { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin-top: 8px; }
@@ -391,18 +371,6 @@
       </div>
     </div>
 
-    <!-- شريط الرقابة والمساعدة الذكي -->
-    <div class="smart-status-banner" id="smartStatusBanner">
-      <div style="display:flex; align-items:center; gap:8px;">
-        <span class="status-pulse"></span>
-        <span id="smartStatusText">تم اختيار أفضل سيرفر مناسب للعمل تلقائياً.</span>
-      </div>
-      <div style="display:flex; gap:6px;">
-        <button style="background:var(--cyan); color:#000; border:none; padding:4px 8px; border-radius:4px; font-weight:800; font-size:0.75rem; cursor:pointer;" onclick="confirmServerSuccess()">✅ تثبيت</button>
-        <button style="background:rgba(255,255,255,0.1); color:#fff; border:1px solid var(--border); padding:4px 8px; border-radius:4px; font-weight:700; font-size:0.75rem; cursor:pointer;" onclick="manualSkipServer()">⏭️ التالي</button>
-      </div>
-    </div>
-
     <!-- قائمة السيرفرات المنسدلة الذكية مع زر التخطي السريع -->
     <div class="server-dropdown-container" id="serversContainer" style="display:none; gap:8px; align-items:center; flex-wrap:wrap;">
       <button id="serverToggleBtn" class="server-toggle-btn" onclick="toggleServerMenu()">
@@ -417,12 +385,10 @@
     </div>
 
     <div class="player-container" id="mainPlayerContainer">
-      <!-- المشغل الأصلي للبث المباشر (HLS Direct Native Player) -->
       <div id="directPlayerBox">
         <video id="nativeVideo" controls playsinline crossorigin="anonymous"></video>
         <button class="skip-intro-btn" id="skipIntroBtn" onclick="skipIntro()">⏭️ تخطي المقدمة (+85s)</button>
       </div>
-      <!-- المشغل التناوبي المدمج (Iframe Fallback) -->
       <div class="player-box" id="iframeBox">
         <iframe id="streamFrame" src="" width="100%" height="450" frameborder="0" allowfullscreen="true" allow="autoplay; fullscreen; encrypted-media; picture-in-picture"></iframe>
       </div>
@@ -845,7 +811,7 @@
     }
 
     function initServerResponseWatcher() {
-      // 1. كاشف التفاعل اللحظي مع المشغل (Iframe Focus Tracker)
+      // كاشف التفاعل اللحظي مع المشغل (Iframe Focus Tracker)
       window.addEventListener('blur', () => {
         setTimeout(() => {
           if (document.activeElement && document.activeElement.tagName === 'IFRAME') {
@@ -854,7 +820,7 @@
         }, 100);
       });
 
-      // 2. مستمع رسائل المشغلات الدولية
+      // مستمع رسائل المشغلات الدولية
       window.addEventListener('message', (event) => {
         if (!event.data) return;
         try {
@@ -887,9 +853,6 @@
       generateServerEndpoints();
       renderDynamicServersDeck();
 
-      const banner = document.getElementById('smartStatusBanner');
-      banner.style.display = 'flex';
-
       const mediaKey = `winning_srv_${currentItem.type}_${currentItem.id}_s${currentItem.season}_e${currentItem.episode}`;
       const savedWinningServer = parseInt(localStorage.getItem(mediaKey) || '1');
 
@@ -906,31 +869,23 @@
       currentServer = serverIdx;
       const target = activeServerList[serverIdx - 1];
       const frame = document.getElementById('streamFrame');
-      const bannerText = document.getElementById('smartStatusText');
       const toggleBtn = document.getElementById('serverToggleBtn');
 
-      bannerText.innerText = `جاري تشغيل: [${target.name}]`;
       toggleBtn.innerHTML = `📺 <span>سيرفر ${serverIdx} (محدد)</span>`;
       
       document.querySelectorAll('.server-menu-btn').forEach((b, i) => b.classList.toggle('active', i + 1 === serverIdx));
 
-      // تعيين الرابط دون تشغيل أي مؤقت تخطي أعمى يقطع الفيديو
       frame.src = target.url;
     }
 
     function confirmServerSuccess() {
       const target = activeServerList[currentServer - 1];
-      const banner = document.getElementById('smartStatusBanner');
-      const bannerText = document.getElementById('smartStatusText');
       const toggleBtn = document.getElementById('serverToggleBtn');
 
-      if (bannerText) bannerText.innerText = `✅ مثبت: [${target ? target.name : 'سيرفر نشط'}]`;
       if (toggleBtn) toggleBtn.innerHTML = `📺 <span>سيرفر ${currentServer} (يعمل بنجاح 🟢)</span>`;
 
       const mediaKey = `winning_srv_${currentItem.type}_${currentItem.id}_s${currentItem.season}_e${currentItem.episode}`;
       localStorage.setItem(mediaKey, currentServer);
-
-      setTimeout(() => { if (banner) banner.style.display = 'none'; }, 2000);
     }
 
     function manualSkipServer() {
@@ -945,7 +900,6 @@
     function changeServer(idx) {
       currentServer = idx;
       executeServerLaunch(idx);
-      document.getElementById('smartStatusBanner').style.display = 'none';
     }
 
     function renderDynamicServersDeck() {
@@ -1005,7 +959,6 @@
           iframeBox.style.display = 'none';
           directBox.style.display = 'block';
           srvContainer.style.display = 'none';
-          document.getElementById('smartStatusBanner').style.display = 'none';
 
           if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
 
@@ -1083,9 +1036,6 @@
 
       const srvContainer = document.getElementById('serversContainer');
       if (srvContainer) srvContainer.style.display = 'none';
-
-      const banner = document.getElementById('smartStatusBanner');
-      if (banner) banner.style.display = 'none';
     }
 
     // ==========================================
@@ -1628,7 +1578,6 @@
       document.getElementById('theaterView').style.display = 'block';
       document.getElementById('mainPlayerContainer').style.display = 'none';
       document.getElementById('serversContainer').style.display = 'none';
-      document.getElementById('smartStatusBanner').style.display = 'none';
       window.scrollTo(0, 0);
 
       currentItem = { id, imdb_id: '', title: '', origTitle: '', slug: '', origLang: '', isAnime: false, isAsian: false, isTurkish: false, type, poster_path: '', season, episode, isCustom: false, directUrl: '' };
@@ -1767,7 +1716,6 @@
       document.getElementById('serversContainer').style.display = 'none';
       document.getElementById('episodesContainer').style.display = 'none';
       document.getElementById('directPlayerBox').style.display = 'block';
-      document.getElementById('smartStatusBanner').style.display = 'none';
       window.scrollTo(0, 0);
 
       const video = document.getElementById('nativeVideo');
