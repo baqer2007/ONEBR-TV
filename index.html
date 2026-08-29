@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-  <!-- وسوم تهيئة محركات البحث (SEO) 🔍 -->
   <title>ONEBR TV | مشاهدة وتحميل أحدث الأفلام والمسلسلات والأنمي</title>
   <meta name="description" content="منصة ONEBR TV لمشاهدة أحدث الأفلام، المسلسلات، الأنمي، والدراما الآسيوية والتركية بجودة عالية وسيرفرات سريعة.">
   <meta name="keywords" content="أفلام, مسلسلات, أنمي, دراما كورية, دراما تركية, سينما, ONEBR TV">
@@ -149,7 +148,6 @@
     .player-box { position: relative; width: 100%; padding-top: 56.25%; }
     .player-box iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
 
-    /* قائمة السيرفرات المنسدلة الذكية */
     .server-dropdown-container { position: relative; margin-top: 15px; z-index: 50; display: none; }
     .server-toggle-btn { background: var(--primary); color: #fff; border: none; padding: 10px 16px; border-radius: 6px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-family: inherit; }
     .server-toggle-btn:hover { background: #b80710; }
@@ -189,7 +187,7 @@
     .auth-toggle-links { display: flex; justify-content: space-between; margin-top: 10px; font-size: 0.75rem; }
     .auth-toggle-links a { color: var(--cyan); text-decoration: none; cursor: pointer; }
 
-    .admin-modal { max-width: 860px; }
+    .admin-modal { max-width: 900px; }
     .admin-nav { display: flex; gap: 6px; margin-bottom: 14px; border-bottom: 1px solid var(--border); padding-bottom: 6px; overflow-x: auto; scrollbar-width: none; }
     .admin-nav-btn { background: none; border: none; color: var(--text-muted); font-weight: 700; font-size: 0.78rem; cursor: pointer; padding: 6px 10px; border-radius: 6px; white-space: nowrap; }
     .admin-nav-btn.active { background: var(--surface-hover); color: var(--cyan); }
@@ -207,6 +205,7 @@
 
     .user-table-avatar { width: 28px; height: 28px; border-radius: 50%; vertical-align: middle; background: #1a2234; border: 1px solid var(--border); }
     .fingerprint-badge { font-family: monospace; font-size: 0.65rem; background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 4px; color: var(--cyan); }
+    .watched-tag { display: inline-block; background: rgba(0, 240, 255, 0.1); color: var(--cyan); border-radius: 4px; padding: 2px 5px; margin: 2px; font-size: 0.68rem; }
 
     footer { background: var(--surface); border-top: 1px solid var(--border); padding: 20px 14px; text-align: center; font-size: 0.72rem; color: var(--text-muted); margin-top: 30px; }
   </style>
@@ -530,11 +529,11 @@
       <div class="admin-nav">
         <button class="admin-nav-btn active" onclick="switchAdminTab('usersManage', this)">👥 المستخدمين المسجلين</button>
         <button class="admin-nav-btn" onclick="switchAdminTab('vipRequests', this)">📩 طلبات الأعضاء</button>
-        <button class="admin-nav-btn" onclick="switchAdminTab('visitors', this)">🌐 سجل الزوار</button>
+        <button class="admin-nav-btn" onclick="switchAdminTab('visitors', this)">🌐 سجل الزوار والنشاط</button>
         <button class="admin-nav-btn" onclick="switchAdminTab('mediaManage', this)">🎬 الأعمال المباشرة</button>
         <button class="admin-nav-btn" onclick="switchAdminTab('addMedia', this)">➕ إضافة عمل</button>
         <button class="admin-nav-btn" onclick="switchAdminTab('banManage', this)">🚫 إدارة الحظر</button>
-        <button class="admin-nav-btn" onclick="switchAdminTab('banner', this)">📢 التنبيهات</button>
+        <button class="admin-nav-btn" onclick="switchAdminTab('siteSettings', this)">⚙️ إعدادات الإعلانات والتنبيهات</button>
       </div>
 
       <div id="tabUsersManage">
@@ -556,9 +555,9 @@
       </div>
 
       <div id="tabVisitors" style="display: none;">
-        <div style="max-height: 280px; overflow-y: auto;">
+        <div style="max-height: 320px; overflow-y: auto;">
           <table class="admin-table">
-            <thead><tr><th>البصمة الفريدة</th><th>الوقت</th><th>المتصفح والجهاز</th><th>الحساب</th></tr></thead>
+            <thead><tr><th>اسم الزائر</th><th>وقت الدخول</th><th>مدة البقاء ⏱️</th><th>المتصفح</th><th>الحساب</th><th>المشاهدات 🎬</th></tr></thead>
             <tbody id="visitorsTableBody"></tbody>
           </table>
         </div>
@@ -591,7 +590,13 @@
         </div>
       </div>
 
-      <div id="tabBanner" style="display: none;">
+      <div id="tabSiteSettings" style="display: none;">
+        <div style="background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <div style="font-size: 0.85rem; font-weight: 800; margin-bottom: 6px; color: var(--gold);">🚫 التحكم العام بالإعلانات لكل الموقع</div>
+          <p style="font-size: 0.72rem; color: var(--text-muted); margin-bottom: 10px;">يمكنك تعطيل جميع شبكات الإعلانات عن كافة الزوار أو تفعيلها بضغطة زر واحدة:</p>
+          <button id="globalAdsToggleBtn" class="btn-submit" style="background: #ef4444;" onclick="toggleGlobalAdsState()">إيقاف الإعلانات عن الجميع 🚫</button>
+        </div>
+
         <div class="form-group"><label>نص الشريط الإعلاني:</label><input type="text" id="adminBannerText" placeholder="اكتب نص الإعلان..."></div>
         <button class="btn-submit" onclick="saveBannerAnnouncement()">تحديث التنبيه</button>
         <button class="btn-submit" style="background: rgba(255,255,255,0.1); margin-top: 6px;" onclick="removeBannerAnnouncement()">إخفاء التنبيه</button>
@@ -686,6 +691,11 @@
     let verifyingForgotEmailAddress = '';
     let generatedOtp = '';
 
+    // تتبع وقت بقاء الزائر
+    const sessionStartTime = Date.now();
+    let currentVisitorRecordKey = null;
+    let isGlobalAdsEnabled = true;
+
     function toggleServerMenu() {
       const menu = document.getElementById("serverDropdown");
       menu.style.display = menu.style.display === "flex" ? "none" : "flex";
@@ -699,7 +709,6 @@
       }
     });
 
-    // 🔍 1. دالة جلب رابط الترجمة العربية تلقائياً
     async function getArabicSubtitleUrl(tmdbId, type, season = 1, episode = 1) {
       try {
         const query = type === 'tv' ? `id=${tmdbId}&s=${season}&e=${episode}` : `id=${tmdbId}`;
@@ -708,20 +717,16 @@
         if (data && data.length > 0 && data[0].url) {
           return data[0].url;
         }
-      } catch (err) {
-        console.warn("لم يتم العثور على ملف ترجمة خارجي:", err);
-      }
+      } catch (err) {}
       return null;
     }
 
-    // 🔗 2. دالة دمج رابط الترجمة داخل رابط السيرفر
     function appendSubtitleToUrl(serverUrl, subtitleUrl) {
       if (!subtitleUrl) return serverUrl;
       const separator = serverUrl.includes('?') ? '&' : '?';
       return `${serverUrl}${separator}sub_url=${encodeURIComponent(subtitleUrl)}&sub_lang=ara`;
     }
 
-    // 🧠 3. بناء قائمة السيرفرات الذكية وترتيبها حسب طبيعة العمل
     function buildSmartServerList() {
       const { id, type, season: s, episode: e } = currentItem;
       const isMov = (type === 'movie');
@@ -832,7 +837,6 @@
       };
     }
 
-    // 🚀 4. بدء التشغيل وجلب الترجمة ودمجها بالسيرفرات فوراً
     async function startStreamingNow() {
       const mainContainer = document.getElementById('mainPlayerContainer');
       const directBox = document.getElementById('directPlayerBox');
@@ -864,6 +868,7 @@
       renderDynamicServersDeck();
       changeServer(1);
       recordResumeProgress(currentItem, 20);
+      recordVisitorWatchActivity(currentItem.title || 'عمل غير محدد');
       mainContainer.scrollIntoView({ behavior: 'smooth' });
     }
 
@@ -988,6 +993,7 @@
       return `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(seed || 'guest')}`;
     }
 
+    // 🏷️ توليد بصمة واسم مميز لكل زائر
     function getVisitorFingerprint() {
       let fp = localStorage.getItem('visitor_uuid');
       if (!fp) {
@@ -997,10 +1003,29 @@
       return fp;
     }
 
-    function injectAdScriptsIfEligible() {
-      if (currentUser && (currentUser.isVip || currentUser.isAdmin || currentUser.adsDisabled)) {
-        return;
+    function getVisitorDisplayName() {
+      let name = localStorage.getItem('visitor_name');
+      if (!name) {
+        const randomNum = Math.floor(1000 + Math.random() * 9000);
+        name = `زائر #${randomNum}`;
+        localStorage.setItem('visitor_name', name);
       }
+      return name;
+    }
+
+    // 🚫 التحقق من حالة الإعلانات الشاملة وحساب المستخدم
+    async function loadGlobalAdsSetting() {
+      try {
+        const res = await fetch(`${FIREBASE_DB}/settings/global_ads.json`);
+        const val = await res.json();
+        if (val !== null) isGlobalAdsEnabled = val;
+      } catch(e) {}
+    }
+
+    function injectAdScriptsIfEligible() {
+      if (!isGlobalAdsEnabled) return;
+      if (currentUser && (currentUser.isVip || currentUser.isAdmin || currentUser.adsDisabled)) return;
+
       const popScript = document.createElement('script');
       popScript.src = "https://pl31046353.profitableratecpmnetwork.com/61/4f/72/614f728ad484f449400870c3be110111.js";
       document.head.appendChild(popScript);
@@ -1010,10 +1035,70 @@
       document.body.appendChild(socialScript);
     }
 
+    // ⏱️ تسجيل الزائر وتحديث وقت البقاء عند المغادرة
+    async function logVisitor() {
+      try {
+        const fp = getVisitorFingerprint();
+        const vName = getVisitorDisplayName();
+        const visitorData = {
+          name: vName,
+          fingerprint: fp,
+          time: new Date().toLocaleString('ar-EG'),
+          agent: navigator.userAgent.substring(0, 32),
+          user: currentUser ? currentUser.email : "Guest",
+          duration: "أقل من دقيقة",
+          watched: []
+        };
+        const res = await fetch(`${FIREBASE_DB}/visitors.json`, { method: 'POST', body: JSON.stringify(visitorData) });
+        const data = await res.json();
+        if (data && data.name) {
+          currentVisitorRecordKey = data.name;
+        }
+      } catch(e) {}
+    }
+
+    function formatDuration(seconds) {
+      if (seconds < 60) return `${seconds} ثانية`;
+      const mins = Math.floor(seconds / 60);
+      const remSecs = seconds % 60;
+      return `${mins} دقيقة و ${remSecs} ثانية`;
+    }
+
+    function updateVisitorDurationOnLeave() {
+      if (!currentVisitorRecordKey) return;
+      const elapsedSeconds = Math.round((Date.now() - sessionStartTime) / 1000);
+      const durationFormatted = formatDuration(elapsedSeconds);
+      
+      const payload = JSON.stringify(durationFormatted);
+      const url = `${FIREBASE_DB}/visitors/${currentVisitorRecordKey}/duration.json`;
+      
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon(url, payload);
+      } else {
+        fetch(url, { method: 'PUT', body: payload, keepalive: true });
+      }
+    }
+
+    window.addEventListener('pagehide', updateVisitorDurationOnLeave);
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') updateVisitorDurationOnLeave();
+    });
+
+    async function recordVisitorWatchActivity(title) {
+      if (!currentVisitorRecordKey || !title) return;
+      try {
+        await fetch(`${FIREBASE_DB}/visitors/${currentVisitorRecordKey}/watched.json`, {
+          method: 'POST',
+          body: JSON.stringify({ title, time: new Date().toLocaleTimeString('ar-EG') })
+        });
+      } catch(e) {}
+    }
+
     async function initSite() {
       applyTheme(currentTheme);
       applyLanguage(currentLang);
       await verifyUserStatus();
+      await loadGlobalAdsSetting();
       injectAdScriptsIfEligible();
       logVisitor();
       loadCustomMediaFromFirebase();
@@ -1742,13 +1827,14 @@
       document.getElementById('tabMediaManage').style.display = tab === 'mediaManage' ? 'block' : 'none';
       document.getElementById('tabAddMedia').style.display = tab === 'addMedia' ? 'block' : 'none';
       document.getElementById('tabBanManage').style.display = tab === 'banManage' ? 'block' : 'none';
-      document.getElementById('tabBanner').style.display = tab === 'banner' ? 'block' : 'none';
+      document.getElementById('tabSiteSettings').style.display = tab === 'siteSettings' ? 'block' : 'none';
       
       if (tab === 'usersManage') loadAdminUsersTable();
       if (tab === 'vipRequests') loadAdminVipRequestsTable();
       if (tab === 'visitors') loadAdminVisitors();
       if (tab === 'mediaManage') loadAdminMediaTable();
       if (tab === 'banManage') loadBannedUsersTable();
+      if (tab === 'siteSettings') updateGlobalAdsBtnUI();
     }
 
     async function loadAdminDashboard() {
@@ -1859,19 +1945,6 @@
       loadAdminStats();
     }
 
-    async function logVisitor() {
-      try {
-        const fp = getVisitorFingerprint();
-        const visitorData = {
-          fingerprint: fp,
-          time: new Date().toLocaleString('ar-EG'),
-          agent: navigator.userAgent.substring(0, 32),
-          user: currentUser ? currentUser.email : "Guest"
-        };
-        await fetch(`${FIREBASE_DB}/visitors.json`, { method: 'POST', body: JSON.stringify(visitorData) });
-      } catch(e) {}
-    }
-
     async function loadAdminVisitors() {
       try {
         const res = await fetch(`${FIREBASE_DB}/visitors.json`);
@@ -1879,19 +1952,45 @@
         const tbody = document.getElementById('visitorsTableBody');
         tbody.innerHTML = "";
         if (data) {
-          Object.keys(data).slice(-20).reverse().forEach(k => {
+          Object.keys(data).slice(-30).reverse().forEach(k => {
             const v = data[k];
+            let watchedHtml = "—";
+            if (v.watched) {
+              const titles = Object.values(v.watched).map(item => typeof item === 'object' ? item.title : item);
+              watchedHtml = titles.map(t => `<span class="watched-tag">🎬 ${t}</span>`).join('');
+            }
             const row = document.createElement('tr');
             row.innerHTML = `
-              <td><span class="fingerprint-badge">${v.fingerprint || 'OLD-VISITOR'}</span></td>
+              <td><strong style="color:var(--cyan);">${v.name || 'زائر'}</strong><br><span class="fingerprint-badge">${v.fingerprint || 'ID'}</span></td>
               <td>${v.time}</td>
+              <td><strong style="color:var(--gold);">${v.duration || 'جاري الحساب...'}</strong></td>
               <td>${v.agent}</td>
               <td><strong>${v.user}</strong></td>
+              <td style="max-width:200px;">${watchedHtml}</td>
             `;
             tbody.appendChild(row);
           });
         }
       } catch(e) {}
+    }
+
+    function updateGlobalAdsBtnUI() {
+      const btn = document.getElementById('globalAdsToggleBtn');
+      if (!btn) return;
+      if (isGlobalAdsEnabled) {
+        btn.innerText = "إيقاف الإعلانات عن الجميع 🚫";
+        btn.style.background = "#ef4444";
+      } else {
+        btn.innerText = "تفعيل الإعلانات للجميع ✅";
+        btn.style.background = "#10b981";
+      }
+    }
+
+    async function toggleGlobalAdsState() {
+      isGlobalAdsEnabled = !isGlobalAdsEnabled;
+      await fetch(`${FIREBASE_DB}/settings/global_ads.json`, { method: 'PUT', body: JSON.stringify(isGlobalAdsEnabled) });
+      updateGlobalAdsBtnUI();
+      alert(isGlobalAdsEnabled ? 'تم تفعيل الإعلانات لجميع زوار الموقع!' : 'تم تعطيل الإعلانات تماماً عن الموقع!');
     }
 
     async function saveCustomMedia() {
