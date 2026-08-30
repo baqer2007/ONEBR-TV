@@ -656,20 +656,23 @@
       if (origLang === 'ar') {
         return item.title || item.name || item.original_title || item.original_name || '';
       }
-      // إذا كان العمل غير عربي نعتمد الاسم الإنجليزي/الأصلي
-      return item.original_title || item.original_name || item.title || item.name || '';
+      // إذا كان العمل غير عربي نعتمد الاسم الإنجليزي أولاً
+      return item.title || item.name || item.original_title || item.original_name || '';
     }
 
     function getSafeQueryParam() {
-      return isFamilyMode ? '&include_adult=false' : '';
+      return isFamilyMode ? '&include_adult=false' : '&include_adult=true';
     }
 
     function toggleFamilyMode() {
       isFamilyMode = !isFamilyMode;
       localStorage.setItem('family_mode', isFamilyMode);
       applyFamilyModeUI();
-      handleRouting();
+      
+      // إعادة تحميل وتحديث جميع الأقسام فورياً
       loadShelves();
+      initHeroRotation();
+      handleRouting();
     }
 
     function applyFamilyModeUI() {
@@ -1460,6 +1463,7 @@
 
             searchDropdown.innerHTML = '';
             results.forEach(item => {
+              if (isFamilyMode && item.adult) return; // حجب البحث العائلي
               const isMovie = (item.media_type === 'movie' || item.title);
               const type = isMovie ? 'movie' : 'tv';
               const title = getDisplayTitle(item);
@@ -1487,8 +1491,13 @@
       try {
         const res = await fetch(`${API_BASE}/trending/all/day?api_key=${API_KEY}${getSafeQueryParam()}`);
         const data = await res.json();
-        heroRotationItems = (data.results || []).filter(i => i.backdrop_path);
+        let items = (data.results || []).filter(i => i.backdrop_path);
+        if (isFamilyMode) {
+          items = items.filter(i => !i.adult);
+        }
+        heroRotationItems = items;
         if (heroRotationItems.length > 0) {
+          heroRotationIndex = 0;
           renderHeroItem(heroRotationItems[0]);
           if (heroInterval) clearInterval(heroInterval);
           heroInterval = setInterval(() => {
@@ -1518,9 +1527,11 @@
 
     async function loadShelfList(path, elemId, fixedType = null) {
       try {
+        const container = document.getElementById(elemId);
+        if (container) container.innerHTML = '';
         const res = await fetch(`${API_BASE}${path}${path.includes('?') ? '&' : '?'}api_key=${API_KEY}${getSafeQueryParam()}`);
         const json = await res.json();
-        renderCards(json.results || [], document.getElementById(elemId), fixedType);
+        renderCards(json.results || [], container, fixedType);
       } catch (e) {}
     }
 
@@ -1528,6 +1539,9 @@
       if (!container) return;
       list.forEach(item => {
         if (!item.poster_path) return;
+        // استبعاد المحتوى المخل والبالغين إذا كان الوضع العائلي مفعلاً
+        if (isFamilyMode && item.adult) return;
+
         const isMovie = fixedType ? (fixedType === 'movie') : (item.media_type === 'movie' || item.title);
         const type = isMovie ? 'movie' : 'tv';
         const title = getDisplayTitle(item);
