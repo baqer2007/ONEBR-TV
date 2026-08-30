@@ -60,11 +60,28 @@
     .brand-icon { width: 32px; height: 32px; background: linear-gradient(135deg, #e50914, #831843); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.9rem; }
     .brand-name { font-size: 1.05rem; font-weight: 900; background: linear-gradient(90deg, var(--text), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-    .header-center { flex: 1; max-width: 360px; position: relative; }
+    .header-center { flex: 1; max-width: 360px; position: relative; display: flex; justify-content: center; }
     .search-wrapper { position: relative; width: 100%; display: flex; align-items: center; }
-    .search-wrapper input { width: 100%; padding: 7px 32px 7px 10px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 0.78rem; outline: none; }
+    
+    /* تعديل شريط البحث ليتمدد بسلاسة عند التركيز */
+    .search-wrapper input { 
+      width: 100%; 
+      padding: 7px 32px 7px 10px; 
+      border-radius: 20px; 
+      border: 1px solid var(--border); 
+      background: var(--bg); 
+      color: var(--text); 
+      font-size: 0.78rem; 
+      outline: none; 
+      transition: all 0.3s ease; 
+    }
+    .search-wrapper input:focus {
+      width: 135%;
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.25);
+      border-color: var(--cyan);
+    }
     html[dir="ltr"] .search-wrapper input { padding: 7px 10px 7px 32px; }
-    .search-icon { position: absolute; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.78rem; cursor: pointer; }
+    .search-icon { position: absolute; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.78rem; cursor: pointer; z-index: 2; }
     html[dir="rtl"] .search-icon { right: 10px; }
     html[dir="ltr"] .search-icon { left: 10px; }
 
@@ -367,6 +384,7 @@
         <button class="skip-intro-btn" id="skipIntroBtn" onclick="skipIntro()">⏭️ تخطي المقدمة (+85s)</button>
       </div>
       <div class="player-box" id="iframeBox">
+        <!-- تفعيل صلاحيات iframe الكاملة للمشغلات الخارجية -->
         <iframe 
           id="streamFrame" 
           src="" 
@@ -374,7 +392,7 @@
           height="450" 
           frameborder="0" 
           allowfullscreen="true" 
-          sandbox="allow-scripts allow-same-origin allow-forms allow-presentation" 
+          sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-popups allow-modals" 
           allow="autoplay; fullscreen; encrypted-media; picture-in-picture">
         </iframe>
       </div>
