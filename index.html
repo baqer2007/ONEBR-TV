@@ -257,6 +257,7 @@
     <div class="genre-boxes-grid" id="genreBoxesContainer"></div>
 
     <div class="drawer-section-title" data-i18n="nav_settings">إعدادات المنصة</div>
+    <div class="drawer-link" onclick="toggleFamilyMode()"><i class="fa-solid fa-shield-halved" style="color:var(--watched);"></i> <span id="familyModeToggleText">الوضع العائلي: مفعّل</span></div>
     <div class="drawer-link" onclick="toggleTheme()"><i class="fa-solid fa-circle-half-stroke"></i> <span id="themeToggleText">الوضع النهاري</span></div>
     <div class="drawer-link" onclick="toggleLanguage()"><i class="fa-solid fa-globe"></i> <span id="langToggleText">English</span></div>
     <div class="drawer-link" id="adminDrawerLink" style="display:none;" onclick="toggleDrawer(); location.hash='#/admin';"><i class="fa-solid fa-shield-halved" style="color:var(--cyan);"></i> <span data-i18n="admin_title">لوحة الأدمن</span></div>
@@ -395,7 +396,6 @@
         <button class="skip-intro-btn" id="skipIntroBtn" onclick="skipIntro()">⏭️ تخطي المقدمة (+85s)</button>
       </div>
       <div class="player-box" id="iframeBox">
-        <!-- تم إلغاء خاصية sandbox بالكامل لتشغيل السيرفرات دون قيود -->
         <iframe 
           id="streamFrame" 
           src="" 
@@ -643,6 +643,8 @@
     const BACKDROP_BASE = "https://image.tmdb.org/t/p/original";
     const PROXY_BASE = "/api/extract?url=";
 
+    let isFamilyMode = localStorage.getItem('family_mode') !== 'false'; // تفعيل الوضع العائلي افتراضياً
+
     function getAuthToken() {
       return localStorage.getItem('auth_token') || '';
     }
@@ -650,10 +652,31 @@
     function getDisplayTitle(item) {
       if (!item) return '';
       const origLang = item.original_language || item.origLang;
+      // إذا كان العمل عربياً نتركه باللغة العربية
       if (origLang === 'ar') {
         return item.title || item.name || item.original_title || item.original_name || '';
       }
+      // إذا كان العمل غير عربي نعتمد الاسم الإنجليزي/الأصلي
       return item.original_title || item.original_name || item.title || item.name || '';
+    }
+
+    function getSafeQueryParam() {
+      return isFamilyMode ? '&include_adult=false' : '';
+    }
+
+    function toggleFamilyMode() {
+      isFamilyMode = !isFamilyMode;
+      localStorage.setItem('family_mode', isFamilyMode);
+      applyFamilyModeUI();
+      handleRouting();
+      loadShelves();
+    }
+
+    function applyFamilyModeUI() {
+      const text = document.getElementById('familyModeToggleText');
+      if (text) {
+        text.innerText = isFamilyMode ? 'الوضع العائلي: مفعّل 🛡️' : 'الوضع العائلي: معطّل ⚠️';
+      }
     }
 
     function sanitizeText(str) {
@@ -735,8 +758,6 @@
     let hasMoreExploreMedia = true;
     let hlsInstance = null;
     let searchDebounceTimer = null;
-    let verifyingForgotEmailAddress = '';
-    let generatedOtp = '';
 
     const sessionStartTime = Date.now();
     let currentVisitorRecordKey = null;
@@ -1172,6 +1193,7 @@
     async function initSite() {
       applyTheme(currentTheme);
       applyLanguage(currentLang);
+      applyFamilyModeUI();
       verifyUserStatus();
       await loadGlobalSettings();
       injectAdScriptsIfEligible();
@@ -1366,7 +1388,7 @@
       }
 
       try {
-        const res = await fetch(`${API_BASE}${currentExploreEndpoint}${currentExploreEndpoint.includes('?') ? '&' : '?'}api_key=${API_KEY}&page=${explorePage}`);
+        const res = await fetch(`${API_BASE}${currentExploreEndpoint}${currentExploreEndpoint.includes('?') ? '&' : '?'}api_key=${API_KEY}&page=${explorePage}${getSafeQueryParam()}`);
         const json = await res.json();
         const results = json.results || [];
 
@@ -1402,7 +1424,7 @@
       container.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:20px;">جاري البحث...</div>';
 
       try {
-        const res = await fetch(`${API_BASE}/search/multi?query=${encodeURIComponent(query)}&api_key=${API_KEY}`);
+        const res = await fetch(`${API_BASE}/search/multi?query=${encodeURIComponent(query)}&api_key=${API_KEY}${getSafeQueryParam()}`);
         const data = await res.json();
         container.innerHTML = '';
         const validResults = (data.results || []).filter(i => i.poster_path);
@@ -1431,7 +1453,7 @@
 
         searchDebounceTimer = setTimeout(async () => {
           try {
-            const res = await fetch(`${API_BASE}/search/multi?query=${encodeURIComponent(q)}&api_key=${API_KEY}`);
+            const res = await fetch(`${API_BASE}/search/multi?query=${encodeURIComponent(q)}&api_key=${API_KEY}${getSafeQueryParam()}`);
             const data = await res.json();
             const results = (data.results || []).filter(i => i.poster_path).slice(0, 6);
             if (results.length === 0) { searchDropdown.style.display = 'none'; return; }
@@ -1463,7 +1485,7 @@
 
     async function initHeroRotation() {
       try {
-        const res = await fetch(`${API_BASE}/trending/all/day?api_key=${API_KEY}`);
+        const res = await fetch(`${API_BASE}/trending/all/day?api_key=${API_KEY}${getSafeQueryParam()}`);
         const data = await res.json();
         heroRotationItems = (data.results || []).filter(i => i.backdrop_path);
         if (heroRotationItems.length > 0) {
@@ -1496,7 +1518,7 @@
 
     async function loadShelfList(path, elemId, fixedType = null) {
       try {
-        const res = await fetch(`${API_BASE}${path}${path.includes('?') ? '&' : '?'}api_key=${API_KEY}`);
+        const res = await fetch(`${API_BASE}${path}${path.includes('?') ? '&' : '?'}api_key=${API_KEY}${getSafeQueryParam()}`);
         const json = await res.json();
         renderCards(json.results || [], document.getElementById(elemId), fixedType);
       } catch (e) {}
@@ -1593,7 +1615,7 @@
 
     async function loadSimilarMedia(id, type) {
       try {
-        const res = await fetch(`${API_BASE}/${type}/${id}/similar?api_key=${API_KEY}`);
+        const res = await fetch(`${API_BASE}/${type}/${id}/similar?api_key=${API_KEY}${getSafeQueryParam()}`);
         const data = await res.json();
         const deck = document.getElementById('deckSimilar');
         deck.innerHTML = '';
