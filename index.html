@@ -179,20 +179,19 @@
     .server-menu-btn:hover, .server-menu-btn.active { background: var(--primary); color: #fff; }
 
     .episodes-bar { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-top: 8px; display: none; }
-    .seasons-scroll { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 5px; margin-top: 6px; }
-    .season-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 5px 10px; border-radius: 5px; font-size: 0.72rem; cursor: pointer; }
-    .season-btn.active { background: var(--cyan); color: #000; font-weight: 800; }
     
-    .episodes-controls { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 8px; padding-top: 6px; border-top: 1px solid var(--border); }
+    .episodes-controls { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
     .episode-jump-box { display: flex; align-items: center; gap: 5px; }
-    .episode-jump-box input { width: 75px; padding: 4px 6px; border-radius: 4px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 0.72rem; text-align: center; }
-    .episode-jump-box button { background: var(--cyan); color: #000; border: none; padding: 4px 8px; border-radius: 4px; font-size: 0.72rem; font-weight: 800; cursor: pointer; }
+    .episode-jump-box input { width: 85px; padding: 5px 8px; border-radius: 5px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 0.75rem; text-align: center; outline: none; }
+    .episode-jump-box input:focus { border-color: var(--cyan); }
+    .episode-jump-box button { background: var(--cyan); color: #000; border: none; padding: 5px 10px; border-radius: 5px; font-size: 0.75rem; font-weight: 800; cursor: pointer; }
 
-    .chunk-ranges-scroll { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 5px; margin-top: 6px; }
-    .chunk-btn { background: var(--surface-hover); border: 1px solid var(--border); color: var(--text-muted); padding: 4px 8px; border-radius: 4px; font-size: 0.68rem; cursor: pointer; font-weight: 700; white-space: nowrap; }
+    .chunk-ranges-scroll { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 5px; margin-bottom: 8px; scrollbar-width: none; }
+    .chunk-ranges-scroll::-webkit-scrollbar { display: none; }
+    .chunk-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text-muted); padding: 5px 10px; border-radius: 5px; font-size: 0.72rem; cursor: pointer; font-weight: 700; white-space: nowrap; }
     .chunk-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-    .episodes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(65px, 1fr)); gap: 5px; max-height: 220px; overflow-y: auto; margin-top: 8px; }
+    .episodes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(65px, 1fr)); gap: 5px; max-height: 220px; overflow-y: auto; margin-top: 4px; }
     .ep-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 6px 3px; border-radius: 5px; text-align: center; font-size: 0.72rem; cursor: pointer; position: relative; }
     .ep-btn.active { background: var(--primary); color: #fff; }
     .ep-btn.is-watched::after { content: '✓'; position: absolute; top: 1px; right: 3px; font-size: 0.6rem; color: var(--watched); font-weight: 900; }
@@ -239,12 +238,42 @@
     .fingerprint-badge { font-family: monospace; font-size: 0.6rem; background: rgba(255,255,255,0.06); padding: 1px 4px; border-radius: 3px; color: var(--cyan); }
     .watched-tag { display: inline-block; background: rgba(0, 240, 255, 0.1); color: var(--cyan); border-radius: 3px; padding: 1px 4px; margin: 1px; font-size: 0.65rem; }
 
+    /* Custom Toast Notification */
+    #customToast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 10px 18px;
+      border-radius: 30px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 9999;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+    }
+    #customToast.toast-show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+    #customToast.toast-error { border-color: #ef4444; color: #ef4444; }
+    #customToast.toast-success { border-color: var(--watched); color: var(--watched); }
+
     footer { background: var(--surface); border-top: 1px solid var(--border); padding: 16px 12px; text-align: center; font-size: 0.7rem; color: var(--text-muted); margin-top: 24px; }
   </style>
 </head>
 <body>
 
   <div id="announcementBanner"></div>
+  <div id="customToast"><i class="fa-solid fa-circle-info"></i> <span id="toastMessage"></span></div>
 
   <div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
   <div class="drawer" id="drawer">
@@ -420,15 +449,14 @@
     </div>
 
     <div class="episodes-bar" id="episodesContainer">
-      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
-        <div style="font-size: 0.78rem; font-weight: 800;" data-i18n="episodes_title">المواسم والحلقات:</div>
+      <div class="episodes-controls">
+        <div style="font-size: 0.78rem; font-weight: 800;" data-i18n="episodes_title">الحلقات:</div>
         <div class="episode-jump-box">
-          <input type="number" id="epJumpInput" placeholder="رقم الحلقة...">
+          <input type="number" id="epJumpInput" placeholder="رقم الحلقة..." min="1">
           <button onclick="handleQuickEpisodeJump()" data-i18n="jump_btn">انتقال</button>
         </div>
       </div>
       
-      <div class="seasons-scroll" id="seasonsList"></div>
       <div class="chunk-ranges-scroll" id="chunkRangesList"></div>
       <div class="episodes-grid" id="episodesList"></div>
     </div>
@@ -520,6 +548,25 @@
         <div class="form-group"><label data-i18n="auth_recover_label">أدخل بريدك الإلكتروني المسجل:</label><input type="email" id="forgotEmail"></div>
         <button class="btn-submit" onclick="sendVerificationCode()" data-i18n="auth_send_otp">إرسال رمز التحقق</button>
         <div class="auth-toggle-links" style="justify-content:center;"><a onclick="switchAuthView('login')" data-i18n="auth_back_login">العودة لتسجيل الدخول</a></div>
+      </div>
+
+      <div id="otpVerifyBox" style="display: none;">
+        <div class="modal-title"><i class="fa-solid fa-envelope-open-text" style="color: var(--cyan);"></i> <span>رمز التحقق (OTP)</span></div>
+        <p style="font-size:0.72rem; color:var(--text-muted); margin-bottom:10px; text-align:center;">لقد أرسلنا رمزاً مكوناً من 6 أرقام إلى بريدك الإلكتروني.</p>
+        <div class="form-group"><input type="text" id="otpInput" placeholder="######" maxlength="6" style="text-align:center; font-size:1.3rem; letter-spacing:8px;"></div>
+        <button class="btn-submit" style="background:var(--cyan); color:#000;" onclick="verifyOtpCode()">تأكيد الرمز</button>
+        <div class="auth-toggle-links" style="justify-content:center;"><a onclick="switchAuthView('forgot')">العودة</a></div>
+      </div>
+
+      <div id="resetPassFormBox" style="display: none;">
+        <div class="modal-title"><i class="fa-solid fa-lock-open" style="color: var(--cyan);"></i> <span>تعيين كود دخول جديد</span></div>
+        <p id="resetTargetEmail" style="font-size:0.72rem; color:var(--text-muted); margin-bottom:6px;"></p>
+        <div class="form-group" style="position: relative;">
+          <label>الكود الجديد:</label>
+          <input type="text" id="newResetPass" class="masked-pin" placeholder="6 خانات على الأقل">
+          <i class="fa-solid fa-eye-slash toggle-eye" onclick="togglePinVisibility('newResetPass', this)"></i>
+        </div>
+        <button class="btn-submit" style="background:var(--cyan); color:#000;" onclick="applyNewPassword()">حفظ وتحديث الكود</button>
       </div>
 
       <div id="authProfile" style="display: none; text-align: center;">
@@ -669,7 +716,7 @@
         shelf_explore: "استكشاف العروض", shelf_similar: "أعمال مقترحة ومشابهة",
         resume_watching: "متابعة المشاهدة", clear_all: "مسح الكل", loading_more: "جاري جلب المزيد...",
         btn_back: "العودة", select_server: "قائمة السيرفرات", srv_prefix: "سيرفر",
-        episodes_title: "المواسم والحلقات:", vip_title: "اشتراكات وباقات VIP",
+        episodes_title: "الحلقات:", vip_title: "اشتراكات وباقات VIP",
         vip_desc: "استمتع بتجربة خالية تماماً من الإعلانات مع شارات توهج ذهبية لحسابك وأولوية قصوى لطلبات الأفلام والمسلسلات.",
         auth_title: "تسجيل الدخول", auth_email: "البريد الإلكتروني:", auth_pass: "كود الدخول (PIN):",
         auth_btn: "دخول الحساب", auth_btn_header: "دخول", auth_profile: "الحساب الشخصي", auth_logout: "تسجيل الخروج",
@@ -712,7 +759,7 @@
         shelf_explore: "Explore Media", shelf_similar: "Similar & Recommended Titles",
         resume_watching: "Continue Watching", clear_all: "Clear All", loading_more: "Loading more...",
         btn_back: "Back", select_server: "Select Server", srv_prefix: "Server",
-        episodes_title: "Seasons & Episodes:", vip_title: "VIP Memberships & Plans",
+        episodes_title: "Episodes:", vip_title: "VIP Memberships & Plans",
         vip_desc: "Enjoy ad-free fast streaming with dedicated gold profile badges and VIP priority media requests.",
         auth_title: "User Login", auth_email: "Email Address:", auth_pass: "PIN Code:",
         auth_btn: "Login", auth_btn_header: "Login", auth_profile: "User Profile", auth_logout: "Logout",
@@ -787,6 +834,21 @@
     const sessionStartTime = Date.now();
     let currentVisitorRecordKey = null;
     let isGlobalAdsEnabled = true;
+
+    let toastTimeout = null;
+    function showToast(message, type = 'info') {
+      const toast = document.getElementById('customToast');
+      const toastText = document.getElementById('toastMessage');
+      if (!toast || !toastText) return;
+
+      clearTimeout(toastTimeout);
+      toastText.innerText = message;
+      toast.className = `toast-show toast-${type}`;
+
+      toastTimeout = setTimeout(() => {
+        toast.className = '';
+      }, 2600);
+    }
 
     function getAuthToken() { return localStorage.getItem('auth_token') || ''; }
     function getLanguageParam() { return currentLang === 'ar' ? '&language=ar-SA' : '&language=en-US'; }
@@ -1126,8 +1188,9 @@
         btn.classList.add('active-watched');
       }
       saveWatchedItems(watched);
-      if (currentItem.type === 'tv') {
-        renderTvEpisodes(currentItem.id, currentItem.season, currentItem.totalEpisodes || 10);
+      if (currentItem.type === 'tv' && currentItem.rawSeasons) {
+        const absEp = mapSeasonEpToAbsolute(currentItem.season, currentItem.episode, currentItem.rawSeasons);
+        renderContinuousEpisodes(currentItem.id, currentItem.rawSeasons, absEp);
       }
     }
 
@@ -1611,7 +1674,8 @@
 
         if (type === 'tv') {
           document.getElementById('episodesContainer').style.display = 'block';
-          renderTvSeasons(currentItem.rawSeasons, id);
+          const absEp = mapSeasonEpToAbsolute(season, episode, currentItem.rawSeasons);
+          renderContinuousEpisodes(id, currentItem.rawSeasons, absEp);
         } else {
           document.getElementById('episodesContainer').style.display = 'none';
         }
@@ -1633,44 +1697,52 @@
       } catch(e) {}
     }
 
-    function renderTvSeasons(seasons, tvId) {
-      const seasonsList = document.getElementById('seasonsList');
-      seasonsList.innerHTML = '';
+    function mapAbsoluteToSeasonEp(targetEp, seasons) {
       const validSeasons = seasons.filter(s => s.season_number > 0);
-
-      validSeasons.forEach(s => {
-        const btn = document.createElement('button');
-        btn.className = `season-btn ${s.season_number === currentItem.season ? 'active' : ''}`;
-        btn.innerText = `${translations[currentLang].season_prefix} ${s.season_number}`;
-        btn.onclick = () => {
-          document.querySelectorAll('.season-btn').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          currentItem.season = s.season_number;
-          currentItem.episode = 1;
-          currentEpisodesChunkIndex = 0;
-          location.hash = `#/theater/tv/${tvId}/${s.season_number}/1`;
-          renderSeasonEpisodesWithChunks(tvId, s.season_number, s.episode_count);
-        };
-        seasonsList.appendChild(btn);
-      });
-
-      const activeSeasonObj = validSeasons.find(s => s.season_number === currentItem.season) || validSeasons[0];
-      if (activeSeasonObj) {
-        currentItem.totalEpisodes = activeSeasonObj.episode_count;
-        currentEpisodesChunkIndex = Math.floor((currentItem.episode - 1) / CHUNK_SIZE);
-        renderSeasonEpisodesWithChunks(tvId, activeSeasonObj.season_number, activeSeasonObj.episode_count);
+      let accumulated = 0;
+      for (let s of validSeasons) {
+        if (targetEp <= (accumulated + s.episode_count)) {
+          return {
+            season: s.season_number,
+            episode: targetEp - accumulated,
+            isValid: true
+          };
+        }
+        accumulated += s.episode_count;
       }
+      return { season: 1, episode: 1, isValid: false, total: accumulated };
     }
 
-    function renderSeasonEpisodesWithChunks(tvId, seasonNum, totalCount) {
-      const chunkRangesList = document.getElementById('chunkRangesList');
-      chunkRangesList.innerHTML = '';
+    function mapSeasonEpToAbsolute(seasonNum, epNum, seasons) {
+      const validSeasons = seasons.filter(s => s.season_number > 0);
+      let accumulated = 0;
+      for (let s of validSeasons) {
+        if (s.season_number === seasonNum) {
+          return accumulated + epNum;
+        }
+        accumulated += s.episode_count;
+      }
+      return epNum;
+    }
 
-      if (totalCount > CHUNK_SIZE) {
-        const numChunks = Math.ceil(totalCount / CHUNK_SIZE);
+    function renderContinuousEpisodes(tvId, seasons, currentAbsEpisode = 1) {
+      const chunkRangesList = document.getElementById('chunkRangesList');
+      const epList = document.getElementById('episodesList');
+      chunkRangesList.innerHTML = '';
+      epList.innerHTML = '';
+
+      const validSeasons = seasons.filter(s => s.season_number > 0);
+      const totalEpisodes = validSeasons.reduce((acc, s) => acc + (s.episode_count || 0), 0);
+
+      if (totalEpisodes === 0) return;
+
+      currentEpisodesChunkIndex = Math.floor((currentAbsEpisode - 1) / CHUNK_SIZE);
+      const numChunks = Math.ceil(totalEpisodes / CHUNK_SIZE);
+
+      if (totalEpisodes > CHUNK_SIZE) {
         for (let c = 0; c < numChunks; c++) {
           const start = c * CHUNK_SIZE + 1;
-          const end = Math.min((c + 1) * CHUNK_SIZE, totalCount);
+          const end = Math.min((c + 1) * CHUNK_SIZE, totalEpisodes);
           const chunkBtn = document.createElement('button');
           chunkBtn.className = `chunk-btn ${c === currentEpisodesChunkIndex ? 'active' : ''}`;
           chunkBtn.innerText = `${start} - ${end}`;
@@ -1678,32 +1750,38 @@
             currentEpisodesChunkIndex = c;
             document.querySelectorAll('.chunk-btn').forEach(cb => cb.classList.remove('active'));
             chunkBtn.classList.add('active');
-            renderEpisodesSlice(tvId, seasonNum, start, end);
+            renderEpisodesSlice(tvId, seasons, start, end);
           };
           chunkRangesList.appendChild(chunkBtn);
         }
-        const currentStart = currentEpisodesChunkIndex * CHUNK_SIZE + 1;
-        const currentEnd = Math.min((currentEpisodesChunkIndex + 1) * CHUNK_SIZE, totalCount);
-        renderEpisodesSlice(tvId, seasonNum, currentStart, currentEnd);
-      } else {
-        renderEpisodesSlice(tvId, seasonNum, 1, totalCount);
       }
+
+      const currentStart = currentEpisodesChunkIndex * CHUNK_SIZE + 1;
+      const currentEnd = Math.min((currentEpisodesChunkIndex + 1) * CHUNK_SIZE, totalEpisodes);
+      renderEpisodesSlice(tvId, seasons, currentStart, currentEnd);
     }
 
-    function renderEpisodesSlice(tvId, seasonNum, startEp, endEp) {
+    function renderEpisodesSlice(tvId, seasons, startAbs, endAbs) {
       const epList = document.getElementById('episodesList');
       epList.innerHTML = '';
 
-      for (let i = startEp; i <= endEp; i++) {
-        const isWatched = isItemWatched(`tv_${tvId}_s${seasonNum}_e${i}`);
+      const currentAbsEp = mapSeasonEpToAbsolute(currentItem.season, currentItem.episode, seasons);
+
+      for (let i = startAbs; i <= endAbs; i++) {
+        const mapped = mapAbsoluteToSeasonEp(i, seasons);
+        const isWatched = isItemWatched(`tv_${tvId}_s${mapped.season}_e${mapped.episode}`);
+        const isActive = (i === currentAbsEp);
+
         const btn = document.createElement('button');
-        btn.className = `ep-btn ${i === currentItem.episode ? 'active' : ''} ${isWatched ? 'is-watched' : ''}`;
+        btn.className = `ep-btn ${isActive ? 'active' : ''} ${isWatched ? 'is-watched' : ''}`;
         btn.innerText = `${translations[currentLang].ep_prefix} ${i}`;
         btn.onclick = () => {
           document.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
-          currentItem.episode = i;
-          location.hash = `#/theater/tv/${tvId}/${seasonNum}/${i}`;
+          
+          currentItem.season = mapped.season;
+          currentItem.episode = mapped.episode;
+          location.hash = `#/theater/tv/${tvId}/${mapped.season}/${mapped.episode}`;
           startStreamingNow();
         };
         epList.appendChild(btn);
@@ -1713,41 +1791,28 @@
     function handleQuickEpisodeJump() {
       const input = document.getElementById('epJumpInput');
       const targetEp = parseInt(input.value.trim());
-      if (isNaN(targetEp) || targetEp < 1) return alert(currentLang === 'ar' ? 'يرجى إدخال رقم حلقة صحيح' : 'Please enter a valid episode number');
+
+      if (isNaN(targetEp) || targetEp < 1) {
+        showToast(currentLang === 'ar' ? 'يرجى إدخال رقم حلقة صحيح' : 'Please enter a valid episode number', 'error');
+        return;
+      }
 
       if (!currentItem.rawSeasons || currentItem.rawSeasons.length === 0) return;
 
-      const validSeasons = currentItem.rawSeasons.filter(s => s.season_number > 0);
-      let targetSeason = currentItem.season;
-      let targetEpisodeInSeason = targetEp;
-
-      let currentSeasonObj = validSeasons.find(s => s.season_number === currentItem.season);
-      if (currentSeasonObj && targetEp <= currentSeasonObj.episode_count) {
-        targetEpisodeInSeason = targetEp;
-      } else {
-        let accumulated = 0;
-        let found = false;
-        for (let s of validSeasons) {
-          if (targetEp <= (accumulated + s.episode_count)) {
-            targetSeason = s.season_number;
-            targetEpisodeInSeason = targetEp - accumulated;
-            found = true;
-            break;
-          }
-          accumulated += s.episode_count;
-        }
-        if (!found) {
-          targetSeason = validSeasons[validSeasons.length - 1].season_number;
-          targetEpisodeInSeason = validSeasons[validSeasons.length - 1].episode_count;
-        }
+      const mapped = mapAbsoluteToSeasonEp(targetEp, currentItem.rawSeasons);
+      if (!mapped.isValid) {
+        showToast(currentLang === 'ar' ? `الحلقة غير متوفرة! إجمالي الحلقات: ${mapped.total}` : `Episode not found! Total episodes: ${mapped.total}`, 'error');
+        return;
       }
 
-      currentItem.season = targetSeason;
-      currentItem.episode = targetEpisodeInSeason;
-      location.hash = `#/theater/tv/${currentItem.id}/${targetSeason}/${targetEpisodeInSeason}`;
+      currentItem.season = mapped.season;
+      currentItem.episode = mapped.episode;
+      location.hash = `#/theater/tv/${currentItem.id}/${mapped.season}/${mapped.episode}`;
       input.value = '';
-      renderTvSeasons(currentItem.rawSeasons, currentItem.id);
+
+      renderContinuousEpisodes(currentItem.id, currentItem.rawSeasons, targetEp);
       startStreamingNow();
+      showToast(currentLang === 'ar' ? `جاري تشغيل الحلقة ${targetEp}...` : `Playing Episode ${targetEp}...`, 'success');
     }
 
     function initPlayerSkipTimer() {
@@ -1803,13 +1868,15 @@
       document.getElementById('loginFormBox').style.display = view === 'login' ? 'block' : 'none';
       document.getElementById('registerFormBox').style.display = view === 'register' ? 'block' : 'none';
       document.getElementById('forgotFormBox').style.display = view === 'forgot' ? 'block' : 'none';
+      document.getElementById('otpVerifyBox').style.display = view === 'otp' ? 'block' : 'none';
+      document.getElementById('resetPassFormBox').style.display = view === 'reset' ? 'block' : 'none';
       document.getElementById('authProfile').style.display = view === 'profile' ? 'block' : 'none';
     }
 
     async function handleLoginSubmit() {
       const email = document.getElementById('loginEmail').value.trim().toLowerCase();
       const pin = document.getElementById('loginPass').value.trim();
-      if (!email || !pin) return alert(currentLang === 'ar' ? 'يرجى ملء جميع الحقول' : 'Please fill all fields');
+      if (!email || !pin) return showToast(currentLang === 'ar' ? 'يرجى ملء جميع الحقول' : 'Please fill all fields', 'error');
 
       try {
         const res = await fetch("/api/auth/login", {
@@ -1826,15 +1893,15 @@
           verifyUserStatus();
           location.reload();
         } else {
-          alert(data.error || (currentLang === 'ar' ? 'بيانات الدخول غير صحيحة!' : 'Invalid credentials!'));
+          showToast(data.error || (currentLang === 'ar' ? 'بيانات الدخول غير صحيحة!' : 'Invalid credentials!'), 'error');
         }
-      } catch(e) { alert(currentLang === 'ar' ? 'تعذر تسجيل الدخول' : 'Login failed'); }
+      } catch(e) { showToast(currentLang === 'ar' ? 'تعذر تسجيل الدخول' : 'Login failed', 'error'); }
     }
 
     async function handleRegisterSubmit() {
       const email = document.getElementById('regEmail').value.trim().toLowerCase();
       const pin = document.getElementById('regPass').value.trim();
-      if (!email || pin.length < 6) return alert(currentLang === 'ar' ? 'يرجى إدخال بريد صحيح ورمز من 6 خانات على الأقل' : 'Please enter valid email and 6-digit PIN');
+      if (!email || pin.length < 6) return showToast(currentLang === 'ar' ? 'يرجى إدخال بريد صحيح ورمز من 6 خانات على الأقل' : 'Please enter valid email and 6-digit PIN', 'error');
 
       try {
         const res = await fetch("/api/auth/register", {
@@ -1844,12 +1911,74 @@
         });
         const data = await res.json();
         if (res.ok && data.success) {
-          alert(currentLang === 'ar' ? 'تم إنشاء الحساب بنجاح!' : 'Account registered successfully!');
+          showToast(currentLang === 'ar' ? 'تم إنشاء الحساب بنجاح!' : 'Account registered successfully!', 'success');
           switchAuthView('login');
         } else {
-          alert(data.error || (currentLang === 'ar' ? 'تعذر إنشاء الحساب' : 'Registration failed'));
+          showToast(data.error || (currentLang === 'ar' ? 'تعذر إنشاء الحساب' : 'Registration failed'), 'error');
         }
-      } catch(e) { alert(currentLang === 'ar' ? 'حدث خطأ في الاتصال بالخادم' : 'Server error'); }
+      } catch(e) { showToast(currentLang === 'ar' ? 'حدث خطأ في الاتصال بالخادم' : 'Server error', 'error'); }
+    }
+
+    let resetAccountEmail = '';
+    async function sendVerificationCode() {
+      const email = document.getElementById('forgotEmail').value.trim().toLowerCase();
+      if (!email) return showToast(currentLang === 'ar' ? 'أدخل بريدك الإلكتروني المسجل' : 'Enter your registered email', 'error');
+
+      try {
+        const res = await fetch("/api/auth/forgot-pin", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email })
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          resetAccountEmail = email;
+          showToast(currentLang === 'ar' ? 'تم إرسال رمز التحقق إلى بريدك!' : 'OTP code sent to your email!', 'success');
+          switchAuthView('otp');
+        } else {
+          showToast(data.error || (currentLang === 'ar' ? 'البريد غير مسجل لدينا!' : 'Email not found!'), 'error');
+        }
+      } catch(e) { showToast(currentLang === 'ar' ? 'فشل إرسال رمز التحقق' : 'Failed to send OTP', 'error'); }
+    }
+
+    async function verifyOtpCode() {
+      const otp = document.getElementById('otpInput').value.trim();
+      if (otp.length !== 6) return showToast(currentLang === 'ar' ? 'أدخل الرمز المكون من 6 أرقام' : 'Enter 6-digit OTP code', 'error');
+
+      try {
+        const res = await fetch("/api/auth/verify-otp", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: resetAccountEmail, otp })
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          document.getElementById('resetTargetEmail').innerText = resetAccountEmail;
+          switchAuthView('reset');
+        } else {
+          showToast(data.error || (currentLang === 'ar' ? 'الرمز غير صحيح أو منتهي الصلاحية!' : 'Invalid or expired OTP!'), 'error');
+        }
+      } catch(e) { showToast(currentLang === 'ar' ? 'فشل التحقق من الرمز' : 'Verification failed', 'error'); }
+    }
+
+    async function applyNewPassword() {
+      const newPin = document.getElementById('newResetPass').value.trim();
+      if (newPin.length < 6) return showToast(currentLang === 'ar' ? 'يجب أن يكون الكود 6 خانات على الأقل' : 'PIN must be at least 6 digits', 'error');
+
+      try {
+        const res = await fetch("/api/auth/reset-pin", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: resetAccountEmail, newPin })
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          showToast(currentLang === 'ar' ? 'تم تحديث كود الدخول بنجاح!' : 'PIN code reset successfully!', 'success');
+          switchAuthView('login');
+        } else {
+          showToast(data.error || (currentLang === 'ar' ? 'فشل تحديث كود الدخول' : 'Reset failed'), 'error');
+        }
+      } catch(e) { showToast(currentLang === 'ar' ? 'فشل تحديث كود الدخول' : 'Reset failed', 'error'); }
     }
 
     function verifyUserStatus() {
@@ -1908,7 +2037,7 @@
     async function submitVipMediaRequest() {
       const title = document.getElementById('reqMediaTitle').value.trim();
       const notes = document.getElementById('reqMediaNotes').value.trim();
-      if (!title) return alert(currentLang === 'ar' ? 'يرجى كتابة اسم العمل المطلوب' : 'Please enter title name');
+      if (!title) return showToast(currentLang === 'ar' ? 'يرجى كتابة اسم العمل المطلوب' : 'Please enter title name', 'error');
 
       const reqData = {
         title: sanitizeText(title),
@@ -1923,12 +2052,12 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(reqData)
         });
-        alert(currentLang === 'ar' ? 'تم إرسال طلبك للإدارة بنجاح!' : 'Request sent successfully!');
+        showToast(currentLang === 'ar' ? 'تم إرسال طلبك للإدارة بنجاح!' : 'Request sent successfully!', 'success');
         document.getElementById('reqMediaTitle').value = '';
         document.getElementById('reqMediaNotes').value = '';
         closeModal('requestMediaModal');
       } catch(e) {
-        alert(currentLang === 'ar' ? 'تعذر إرسال الطلب' : 'Failed to send request');
+        showToast(currentLang === 'ar' ? 'تعذر إرسال الطلب' : 'Failed to send request', 'error');
       }
     }
 
@@ -1946,7 +2075,7 @@
     
     function openAdminModal() {
       if (!currentUser || !currentUser.isAdmin) {
-        alert(currentLang === 'ar' ? 'غير مصرح لك بالدخول!' : 'Access denied!');
+        showToast(currentLang === 'ar' ? 'غير مصرح لك بالدخول!' : 'Access denied!', 'error');
         location.hash = '#/home';
         return;
       }
@@ -2119,14 +2248,14 @@
         body: JSON.stringify({ global_ads: isGlobalAdsEnabled })
       });
       updateGlobalAdsBtnUI();
-      alert(isGlobalAdsEnabled ? (currentLang === 'ar' ? 'تم تفعيل الإعلانات لجميع زوار الموقع!' : 'Ads enabled for all visitors!') : (currentLang === 'ar' ? 'تم تعطيل الإعلانات تماماً عن الموقع!' : 'Ads disabled completely!'));
+      showToast(isGlobalAdsEnabled ? (currentLang === 'ar' ? 'تم تفعيل الإعلانات لجميع زوار الموقع!' : 'Ads enabled for all visitors!') : (currentLang === 'ar' ? 'تم تعطيل الإعلانات تماماً عن الموقع!' : 'Ads disabled completely!'), 'info');
     }
 
     async function saveCustomMedia() {
       const title = document.getElementById('customTitle').value.trim();
       const poster = document.getElementById('customPoster').value.trim();
       const url = document.getElementById('customStreamUrl').value.trim();
-      if (!title || !url) return alert(currentLang === 'ar' ? 'يرجى ملء الحقول المطلوبة' : 'Please fill required fields');
+      if (!title || !url) return showToast(currentLang === 'ar' ? 'يرجى ملء الحقول المطلوبة' : 'Please fill required fields', 'error');
 
       const token = getAuthToken();
       await fetch("/api/admin/series", {
@@ -2134,7 +2263,7 @@
         headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
         body: JSON.stringify({ title: sanitizeText(title), poster: poster || "https://image.tmdb.org/t/p/w500/mXk9kEw9u5dF72Tsk4O9Jt0rGgG.jpg", url })
       });
-      alert(currentLang === 'ar' ? 'تم نشر العمل!' : 'Media published!');
+      showToast(currentLang === 'ar' ? 'تم نشر العمل!' : 'Media published!', 'success');
       loadCustomMedia();
       loadAdminDashboard();
     }
@@ -2190,14 +2319,14 @@
 
     async function banUserAction() {
       const email = document.getElementById('banUserEmail').value.trim().toLowerCase();
-      if (!email) return alert(currentLang === 'ar' ? 'أدخل بريد المستخدم' : 'Enter user email');
+      if (!email) return showToast(currentLang === 'ar' ? 'أدخل بريد المستخدم' : 'Enter user email', 'error');
       const token = getAuthToken();
       await fetch("/api/admin/ban", {
         method: 'POST',
         headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
         body: JSON.stringify({ email: sanitizeText(email) })
       });
-      alert(currentLang === 'ar' ? 'تم حظر المستخدم بنجاح!' : 'User banned successfully!');
+      showToast(currentLang === 'ar' ? 'تم حظر المستخدم بنجاح!' : 'User banned successfully!', 'success');
       document.getElementById('banUserEmail').value = '';
       loadAdminDashboard();
     }
@@ -2228,6 +2357,7 @@
         headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
         body: JSON.stringify({ banner: sanitizeText(text) })
       });
+      showToast(currentLang === 'ar' ? 'تم تحديث الإعلان!' : 'Banner updated!', 'success');
       loadGlobalSettings();
     }
 
@@ -2235,6 +2365,7 @@
       const token = getAuthToken();
       await fetch("/api/admin/settings/banner", { method: 'DELETE', headers: { "Authorization": `Bearer ${token}` } });
       document.getElementById('announcementBanner').style.display = 'none';
+      showToast(currentLang === 'ar' ? 'تم إخفاء الإعلان!' : 'Banner removed!', 'info');
     }
 
     initSite();
