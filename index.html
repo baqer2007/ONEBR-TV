@@ -548,6 +548,7 @@
       
       <div class="admin-stats-grid">
         <div class="admin-stat-card"><div class="stat-label">👥 إجمالي الزيارات</div><div class="stat-number" id="statVisitorsCount">0</div></div>
+        <div class="admin-stat-card"><div class="stat-label">✨ الزوار الفريدين (الأشخاص)</div><div class="stat-number" id="statUniqueVisitorsCount" style="color:var(--gold);">0</div></div>
         <div class="admin-stat-card"><div class="stat-label">👤 المسجلين</div><div class="stat-number" id="statUsersCount">0</div></div>
         <div class="admin-stat-card"><div class="stat-label">📩 طلبات VIP</div><div class="stat-number" id="statRequestsCount" style="color:var(--gold);">0</div></div>
         <div class="admin-stat-card"><div class="stat-label">🎬 الأعمال المباشرة</div><div class="stat-number" id="statMediaCount">0</div></div>
@@ -643,20 +644,39 @@
     const BACKDROP_BASE = "https://image.tmdb.org/t/p/original";
     const PROXY_BASE = "/api/extract?url=";
 
-    let isFamilyMode = localStorage.getItem('family_mode') !== 'false'; // تفعيل الوضع العائلي افتراضياً
+    const SENSITIVE_KEYWORDS = [
+      "overflow", "secret mission", "hentai", "ecchi", "erotic", "sex", "uncensored", 
+      "redo of healer", "highschool dxd", "yosuga no sora", "interspecies reviewers",
+      "aki sora", "boku no pico", "kiss x sis", "valkyrie drive", "shinmai maou",
+      "prison school", "ishuzoku", "peter grill", "shimoneta", "monster musume"
+    ];
+
+    let currentLang = localStorage.getItem('site_lang') || 'ar';
+    let currentTheme = localStorage.getItem('site_theme') || 'dark';
+    let isFamilyMode = localStorage.getItem('family_mode') !== 'false';
 
     function getAuthToken() {
       return localStorage.getItem('auth_token') || '';
     }
 
+    function getLanguageParam() {
+      return currentLang === 'ar' ? '&language=ar-SA' : '&language=en-US';
+    }
+
+    function isSensitiveMedia(item) {
+      if (!item) return false;
+      if (item.adult === true) return true;
+      
+      const titleStr = `${item.title || ''} ${item.name || ''} ${item.original_title || ''} ${item.original_name || ''}`.toLowerCase();
+      return SENSITIVE_KEYWORDS.some(kw => titleStr.includes(kw));
+    }
+
     function getDisplayTitle(item) {
       if (!item) return '';
       const origLang = item.original_language || item.origLang;
-      // إذا كان العمل عربياً نتركه باللغة العربية
       if (origLang === 'ar') {
         return item.title || item.name || item.original_title || item.original_name || '';
       }
-      // إذا كان العمل غير عربي نعتمد الاسم الإنجليزي أولاً
       return item.title || item.name || item.original_title || item.original_name || '';
     }
 
@@ -669,7 +689,6 @@
       localStorage.setItem('family_mode', isFamilyMode);
       applyFamilyModeUI();
       
-      // إعادة تحميل وتحديث جميع الأقسام فورياً
       loadShelves();
       initHeroRotation();
       handleRouting();
@@ -711,9 +730,6 @@
       { id: "turkish", ar: "تركي", en: "Turkish" },
       { id: "korean", ar: "كوري", en: "Korean" }
     ];
-
-    let currentLang = localStorage.getItem('site_lang') || 'ar';
-    let currentTheme = localStorage.getItem('site_theme') || 'dark';
 
     const translations = {
       ar: {
@@ -1252,6 +1268,7 @@
       applyLanguage(currentLang);
       handleRouting();
       initHeroRotation();
+      loadShelves();
     }
     function applyLanguage(lang) {
       document.documentElement.lang = lang;
@@ -1345,6 +1362,7 @@
         deck.innerHTML = '';
         document.getElementById('resumeShelfBox').style.display = 'block';
         list.forEach(item => {
+          if (isFamilyMode && isSensitiveMedia(item)) return;
           const card = document.createElement('div');
           card.className = 'card';
           const progressVal = item.progress || 50;
@@ -1391,7 +1409,7 @@
       }
 
       try {
-        const res = await fetch(`${API_BASE}${currentExploreEndpoint}${currentExploreEndpoint.includes('?') ? '&' : '?'}api_key=${API_KEY}&page=${explorePage}${getSafeQueryParam()}`);
+        const res = await fetch(`${API_BASE}${currentExploreEndpoint}${currentExploreEndpoint.includes('?') ? '&' : '?'}api_key=${API_KEY}&page=${explorePage}${getSafeQueryParam()}${getLanguageParam()}`);
         const json = await res.json();
         const results = json.results || [];
 
@@ -1427,7 +1445,7 @@
       container.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:20px;">جاري البحث...</div>';
 
       try {
-        const res = await fetch(`${API_BASE}/search/multi?query=${encodeURIComponent(query)}&api_key=${API_KEY}${getSafeQueryParam()}`);
+        const res = await fetch(`${API_BASE}/search/multi?query=${encodeURIComponent(query)}&api_key=${API_KEY}${getSafeQueryParam()}${getLanguageParam()}`);
         const data = await res.json();
         container.innerHTML = '';
         const validResults = (data.results || []).filter(i => i.poster_path);
@@ -1456,14 +1474,14 @@
 
         searchDebounceTimer = setTimeout(async () => {
           try {
-            const res = await fetch(`${API_BASE}/search/multi?query=${encodeURIComponent(q)}&api_key=${API_KEY}${getSafeQueryParam()}`);
+            const res = await fetch(`${API_BASE}/search/multi?query=${encodeURIComponent(q)}&api_key=${API_KEY}${getSafeQueryParam()}${getLanguageParam()}`);
             const data = await res.json();
-            const results = (data.results || []).filter(i => i.poster_path).slice(0, 6);
+            const results = (data.results || []).filter(i => i.poster_path).slice(0, 8);
             if (results.length === 0) { searchDropdown.style.display = 'none'; return; }
 
             searchDropdown.innerHTML = '';
             results.forEach(item => {
-              if (isFamilyMode && item.adult) return; // حجب البحث العائلي
+              if (isFamilyMode && isSensitiveMedia(item)) return;
               const isMovie = (item.media_type === 'movie' || item.title);
               const type = isMovie ? 'movie' : 'tv';
               const title = getDisplayTitle(item);
@@ -1489,11 +1507,11 @@
 
     async function initHeroRotation() {
       try {
-        const res = await fetch(`${API_BASE}/trending/all/day?api_key=${API_KEY}${getSafeQueryParam()}`);
+        const res = await fetch(`${API_BASE}/trending/all/day?api_key=${API_KEY}${getSafeQueryParam()}${getLanguageParam()}`);
         const data = await res.json();
         let items = (data.results || []).filter(i => i.backdrop_path);
         if (isFamilyMode) {
-          items = items.filter(i => !i.adult);
+          items = items.filter(i => !isSensitiveMedia(i));
         }
         heroRotationItems = items;
         if (heroRotationItems.length > 0) {
@@ -1529,7 +1547,7 @@
       try {
         const container = document.getElementById(elemId);
         if (container) container.innerHTML = '';
-        const res = await fetch(`${API_BASE}${path}${path.includes('?') ? '&' : '?'}api_key=${API_KEY}${getSafeQueryParam()}`);
+        const res = await fetch(`${API_BASE}${path}${path.includes('?') ? '&' : '?'}api_key=${API_KEY}${getSafeQueryParam()}${getLanguageParam()}`);
         const json = await res.json();
         renderCards(json.results || [], container, fixedType);
       } catch (e) {}
@@ -1539,8 +1557,7 @@
       if (!container) return;
       list.forEach(item => {
         if (!item.poster_path) return;
-        // استبعاد المحتوى المخل والبالغين إذا كان الوضع العائلي مفعلاً
-        if (isFamilyMode && item.adult) return;
+        if (isFamilyMode && isSensitiveMedia(item)) return;
 
         const isMovie = fixedType ? (fixedType === 'movie') : (item.media_type === 'movie' || item.title);
         const type = isMovie ? 'movie' : 'tv';
@@ -1576,7 +1593,7 @@
       currentItem = { id, imdb_id: '', title: '', origTitle: '', slug: '', origLang: '', isAnime: false, isAsian: false, isTurkish: false, type, poster_path: '', season, episode, isCustom: false, directUrl: '' };
 
       try {
-        const res = await fetch(`${API_BASE}/${type}/${id}?api_key=${API_KEY}&append_to_response=external_ids`);
+        const res = await fetch(`${API_BASE}/${type}/${id}?api_key=${API_KEY}&append_to_response=external_ids${getLanguageParam()}`);
         const data = await res.json();
         
         currentItem.origTitle = data.original_title || data.original_name || data.title || data.name;
@@ -1590,7 +1607,17 @@
         currentItem.isAsian = ['ko', 'zh'].includes(currentItem.origLang);
 
         document.getElementById('detailTitle').innerText = currentItem.title;
-        document.getElementById('detailOverview').innerText = data.overview || "High definition streaming provided by ONEBR TV.";
+        
+        let overviewText = data.overview;
+        if (!overviewText && currentLang === 'ar') {
+          try {
+            const fallbackRes = await fetch(`${API_BASE}/${type}/${id}?api_key=${API_KEY}&language=en-US`);
+            const fallbackData = await fallbackRes.json();
+            overviewText = fallbackData.overview;
+          } catch(e) {}
+        }
+        
+        document.getElementById('detailOverview').innerText = overviewText || (currentLang === 'ar' ? 'لا يتوفر وصف لهذا العمل حالياً.' : 'No description available for this title.');
         document.getElementById('detailScore').innerText = `⭐ ${data.vote_average ? data.vote_average.toFixed(1) : '8.0'}`;
         document.getElementById('detailYear').innerText = (data.release_date || data.first_air_date || '2026').substring(0, 4);
 
@@ -1629,7 +1656,7 @@
 
     async function loadSimilarMedia(id, type) {
       try {
-        const res = await fetch(`${API_BASE}/${type}/${id}/similar?api_key=${API_KEY}${getSafeQueryParam()}`);
+        const res = await fetch(`${API_BASE}/${type}/${id}/similar?api_key=${API_KEY}${getSafeQueryParam()}${getLanguageParam()}`);
         const data = await res.json();
         const deck = document.getElementById('deckSimilar');
         deck.innerHTML = '';
@@ -1921,7 +1948,16 @@
         });
         const data = await res.json();
 
-        document.getElementById('statVisitorsCount').innerText = data.visitors ? Object.keys(data.visitors).length : '0';
+        const visitorsObj = data.visitors || {};
+        const totalVisitsCount = Object.keys(visitorsObj).length;
+        
+        const uniqueFingerprints = new Set(
+          Object.values(visitorsObj).map(v => v.fingerprint).filter(Boolean)
+        );
+        const uniqueCount = uniqueFingerprints.size;
+
+        document.getElementById('statVisitorsCount').innerText = totalVisitsCount;
+        document.getElementById('statUniqueVisitorsCount').innerText = uniqueCount;
         document.getElementById('statUsersCount').innerText = data.users ? Object.keys(data.users).length : '0';
         document.getElementById('statMediaCount').innerText = data.series ? Object.keys(data.series).length : '0';
         document.getElementById('statBannedCount').innerText = data.banned ? Object.keys(data.banned).length : '0';
