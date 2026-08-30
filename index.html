@@ -9,6 +9,16 @@
   <meta name="description" content="منصة ONEBR TV لمشاهدة أحدث الأفلام، المسلسلات، الأنمي، والدراما بجودة عالية.">
   <meta name="theme-color" content="#e50914">
 
+  <!-- الرابط الأساسي لتحسين الأرشفة وفهرسة محرك البحث -->
+  <link rel="canonical" href="https://tv.onebr.workers.dev/" />
+
+  <!-- وسوم Open Graph لمواقع التواصل الاجتماعي ومحركات البحث -->
+  <meta property="og:title" content="ONEBR TV | مشاهدة وتحميل أحدث الأفلام والمسلسلات والأنمي" />
+  <meta property="og:description" content="منصة ONEBR TV لمشاهدة أحدث الأفلام، المسلسلات، الأنمي، والدراما بجودة عالية." />
+  <meta property="og:url" content="https://tv.onebr.workers.dev/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://img.icons8.com/color/96/movie-projector.png" />
+
   <link rel="icon" type="image/png" href="https://img.icons8.com/color/96/movie-projector.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
@@ -1959,7 +1969,7 @@
         } else {
           showToast(data.error || (currentLang === 'ar' ? 'الرمز غير صحيح أو منتهي الصلاحية!' : 'Invalid or expired OTP!'), 'error');
         }
-      } catch(e) { showToast(currentLang === 'ar' ? 'فشل التحقق من الرمز' : 'Verification failed', 'error'); }
+      } catch(e) {}
     }
 
     async function applyNewPassword() {
