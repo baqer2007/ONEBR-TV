@@ -367,7 +367,16 @@
         <button class="skip-intro-btn" id="skipIntroBtn" onclick="skipIntro()">⏭️ تخطي المقدمة (+85s)</button>
       </div>
       <div class="player-box" id="iframeBox">
-        <iframe id="streamFrame" src="" width="100%" height="450" frameborder="0" allowfullscreen="true" sandbox="allow-scripts allow-forms allow-presentation allow-top-navigation-by-user-activation" allow="autoplay; fullscreen; encrypted-media; picture-in-picture"></iframe>
+        <iframe 
+          id="streamFrame" 
+          src="" 
+          width="100%" 
+          height="450" 
+          frameborder="0" 
+          allowfullscreen="true" 
+          sandbox="allow-scripts allow-same-origin allow-forms allow-presentation" 
+          allow="autoplay; fullscreen; encrypted-media; picture-in-picture">
+        </iframe>
       </div>
     </div>
 
