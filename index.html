@@ -6,20 +6,40 @@
   <meta name="google-site-verification" content="r7LuKZgZFazN0vuA0iACq1hfCKV75Es_9DxBhaXCr-Q" />
 
   <title>ONEBR TV | مشاهدة وتحميل أحدث الأفلام والمسلسلات والأنمي</title>
-  <meta name="description" content="منصة ONEBR TV لمشاهدة أحدث الأفلام، المسلسلات، الأنمي، والدراما بجودة عالية.">
+  <meta name="description" content="منصة ONEBR TV لمشاهدة وتحميل أحدث الأفلام، المسلسلات، الأنمي، والدراما بجودة عالية وبدون إعلانات مزعجة.">
   <meta name="theme-color" content="#e50914">
 
-  <!-- الرابط الأساسي لتحسين الأرشفة وفهرسة محرك البحث -->
-  <link rel="canonical" href="https://tv.onebr.workers.dev/" />
+  <!-- إعدادات تطبيق PWA المستقل -->
+  <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/96/film-reel.png">
+  <link rel="apple-touch-icon" href="https://img.icons8.com/fluency/192/film-reel.png">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="ONEBR TV">
 
-  <!-- وسوم Open Graph لمواقع التواصل الاجتماعي ومحركات البحث -->
+  <link rel="canonical" href="https://tv.onebr.workers.dev/" />
   <meta property="og:title" content="ONEBR TV | مشاهدة وتحميل أحدث الأفلام والمسلسلات والأنمي" />
   <meta property="og:description" content="منصة ONEBR TV لمشاهدة أحدث الأفلام، المسلسلات، الأنمي، والدراما بجودة عالية." />
   <meta property="og:url" content="https://tv.onebr.workers.dev/" />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="https://img.icons8.com/color/96/movie-projector.png" />
+  <meta property="og:image" content="https://img.icons8.com/fluency/512/film-reel.png" />
 
-  <link rel="icon" type="image/png" href="https://img.icons8.com/color/96/movie-projector.png">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "ONEBR TV",
+    "alternateName": ["ون بي ار تي في", "ONEBR"],
+    "url": "https://tv.onebr.workers.dev/",
+    "sameAs": [
+      "https://t.me/BIOURP",
+      "https://t.me/iwhw7",
+      "https://www.tiktok.com/@onebr.tv"
+    ]
+  }
+  </script>
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
@@ -55,6 +75,14 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
     body { background-color: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; transition: background-color 0.3s, color 0.3s; }
 
+    *:focus-visible, .card:focus, button:focus, input:focus, a:focus {
+      outline: 3px solid var(--cyan) !important;
+      outline-offset: 2px;
+      transform: scale(1.04);
+      transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 50;
+    }
+
     .masked-pin { -webkit-text-security: disc; }
     .toggle-eye { position: absolute; left: 12px; top: 34px; color: var(--text-muted); cursor: pointer; font-size: 1rem; }
     html[dir="ltr"] .toggle-eye { left: auto; right: 12px; }
@@ -64,12 +92,12 @@
 
     #announcementBanner { display: none; background: linear-gradient(90deg, #991b1b, #e50914, #991b1b); color: #fff; padding: 8px 12px; font-size: 0.78rem; font-weight: 700; text-align: center; position: sticky; top: 0; z-index: 1200; }
 
-    header { position: sticky; top: 0; height: 58px; padding: 0 clamp(8px, 3vw, 16px); display: flex; justify-content: space-between; align-items: center; background: var(--surface); backdrop-filter: blur(16px); z-index: 1000; border-bottom: 1px solid var(--border); gap: 8px; position: relative; }
+    header { position: sticky; top: 0; height: 58px; padding: 0 clamp(8px, 3vw, 16px); display: flex; justify-content: space-between; align-items: center; background: var(--surface); backdrop-filter: blur(16px); z-index: 1000; border-bottom: 1px solid var(--border); gap: 8px; }
     .header-left { display: flex; align-items: center; gap: 8px; flex-shrink: 0; transition: opacity 0.2s; }
     .menu-btn { background: none; border: none; color: var(--text); font-size: 1.2rem; cursor: pointer; padding: 6px; display: flex; align-items: center; justify-content: center; }
-    .brand { display: flex; align-items: center; gap: 6px; text-decoration: none; }
-    .brand-icon { width: 32px; height: 32px; background: linear-gradient(135deg, #e50914, #831843); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.9rem; }
-    .brand-name { font-size: 1.05rem; font-weight: 900; background: linear-gradient(90deg, var(--text), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .brand { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .brand-logo-img { width: 34px; height: 34px; border-radius: 8px; object-fit: contain; background: #000; border: 1px solid rgba(229, 9, 20, 0.3); box-shadow: 0 0 10px rgba(229, 9, 20, 0.25); }
+    .brand-name { font-size: 1.05rem; font-weight: 900; background: linear-gradient(90deg, #ff3344, var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
     .header-center { flex: 1; max-width: 360px; position: relative; display: flex; justify-content: center; transition: all 0.3s ease; }
     .search-wrapper { position: relative; width: 100%; display: flex; align-items: center; }
@@ -169,7 +197,7 @@
     .play-circle-btn { width: 48px; height: 48px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 0 16px rgba(229, 9, 20, 0.6); border: none; }
     .play-circle-btn i { color: #ffffff; font-size: 1.1rem; margin-inline-start: 2px; }
 
-    .btn-detail-action { background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 8px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
+    .btn-detail-action { background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 8px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; text-decoration: none; }
     .btn-detail-action.active-fav { color: var(--gold); border-color: var(--gold); }
     .btn-detail-action.active-watched { color: var(--watched); border-color: var(--watched); }
 
@@ -190,20 +218,19 @@
     .server-menu-btn:hover, .server-menu-btn.active { background: var(--primary); color: #fff; }
 
     .episodes-bar { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-top: 8px; display: none; }
-    
     .episodes-controls { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
     .episode-jump-box { display: flex; align-items: center; gap: 5px; }
     .episode-jump-box input { width: 85px; padding: 5px 8px; border-radius: 5px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 0.75rem; text-align: center; outline: none; }
     .episode-jump-box input:focus { border-color: var(--cyan); }
     .episode-jump-box button { background: var(--cyan); color: #000; border: none; padding: 5px 10px; border-radius: 5px; font-size: 0.75rem; font-weight: 800; cursor: pointer; }
 
-    .chunk-ranges-scroll { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 5px; margin-bottom: 8px; scrollbar-width: none; }
+    .chunk-ranges-scroll { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 8px; scrollbar-width: none; }
     .chunk-ranges-scroll::-webkit-scrollbar { display: none; }
-    .chunk-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text-muted); padding: 5px 10px; border-radius: 5px; font-size: 0.72rem; cursor: pointer; font-weight: 700; white-space: nowrap; }
+    .chunk-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; font-weight: 800; white-space: nowrap; transition: all 0.2s; }
     .chunk-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-    .episodes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(65px, 1fr)); gap: 5px; max-height: 220px; overflow-y: auto; margin-top: 4px; }
-    .ep-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 6px 3px; border-radius: 5px; text-align: center; font-size: 0.72rem; cursor: pointer; position: relative; }
+    .episodes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 6px; max-height: 240px; overflow-y: auto; margin-top: 4px; }
+    .ep-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 7px 4px; border-radius: 5px; text-align: center; font-size: 0.75rem; cursor: pointer; position: relative; font-weight: 700; }
     .ep-btn.active { background: var(--primary); color: #fff; }
     .ep-btn.is-watched::after { content: '✓'; position: absolute; top: 1px; right: 3px; font-size: 0.6rem; color: var(--watched); font-weight: 900; }
 
@@ -216,18 +243,20 @@
     .vip-btn-plan { background: var(--primary); color: #fff; text-decoration: none; padding: 7px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; display: block; }
 
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; z-index: 3000; padding: 10px; }
-    .modal-box { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; width: 100%; max-width: 460px; max-height: 88vh; overflow-y: auto; padding: 16px; position: relative; }
+    .modal-box { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; width: 100%; max-width: 440px; max-height: 88vh; overflow-y: auto; padding: 16px; position: relative; }
     .modal-close { position: absolute; top: 12px; color: var(--text-muted); cursor: pointer; font-size: 1rem; z-index: 10; }
     html[dir="rtl"] .modal-close { left: 12px; }
     html[dir="ltr"] .modal-close { right: 12px; }
     .modal-title { font-size: 1rem; font-weight: 800; margin-bottom: 10px; color: var(--text); display: flex; align-items: center; gap: 6px; }
 
-    .form-group { margin-bottom: 8px; }
+    .form-group { margin-bottom: 8px; text-align: start; }
     .form-group label { display: block; font-size: 0.72rem; color: var(--text-muted); margin-bottom: 3px; }
     .form-group input, .form-group textarea { width: 100%; padding: 7px 9px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 0.78rem; outline: none; }
-    .btn-submit { width: 100%; background: var(--primary); color: #fff; border: none; padding: 9px; border-radius: 6px; font-weight: 800; font-size: 0.78rem; cursor: pointer; }
+    .btn-submit { width: 100%; background: var(--primary); color: #fff; border: none; padding: 9px; border-radius: 6px; font-weight: 800; font-size: 0.78rem; cursor: pointer; text-decoration: none; display: inline-block; text-align: center; }
     .auth-toggle-links { display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.72rem; }
     .auth-toggle-links a { color: var(--cyan); text-decoration: none; cursor: pointer; }
+
+    .badge-info-pill { display: inline-block; padding: 4px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; margin-top: 4px; border: 1px solid var(--border); background: var(--bg); }
 
     .admin-modal { max-width: 850px; }
     .admin-nav { display: flex; gap: 5px; margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 6px; overflow-x: auto; scrollbar-width: none; }
@@ -245,11 +274,13 @@
     .btn-table-vip { background: var(--gold); color: #000; border: none; padding: 3px 6px; border-radius: 4px; font-size: 0.65rem; cursor: pointer; font-weight: 800; }
     .btn-table-ads { background: var(--surface-hover); color: var(--cyan); border: 1px solid var(--border); padding: 3px 6px; border-radius: 4px; font-size: 0.65rem; cursor: pointer; font-weight: 800; }
 
-    .user-table-avatar { width: 24px; height: 24px; border-radius: 50%; vertical-align: middle; background: #1a2234; border: 1px solid var(--border); }
-    .fingerprint-badge { font-family: monospace; font-size: 0.6rem; background: rgba(255,255,255,0.06); padding: 1px 4px; border-radius: 3px; color: var(--cyan); }
-    .watched-tag { display: inline-block; background: rgba(0, 240, 255, 0.1); color: var(--cyan); border-radius: 3px; padding: 1px 4px; margin: 1px; font-size: 0.65rem; }
+    .social-links-grid { display: flex; gap: 8px; justify-content: center; margin-bottom: 12px; flex-wrap: wrap; }
+    .social-btn { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; text-decoration: none; color: #fff; background: var(--surface-hover); border: 1px solid var(--border); transition: all 0.2s ease; }
+    .social-btn-tg { border-color: #229ED9; color: #229ED9; }
+    .social-btn-tg:hover { background: #229ED9; color: #fff; box-shadow: 0 0 10px rgba(34, 158, 217, 0.4); }
+    .social-btn-tt { border-color: #ff0050; color: #ff0050; }
+    .social-btn-tt:hover { background: linear-gradient(45deg, #ff0050, #00f2fe); color: #fff; box-shadow: 0 0 10px rgba(255, 0, 80, 0.4); }
 
-    /* Custom Toast Notification */
     #customToast {
       position: fixed;
       bottom: 24px;
@@ -271,14 +302,11 @@
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       pointer-events: none;
     }
-    #customToast.toast-show {
-      transform: translateX(-50%) translateY(0);
-      opacity: 1;
-    }
+    #customToast.toast-show { transform: translateX(-50%) translateY(0); opacity: 1; }
     #customToast.toast-error { border-color: #ef4444; color: #ef4444; }
     #customToast.toast-success { border-color: var(--watched); color: var(--watched); }
 
-    footer { background: var(--surface); border-top: 1px solid var(--border); padding: 16px 12px; text-align: center; font-size: 0.7rem; color: var(--text-muted); margin-top: 24px; }
+    footer { background: var(--surface); border-top: 1px solid var(--border); padding: 18px 12px; text-align: center; font-size: 0.72rem; color: var(--text-muted); margin-top: 24px; }
   </style>
 </head>
 <body>
@@ -290,19 +318,29 @@
   <div class="drawer" id="drawer">
     <div class="drawer-header">
       <div class="brand">
-        <div class="brand-icon"><i class="fa-solid fa-film"></i></div>
+        <img src="https://img.icons8.com/fluency/96/film-reel.png" alt="ONEBR" class="brand-logo-img" onerror="this.src='https://img.icons8.com/fluency/96/film-reel.png'">
         <div class="brand-name">ONEBR TV</div>
       </div>
       <i class="fa-solid fa-xmark" style="cursor:pointer; font-size:1.1rem;" onclick="toggleDrawer()"></i>
     </div>
+    
+    <div class="drawer-link" id="pwaInstallBtn" style="background: linear-gradient(90deg, #e50914, #831843); color:#fff;" onclick="triggerPwaInstall()">
+      <i class="fa-solid fa-mobile-screen-button"></i> <span>تثبيت التطبيق على الهاتف والشاشة</span>
+    </div>
+
     <div class="drawer-section-title" data-i18n="nav_sections">الأقسام الرئيسية</div>
     <div class="drawer-link" onclick="toggleDrawer(); location.hash='#/home';"><i class="fa-solid fa-house"></i> <span data-i18n="nav_home">الرئيسية</span></div>
     <div class="drawer-link" onclick="toggleDrawer(); location.hash='#/movies';"><i class="fa-solid fa-clapperboard"></i> <span data-i18n="nav_movies">الأفلام</span></div>
     <div class="drawer-link" onclick="toggleDrawer(); location.hash='#/tv';"><i class="fa-solid fa-tv"></i> <span data-i18n="nav_tv">المسلسلات</span></div>
     <div class="drawer-link" onclick="toggleDrawer(); location.hash='#/anime';"><i class="fa-solid fa-dragon" style="color:var(--cyan);"></i> <span data-i18n="nav_anime">قسم الأنمي (Anime)</span></div>
     <div class="drawer-link" onclick="toggleDrawer(); location.hash='#/favorites';"><i class="fa-solid fa-bookmark" style="color:var(--gold);"></i> <span data-i18n="nav_favorites">قائمة المفضلة</span></div>
-    <div class="drawer-link" onclick="toggleDrawer(); openVipModal();"><i class="fa-solid fa-crown" style="color:var(--gold);"></i> <span data-i18n="vip_title">اشتراكات VIP</span></div>
-    <div class="drawer-link" id="drawerVipReqLink" style="display:none;" onclick="toggleDrawer(); openRequestMediaModal();"><i class="fa-solid fa-paper-plane" style="color:var(--cyan);"></i> <span data-i18n="vip_request_link">طلب عمل حصري (VIP)</span></div>
+    <div class="drawer-link" onclick="toggleDrawer(); openVipModal();"><i class="fa-solid fa-crown" style="color:var(--gold);"></i> <span>اشتراكات VIP</span></div>
+    <div class="drawer-link" id="drawerVipReqLink" style="display:none;" onclick="toggleDrawer(); openRequestMediaModal();"><i class="fa-solid fa-paper-plane" style="color:var(--cyan);"></i> <span>طلب عمل حصري (VIP)</span></div>
+
+    <div class="drawer-section-title">مجتمعنا وقنواتنا 🌐</div>
+    <a href="https://t.me/BIOURP" target="_blank" class="drawer-link"><i class="fa-brands fa-telegram" style="color:#229ED9;"></i> <span>قناة التليكرام الأساسية</span></a>
+    <a href="https://t.me/iwhw7" target="_blank" class="drawer-link"><i class="fa-brands fa-telegram" style="color:#0088cc;"></i> <span>قناة التحديثات والطلبات</span></a>
+    <a href="https://www.tiktok.com/@onebr.tv" target="_blank" class="drawer-link"><i class="fa-brands fa-tiktok" style="color:#ff0050;"></i> <span>حساب تيك توك (@onebr.tv)</span></a>
 
     <div class="drawer-section-title" data-i18n="nav_genres">جميع التصنيفات</div>
     <div class="genre-boxes-grid" id="genreBoxesContainer"></div>
@@ -311,14 +349,14 @@
     <div class="drawer-link" onclick="toggleFamilyMode()"><i class="fa-solid fa-shield-halved" style="color:var(--watched);"></i> <span id="familyModeToggleText">الوضع العائلي: مفعّل</span></div>
     <div class="drawer-link" onclick="toggleTheme()"><i class="fa-solid fa-circle-half-stroke"></i> <span id="themeToggleText">الوضع النهاري</span></div>
     <div class="drawer-link" onclick="toggleLanguage()"><i class="fa-solid fa-globe"></i> <span id="langToggleText">English</span></div>
-    <div class="drawer-link" id="adminDrawerLink" style="display:none;" onclick="toggleDrawer(); location.hash='#/admin';"><i class="fa-solid fa-shield-halved" style="color:var(--cyan);"></i> <span data-i18n="admin_title">لوحة الأدمن</span></div>
+    <div class="drawer-link" id="adminDrawerLink" style="display:none;" onclick="toggleDrawer(); location.hash='#/admin';"><i class="fa-solid fa-shield-halved" style="color:var(--cyan);"></i> <span>لوحة الأدمن</span></div>
   </div>
 
   <header>
     <div class="header-left" id="headerLeftBox">
       <button class="menu-btn" onclick="toggleDrawer()"><i class="fa-solid fa-bars"></i></button>
       <a href="#/home" class="brand">
-        <div class="brand-icon"><i class="fa-solid fa-film"></i></div>
+        <img src="https://img.icons8.com/fluency/96/film-reel.png" alt="ONEBR" class="brand-logo-img">
         <div class="brand-name">ONEBR TV</div>
       </a>
     </div>
@@ -363,7 +401,7 @@
       </div>
 
       <div class="shelf" id="customShelfBox" style="display: none;">
-        <div class="shelf-title">⭐ <span data-i18n="shelf_custom">أعمال مضافة بواسطة الإدارة</span></div>
+        <div class="shelf-title">⭐ <span>أعمال مضافة بواسطة الإدارة</span></div>
         <div class="shelf-grid" id="deckCustom"></div>
       </div>
 
@@ -430,6 +468,8 @@
           </button>
           <button class="btn-detail-action" id="btnToggleFav" onclick="toggleCurrentFavorite()"><i class="fa-solid fa-bookmark"></i> <span data-i18n="btn_fav">المفضلة</span></button>
           <button class="btn-detail-action" id="btnToggleWatched" onclick="toggleCurrentWatched()"><i class="fa-solid fa-check"></i> <span data-i18n="btn_watched">تمت المشاهدة</span></button>
+          <button class="btn-detail-action" onclick="openDownloadModal()"><i class="fa-solid fa-download" style="color:var(--cyan);"></i> <span>تنزيل العمل</span></button>
+          <button class="btn-detail-action" onclick="fetchAndDownloadSub()"><i class="fa-solid fa-closed-captioning" style="color:var(--gold);"></i> <span>تنزيل الترجمة (.srt)</span></button>
         </div>
       </div>
     </div>
@@ -444,7 +484,7 @@
     <div class="player-container" id="mainPlayerContainer">
       <div id="directPlayerBox">
         <video id="nativeVideo" controls playsinline></video>
-        <button class="skip-intro-btn" id="skipIntroBtn" onclick="skipIntro()">⏭️ <span data-i18n="skip_intro">تخطي المقدمة (+85s)</span></button>
+        <button class="skip-intro-btn" id="skipIntroBtn" onclick="skipIntro()">⏭️ <span>تخطي المقدمة (+85s)</span></button>
       </div>
       <div class="player-box" id="iframeBox">
         <iframe 
@@ -461,7 +501,7 @@
 
     <div class="episodes-bar" id="episodesContainer">
       <div class="episodes-controls">
-        <div style="font-size: 0.78rem; font-weight: 800;" data-i18n="episodes_title">الحلقات:</div>
+        <div style="font-size: 0.78rem; font-weight: 800;" data-i18n="episodes_title">الحلقات والمواسم:</div>
         <div class="episode-jump-box">
           <input type="number" id="epJumpInput" placeholder="رقم الحلقة..." min="1">
           <button onclick="handleQuickEpisodeJump()" data-i18n="jump_btn">انتقال</button>
@@ -478,6 +518,50 @@
     </div>
   </div>
 
+  <div class="modal-overlay" id="downloadModal">
+    <div class="modal-box" style="max-width: 440px; text-align: center;">
+      <i class="fa-solid fa-xmark modal-close" onclick="closeModal('downloadModal')"></i>
+      <div class="modal-title" style="justify-content: center;">
+        <i class="fa-solid fa-cloud-arrow-down" style="color:var(--cyan);"></i> خيارات تنزيل العمل
+      </div>
+      <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 12px;">اختر رابط التنزيل المباشر أو الجودة المناسبة لجهازك:</p>
+      <div style="display:flex; flex-direction:column; gap:8px;" id="downloadLinksList"></div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="vipModal">
+    <div class="modal-box">
+      <i class="fa-solid fa-xmark modal-close" onclick="closeModal('vipModal')"></i>
+      <div class="modal-title"><i class="fa-solid fa-crown" style="color: var(--gold);"></i> <span>اشتراكات وباقات VIP</span></div>
+      <p style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.4;">استمتع بتجربة خالية تماماً من الإعلانات مع شارات توهج ذهبية لحسابك وأولوية قصوى لطلبات الأفلام والمسلسلات.</p>
+      <div class="vip-pricing-grid">
+        <div class="vip-card">
+          <div class="vip-card-title">الباقة الشهرية</div>
+          <div class="vip-card-price">$1.00 <span style="font-size:0.65rem; color:var(--text-muted);">/ شهر</span></div>
+          <div class="vip-features">✓ منع الإعلانات نهائياً<br>✓ شارة VIP مذهبة<br>✓ طلب الأعمال الحصرية فوراً</div>
+          <a href="https://t.me/BIOURP" target="_blank" class="vip-btn-plan">تفعيل عبر تليكرام ($1)</a>
+        </div>
+        <div class="vip-card featured">
+          <div class="vip-card-title">الباقة السنوية (الأفضل)</div>
+          <div class="vip-card-price">$10.00 <span style="font-size:0.65rem; color:var(--text-muted);">/ سنة</span></div>
+          <div class="vip-features">✓ جميع ميزات VIP<br>✓ شارة ذهبية متوهجة دائمة<br>✓ أولوية تنفيذ الطلبات المباشرة</div>
+          <a href="https://t.me/BIOURP" target="_blank" class="vip-btn-plan" style="background:var(--gold); color:#000;">تفعيل عبر تليكرام ($10)</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="requestMediaModal">
+    <div class="modal-box">
+      <i class="fa-solid fa-xmark modal-close" onclick="closeModal('requestMediaModal')"></i>
+      <div class="modal-title"><i class="fa-solid fa-paper-plane" style="color: var(--cyan);"></i> <span>طلب عمل جديد (VIP)</span></div>
+      <p style="font-size: 0.72rem; color: var(--text-muted); margin-bottom: 10px;">اكتب اسم الفيلم أو المسلسل وسيقوم فريق العمل بتوفيره سريعاً.</p>
+      <div class="form-group"><label>اسم العمل المطلوب:</label><input type="text" id="reqMediaTitle" placeholder="مثال: اسم العمل وسنة الإنتاج"></div>
+      <div class="form-group"><label>ملاحظات إضافية (اختياري):</label><textarea id="reqMediaNotes" rows="3" placeholder="حدد الموسم أو الجودة المطلوبة..."></textarea></div>
+      <button class="btn-submit" style="background: var(--cyan); color:#000;" onclick="submitVipMediaRequest()">إرسال الطلب للإدارة</button>
+    </div>
+  </div>
+
   <div class="modal-overlay" id="confirmClearModal">
     <div class="modal-box" style="max-width: 320px; text-align: center; padding: 20px;">
       <div style="color: #ef4444; margin-bottom: 12px;"><i class="fa-solid fa-triangle-exclamation" style="font-size: 2.5rem;"></i></div>
@@ -487,39 +571,6 @@
         <button class="btn-submit" style="background: var(--surface-hover); color: var(--text); border: 1px solid var(--border); width: 48%;" onclick="closeModal('confirmClearModal')" data-i18n="btn_cancel">إلغاء</button>
         <button class="btn-submit" style="background: #ef4444; color: white; border: none; width: 48%;" onclick="executeClearHistory()" data-i18n="btn_confirm_clear">نعم، امسح</button>
       </div>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="vipModal">
-    <div class="modal-box">
-      <i class="fa-solid fa-xmark modal-close" onclick="closeModal('vipModal')"></i>
-      <div class="modal-title"><i class="fa-solid fa-crown" style="color: var(--gold);"></i> <span data-i18n="vip_title">اشتراكات وباقات VIP</span></div>
-      <p style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.4;" data-i18n="vip_desc">استمتع بتجربة خالية تماماً من الإعلانات مع شارات توهج ذهبية لحسابك وأولوية قصوى لطلبات الأفلام والمسلسلات.</p>
-      <div class="vip-pricing-grid">
-        <div class="vip-card">
-          <div class="vip-card-title" data-i18n="vip_monthly">الباقة الشهرية</div>
-          <div class="vip-card-price">$1.00 <span style="font-size:0.65rem; color:var(--text-muted);" data-i18n="per_month">/ شهر</span></div>
-          <div class="vip-features" data-i18n="vip_feat_1">✓ منع الإعلانات نهائياً<br>✓ شارة VIP مذهبة<br>✓ طلب الأعمال الحصرية فوراً</div>
-          <a href="https://t.me/ONEBR?text=ارغب+بالاشتراك+في+باقة+VIP+الشهرية+(1$)" target="_blank" class="vip-btn-plan" data-i18n="vip_btn_1">تفعيل عبر تليكرام ($1)</a>
-        </div>
-        <div class="vip-card featured">
-          <div class="vip-card-title" data-i18n="vip_yearly">الباقة السنوية (الأفضل)</div>
-          <div class="vip-card-price">$10.00 <span style="font-size:0.65rem; color:var(--text-muted);" data-i18n="per_year">/ سنة</span></div>
-          <div class="vip-features" data-i18n="vip_feat_2">✓ جميع ميزات VIP<br>✓ شارة ذهبية متوهجة دائمة<br>✓ أولوية تنفيذ الطلبات المباشرة</div>
-          <a href="https://t.me/ONEBR?text=ارغب+بالاشتراك+في+باقة+VIP+السنوية+(10$)" target="_blank" class="vip-btn-plan" style="background:var(--gold); color:#000;" data-i18n="vip_btn_2">تفعيل عبر تليكرام ($10)</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="requestMediaModal">
-    <div class="modal-box">
-      <i class="fa-solid fa-xmark modal-close" onclick="closeModal('requestMediaModal')"></i>
-      <div class="modal-title"><i class="fa-solid fa-paper-plane" style="color: var(--cyan);"></i> <span data-i18n="req_title">طلب عمل جديد (VIP)</span></div>
-      <p style="font-size: 0.72rem; color: var(--text-muted); margin-bottom: 10px;" data-i18n="req_desc">اكتب اسم الفيلم أو المسلسل وسيقوم فريق العمل بتوفيره سريعاً.</p>
-      <div class="form-group"><label data-i18n="req_name_label">اسم العمل المطلوب:</label><input type="text" id="reqMediaTitle" placeholder="مثال: اسم العمل وسنة الإنتاج"></div>
-      <div class="form-group"><label data-i18n="req_notes_label">ملاحظات إضافية (اختياري):</label><textarea id="reqMediaNotes" rows="3" placeholder="حدد الموسم أو الجودة المطلوبة..."></textarea></div>
-      <button class="btn-submit" style="background: var(--cyan); color:#000;" onclick="submitVipMediaRequest()" data-i18n="req_submit_btn">إرسال الطلب للإدارة</button>
     </div>
   </div>
 
@@ -589,10 +640,14 @@
           <span id="profileEmail" style="font-size: 0.82rem; font-weight: 700; color: var(--text);"></span>
           <span id="profileGlowBadge" class="vip-badge-glow" style="display:none;"><i class="fa-solid fa-crown"></i> VIP</span>
         </div>
-        <p id="profileRoleBadge" style="font-size: 0.68rem; color: var(--gold); font-weight: 800; margin-bottom: 3px;"></p>
-        <p id="profileAdsStatusBadge" style="font-size: 0.65rem; color: var(--cyan); font-weight: 700; margin-bottom: 12px;"></p>
-        <div style="display:flex; gap:5px; justify-content:center;">
-          <button class="btn-submit" id="profileVipReqBtn" style="background: var(--surface-hover); color: var(--cyan); border: 1px solid var(--border); display:none;" onclick="closeModal('authModal'); openRequestMediaModal();" data-i18n="req_btn_profile">طلب فيلم أو مسلسل</button>
+        
+        <div style="display: flex; flex-direction: column; gap: 4px; align-items: center; margin: 6px 0;">
+          <span id="profileRoleBadge" class="badge-info-pill" style="color: var(--gold);"></span>
+          <span id="profileAdsStatusBadge" class="badge-info-pill" style="color: var(--text-muted);"></span>
+        </div>
+
+        <div style="display:flex; gap:5px; justify-content:center; margin-top:10px;">
+          <button class="btn-submit" id="profileVipReqBtn" style="background: var(--surface-hover); color: var(--cyan); border: 1px solid var(--border); display:none;" onclick="closeModal('authModal'); openRequestMediaModal();">طلب فيلم أو مسلسل</button>
           <button class="btn-submit" style="background: #ef4444;" onclick="logoutUser()" data-i18n="auth_logout">تسجيل الخروج</button>
         </div>
       </div>
@@ -602,31 +657,31 @@
   <div class="modal-overlay" id="adminModal">
     <div class="modal-box admin-modal">
       <i class="fa-solid fa-xmark modal-close" onclick="closeModal('adminModal'); location.hash='#/home';"></i>
-      <div class="modal-title"><i class="fa-solid fa-shield-halved" style="color: var(--gold);"></i> <span data-i18n="admin_title">لوحة تحكم المشرفين (ONEBR TV)</span></div>
+      <div class="modal-title"><i class="fa-solid fa-shield-halved" style="color: var(--gold);"></i> <span>لوحة تحكم المشرفين (ONEBR TV)</span></div>
       
       <div class="admin-stats-grid">
-        <div class="admin-stat-card"><div class="stat-label" data-i18n="stat_visits">👥 إجمالي الزيارات</div><div class="stat-number" id="statVisitorsCount">0</div></div>
-        <div class="admin-stat-card"><div class="stat-label" data-i18n="stat_unique">✨ الزوار الفريدين (الأشخاص)</div><div class="stat-number" id="statUniqueVisitorsCount" style="color:var(--gold);">0</div></div>
-        <div class="admin-stat-card"><div class="stat-label" data-i18n="stat_registered">👤 المسجلين</div><div class="stat-number" id="statUsersCount">0</div></div>
-        <div class="admin-stat-card"><div class="stat-label" data-i18n="stat_requests">📩 طلبات VIP</div><div class="stat-number" id="statRequestsCount" style="color:var(--gold);">0</div></div>
-        <div class="admin-stat-card"><div class="stat-label" data-i18n="stat_media">🎬 الأعمال المباشرة</div><div class="stat-number" id="statMediaCount">0</div></div>
-        <div class="admin-stat-card"><div class="stat-label" data-i18n="stat_banned">🚫 المحظورين</div><div class="stat-number" id="statBannedCount" style="color:#ef4444;">0</div></div>
+        <div class="admin-stat-card"><div class="stat-label">👥 إجمالي الزيارات</div><div class="stat-number" id="statVisitorsCount">0</div></div>
+        <div class="admin-stat-card"><div class="stat-label">✨ الزوار الفريدين</div><div class="stat-number" id="statUniqueVisitorsCount" style="color:var(--gold);">0</div></div>
+        <div class="admin-stat-card"><div class="stat-label">👤 المسجلين</div><div class="stat-number" id="statUsersCount">0</div></div>
+        <div class="admin-stat-card"><div class="stat-label">📩 طلبات VIP</div><div class="stat-number" id="statRequestsCount" style="color:var(--gold);">0</div></div>
+        <div class="admin-stat-card"><div class="stat-label">🎬 الأعمال المباشرة</div><div class="stat-number" id="statMediaCount">0</div></div>
+        <div class="admin-stat-card"><div class="stat-label">🚫 المحظورين</div><div class="stat-number" id="statBannedCount" style="color:#ef4444;">0</div></div>
       </div>
 
       <div class="admin-nav">
-        <button class="admin-nav-btn active" onclick="switchAdminTab('usersManage', this)" data-i18n="adm_tab_users">👥 المسجلين</button>
-        <button class="admin-nav-btn" onclick="switchAdminTab('vipRequests', this)" data-i18n="adm_tab_reqs">📩 الطلبات</button>
-        <button class="admin-nav-btn" onclick="switchAdminTab('visitors', this)" data-i18n="adm_tab_visitors">🌐 سجل الزوار</button>
-        <button class="admin-nav-btn" onclick="switchAdminTab('mediaManage', this)" data-i18n="adm_tab_media">🎬 الأعمال</button>
-        <button class="admin-nav-btn" onclick="switchAdminTab('addMedia', this)" data-i18n="adm_tab_add">➕ إضافة عمل</button>
-        <button class="admin-nav-btn" onclick="switchAdminTab('banManage', this)" data-i18n="adm_tab_ban">🚫 الحظر</button>
-        <button class="admin-nav-btn" onclick="switchAdminTab('siteSettings', this)" data-i18n="adm_tab_ads">⚙️ الإعلانات</button>
+        <button class="admin-nav-btn active" onclick="switchAdminTab('usersManage', this)">👥 المسجلين</button>
+        <button class="admin-nav-btn" onclick="switchAdminTab('vipRequests', this)">📩 الطلبات</button>
+        <button class="admin-nav-btn" onclick="switchAdminTab('visitors', this)">🌐 سجل الزوار</button>
+        <button class="admin-nav-btn" onclick="switchAdminTab('mediaManage', this)">🎬 الأعمال</button>
+        <button class="admin-nav-btn" onclick="switchAdminTab('addMedia', this)">➕ إضافة عمل</button>
+        <button class="admin-nav-btn" onclick="switchAdminTab('banManage', this)">🚫 الحظر</button>
+        <button class="admin-nav-btn" onclick="switchAdminTab('siteSettings', this)">⚙️ الإعلانات</button>
       </div>
 
       <div id="tabUsersManage">
         <div style="max-height: 260px; overflow-y: auto;">
           <table class="admin-table">
-            <thead><tr><th data-i18n="th_user">المستخدم</th><th data-i18n="th_email">البريد</th><th data-i18n="th_role">الرتبة</th><th data-i18n="th_ads">الإعلانات</th><th data-i18n="th_actions">الإجراءات</th></tr></thead>
+            <thead><tr><th>المستخدم</th><th>البريد</th><th>الرتبة</th><th>الإعلانات</th><th>الإجراءات</th></tr></thead>
             <tbody id="adminUsersTableBody"></tbody>
           </table>
         </div>
@@ -635,7 +690,7 @@
       <div id="tabVipRequests" style="display: none;">
         <div style="max-height: 260px; overflow-y: auto;">
           <table class="admin-table">
-            <thead><tr><th data-i18n="th_req_title">العمل المطلوب</th><th data-i18n="th_req_notes">الملاحظات</th><th data-i18n="th_req_user">المرسل</th><th data-i18n="th_actions">الإجراء</th></tr></thead>
+            <thead><tr><th>العمل المطلوب</th><th>الملاحظات</th><th>المرسل</th><th>الإجراء</th></tr></thead>
             <tbody id="adminVipRequestsTableBody"></tbody>
           </table>
         </div>
@@ -644,7 +699,7 @@
       <div id="tabVisitors" style="display: none;">
         <div style="max-height: 280px; overflow-y: auto;">
           <table class="admin-table">
-            <thead><tr><th data-i18n="th_vis_name">الاسم</th><th data-i18n="th_vis_entry">الدخول</th><th data-i18n="th_vis_duration">البقاء ⏱️</th><th data-i18n="th_vis_agent">المتصفح</th><th data-i18n="th_vis_acc">الحساب</th><th data-i18n="th_vis_watched">المشاهدات 🎬</th></tr></thead>
+            <thead><tr><th>الاسم</th><th>الدخول</th><th>البقاء ⏱️</th><th>المتصفح</th><th>الحساب</th><th>المشاهدات 🎬</th></tr></thead>
             <tbody id="visitorsTableBody"></tbody>
           </table>
         </div>
@@ -653,24 +708,23 @@
       <div id="tabMediaManage" style="display: none;">
         <div style="max-height: 260px; overflow-y: auto;">
           <table class="admin-table">
-            <thead><tr><th data-i18n="th_media_name">اسم العمل</th><th data-i18n="th_media_url">الرابط</th><th data-i18n="th_actions">الإجراء</th></tr></thead>
+            <thead><tr><th>اسم العمل</th><th>الرابط</th><th>الإجراء</th></tr></thead>
             <tbody id="adminMediaTableBody"></tbody>
           </table>
         </div>
       </div>
 
       <div id="tabAddMedia" style="display: none;">
-        <div class="form-group"><label data-i18n="add_media_name">اسم العمل:</label><input type="text" id="customTitle" placeholder="مثال: اسم المسلسل أو الفيلم"></div>
-        <div class="form-group"><label data-i18n="add_media_poster">رابط البوستر:</label><input type="text" id="customPoster" placeholder="https://image.tmdb.org/..."></div>
-        <div class="form-group"><label data-i18n="add_media_url">رابط الفيديو المباشر (.m3u8 أو .mp4):</label><input type="text" id="customStreamUrl" placeholder="https://.../video.m3u8"></div>
-        <button class="btn-submit" style="background: var(--cyan); color: #000;" onclick="saveCustomMedia()" data-i18n="btn_publish">نشر العمل فوراً</button>
+        <div class="form-group"><label>اسم العمل:</label><input type="text" id="customTitle" placeholder="مثال: اسم المسلسل أو الفيلم"></div>
+        <div class="form-group"><label>رابط البوستر:</label><input type="text" id="customPoster" placeholder="https://image.tmdb.org/..."></div>
+        <div class="form-group"><label>رابط الفيديو المباشر (.m3u8 أو .mp4):</label><input type="text" id="customStreamUrl" placeholder="https://.../video.m3u8"></div>
+        <button class="btn-submit" style="background: var(--cyan); color: #000;" onclick="saveCustomMedia()">نشر العمل فوراً</button>
       </div>
 
       <div id="tabBanManage" style="display: none;">
-        <div class="form-group"><label data-i18n="ban_email_label">البريد الإلكتروني المراد حظره:</label><input type="text" id="banUserEmail" placeholder="user@example.com"></div>
-        <button class="btn-submit" style="background: #ef4444;" onclick="banUserAction()" data-i18n="btn_ban_now">حظر المستخدم الآن</button>
+        <div class="form-group"><label>البريد الإلكتروني المراد حظره:</label><input type="text" id="banUserEmail" placeholder="user@example.com"></div>
+        <button class="btn-submit" style="background: #ef4444;" onclick="banUserAction()">حظر المستخدم الآن</button>
         <div style="margin-top: 12px; max-height: 150px; overflow-y: auto;">
-          <div style="font-size: 0.72rem; font-weight: 800; margin-bottom: 5px;" data-i18n="banned_list_title">قائمة المحظورين:</div>
           <table class="admin-table">
             <tbody id="bannedUsersTableBody"></tbody>
           </table>
@@ -679,19 +733,22 @@
 
       <div id="tabSiteSettings" style="display: none;">
         <div style="background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 12px;">
-          <div style="font-size: 0.8rem; font-weight: 800; margin-bottom: 5px; color: var(--gold);" data-i18n="ads_control_title">🚫 التحكم العام بالإعلانات لكل الموقع</div>
-          <p style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 8px;" data-i18n="ads_control_desc">يمكنك تعطيل جميع شبكات الإعلانات عن كافة الزوار أو تفعيلها بضغطة زر واحدة:</p>
+          <div style="font-size: 0.8rem; font-weight: 800; margin-bottom: 5px; color: var(--gold);">🚫 التحكم العام بالإعلانات لكل الموقع</div>
           <button id="globalAdsToggleBtn" class="btn-submit" style="background: #ef4444;" onclick="toggleGlobalAdsState()">إيقاف الإعلانات عن الجميع 🚫</button>
         </div>
-
-        <div class="form-group"><label data-i18n="banner_text_label">نص الشريط الإعلاني:</label><input type="text" id="adminBannerText" placeholder="اكتب نص الإعلان..."></div>
-        <button class="btn-submit" onclick="saveBannerAnnouncement()" data-i18n="btn_save_banner">تحديث التنبيه</button>
-        <button class="btn-submit" style="background: rgba(255,255,255,0.1); margin-top: 5px;" onclick="removeBannerAnnouncement()" data-i18n="btn_hide_banner">إخفاء التنبيه</button>
+        <div class="form-group"><label>نص الشريط الإعلاني:</label><input type="text" id="adminBannerText" placeholder="اكتب نص الإعلان..."></div>
+        <button class="btn-submit" onclick="saveBannerAnnouncement()">تحديث التنبيه</button>
+        <button class="btn-submit" style="background: rgba(255,255,255,0.1); margin-top: 5px;" onclick="removeBannerAnnouncement()">إخفاء التنبيه</button>
       </div>
     </div>
   </div>
 
   <footer>
+    <div class="social-links-grid">
+      <a href="https://t.me/BIOURP" target="_blank" class="social-btn social-btn-tg"><i class="fa-brands fa-telegram"></i> <span>قناة التليكرام 1</span></a>
+      <a href="https://t.me/iwhw7" target="_blank" class="social-btn social-btn-tg"><i class="fa-brands fa-telegram"></i> <span>قناة التحديثات 2</span></a>
+      <a href="https://www.tiktok.com/@onebr.tv" target="_blank" class="social-btn social-btn-tt"><i class="fa-brands fa-tiktok"></i> <span>TikTok (@onebr.tv)</span></a>
+    </div>
     <div><strong>ONEBR TV</strong> © 2026. All rights reserved.</div>
   </footer>
 
@@ -706,102 +763,56 @@
       "overflow", "secret mission", "hentai", "ecchi", "erotic", "sex", "uncensored", 
       "redo of healer", "highschool dxd", "yosuga no sora", "interspecies reviewers",
       "aki sora", "boku no pico", "kiss x sis", "valkyrie drive", "shinmai maou",
-      "prison school", "ishuzoku", "peter grill", "shimoneta", "monster musume"
+      "prison school", "ishuzoku", "peter grill", "shimoneta", "monster musume",
+      "nude", "porn", "xxx", "adult", "sensual", "naked", "strip", "lust", "seduction",
+      "intimacy", "fetish", "pleasure", "sensuality", "erotica", "prostitute", "brothel",
+      "إباحي", "جنسي", "تعري", "شهواني", "مغري", "كبار فقط", "+18", "18+"
     ];
 
     let currentLang = localStorage.getItem('site_lang') || 'ar';
     let currentTheme = localStorage.getItem('site_theme') || 'dark';
     let isFamilyMode = localStorage.getItem('family_mode') !== 'false';
 
-    let currentEpisodesChunkIndex = 0;
-    const CHUNK_SIZE = 50;
+    let deferredPrompt = null;
 
     const translations = {
       ar: {
         nav_sections: "الأقسام الرئيسية", nav_genres: "جميع التصنيفات", nav_settings: "إعدادات المنصة",
         nav_home: "الرئيسية", nav_movies: "الأفلام", nav_tv: "المسلسلات", nav_anime: "قسم الأنمي (Anime)",
-        nav_favorites: "قائمة المفضلة", vip_request_link: "طلب عمل حصري (VIP)",
-        watch_now: "مشاهدة العمل", shelf_custom: "أعمال مضافة بواسطة الإدارة",
+        nav_favorites: "قائمة المفضلة", watch_now: "مشاهدة العمل",
         shelf_trending: "الأكثر رواجاً اليوم", shelf_anime: "عالم الأنمي والرسوم المتحركة اليابانية",
         shelf_turkish: "الدراما والمسلسلات التركية", shelf_movies: "أحدث الأفلام العالمية",
         shelf_explore: "استكشاف العروض", shelf_similar: "أعمال مقترحة ومشابهة",
         resume_watching: "متابعة المشاهدة", clear_all: "مسح الكل", loading_more: "جاري جلب المزيد...",
         btn_back: "العودة", select_server: "قائمة السيرفرات", srv_prefix: "سيرفر",
-        episodes_title: "الحلقات:", vip_title: "اشتراكات وباقات VIP",
-        vip_desc: "استمتع بتجربة خالية تماماً من الإعلانات مع شارات توهج ذهبية لحسابك وأولوية قصوى لطلبات الأفلام والمسلسلات.",
-        auth_title: "تسجيل الدخول", auth_email: "البريد الإلكتروني:", auth_pass: "كود الدخول (PIN):",
-        auth_btn: "دخول الحساب", auth_btn_header: "دخول", auth_profile: "الحساب الشخصي", auth_logout: "تسجيل الخروج",
-        admin_title: "لوحة تحكم المشرفين (ONEBR TV)", search_ph: "بحث ذكي...",
+        episodes_title: "الحلقات والمواسم:", auth_title: "تسجيل الدخول", auth_email: "البريد الإلكتروني:",
+        auth_pass: "كود الدخول (PIN):", auth_btn: "دخول الحساب", auth_btn_header: "دخول",
+        auth_profile: "الحساب الشخصي", auth_logout: "تسجيل الخروج", search_ph: "بحث ذكي...",
         season_prefix: "الموسم", ep_prefix: "حلقة", jump_btn: "انتقال", jump_ph: "رقم الحلقة...",
-        btn_fav: "المفضلة", btn_watched: "تمت المشاهدة", skip_intro: "تخطي المقدمة (+85s)",
-        favorites_title: "قائمة المفضلة الخاصة بك", no_favs: "لم تقم بإضافة أي أعمال إلى المفضلة بعد.",
-        clear_modal_title: "مسح سجل المشاهدة", clear_modal_desc: "هل أنت متأكد من مسح جميع الأعمال من سجل المتابعة؟",
-        btn_cancel: "إلغاء", btn_confirm_clear: "نعم، امسح",
-        vip_monthly: "الباقة الشهرية", per_month: "/ شهر", vip_yearly: "الباقة السنوية (الأفضل)", per_year: "/ سنة",
-        vip_feat_1: "✓ منع الإعلانات نهائياً<br>✓ شارة VIP مذهبة<br>✓ طلب الأعمال الحصرية فوراً",
-        vip_feat_2: "✓ جميع ميزات VIP<br>✓ شارة ذهبية متوهجة دائمة<br>✓ أولوية تنفيذ الطلبات المباشرة",
-        vip_btn_1: "تفعيل عبر تليكرام ($1)", vip_btn_2: "تفعيل عبر تليكرام ($10)",
-        req_title: "طلب عمل جديد (VIP)", req_desc: "اكتب اسم الفيلم أو المسلسل وسيقوم فريق العمل بتوفيره سريعاً.",
-        req_name_label: "اسم العمل المطلوب:", req_notes_label: "ملاحظات إضافية (اختياري):", req_submit_btn: "إرسال الطلب للإدارة",
-        req_btn_profile: "طلب فيلم أو مسلسل",
+        btn_fav: "المفضلة", btn_watched: "تمت المشاهدة", favorites_title: "قائمة المفضلة الخاصة بك",
+        no_favs: "لم تقم بإضافة أي أعمال إلى المفضلة بعد.", clear_modal_title: "مسح سجل المشاهدة",
+        clear_modal_desc: "هل أنت متأكد من مسح جميع الأعمال من سجل المتابعة؟", btn_cancel: "إلغاء", btn_confirm_clear: "نعم، امسح",
         auth_create_acc: "إنشاء حساب جديد", auth_forgot: "نسيت رمز الدخول؟", auth_pass_new: "كود الدخول الجديد (PIN):",
-        auth_reg_btn: "إنشاء الحساب الآن", auth_has_acc: "لديك حساب بالفعل؟ تسجيل الدخول",
-        auth_recover: "استعادة الحساب", auth_recover_label: "أدخل بريدك الإلكتروني المسجل:", auth_send_otp: "إرسال رمز التحقق", auth_back_login: "العودة لتسجيل الدخول",
-        stat_visits: "👥 إجمالي الزيارات", stat_unique: "✨ الزوار الفريدين (الأشخاص)", stat_registered: "👤 المسجلين",
-        stat_requests: "📩 طلبات VIP", stat_media: "🎬 الأعمال المباشرة", stat_banned: "🚫 المحظورين",
-        adm_tab_users: "👥 المسجلين", adm_tab_reqs: "📩 الطلبات", adm_tab_visitors: "🌐 سجل الزوار",
-        adm_tab_media: "🎬 الأعمال", adm_tab_add: "➕ إضافة عمل", adm_tab_ban: "🚫 الحظر", adm_tab_ads: "⚙️ الإعلانات",
-        th_user: "المستخدم", th_email: "البريد", th_role: "الرتبة", th_ads: "الإعلانات", th_actions: "الإجراءات",
-        th_req_title: "العمل المطلوب", th_req_notes: "الملاحظات", th_req_user: "المرسل",
-        th_vis_name: "الاسم", th_vis_entry: "الدخول", th_vis_duration: "البقاء ⏱️", th_vis_agent: "المتصفح", th_vis_acc: "الحساب", th_vis_watched: "المشاهدات 🎬",
-        th_media_name: "اسم العمل", th_media_url: "الرابط",
-        add_media_name: "اسم العمل:", add_media_poster: "رابط البوستر:", add_media_url: "رابط الفيديو المباشر (.m3u8 أو .mp4):", btn_publish: "نشر العمل فوراً",
-        ban_email_label: "البريد الإلكتروني المراد حظره:", btn_ban_now: "حظر المستخدم الآن", banned_list_title: "قائمة المحظورين:",
-        ads_control_title: "🚫 التحكم العام بالإعلانات لكل الموقع", ads_control_desc: "يمكنك تعطيل جميع شبكات الإعلانات عن كافة الزوار أو تفعيلها بضغطة زر واحدة:",
-        banner_text_label: "نص الشريط الإعلاني:", btn_save_banner: "تحديث التنبيه", btn_hide_banner: "إخفاء التنبيه"
+        auth_reg_btn: "إنشاء الحساب الآن", auth_has_acc: "لديك حساب بالفعل؟ تسجيل الدخول"
       },
       en: {
         nav_sections: "Main Sections", nav_genres: "All Genres", nav_settings: "Platform Settings",
         nav_home: "Home", nav_movies: "Movies", nav_tv: "TV Shows", nav_anime: "Anime Hub",
-        nav_favorites: "My Favorites", vip_request_link: "Request VIP Media",
-        watch_now: "Watch Now", shelf_custom: "Admin Releases",
+        nav_favorites: "My Favorites", watch_now: "Watch Now",
         shelf_trending: "Trending Today", shelf_anime: "Anime & Japanese Animation",
         shelf_turkish: "Turkish Drama & Series", shelf_movies: "Latest World Movies",
         shelf_explore: "Explore Media", shelf_similar: "Similar & Recommended Titles",
         resume_watching: "Continue Watching", clear_all: "Clear All", loading_more: "Loading more...",
         btn_back: "Back", select_server: "Select Server", srv_prefix: "Server",
-        episodes_title: "Episodes:", vip_title: "VIP Memberships & Plans",
-        vip_desc: "Enjoy ad-free fast streaming with dedicated gold profile badges and VIP priority media requests.",
-        auth_title: "User Login", auth_email: "Email Address:", auth_pass: "PIN Code:",
-        auth_btn: "Login", auth_btn_header: "Login", auth_profile: "User Profile", auth_logout: "Logout",
-        admin_title: "Admin Dashboard (ONEBR TV)", search_ph: "Smart search...",
+        episodes_title: "Episodes & Seasons:", auth_title: "User Login", auth_email: "Email Address:",
+        auth_pass: "PIN Code:", auth_btn: "Login", auth_btn_header: "Login",
+        auth_profile: "User Profile", auth_logout: "Logout", search_ph: "Smart search...",
         season_prefix: "Season", ep_prefix: "Ep", jump_btn: "Go", jump_ph: "Episode #...",
-        btn_fav: "Favorite", btn_watched: "Watched", skip_intro: "Skip Intro (+85s)",
-        favorites_title: "Your Favorite Titles", no_favs: "You have not added any titles to favorites yet.",
-        clear_modal_title: "Clear Watch History", clear_modal_desc: "Are you sure you want to clear your entire watch history?",
-        btn_cancel: "Cancel", btn_confirm_clear: "Yes, Clear",
-        vip_monthly: "Monthly Plan", per_month: "/ month", vip_yearly: "Yearly Plan (Best)", per_year: "/ year",
-        vip_feat_1: "✓ Zero Ads Guaranteed<br>✓ Gold VIP Profile Badge<br>✓ Instant Exclusive Media Requests",
-        vip_feat_2: "✓ All VIP Features<br>✓ Permanent Glowing Badge<br>✓ Highest Priority Support",
-        vip_btn_1: "Subscribe via Telegram ($1)", vip_btn_2: "Subscribe via Telegram ($10)",
-        req_title: "Request Media (VIP)", req_desc: "Enter movie or series name and our team will add it promptly.",
-        req_name_label: "Title Name:", req_notes_label: "Additional Notes (Optional):", req_submit_btn: "Submit Request",
-        req_btn_profile: "Request Movie / TV",
+        btn_fav: "Favorite", btn_watched: "Watched", favorites_title: "Your Favorite Titles",
+        no_favs: "You have not added any titles to favorites yet.", clear_modal_title: "Clear Watch History",
+        clear_modal_desc: "Are you sure you want to clear your entire watch history?", btn_cancel: "Cancel", btn_confirm_clear: "Yes, Clear",
         auth_create_acc: "Create New Account", auth_forgot: "Forgot PIN?", auth_pass_new: "New PIN Code:",
-        auth_reg_btn: "Register Now", auth_has_acc: "Already have an account? Login",
-        auth_recover: "Account Recovery", auth_recover_label: "Enter your registered email:", auth_send_otp: "Send Verification Code", auth_back_login: "Back to Login",
-        stat_visits: "👥 Total Visits", stat_unique: "✨ Unique Visitors (People)", stat_registered: "👤 Registered",
-        stat_requests: "📩 VIP Requests", stat_media: "🎬 Direct Media", stat_banned: "🚫 Banned",
-        adm_tab_users: "👥 Users", adm_tab_reqs: "📩 Requests", adm_tab_visitors: "🌐 Visitor Log",
-        adm_tab_media: "🎬 Media", adm_tab_add: "➕ Add Media", adm_tab_ban: "🚫 Bans", adm_tab_ads: "⚙️ Ads Control",
-        th_user: "User", th_email: "Email", th_role: "Role", th_ads: "Ads", th_actions: "Actions",
-        th_req_title: "Requested Title", th_req_notes: "Notes", th_req_user: "Sender",
-        th_vis_name: "Name", th_vis_entry: "Entry", th_vis_duration: "Duration ⏱️", th_vis_agent: "Browser", th_vis_acc: "Account", th_vis_watched: "Watched 🎬",
-        th_media_name: "Title", th_media_url: "URL",
-        add_media_name: "Title Name:", add_media_poster: "Poster URL:", add_media_url: "Direct Stream URL (.m3u8 or .mp4):", btn_publish: "Publish Now",
-        ban_email_label: "Email to ban:", btn_ban_now: "Ban User Now", banned_list_title: "Banned List:",
-        ads_control_title: "🚫 Global Ads Controller", ads_control_desc: "Disable all ad networks for every visitor or enable with one click:",
-        banner_text_label: "Banner Text:", btn_save_banner: "Update Banner", btn_hide_banner: "Hide Banner"
+        auth_reg_btn: "Register Now", auth_has_acc: "Already have an account? Login"
       }
     };
 
@@ -846,6 +857,15 @@
     let currentVisitorRecordKey = null;
     let isGlobalAdsEnabled = true;
 
+    // تسجيل الـ Service Worker لتمكين تشغيل PWA بشكل أصلي ومستقل
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((reg) => console.log('PWA Service Worker Active:', reg.scope))
+          .catch((err) => console.error('Service Worker Registration Failed:', err));
+      });
+    }
+
     let toastTimeout = null;
     function showToast(message, type = 'info') {
       const toast = document.getElementById('customToast');
@@ -858,7 +878,7 @@
 
       toastTimeout = setTimeout(() => {
         toast.className = '';
-      }, 2600);
+      }, 3200);
     }
 
     function getAuthToken() { return localStorage.getItem('auth_token') || ''; }
@@ -867,8 +887,16 @@
     function isSensitiveMedia(item) {
       if (!item) return false;
       if (item.adult === true) return true;
-      const titleStr = `${item.title || ''} ${item.name || ''} ${item.original_title || ''} ${item.original_name || ''}`.toLowerCase();
-      return SENSITIVE_KEYWORDS.some(kw => titleStr.includes(kw));
+      
+      const fullText = `
+        ${item.title || ''} 
+        ${item.name || ''} 
+        ${item.original_title || ''} 
+        ${item.original_name || ''} 
+        ${item.overview || ''}
+      `.toLowerCase();
+
+      return SENSITIVE_KEYWORDS.some(kw => fullText.includes(kw.toLowerCase()));
     }
 
     function getDisplayTitle(item) {
@@ -881,7 +909,7 @@
     }
 
     function getSafeQueryParam() {
-      return isFamilyMode ? '&include_adult=false' : '&include_adult=true';
+      return isFamilyMode ? '&include_adult=false&without_genres=10749,18' : '&include_adult=true';
     }
 
     function toggleFamilyMode() {
@@ -891,6 +919,7 @@
       loadShelves();
       initHeroRotation();
       handleRouting();
+      showToast(isFamilyMode ? "تم تفعيل الوضع العائلي وحجب جميع الأعمال الحساسة 🛡️" : "تم تعطيل الوضع العائلي ⚠️", "info");
     }
 
     function applyFamilyModeUI() {
@@ -918,7 +947,10 @@
     }
     function applyTheme(theme) {
       document.documentElement.setAttribute('data-theme', theme);
-      document.getElementById('themeToggleText').innerText = theme === 'dark' ? (currentLang === 'ar' ? 'الوضع النهاري' : 'Light Mode') : (currentLang === 'ar' ? 'الوضع الليلي' : 'Dark Mode');
+      const themeText = document.getElementById('themeToggleText');
+      if (themeText) {
+        themeText.innerText = theme === 'dark' ? (currentLang === 'ar' ? 'الوضع النهاري' : 'Light Mode') : (currentLang === 'ar' ? 'الوضع الليلي' : 'Dark Mode');
+      }
     }
 
     function toggleLanguage() {
@@ -972,6 +1004,26 @@
       overlay.style.display = drawer.classList.contains('open') ? 'block' : 'none';
     }
 
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      const pwaBtn = document.getElementById('pwaInstallBtn');
+      if (pwaBtn) pwaBtn.style.display = 'flex';
+    });
+
+    async function triggerPwaInstall() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const choice = await deferredPrompt.userChoice;
+        if (choice.outcome === 'accepted') {
+          showToast("جاري تثبيت ONEBR TV كتطبيق مستقل على جهازك...", "success");
+        }
+        deferredPrompt = null;
+      } else {
+        showToast("إذا لم تظهر نافذة التثبيت: اضغط (⋮) أعلى المتصفح ثم اختر 'تثبيت التطبيق' أو 'إضافة إلى الشاشة الرئيسية'", "info");
+      }
+    }
+
     function initSearchFocusEffect() {
       const searchInput = document.getElementById('searchInput');
       const headerCenter = document.getElementById('headerCenterBox');
@@ -995,6 +1047,34 @@
       });
     }
 
+    function initSmartTvNavigation() {
+      window.addEventListener('keydown', (e) => {
+        const focusable = Array.from(document.querySelectorAll('button, [href], input, .card, [tabindex="0"]')).filter(el => {
+          return el.offsetParent !== null && !el.disabled;
+        });
+        
+        let index = focusable.indexOf(document.activeElement);
+
+        if (e.key === 'ArrowDown' || e.key === 'Down') {
+          if (index < focusable.length - 1) focusable[index + 1].focus();
+        } else if (e.key === 'ArrowUp' || e.key === 'Up') {
+          if (index > 0) focusable[index - 1].focus();
+        } else if (e.key === 'ArrowRight' || e.key === 'Right') {
+          const next = document.documentElement.dir === 'rtl' ? index - 1 : index + 1;
+          if (focusable[next]) focusable[next].focus();
+        } else if (e.key === 'ArrowLeft' || e.key === 'Left') {
+          const prev = document.documentElement.dir === 'rtl' ? index + 1 : index - 1;
+          if (focusable[prev]) focusable[prev].focus();
+        } else if (e.key === 'Back' || e.key === 'Escape') {
+          if (document.querySelector('.modal-overlay[style*="flex"]')) {
+            document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none');
+          } else {
+            history.back();
+          }
+        }
+      });
+    }
+
     function toggleServerMenu() {
       const menu = document.getElementById("serverDropdown");
       menu.style.display = menu.style.display === "flex" ? "none" : "flex";
@@ -1008,20 +1088,18 @@
       }
     });
 
-    async function getArabicSubtitleUrl(tmdbId, type, season = 1, episode = 1) {
-      try {
-        const query = type === 'tv' ? `id=${tmdbId}&s=${season}&e=${episode}` : `id=${tmdbId}`;
-        const res = await fetch(`https://sub.wyzie.ru/search?${query}&lang=ar`);
-        const data = await res.json();
-        if (data && data.length > 0 && data[0].url) return data[0].url;
-      } catch (err) {}
-      return null;
-    }
-
-    function appendSubtitleToUrl(serverUrl, subtitleUrl) {
-      if (!subtitleUrl) return serverUrl;
-      const separator = serverUrl.includes('?') ? '&' : '?';
-      return `${serverUrl}${separator}sub_url=${encodeURIComponent(subtitleUrl)}&sub_lang=ara`;
+    function downloadBlobDirectly(content, fileName, mimeType = 'text/plain;charset=utf-8') {
+      const blob = new Blob([content], { type: mimeType });
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(blobUrl);
+      }, 120);
     }
 
     function buildSmartServerList() {
@@ -1075,12 +1153,9 @@
       const targetUrl = activeServerList[idx - 1].url;
       const frame = document.getElementById('streamFrame');
       frame.src = targetUrl;
-      frame.onerror = () => {
-        if (currentServer < activeServerList.length) changeServer(currentServer + 1);
-      };
     }
 
-    async function startStreamingNow() {
+    function startStreamingNow() {
       const mainContainer = document.getElementById('mainPlayerContainer');
       const directBox = document.getElementById('directPlayerBox');
       const iframeBox = document.getElementById('iframeBox');
@@ -1092,18 +1167,14 @@
       srvContainer.style.display = 'block';
 
       buildSmartServerList();
-
-      const subUrl = await getArabicSubtitleUrl(currentItem.id, currentItem.type, currentItem.season, currentItem.episode);
-      if (subUrl) {
-        activeServerList = activeServerList.map(srv => ({ ...srv, url: appendSubtitleToUrl(srv.url, subUrl) }));
-      }
-
       currentServer = 1;
       renderDynamicServersDeck();
       changeServer(1);
       recordResumeProgress(currentItem, 20);
-      recordVisitorWatchActivity(currentItem.title || 'عمل غير محدد');
+      recordVisitorWatchActivity(currentItem.title);
       mainContainer.scrollIntoView({ behavior: 'smooth' });
+
+      showToast("لتشغيل الترجمة: اضغط زر (CC) في أسفل المشغل، أو اختر سيرفر آخر", "info");
     }
 
     function stopPlayer() {
@@ -1200,8 +1271,175 @@
       }
       saveWatchedItems(watched);
       if (currentItem.type === 'tv' && currentItem.rawSeasons) {
-        const absEp = mapSeasonEpToAbsolute(currentItem.season, currentItem.episode, currentItem.rawSeasons);
-        renderContinuousEpisodes(currentItem.id, currentItem.rawSeasons, absEp);
+        renderSeasonsTabUI(currentItem.id, currentItem.rawSeasons);
+      }
+    }
+
+    async function openDownloadModal() {
+      const container = document.getElementById('downloadLinksList');
+      container.innerHTML = `<div style="padding:15px; font-size:0.8rem; color:var(--text-muted);"><i class="fa-solid fa-spinner fa-spin"></i> جاري استخراج خيارات التنزيل...</div>`;
+      document.getElementById('downloadModal').style.display = 'flex';
+
+      let { id, imdb_id, type, season: s, episode: e, title } = currentItem;
+      const isMov = (type === 'movie');
+      const cleanTitle = (title || 'Media').replace(/[\/\?<>\\:\*\|":]/g, ' ').trim();
+      const targetName = isMov ? cleanTitle : `${cleanTitle} S0${s}E0${e}`;
+
+      if (!imdb_id && id && id !== 'custom') {
+        try {
+          const resExt = await fetch(`${API_BASE}/${type}/${id}/external_ids?api_key=${API_KEY}`);
+          const dataExt = await resExt.json();
+          if (dataExt && dataExt.imdb_id) {
+            imdb_id = dataExt.imdb_id;
+            currentItem.imdb_id = imdb_id;
+          }
+        } catch(err) {}
+      }
+
+      container.innerHTML = '';
+      const defaultTrackers = '&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.bittor.pw:1337/announce';
+      let linksFound = false;
+
+      if (isMov && imdb_id) {
+        try {
+          const ytsUrl = `https://yts.mx/api/v2/list_movies.json?query_term=${imdb_id}`;
+          const res = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(ytsUrl)}`, { signal: AbortSignal.timeout(6000) });
+          const ytsData = await res.json();
+          
+          if (ytsData?.data?.movies?.[0]?.torrents) {
+            ytsData.data.movies[0].torrents.forEach(t => {
+              if (t.hash) {
+                linksFound = true;
+                const magnetLink = `magnet:?xt=urn:btih:${t.hash}&dn=${encodeURIComponent(targetName + ' [' + t.quality + ']')}${defaultTrackers}`;
+                
+                const btn = document.createElement('a');
+                btn.href = magnetLink;
+                btn.className = "btn-submit";
+                btn.style.background = t.quality.includes('1080') ? "linear-gradient(135deg, #10b981, #059669)" : "var(--surface-hover)";
+                btn.style.border = "1px solid var(--border)";
+                btn.style.color = "#fff";
+                btn.style.marginBottom = "6px";
+                btn.innerHTML = `<i class="fa-solid fa-download"></i> تحميل تورنت / Magnet (${t.quality} - ${t.size})`;
+                container.appendChild(btn);
+              }
+            });
+          }
+        } catch(e) {}
+      }
+
+      const searchName = encodeURIComponent(targetName);
+      const searchBtn = document.createElement('a');
+      searchBtn.href = `https://1337x.to/search/${searchName}/1/`;
+      searchBtn.target = "_blank";
+      searchBtn.className = "btn-submit";
+      searchBtn.style.background = "var(--surface)";
+      searchBtn.style.border = "1px solid var(--cyan)";
+      searchBtn.style.color = "var(--cyan)";
+      searchBtn.innerHTML = `<i class="fa-solid fa-magnifying-glass"></i> البحث عن جميع نسخ وتورنت العمل في 1337x`;
+      container.appendChild(searchBtn);
+
+      if (!linksFound && isMov) {
+        const infoMsg = document.createElement('p');
+        infoMsg.style.fontSize = "0.78rem";
+        infoMsg.style.color = "var(--text-muted)";
+        infoMsg.style.padding = "8px";
+        infoMsg.innerText = "يمكنك النقر على زر البحث بالأعلى واختيار النسخة المناسبة مباشرة عبر تطبيق التورنت لديك.";
+        container.appendChild(infoMsg);
+      }
+    }
+
+    async function fetchAndDownloadSub() {
+      let { id, imdb_id, type, season: s, episode: e, title } = currentItem;
+      showToast("جاري البحث عن ملف الترجمة العربي...", "info");
+      
+      const filename = `${(title || 'Media').replace(/[\/\?<>\\:\*\|":]/g, '_')}_${type === 'tv' ? `S${s}E${e}` : 'Movie'}_Arabic.srt`;
+
+      if (!imdb_id && id) {
+        try {
+          const resExt = await fetch(`${API_BASE}/${type}/${id}/external_ids?api_key=${API_KEY}`);
+          const dataExt = await resExt.json();
+          if (dataExt && dataExt.imdb_id) {
+            imdb_id = dataExt.imdb_id;
+            currentItem.imdb_id = imdb_id;
+          }
+        } catch(e) {}
+      }
+
+      if (imdb_id) {
+        try {
+          const endpoint = type === 'tv'
+            ? `https://opensubtitles-v3.strem.io/subtitles/series/${imdb_id}:${s}:${e}.json`
+            : `https://opensubtitles-v3.strem.io/subtitles/movie/${imdb_id}.json`;
+
+          const res = await fetch(endpoint, { signal: AbortSignal.timeout(5000) });
+          const data = await res.json();
+          
+          if (data?.subtitles?.length > 0) {
+            const arSub = data.subtitles.find(sub => sub.lang === 'ara' || sub.lang === 'ar' || sub.lang === 'arabic') || data.subtitles[0];
+            if (arSub?.url) {
+              const subRes = await fetch(arSub.url);
+              if (subRes.ok) {
+                const subText = await subRes.text();
+                downloadBlobDirectly(subText, filename, 'text/plain;charset=utf-8');
+                showToast("تم تنزيل ملف الترجمة بنجاح!", "success");
+                return;
+              }
+            }
+          }
+        } catch (err) {}
+      }
+
+      const subdlUrl = `https://subdl.com/search/${encodeURIComponent(title || '')}`;
+      window.open(subdlUrl, '_blank');
+      showToast("تم فتح صفحة تنزيل الترجمة العربية المتوافقة", "success");
+    }
+
+    function initPlayerSkipTimer() {
+      const video = document.getElementById('nativeVideo');
+      const skipBtn = document.getElementById('skipIntroBtn');
+      video.addEventListener('timeupdate', () => {
+        if (video.currentTime > 2 && video.currentTime < 120) skipBtn.style.display = 'block';
+        else skipBtn.style.display = 'none';
+      });
+    }
+
+    function skipIntro() {
+      const video = document.getElementById('nativeVideo');
+      if (video) video.currentTime += 85;
+    }
+
+    function playDirectMedia(title, streamUrl, poster) {
+      currentItem = { id: 'custom', type: 'custom', title, poster_path: poster, isCustom: true, directUrl: streamUrl };
+      document.getElementById('homeView').style.display = 'none';
+      document.getElementById('searchResultsView').style.display = 'none';
+      document.getElementById('favoritesView').style.display = 'none';
+      document.getElementById('theaterView').style.display = 'block';
+      document.getElementById('detailHeroBox').style.display = 'none';
+      document.getElementById('mainPlayerContainer').style.display = 'block';
+      document.getElementById('iframeBox').style.display = 'none';
+      document.getElementById('serversContainer').style.display = 'none';
+      document.getElementById('episodesContainer').style.display = 'none';
+      document.getElementById('directPlayerBox').style.display = 'block';
+      window.scrollTo(0, 0);
+
+      const video = document.getElementById('nativeVideo');
+      const proxiedUrl = PROXY_BASE + encodeURIComponent(streamUrl);
+
+      if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
+
+      if (streamUrl.includes('.m3u8')) {
+        if (Hls.isSupported()) {
+          hlsInstance = new Hls();
+          hlsInstance.loadSource(proxiedUrl);
+          hlsInstance.attachMedia(video);
+          hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => video.play().catch(()=>{}));
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+          video.src = proxiedUrl;
+          video.play().catch(()=>{});
+        }
+      } else {
+        video.src = proxiedUrl;
+        video.play().catch(()=>{});
       }
     }
 
@@ -1321,6 +1559,8 @@
       initSearchFocusEffect();
       initInfiniteScroll();
       initPlayerSkipTimer();
+      initSmartTvNavigation();
+      loadShelves();
 
       window.addEventListener('hashchange', handleRouting);
       handleRouting();
@@ -1389,7 +1629,9 @@
       window.scrollTo(0, 0);
 
       const container = document.getElementById('deckFavorites');
-      const favs = getFavorites();
+      let favs = getFavorites();
+      if (isFamilyMode) favs = favs.filter(i => !isSensitiveMedia(i));
+
       container.innerHTML = '';
       if (favs.length === 0) {
         container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:30px; color:var(--text-muted);">${translations[currentLang].no_favs}</div>`;
@@ -1400,14 +1642,16 @@
 
     function loadResumeShelf() {
       const deck = document.getElementById('deckResume');
-      const list = getResumeList();
+      let list = getResumeList();
+      if (isFamilyMode) list = list.filter(i => !isSensitiveMedia(i));
+
       if (list.length > 0) {
         deck.innerHTML = '';
         document.getElementById('resumeShelfBox').style.display = 'block';
         list.forEach(item => {
-          if (isFamilyMode && isSensitiveMedia(item)) return;
           const card = document.createElement('div');
           card.className = 'card';
+          card.tabIndex = 0;
           const progressVal = item.progress || 50;
           const displayTitle = getDisplayTitle(item);
           const resumeText = currentLang === 'ar' ? 'استئناف ▶' : 'Resume ▶';
@@ -1455,7 +1699,9 @@
       try {
         const res = await fetch(`${API_BASE}${currentExploreEndpoint}${currentExploreEndpoint.includes('?') ? '&' : '?'}api_key=${API_KEY}&page=${explorePage}${getSafeQueryParam()}&language=en-US`);
         const json = await res.json();
-        const results = json.results || [];
+        let results = json.results || [];
+        if (isFamilyMode) results = results.filter(i => !isSensitiveMedia(i));
+
         if (results.length === 0) hasMoreExploreMedia = false;
         else {
           renderCards(results, document.getElementById('deckExplore'));
@@ -1490,7 +1736,9 @@
         const res = await fetch(`${API_BASE}/search/multi?query=${encodeURIComponent(query)}&api_key=${API_KEY}${getSafeQueryParam()}&language=en-US`);
         const data = await res.json();
         container.innerHTML = '';
-        const validResults = (data.results || []).filter(i => i.poster_path);
+        let validResults = (data.results || []).filter(i => i.poster_path);
+        if (isFamilyMode) validResults = validResults.filter(i => !isSensitiveMedia(i));
+
         if (validResults.length === 0) {
           container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:20px; color:var(--text-muted);">${currentLang === 'ar' ? 'لم يتم العثور على أي نتائج مطابقة.' : 'No matching results found.'}</div>`;
           return;
@@ -1516,12 +1764,14 @@
           try {
             const res = await fetch(`${API_BASE}/search/multi?query=${encodeURIComponent(q)}&api_key=${API_KEY}${getSafeQueryParam()}&language=en-US`);
             const data = await res.json();
-            const results = (data.results || []).filter(i => i.poster_path).slice(0, 8);
+            let results = (data.results || []).filter(i => i.poster_path);
+            if (isFamilyMode) results = results.filter(i => !isSensitiveMedia(i));
+            results = results.slice(0, 8);
+
             if (results.length === 0) { searchDropdown.style.display = 'none'; return; }
 
             searchDropdown.innerHTML = '';
             results.forEach(item => {
-              if (isFamilyMode && isSensitiveMedia(item)) return;
               const isMovie = (item.media_type === 'movie' || item.title);
               const type = isMovie ? 'movie' : 'tv';
               const title = getDisplayTitle(item);
@@ -1574,20 +1824,31 @@
     }
 
     async function loadShelves() {
-      loadShelfList('/trending/all/day', 'deckTrending');
-      loadShelfList('/discover/tv?with_genres=16&with_original_language=ja&sort_by=popularity.desc', 'deckAnime', 'tv');
-      loadShelfList('/discover/tv?with_original_language=tr&sort_by=popularity.desc', 'deckTurkish', 'tv');
-      loadShelfList('/movie/popular', 'deckMovies', 'movie');
+      await Promise.allSettled([
+        loadShelfList('/trending/all/day', 'deckTrending'),
+        loadShelfList('/discover/tv?with_genres=16&with_original_language=ja&sort_by=popularity.desc', 'deckAnime', 'tv'),
+        loadShelfList('/discover/tv?with_original_language=tr&sort_by=popularity.desc', 'deckTurkish', 'tv'),
+        loadShelfList('/movie/popular', 'deckMovies', 'movie')
+      ]);
     }
-    loadShelves();
 
     async function loadShelfList(path, elemId, fixedType = null) {
       try {
         const container = document.getElementById(elemId);
-        if (container) container.innerHTML = '';
-        const res = await fetch(`${API_BASE}${path}${path.includes('?') ? '&' : '?'}api_key=${API_KEY}${getSafeQueryParam()}&language=en-US`);
+        if (!container) return;
+        
+        const separator = path.includes('?') ? '&' : '?';
+        const url = `${API_BASE}${path}${separator}api_key=${API_KEY}${getSafeQueryParam()}&language=en-US`;
+        
+        const res = await fetch(url);
+        if (!res.ok) return;
+        
         const json = await res.json();
-        renderCards(json.results || [], container, fixedType);
+        let results = json.results || [];
+        if (isFamilyMode) results = results.filter(i => !isSensitiveMedia(i));
+
+        container.innerHTML = '';
+        renderCards(results, container, fixedType);
       } catch (e) {}
     }
 
@@ -1607,6 +1868,7 @@
 
         const card = document.createElement('div');
         card.className = 'card';
+        card.tabIndex = 0;
         card.onclick = () => { location.hash = `#/theater/${type}/${item.id}`; };
         card.innerHTML = `
           ${watched ? `<span class="card-watched-badge">${watchedBadgeText}</span>` : ''}
@@ -1632,12 +1894,21 @@
       currentItem = { id, imdb_id: '', title: '', origTitle: '', slug: '', origLang: '', isAnime: false, isAsian: false, isTurkish: false, type, poster_path: '', season, episode, isCustom: false, directUrl: '', rawSeasons: [] };
 
       try {
-        const resLocalized = await fetch(`${API_BASE}/${type}/${id}?api_key=${API_KEY}&append_to_response=external_ids${getLanguageParam()}`);
-        const dataLocalized = await resLocalized.json();
+        const [resLocalized, resEn] = await Promise.all([
+          fetch(`${API_BASE}/${type}/${id}?api_key=${API_KEY}&append_to_response=external_ids${getLanguageParam()}`),
+          fetch(`${API_BASE}/${type}/${id}?api_key=${API_KEY}&append_to_response=external_ids&language=en-US`)
+        ]);
 
-        const resEn = await fetch(`${API_BASE}/${type}/${id}?api_key=${API_KEY}&language=en-US`);
+        const dataLocalized = await resLocalized.json();
         const dataEn = await resEn.json();
         
+        if (isFamilyMode && (isSensitiveMedia(dataLocalized) || isSensitiveMedia(dataEn))) {
+          showToast("عذراً، هذا المحتوى محجوب في الوضع العائلي 🛡️", "error");
+          location.hash = '#/home';
+          return;
+        }
+
+        currentItem.imdb_id = dataLocalized.external_ids?.imdb_id || dataEn.external_ids?.imdb_id || dataLocalized.imdb_id || '';
         currentItem.origTitle = dataLocalized.original_title || dataLocalized.original_name || dataLocalized.title || dataLocalized.name;
         currentItem.origLang = dataLocalized.original_language || '';
         
@@ -1685,8 +1956,7 @@
 
         if (type === 'tv') {
           document.getElementById('episodesContainer').style.display = 'block';
-          const absEp = mapSeasonEpToAbsolute(season, episode, currentItem.rawSeasons);
-          renderContinuousEpisodes(id, currentItem.rawSeasons, absEp);
+          renderSeasonsTabUI(id, currentItem.rawSeasons);
         } else {
           document.getElementById('episodesContainer').style.display = 'none';
         }
@@ -1702,97 +1972,59 @@
       try {
         const res = await fetch(`${API_BASE}/${type}/${id}/similar?api_key=${API_KEY}${getSafeQueryParam()}&language=en-US`);
         const data = await res.json();
+        let results = data.results || [];
+        if (isFamilyMode) results = results.filter(i => !isSensitiveMedia(i));
+
         const deck = document.getElementById('deckSimilar');
         deck.innerHTML = '';
-        renderCards(data.results || [], deck, type);
+        renderCards(results, deck, type);
       } catch(e) {}
     }
 
-    function mapAbsoluteToSeasonEp(targetEp, seasons) {
+    function renderSeasonsTabUI(tvId, seasons) {
+      const container = document.getElementById('chunkRangesList');
+      container.innerHTML = '';
+      
       const validSeasons = seasons.filter(s => s.season_number > 0);
-      let accumulated = 0;
-      for (let s of validSeasons) {
-        if (targetEp <= (accumulated + s.episode_count)) {
-          return {
-            season: s.season_number,
-            episode: targetEp - accumulated,
-            isValid: true
-          };
-        }
-        accumulated += s.episode_count;
-      }
-      return { season: 1, episode: 1, isValid: false, total: accumulated };
+      if (validSeasons.length === 0) return;
+
+      const currentActiveSeason = validSeasons.find(s => s.season_number === currentItem.season) || validSeasons[0];
+      currentItem.season = currentActiveSeason.season_number;
+
+      validSeasons.forEach(season => {
+        const tabBtn = document.createElement('button');
+        tabBtn.className = `chunk-btn ${season.season_number === currentItem.season ? 'active' : ''}`;
+        tabBtn.innerText = `${translations[currentLang].season_prefix} ${season.season_number} (${season.episode_count} ${translations[currentLang].ep_prefix})`;
+        
+        tabBtn.onclick = () => {
+          document.querySelectorAll('.chunk-btn').forEach(b => b.classList.remove('active'));
+          tabBtn.classList.add('active');
+          currentItem.season = season.season_number;
+          renderEpisodesGridForSeason(tvId, season.season_number, season.episode_count);
+        };
+        container.appendChild(tabBtn);
+      });
+
+      renderEpisodesGridForSeason(tvId, currentItem.season, currentActiveSeason.episode_count);
     }
 
-    function mapSeasonEpToAbsolute(seasonNum, epNum, seasons) {
-      const validSeasons = seasons.filter(s => s.season_number > 0);
-      let accumulated = 0;
-      for (let s of validSeasons) {
-        if (s.season_number === seasonNum) {
-          return accumulated + epNum;
-        }
-        accumulated += s.episode_count;
-      }
-      return epNum;
-    }
-
-    function renderContinuousEpisodes(tvId, seasons, currentAbsEpisode = 1) {
-      const chunkRangesList = document.getElementById('chunkRangesList');
-      const epList = document.getElementById('episodesList');
-      chunkRangesList.innerHTML = '';
-      epList.innerHTML = '';
-
-      const validSeasons = seasons.filter(s => s.season_number > 0);
-      const totalEpisodes = validSeasons.reduce((acc, s) => acc + (s.episode_count || 0), 0);
-
-      if (totalEpisodes === 0) return;
-
-      currentEpisodesChunkIndex = Math.floor((currentAbsEpisode - 1) / CHUNK_SIZE);
-      const numChunks = Math.ceil(totalEpisodes / CHUNK_SIZE);
-
-      if (totalEpisodes > CHUNK_SIZE) {
-        for (let c = 0; c < numChunks; c++) {
-          const start = c * CHUNK_SIZE + 1;
-          const end = Math.min((c + 1) * CHUNK_SIZE, totalEpisodes);
-          const chunkBtn = document.createElement('button');
-          chunkBtn.className = `chunk-btn ${c === currentEpisodesChunkIndex ? 'active' : ''}`;
-          chunkBtn.innerText = `${start} - ${end}`;
-          chunkBtn.onclick = () => {
-            currentEpisodesChunkIndex = c;
-            document.querySelectorAll('.chunk-btn').forEach(cb => cb.classList.remove('active'));
-            chunkBtn.classList.add('active');
-            renderEpisodesSlice(tvId, seasons, start, end);
-          };
-          chunkRangesList.appendChild(chunkBtn);
-        }
-      }
-
-      const currentStart = currentEpisodesChunkIndex * CHUNK_SIZE + 1;
-      const currentEnd = Math.min((currentEpisodesChunkIndex + 1) * CHUNK_SIZE, totalEpisodes);
-      renderEpisodesSlice(tvId, seasons, currentStart, currentEnd);
-    }
-
-    function renderEpisodesSlice(tvId, seasons, startAbs, endAbs) {
+    function renderEpisodesGridForSeason(tvId, seasonNum, epCount) {
       const epList = document.getElementById('episodesList');
       epList.innerHTML = '';
 
-      const currentAbsEp = mapSeasonEpToAbsolute(currentItem.season, currentItem.episode, seasons);
-
-      for (let i = startAbs; i <= endAbs; i++) {
-        const mapped = mapAbsoluteToSeasonEp(i, seasons);
-        const isWatched = isItemWatched(`tv_${tvId}_s${mapped.season}_e${mapped.episode}`);
-        const isActive = (i === currentAbsEp);
+      for (let ep = 1; ep <= epCount; ep++) {
+        const isWatched = isItemWatched(`tv_${tvId}_s${seasonNum}_e${ep}`);
+        const isActive = (seasonNum === currentItem.season && ep === currentItem.episode);
 
         const btn = document.createElement('button');
         btn.className = `ep-btn ${isActive ? 'active' : ''} ${isWatched ? 'is-watched' : ''}`;
-        btn.innerText = `${translations[currentLang].ep_prefix} ${i}`;
+        btn.innerText = `${translations[currentLang].ep_prefix} ${ep}`;
         btn.onclick = () => {
           document.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
-          
-          currentItem.season = mapped.season;
-          currentItem.episode = mapped.episode;
-          location.hash = `#/theater/tv/${tvId}/${mapped.season}/${mapped.episode}`;
+          currentItem.season = seasonNum;
+          currentItem.episode = ep;
+          location.hash = `#/theater/tv/${tvId}/${seasonNum}/${ep}`;
           startStreamingNow();
         };
         epList.appendChild(btn);
@@ -1808,71 +2040,15 @@
         return;
       }
 
-      if (!currentItem.rawSeasons || currentItem.rawSeasons.length === 0) return;
-
-      const mapped = mapAbsoluteToSeasonEp(targetEp, currentItem.rawSeasons);
-      if (!mapped.isValid) {
-        showToast(currentLang === 'ar' ? `الحلقة غير متوفرة! إجمالي الحلقات: ${mapped.total}` : `Episode not found! Total episodes: ${mapped.total}`, 'error');
-        return;
-      }
-
-      currentItem.season = mapped.season;
-      currentItem.episode = mapped.episode;
-      location.hash = `#/theater/tv/${currentItem.id}/${mapped.season}/${mapped.episode}`;
+      currentItem.episode = targetEp;
+      location.hash = `#/theater/tv/${currentItem.id}/${currentItem.season}/${targetEp}`;
       input.value = '';
 
-      renderContinuousEpisodes(currentItem.id, currentItem.rawSeasons, targetEp);
+      if (currentItem.rawSeasons) {
+        renderSeasonsTabUI(currentItem.id, currentItem.rawSeasons);
+      }
       startStreamingNow();
       showToast(currentLang === 'ar' ? `جاري تشغيل الحلقة ${targetEp}...` : `Playing Episode ${targetEp}...`, 'success');
-    }
-
-    function initPlayerSkipTimer() {
-      const video = document.getElementById('nativeVideo');
-      const skipBtn = document.getElementById('skipIntroBtn');
-      video.addEventListener('timeupdate', () => {
-        if (video.currentTime > 2 && video.currentTime < 120) skipBtn.style.display = 'block';
-        else skipBtn.style.display = 'none';
-      });
-    }
-
-    function skipIntro() {
-      const video = document.getElementById('nativeVideo');
-      if (video) video.currentTime += 85;
-    }
-
-    function playDirectMedia(title, streamUrl, poster) {
-      currentItem = { id: 'custom', type: 'custom', title, poster_path: poster, isCustom: true, directUrl: streamUrl };
-      document.getElementById('homeView').style.display = 'none';
-      document.getElementById('searchResultsView').style.display = 'none';
-      document.getElementById('favoritesView').style.display = 'none';
-      document.getElementById('theaterView').style.display = 'block';
-      document.getElementById('detailHeroBox').style.display = 'none';
-      document.getElementById('mainPlayerContainer').style.display = 'block';
-      document.getElementById('iframeBox').style.display = 'none';
-      document.getElementById('serversContainer').style.display = 'none';
-      document.getElementById('episodesContainer').style.display = 'none';
-      document.getElementById('directPlayerBox').style.display = 'block';
-      window.scrollTo(0, 0);
-
-      const video = document.getElementById('nativeVideo');
-      const proxiedUrl = PROXY_BASE + encodeURIComponent(streamUrl);
-
-      if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
-
-      if (streamUrl.includes('.m3u8')) {
-        if (Hls.isSupported()) {
-          hlsInstance = new Hls();
-          hlsInstance.loadSource(proxiedUrl);
-          hlsInstance.attachMedia(video);
-          hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => video.play().catch(()=>{}));
-        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-          video.src = proxiedUrl;
-          video.play().catch(()=>{});
-        }
-      } else {
-        video.src = proxiedUrl;
-        video.play().catch(()=>{});
-      }
     }
 
     function switchAuthView(view) {
@@ -2076,8 +2252,16 @@
       if (currentUser) {
         switchAuthView('profile');
         document.getElementById('profileEmail').innerText = sanitizeText(currentUser.email);
-        document.getElementById('profileRoleBadge').innerText = currentUser.isAdmin ? (currentLang === 'ar' ? '⭐ مشرف النظام (Super Admin)' : '⭐ Super Admin') : (currentUser.isVip ? (currentLang === 'ar' ? '👑 عضو مميز (VIP)' : '👑 VIP Member') : (currentLang === 'ar' ? 'عضو مسجل (Free Member)' : 'Free Member'));
-        document.getElementById('profileAdsStatusBadge').innerText = (currentUser.isVip || currentUser.isAdmin || currentUser.adsDisabled) ? (currentLang === 'ar' ? '🛡️ حالة الإعلانات: معطلة بالكامل' : '🛡️ Ads: Completely Disabled') : (currentLang === 'ar' ? '📢 حالة الإعلانات: مفعّلة' : '📢 Ads: Enabled');
+        
+        const roleBadge = document.getElementById('profileRoleBadge');
+        const adsBadge = document.getElementById('profileAdsStatusBadge');
+
+        if (roleBadge) {
+          roleBadge.innerText = currentUser.isAdmin ? (currentLang === 'ar' ? '⭐ مشرف النظام (Super Admin)' : '⭐ Super Admin') : (currentUser.isVip ? (currentLang === 'ar' ? '👑 عضو مميز (VIP)' : '👑 VIP Member') : (currentLang === 'ar' ? 'عضو مسجل (Free Member)' : 'Free Member'));
+        }
+        if (adsBadge) {
+          adsBadge.innerText = (currentUser.isVip || currentUser.isAdmin || currentUser.adsDisabled) ? (currentLang === 'ar' ? '🛡️ حالة الإعلانات: معطلة بالكامل' : '🛡️ Ads: Completely Disabled') : (currentLang === 'ar' ? '📢 حالة الإعلانات: مفعّلة' : '📢 Ads: Enabled');
+        }
       } else {
         switchAuthView('login');
       }
@@ -2127,9 +2311,9 @@
         document.getElementById('statVisitorsCount').innerText = totalVisitsCount;
         document.getElementById('statUniqueVisitorsCount').innerText = uniqueFingerprints.size;
         document.getElementById('statUsersCount').innerText = data.users ? Object.keys(data.users).length : '0';
+        document.getElementById('statRequestsCount').innerText = data.requests ? Object.keys(data.requests).length : '0';
         document.getElementById('statMediaCount').innerText = data.series ? Object.keys(data.series).length : '0';
         document.getElementById('statBannedCount').innerText = data.banned ? Object.keys(data.banned).length : '0';
-        document.getElementById('statRequestsCount').innerText = data.requests ? Object.keys(data.requests).length : '0';
 
         window._adminDataCache = data;
         loadAdminUsersTable();
@@ -2148,7 +2332,7 @@
 
         const row = document.createElement('tr');
         row.innerHTML = `
-          <td><img class="user-table-avatar" src="${av}"></td>
+          <td><img style="width:24px; height:24px; border-radius:50%;" src="${av}"></td>
           <td><strong>${sanitizeText(u.email)}</strong></td>
           <td><span style="color:${isVip ? 'var(--gold)' : 'var(--text-muted)'}; font-weight:800;">${isVip ? 'VIP 👑' : (currentLang === 'ar' ? 'عادي' : 'Free')}</span></td>
           <td><span style="color:${adsDisabled ? '#10b981' : '#f59e0b'}; font-weight:700;">${adsDisabled ? (currentLang === 'ar' ? '🚫 معطلة' : '🚫 Disabled') : (currentLang === 'ar' ? '📢 مفعلة' : '📢 Active')}</span></td>
@@ -2315,6 +2499,7 @@
             const item = data[key];
             const card = document.createElement('div');
             card.className = 'card';
+            card.tabIndex = 0;
             card.onclick = () => playDirectMedia(item.title, item.url, item.poster);
             card.innerHTML = `
               <img src="${item.poster}" loading="lazy">
