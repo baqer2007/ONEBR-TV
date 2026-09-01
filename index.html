@@ -89,7 +89,6 @@
       transition: background-color 0.3s, color 0.3s; 
     }
 
-    /* دعم التركيز لريموت التلفاز والماوس دون التعليق على شاشات اللمس بالهاتف */
     @media (hover: hover) and (pointer: fine) {
       *:focus-visible, .card:focus-visible, button:focus-visible, input:focus-visible, a:focus-visible {
         outline: 3px solid var(--cyan) !important;
@@ -495,6 +494,12 @@
       </div>
     </div>
 
+    <!-- مساحة إعلان Native Banner المتجدد تلقائياً كل 45 ثانية أثناء المشاهدة والمضبوط بالأدمن -->
+    <div id="adNativeContainer" style="display:none; text-align:center; margin-bottom:12px; background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:8px;">
+      <span style="font-size:0.65rem; color:var(--text-muted); display:block; margin-bottom:6px;">إعلان مروّج</span>
+      <div id="adNativeSlot" style="min-height:120px; width:100%; display:flex; justify-content:center; align-items:center; overflow:hidden;"></div>
+    </div>
+
     <div class="server-dropdown-container" id="serversContainer">
       <button id="serverToggleBtn" class="server-toggle-btn" onclick="toggleServerMenu()">
         📺 <span data-i18n="select_server">قائمة السيرفرات</span>
@@ -795,6 +800,7 @@
     let isFamilyMode = localStorage.getItem('family_mode') !== 'false';
 
     let deferredPrompt = null;
+    let nativeAdRefreshInterval = null;
 
     const translations = {
       ar: {
@@ -1175,6 +1181,75 @@
       frame.src = targetUrl;
     }
 
+    /* دوال إعلان Native Banner المرتبطة بالأدمن والتحديث التلقائي */
+    function loadNativeAdsterraBanner() {
+      if (!isGlobalAdsEnabled) return;
+      if (currentUser && (currentUser.isVip || currentUser.isAdmin || currentUser.adsDisabled)) return;
+
+      const slot = document.getElementById('adNativeSlot');
+      if (!slot) return;
+
+      const iframe = document.createElement('iframe');
+      iframe.style.width = "100%";
+      iframe.style.minHeight = "160px";
+      iframe.style.border = "none";
+      iframe.style.overflow = "hidden";
+      iframe.scrolling = "no";
+
+      const adHtml = `
+        <!DOCTYPE html>
+        <html dir="rtl">
+          <head>
+            <meta charset="UTF-8">
+            <style>
+              body { margin: 0; padding: 0; background: transparent; display: flex; justify-content: center; align-items: center; }
+            </style>
+          </head>
+          <body>
+            <div id="container-136c0544979a65c78ef44bed7aad1fe2"></div>
+            <script async="async" data-cfasync="false" src="https://pl31119757.profitableratecpmnetwork.com/136c0544979a65c78ef44bed7aad1fe2/invoke.js"><\/script>
+          </body>
+        </html>
+      `;
+
+      slot.innerHTML = '';
+      slot.appendChild(iframe);
+
+      try {
+        const doc = iframe.contentWindow || iframe.contentDocument.document || iframe.contentDocument;
+        doc.document.open();
+        doc.document.write(adHtml);
+        doc.document.close();
+      } catch (e) {}
+    }
+
+    function startNativeAdAutoRefresh() {
+      if (!isGlobalAdsEnabled) return;
+      if (currentUser && (currentUser.isVip || currentUser.isAdmin || currentUser.adsDisabled)) return;
+
+      const container = document.getElementById('adNativeContainer');
+      if (container) container.style.display = 'block';
+
+      loadNativeAdsterraBanner();
+
+      if (nativeAdRefreshInterval) clearInterval(nativeAdRefreshInterval);
+
+      nativeAdRefreshInterval = setInterval(() => {
+        loadNativeAdsterraBanner();
+      }, 45000);
+    }
+
+    function stopNativeAdAutoRefresh() {
+      if (nativeAdRefreshInterval) {
+        clearInterval(nativeAdRefreshInterval);
+        nativeAdRefreshInterval = null;
+      }
+      const container = document.getElementById('adNativeContainer');
+      if (container) container.style.display = 'none';
+      const slot = document.getElementById('adNativeSlot');
+      if (slot) slot.innerHTML = '';
+    }
+
     function startStreamingNow() {
       const mainContainer = document.getElementById('mainPlayerContainer');
       const directBox = document.getElementById('directPlayerBox');
@@ -1192,12 +1267,16 @@
       changeServer(1);
       recordResumeProgress(currentItem, 20);
       recordVisitorWatchActivity(currentItem.title);
-      mainContainer.scrollIntoView({ behavior: 'smooth' });
+      
+      startNativeAdAutoRefresh();
 
+      mainContainer.scrollIntoView({ behavior: 'smooth' });
       showToast("لتشغيل الترجمة: اضغط زر (CC) في أسفل المشغل، أو اختر سيرفر آخر", "info");
     }
 
     function stopPlayer() {
+      stopNativeAdAutoRefresh();
+
       const frame = document.getElementById('streamFrame');
       if (frame) frame.src = "";
       const video = document.getElementById('nativeVideo');
@@ -1488,24 +1567,16 @@
       try {
         const res = await fetch("/api/settings");
         const data = await res.json();
-        if (data.global_ads !== undefined) isGlobalAdsEnabled = data.global_ads;
+        if (data.global_ads !== undefined) {
+          isGlobalAdsEnabled = data.global_ads;
+          updateGlobalAdsBtnUI();
+        }
         if (data.banner) {
           const banner = document.getElementById('announcementBanner');
           banner.innerText = sanitizeText(data.banner);
           banner.style.display = 'block';
         }
       } catch(e) {}
-    }
-
-    function injectAdScriptsIfEligible() {
-      if (!isGlobalAdsEnabled) return;
-      if (currentUser && (currentUser.isVip || currentUser.isAdmin || currentUser.adsDisabled)) return;
-      const popScript = document.createElement('script');
-      popScript.src = "https://pl31046353.profitableratecpmnetwork.com/61/4f/72/614f728ad484f449400870c3be110111.js";
-      document.head.appendChild(popScript);
-      const socialScript = document.createElement('script');
-      socialScript.src = "https://pl31046352.profitableratecpmnetwork.com/24/e2/59/24e259929d0a94f08f92e8373055a876.js";
-      document.head.appendChild(socialScript);
     }
 
     async function logVisitor() {
@@ -1570,7 +1641,6 @@
       applyFamilyModeUI();
       verifyUserStatus();
       await loadGlobalSettings();
-      injectAdScriptsIfEligible();
       logVisitor();
       loadCustomMedia();
       loadResumeShelf();
@@ -2463,6 +2533,9 @@
         body: JSON.stringify({ global_ads: isGlobalAdsEnabled })
       });
       updateGlobalAdsBtnUI();
+      if (!isGlobalAdsEnabled) {
+        stopNativeAdAutoRefresh();
+      }
       showToast(isGlobalAdsEnabled ? (currentLang === 'ar' ? 'تم تفعيل الإعلانات لجميع زوار الموقع!' : 'Ads enabled for all visitors!') : (currentLang === 'ar' ? 'تم تعطيل الإعلانات تماماً عن الموقع!' : 'Ads disabled completely!'), 'info');
     }
 
