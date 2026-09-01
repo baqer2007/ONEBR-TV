@@ -221,6 +221,42 @@
     .btn-detail-action.active-fav { color: var(--gold); border-color: var(--gold); }
     .btn-detail-action.active-watched { color: var(--watched); border-color: var(--watched); }
 
+    /* شاشة بوابة الإعلان التمهيدي (5 ثوانٍ قبل المشغل) */
+    #preRollGateBox {
+      display: none;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 12px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .preroll-timer-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(229, 9, 20, 0.2);
+      border: 1px solid var(--primary);
+      color: #fff;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+    .preroll-skip-btn {
+      background: var(--surface-hover);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      cursor: pointer;
+      font-weight: 700;
+      margin-top: 8px;
+    }
+
     .player-container { width: 100%; background: #000; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 12px; position: relative; display: none; }
     #directPlayerBox { display: none; width: 100%; position: relative; }
     #nativeVideo { width: 100%; max-height: 65vh; display: block; }
@@ -483,7 +519,7 @@
         <p class="hero-desc" id="detailOverview" style="max-width:650px; -webkit-line-clamp:3;">قصة العمل وتفاصيله...</p>
         
         <div class="action-buttons-row">
-          <button class="play-circle-btn" onclick="startStreamingNow()" title="تشغيل الفيديو">
+          <button class="play-circle-btn" onclick="requestPlayStreamWithGate()" title="تشغيل الفيديو">
             <i class="fa-solid fa-play"></i>
           </button>
           <button class="btn-detail-action" id="btnToggleFav" onclick="toggleCurrentFavorite()"><i class="fa-solid fa-bookmark"></i> <span data-i18n="btn_fav">المفضلة</span></button>
@@ -494,7 +530,17 @@
       </div>
     </div>
 
-    <!-- مساحة إعلان Native Banner المتجدد تلقائياً كل 45 ثانية أثناء المشاهدة والمضبوط بالأدمن -->
+    <!-- بوابة إعلان الـ 5 ثوانٍ قبل المشغل (Pre-roll Gate) -->
+    <div id="preRollGateBox">
+      <div class="preroll-timer-badge">
+        <i class="fa-solid fa-circle-notch fa-spin"></i>
+        <span>جاري تجهيز سيرفر المشاهدة السريع خلال: <strong id="prerollCountdown" style="color:var(--gold); font-size:1rem;">5</strong> ثوانٍ</span>
+      </div>
+      <div id="prerollAdSlot" style="min-height:140px; display:flex; justify-content:center; align-items:center; overflow:hidden;"></div>
+      <button class="preroll-skip-btn" onclick="bypassPreRollAndPlay()"><i class="fa-solid fa-forward-step"></i> تخطي والتشغيل الفوري</button>
+    </div>
+
+    <!-- مساحة إعلان Native Banner المتجدد تلقائياً كل 45 ثانية أثناء المشاهدة -->
     <div id="adNativeContainer" style="display:none; text-align:center; margin-bottom:12px; background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:8px;">
       <span style="font-size:0.65rem; color:var(--text-muted); display:block; margin-bottom:6px;">إعلان مروّج</span>
       <div id="adNativeSlot" style="min-height:120px; width:100%; display:flex; justify-content:center; align-items:center; overflow:hidden;"></div>
@@ -801,6 +847,7 @@
 
     let deferredPrompt = null;
     let nativeAdRefreshInterval = null;
+    let preRollTimer = null;
 
     const translations = {
       ar: {
@@ -1181,17 +1228,12 @@
       frame.src = targetUrl;
     }
 
-    /* دوال إعلان Native Banner المرتبطة بالأدمن والتحديث التلقائي */
-    function loadNativeAdsterraBanner() {
-      if (!isGlobalAdsEnabled) return;
-      if (currentUser && (currentUser.isVip || currentUser.isAdmin || currentUser.adsDisabled)) return;
-
-      const slot = document.getElementById('adNativeSlot');
-      if (!slot) return;
-
+    /* دوال إنشاء وتحديث إعلان Adsterra في الـ Iframe المستقل */
+    function createAdIframe(containerElement) {
+      if (!containerElement) return;
       const iframe = document.createElement('iframe');
       iframe.style.width = "100%";
-      iframe.style.minHeight = "160px";
+      iframe.style.minHeight = "140px";
       iframe.style.border = "none";
       iframe.style.overflow = "hidden";
       iframe.scrolling = "no";
@@ -1212,8 +1254,8 @@
         </html>
       `;
 
-      slot.innerHTML = '';
-      slot.appendChild(iframe);
+      containerElement.innerHTML = '';
+      containerElement.appendChild(iframe);
 
       try {
         const doc = iframe.contentWindow || iframe.contentDocument.document || iframe.contentDocument;
@@ -1221,6 +1263,13 @@
         doc.document.write(adHtml);
         doc.document.close();
       } catch (e) {}
+    }
+
+    function loadNativeAdsterraBanner() {
+      if (!isGlobalAdsEnabled) return;
+      if (currentUser && (currentUser.isVip || currentUser.isAdmin || currentUser.adsDisabled)) return;
+      const slot = document.getElementById('adNativeSlot');
+      createAdIframe(slot);
     }
 
     function startNativeAdAutoRefresh() {
@@ -1250,6 +1299,54 @@
       if (slot) slot.innerHTML = '';
     }
 
+    /* بوابة الـ 5 ثوانٍ قبل تشغيل السيرفر المضمن */
+    function requestPlayStreamWithGate() {
+      const isVipUser = currentUser && (currentUser.isVip || currentUser.isAdmin || currentUser.adsDisabled);
+      
+      // إذا كان المستخدم VIP أو الإعلانات معطلة بالأدمن، يتم التشغيل الفوري دون انتظار
+      if (isVipUser || !isGlobalAdsEnabled) {
+        startStreamingNow();
+        return;
+      }
+
+      const gateBox = document.getElementById('preRollGateBox');
+      const countdownElem = document.getElementById('prerollCountdown');
+      const prerollAdSlot = document.getElementById('prerollAdSlot');
+
+      gateBox.style.display = 'block';
+      gateBox.scrollIntoView({ behavior: 'smooth' });
+
+      createAdIframe(prerollAdSlot);
+
+      let timeLeft = 5;
+      countdownElem.innerText = timeLeft;
+
+      if (preRollTimer) clearInterval(preRollTimer);
+
+      preRollTimer = setInterval(() => {
+        timeLeft--;
+        if (countdownElem) countdownElem.innerText = timeLeft;
+
+        if (timeLeft <= 0) {
+          clearInterval(preRollTimer);
+          preRollTimer = null;
+          gateBox.style.display = 'none';
+          prerollAdSlot.innerHTML = '';
+          startStreamingNow();
+        }
+      }, 1000);
+    }
+
+    function bypassPreRollAndPlay() {
+      if (preRollTimer) {
+        clearInterval(preRollTimer);
+        preRollTimer = null;
+      }
+      document.getElementById('preRollGateBox').style.display = 'none';
+      document.getElementById('prerollAdSlot').innerHTML = '';
+      startStreamingNow();
+    }
+
     function startStreamingNow() {
       const mainContainer = document.getElementById('mainPlayerContainer');
       const directBox = document.getElementById('directPlayerBox');
@@ -1275,6 +1372,11 @@
     }
 
     function stopPlayer() {
+      if (preRollTimer) {
+        clearInterval(preRollTimer);
+        preRollTimer = null;
+      }
+      document.getElementById('preRollGateBox').style.display = 'none';
       stopNativeAdAutoRefresh();
 
       const frame = document.getElementById('streamFrame');
@@ -1979,6 +2081,7 @@
       document.getElementById('theaterView').style.display = 'block';
       document.getElementById('mainPlayerContainer').style.display = 'none';
       document.getElementById('serversContainer').style.display = 'none';
+      document.getElementById('preRollGateBox').style.display = 'none';
       window.scrollTo(0, 0);
 
       currentItem = { id, imdb_id: '', title: '', origTitle: '', slug: '', origLang: '', isAnime: false, isAsian: false, isTurkish: false, type, poster_path: '', season, episode, isCustom: false, directUrl: '', rawSeasons: [] };
@@ -2115,7 +2218,7 @@
           currentItem.season = seasonNum;
           currentItem.episode = ep;
           location.hash = `#/theater/tv/${tvId}/${seasonNum}/${ep}`;
-          startStreamingNow();
+          requestPlayStreamWithGate();
         };
         epList.appendChild(btn);
       }
@@ -2137,7 +2240,7 @@
       if (currentItem.rawSeasons) {
         renderSeasonsTabUI(currentItem.id, currentItem.rawSeasons);
       }
-      startStreamingNow();
+      requestPlayStreamWithGate();
       showToast(currentLang === 'ar' ? `جاري تشغيل الحلقة ${targetEp}...` : `Playing Episode ${targetEp}...`, 'success');
     }
 
